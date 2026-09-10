@@ -1,6 +1,6 @@
 import os
 import asyncio
-from flask import Flask, jsonify, render_template, send_from_directory
+from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 from telethon import TelegramClient
 
@@ -10,86 +10,53 @@ API_HASH = 'bf8867bfab75aa5533dd036687e287ca'
 DOWNLOAD_DIR = 'downloads'
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# تحديد مسار مجلد templates بشكل صحيح ليعمل على Render
 app = Flask(__name__, template_folder='templates')
 CORS(app)
 
 client = TelegramClient('user_session', API_ID, API_HASH)
 
+# معرف القناة المباشر بناءً على الرابط الذي أرسلته
+TARGET_CHANNEL = 'IPA1_KP'
+
 @app.route('/')
 def home():
-    # هنا يتم عرض واجهة الموقع الكاملة التي في مجلد templates
     return render_template('index.html')
 
 @app.route('/api/apps', methods=['GET'])
-def get_all_apps():
-    # قائمة مبدئية أو يمكنك جلبها من قناة تيليجرام مباشرة
-    # هذه التطبيقات ستظهر تلقائياً في واجهة الموقع
-    sample_apps = [
-        {
-            "title": "E-Sign Signer",
-            "category": "tools",
-            "description": "أداة قوية لتوقيع وتثبيت ملفات الـ IPA مباشرة.",
-            "size": "45 MB",
-            "version": "v5.0.2",
-            "icon": "https://picsum.photos/100/100?random=1",
-            "download_url": "#"
-        },
-        {
-            "title": "Delta Emulator",
-            "category": "games",
-            "description": "محاكي الألعاب الكلاسيكية الشهير للأيفون.",
-            "size": "78 MB",
-            "version": "v1.5.2",
-            "icon": "https://picsum.photos/100/100?random=2",
-            "download_url": "#"
-        }
-    ]
-    return jsonify(sample_apps)
-
-@app.route('/api/app/<channel>/<int:msg_id>', methods=['GET'])
-def get_app_details(channel, msg_id):
-    async def fetch():
-        await client.connect()
-        message = await client.get_messages(channel, ids=msg_id)
-        if not message:
-            return None
-        
-        folder_path = os.path.join(DOWNLOAD_DIR, str(msg_id))
-        os.makedirs(folder_path, exist_ok=True)
-        
-        photo_name = None
-        file_name = None
-        
-        if message.photo:
-            photo_path = await message.download_media(file=folder_path)
-            photo_name = os.path.basename(photo_path)
+def get_channel_apps():
+    async def fetch_from_channel():
+        apps_list = []
+        try:
+            await client.connect()
+            # جلب آخر الرسائل من القناة المحددة
+            async for message in client.iter_messages(TARGET_CHANNEL, limit=30):
+                if message.file and message.file.name and message.file.name.endswith('.ipa'):
+                    file_size_mb = round(message.file.size / (1024 * 1024), 2) if message.file.size else 0
+                    
+                    description = message.text if message.text else "تطبيق IPA من قناة دعم المتاجر"
+                    
+                    apps_list.append({
+                        "id": message.id,
+                        "title": message.file.name.replace('.ipa', ''),
+                        "category": "apps",
+                        "description": description,
+                        "size": f"{file_size_mb} MB",
+                        "version": "Latest",
+                        "icon": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/09/b6/42/09b642a8-124e-3759-b146-24003d1681a5/AppIcon-0-1x_U007emarketing-0-0-G4-85-220.png/512x512bb.jpg",
+                        "download_url": f"https://t.me/{TARGET_CHANNEL}/{message.id}"
+                    })
+        except Exception as e:
+            print(f"Error reading channel: {e}")
             
-        if message.file:
-            file_path = await message.download_media(file=folder_path)
-            file_name = os.path.basename(file_path)
-            
-        return {
-            "text": message.text or "",
-            "photo": photo_name,
-            "file": file_name,
-            "size": round(message.file.size / (1024 * 1024), 2) if message.file else 0
-        }
+        return apps_list
 
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
-    data = loop.run_until_complete(fetch())
+    apps = loop.run_until_complete(fetch_from_channel())
 
-    if not data:
-        return jsonify({"status": "error"}), 404
-
-    return jsonify({
-        "status": "success",
-        "description": data["text"],
-        "size_mb": data["size"],
-        "file_name": data["file"]
-    })
+    return jsonify(apps)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+
