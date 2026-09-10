@@ -1,6 +1,6 @@
 import os
 import asyncio
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 from telethon import TelegramClient
 
@@ -10,14 +10,42 @@ API_HASH = 'bf8867bfab75aa5533dd036687e287ca'
 DOWNLOAD_DIR = 'downloads'
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-app = Flask(__name__)
+# تحديد مسار مجلد templates بشكل صحيح ليعمل على Render
+app = Flask(__name__, template_folder='templates')
 CORS(app)
 
 client = TelegramClient('user_session', API_ID, API_HASH)
 
 @app.route('/')
 def home():
-    return "iPA Store Backend Active"
+    # هنا يتم عرض واجهة الموقع الكاملة التي في مجلد templates
+    return render_template('index.html')
+
+@app.route('/api/apps', methods=['GET'])
+def get_all_apps():
+    # قائمة مبدئية أو يمكنك جلبها من قناة تيليجرام مباشرة
+    # هذه التطبيقات ستظهر تلقائياً في واجهة الموقع
+    sample_apps = [
+        {
+            "title": "E-Sign Signer",
+            "category": "tools",
+            "description": "أداة قوية لتوقيع وتثبيت ملفات الـ IPA مباشرة.",
+            "size": "45 MB",
+            "version": "v5.0.2",
+            "icon": "https://picsum.photos/100/100?random=1",
+            "download_url": "#"
+        },
+        {
+            "title": "Delta Emulator",
+            "category": "games",
+            "description": "محاكي الألعاب الكلاسيكية الشهير للأيفون.",
+            "size": "78 MB",
+            "version": "v1.5.2",
+            "icon": "https://picsum.photos/100/100?random=2",
+            "download_url": "#"
+        }
+    ]
+    return jsonify(sample_apps)
 
 @app.route('/api/app/<channel>/<int:msg_id>', methods=['GET'])
 def get_app_details(channel, msg_id):
@@ -64,5 +92,4 @@ def get_app_details(channel, msg_id):
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
-    with client:
-        app.run(host='0.0.0.0', port=port)
+    app.run(host='0.0.0.0', port=port)
