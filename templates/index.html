@@ -2,118 +2,207 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>متجر تطبيقات IPA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iStore IPA</title>
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 20px;
+        :root {
+            --bg-color: #000000;
+            --card-bg: rgba(28, 28, 30, 0.75);
+            --card-border: rgba(255, 255, 255, 0.12);
+            --accent-blue: #0A84FF;
+            --text-main: #FFFFFF;
+            --text-sub: #8E8E93;
+            --glass-nav: rgba(25, 25, 25, 0.75);
+            --radius-xl: 20px;
+            --radius-lg: 14px;
+            --radius-sm: 10px;
         }
-        h1 {
-            text-align: center;
-            font-size: 24px;
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 20px 16px 100px 16px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
-        .section-title {
-            font-size: 18px;
-            color: #007aff;
-            margin-top: 25px;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0;
         }
-        .app-card {
-            background-color: #1c1c1e;
-            border-radius: 14px;
-            padding: 15px;
+
+        /* قسم اليوم المميز */
+        .today-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(20px);
+        }
+
+        .today-title {
+            font-size: 12px;
+            color: var(--accent-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .today-heading {
+            font-size: 20px;
+            font-weight: 700;
             margin-bottom: 12px;
+        }
+
+        .app-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .app-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius-lg);
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            backdrop-filter: blur(10px);
         }
+
         .app-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 14px;
         }
+
         .app-icon {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             border-radius: 12px;
             object-fit: cover;
         }
+
         .app-details h3 {
-            margin: 0 0 5px 0;
+            margin: 0 0 4px 0;
             font-size: 16px;
+            font-weight: 600;
         }
+
         .app-details p {
             margin: 0;
             font-size: 12px;
-            color: #8e8e93;
-            max-width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            color: var(--text-sub);
         }
-        .app-size {
-            font-size: 11px;
-            color: #34c759;
-            margin-top: 4px;
-        }
+
         .download-btn {
-            background-color: #34c759;
+            background-color: var(--accent-blue);
             color: white;
-            padding: 8px 16px;
+            padding: 8px 18px;
             border-radius: 20px;
             text-decoration: none;
             font-size: 13px;
-            font-weight: bold;
+            font-weight: 600;
+        }
+
+        /* شريط التنقل السفلي */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--glass-nav);
+            backdrop-filter: blur(30px);
+            border-top: 1px solid var(--card-border);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 25px 0;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 11px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .nav-item.active {
+            color: var(--accent-blue);
         }
     </style>
 </head>
 <body>
 
-    <h1>متجر تطبيقات الآيفون (IPA) 🍏</h1>
+    <div class="header">
+        <h1>اليوم</h1>
+    </div>
 
-    <div id="apps-container">
-        <p style="text-align: center; color: #8e8e93;">جاري تحميل التطبيقات...</p>
+    <!-- بطاقة اليوم المميزة -->
+    <div class="today-card">
+        <div class="today-title">تطبيق اليوم المميز</div>
+        <div class="today-heading">متجر تطبيقات الآيفون (IPA)</div>
+        <p style="color: var(--text-sub); font-size: 13px; margin: 0 0 15px 0;">استكشف وحمل أفضل التطبيقات والألعاب المحدثة مباشرة بكل سهولة.</p>
+    </div>
+
+    <h3 style="font-size: 18px; margin-bottom: 15px;">القائمة العامة</h3>
+    
+    <div class="app-list" id="apps-container">
+        <p style="text-align: center; color: var(--text-sub);">جاري التحميل...</p>
+    </div>
+
+    <!-- شريط التنقل السفلي الأصلي -->
+    <div class="nav-bar">
+        <a href="#" class="nav-item active">الرئيسية</a>
+        <a href="#" class="nav-item">الألعاب</a>
+        <a href="#" class="nav-item">التطبيقات</a>
+        <a href="#" class="nav-item">الأدوات</a>
     </div>
 
     <script>
         fetch('/api/apps')
-            .then(response => response.json())
+            .then(res => res.json())
             .then(data => {
                 const container = document.getElementById('apps-container');
                 container.innerHTML = '';
                 
-                if (data.length === 0) {
-                    container.innerHTML = '<p style="text-align: center;">لا توجد تطبيقات متاحة حالياً.</p>';
+                if(data.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--text-sub);">لا توجد تطبيقات متاحة حالياً.</p>';
                     return;
                 }
 
                 data.forEach(app => {
                     const card = document.createElement('div');
-                    card.className = 'app-card';
+                    card.className = 'app-item';
                     card.innerHTML = `
                         <div class="app-info">
                             <img src="${app.icon}" class="app-icon" alt="${app.title}">
                             <div class="app-details">
                                 <h3>${app.title}</h3>
-                                <p>${app.description}</p>
-                                <div class="app-size">${app.size} • ${app.version}</div>
+                                <p>${app.size} • ${app.version}</p>
                             </div>
                         </div>
                         <a href="${app.download_url}" class="download-btn" target="_blank">تنزيل</a>
                     `;
                     container.appendChild(card);
                 });
-            })
-            .catch(err => {
-                console.error(err);
-                document.getElementById('apps-container').innerHTML = '<p style="text-align: center; color: #ff3b30;">حدث خطأ في تحميل البيانات.</p>';
             });
     </script>
 </body>
