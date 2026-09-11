@@ -27,7 +27,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 20px; letter-spacing: 0.5px; }
-        .logo-area span { color: #ff3b30; }
+        .logo-area span { color: #0a84ff; }
         
         .header-icons { display: flex; gap: 10px; align-items: center; }
         .icon-btn {
@@ -67,7 +67,7 @@
             box-sizing: border-box;
             outline: none;
         }
-        .search-input:focus { border-color: #ff3b30; }
+        .search-input:focus { border-color: #0a84ff; }
         .search-icon {
             position: absolute;
             right: 15px;
@@ -81,7 +81,7 @@
         .today-header { margin-bottom: 15px; animation: fadeInUp 0.4s ease; }
         .today-date { color: #8e8e93; font-size: 12px; font-weight: 600; }
         .today-title { font-size: 28px; font-weight: 900; margin: 2px 0; }
-        .today-subtitle { font-size: 13px; color: #ff3b30; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+        .today-subtitle { font-size: 13px; color: #ff9f0a; font-weight: 700; display: flex; align-items: center; gap: 5px; }
 
         .featured-card {
             background: #16161c;
@@ -93,7 +93,9 @@
         }
         .featured-img { width: 100%; height: 190px; object-fit: cover; }
         .featured-body { padding: 16px; }
-        .badge-tag { background: rgba(255,59,48,0.15); color: #ff3b30; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; margin-bottom: 8px; }
+        .badge-tag { background: rgba(255,159,10,0.15); color: #ff9f0a; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; margin-bottom: 8px; }
+        
+        .section-heading { font-size: 17px; font-weight: 800; margin: 20px 0 12px 0; display: flex; justify-content: space-between; align-items: center; }
         
         /* كارد التطبيق */
         .app-card-pro {
@@ -108,65 +110,29 @@
         }
         .app-meta { display: flex; align-items: center; gap: 12px; overflow: hidden; flex: 1; cursor: pointer; }
         .app-icon-img { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
-        .app-details h4 { margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+        .app-details h4 { margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #fff; }
         .app-details p { margin: 0; font-size: 12px; color: #8e8e93; }
         .app-category-sub { font-size: 11px; color: #8e8e93; font-weight: 600; margin-top: 2px; }
         
-        /* قصاصة الحجم الاستيكر الأحمر بوضوح تحت الاسم */
-        .stickers-tag {
-            background: rgba(255, 59, 48, 0.2);
-            color: #ff3b30;
-            border: 1px solid rgba(255, 59, 48, 0.4);
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 6px;
-            display: inline-block;
-            margin-top: 4px;
-        }
-
         .app-actions { display: flex; gap: 8px; align-items: center; }
-        
-        /* زر عرض الشفاف بنمط Glass وزوايا دائرية وناعمة باللون الأحمر */
-        .btn-view-details {
-            background: rgba(255, 59, 48, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: #ff3b30;
-            padding: 7px 16px;
-            border-radius: 16px;
-            text-decoration: none;
-            font-size: 12px;
-            font-weight: 800;
-            border: 1px solid rgba(255, 59, 48, 0.4);
-            box-shadow: 0 4px 12px rgba(255, 59, 48, 0.2);
-            white-space: nowrap;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-view-details:hover {
-            background: rgba(255, 59, 48, 0.3);
-        }
-
         .btn-install {
-            background: linear-gradient(135deg, #ff3b30, #d32f2f);
+            background: linear-gradient(135deg, #0a84ff, #0062d2);
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 16px;
+            padding: 7px 15px;
+            border-radius: 18px;
             text-decoration: none;
             font-size: 12px;
             font-weight: 800;
             border: none;
-            box-shadow: 0 4px 12px rgba(255,59,48,0.3);
-            display: inline-block;
-            text-align: center;
+            box-shadow: 0 4px 12px rgba(10,132,255,0.3);
+            white-space: nowrap;
+            cursor: pointer;
         }
-
         .admin-btns { display: flex; gap: 4px; }
         .btn-edit { background: #ff9f0a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
-        .btn-del { background: #ff3b30; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
+        .btn-del { background: #ff453a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
 
-        /* القائمة السفلية العائمة */
+        /* القائمة السفلية العائمة الشفافة والمعدلة */
         .floating-nav {
             position: fixed;
             bottom: 14px;
@@ -199,13 +165,32 @@
             font-family: 'Cairo', sans-serif;
             transition: 0.25s;
         }
-        .nav-item.active { color: #ff3b30; transform: scale(1.08); }
+        .nav-item.active { color: #0a84ff; transform: scale(1.08); }
         .nav-item svg { width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 2.2; }
 
-        /* النوافذ المنبثقة Modal */
+        /* النافذة المنبثقة العادية Modal */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
-        .modal-box { background: #16161c; border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; width: 88%; max-width: 380px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
+        .modal-box { background: #16161c; border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; width: 88%; max-width: 360px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; position: relative; }
         
+        /* زر الإغلاق X الجديد */
+        .modal-close-x {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: #2c2c2e;
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
         /* صفحة تفاصيل التطبيق المنبثقة من الأسفل للأعلى */
         .bottom-sheet-modal {
             display: none;
@@ -237,7 +222,7 @@
             to { transform: translateY(0); }
         }
 
-        /* لقطات الشاشة الأفقية */
+        /* لقطات الشاشة الأفقية داخل صفحة التفاصيل */
         .screenshots-container {
             display: flex;
             gap: 10px;
@@ -258,73 +243,83 @@
             scroll-snap-align: start;
         }
 
-        .input-field { width: 100%; padding: 11px; margin-bottom: 6px; background: #0b0b0f; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; box-sizing: border-box; font-family: 'Cairo', sans-serif; font-size: 13px; outline: none; }
+        .input-field { width: 100%; padding: 11px; margin-bottom: 10px; background: #0b0b0f; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; box-sizing: border-box; font-family: 'Cairo', sans-serif; font-size: 13px; outline: none; }
         select.input-field { appearance: none; }
         
-        /* شرح فوق كل خانة باللون الرمادي البارز */
-        .field-label-desc {
-            font-size: 11px;
-            color: #b0b0b5;
-            margin-bottom: 3px;
-            margin-top: 10px;
-            font-weight: 600;
-        }
-
         .admin-add-float {
             position: fixed;
             bottom: 84px;
             left: 20px;
-            background: rgba(255, 59, 48, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 59, 48, 0.5);
-            color: #ff3b30;
+            background: #32d74b;
+            color: #000;
             padding: 9px 16px;
             border-radius: 25px;
             font-weight: 800;
             font-size: 12px;
-            box-shadow: 0 4px 15px rgba(255,59,48,0.3);
+            border: none;
+            box-shadow: 0 4px 15px rgba(50,215,75,0.4);
             cursor: pointer;
             z-index: 999;
             display: none;
         }
 
-        .admin-dashboard-card {
+        /* تحسينات لوحة تحكم الأدمن الفاخرة */
+        .admin-dashboard-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            animation: fadeInUp 0.4s ease;
+        }
+        .admin-section-card {
             background: #16161c;
-            border: 1px solid rgba(255,59,48,0.3);
-            border-radius: 18px;
-            padding: 16px;
-            margin-bottom: 15px;
+            border: 1px solid rgba(10,132,255,0.25);
+            border-radius: 20px;
+            padding: 18px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
         .admin-stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 15px;
         }
         .stat-box {
             background: #0b0b0f;
             border: 1px solid rgba(255,255,255,0.06);
-            padding: 12px;
+            padding: 14px;
             border-radius: 14px;
             text-align: center;
         }
-        .stat-box h5 { margin: 0 0 5px 0; color: #8e8e93; font-size: 11px; }
-        .stat-box p { margin: 0; color: #ff3b30; font-size: 18px; font-weight: 900; }
+        .stat-box h5 { margin: 0 0 6px 0; color: #8e8e93; font-size: 11px; font-weight: 700; }
+        .stat-box p { margin: 0; color: #0a84ff; font-size: 20px; font-weight: 900; }
         
+        .admin-trending-box {
+            background: rgba(10,132,255,0.08);
+            border: 1px solid rgba(10,132,255,0.2);
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .report-admin-item {
             background: #0b0b0f;
-            border: 1px solid rgba(255,59,48,0.3);
-            padding: 12px;
+            border: 1px solid rgba(255,59,48,0.25);
+            padding: 14px;
             border-radius: 14px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 12px;
+            transition: 0.2s;
         }
+        .report-admin-item:hover { border-color: rgba(255,59,48,0.5); }
 
         .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
         .detail-icon { width: 75px; height: 75px; border-radius: 18px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
         .star-rating { color: #ff9f0a; font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 4px; margin: 4px 0; }
         .comment-box { background: #0b0b0f; border: 1px solid rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; font-size: 12px; }
-        .comment-user { color: #ff3b30; font-weight: 700; margin-bottom: 3px; }
+        .comment-user { color: #0a84ff; font-weight: 700; margin-bottom: 3px; }
         
         .tool-guide-card {
             background: #16161c;
@@ -333,7 +328,7 @@
             padding: 16px;
             margin-bottom: 14px;
         }
-        .tool-guide-card h3 { color: #ff3b30; margin-top: 0; font-size: 16px; }
+        .tool-guide-card h3 { color: #32d74b; margin-top: 0; font-size: 16px; }
         .tool-guide-card p { color: #a1a1a6; font-size: 13px; line-height: 1.6; margin-bottom: 10px; }
     </style>
 
@@ -345,14 +340,13 @@
 
     <div class="header">
         <div class="logo-area">
-            <svg width="20" height="20" viewBox="0 0 170 170" fill="#ff3b30"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.1-1.9-14.24-6.08-3.05-2.61-6.91-7.2-11.58-13.78-6.1-8.57-11.05-18.15-14.85-28.74-3.8-10.59-5.7-20.73-5.7-30.43 0-11.58 3.02-21.2 9.07-28.85 6.04-7.65 13.68-11.54 22.9-11.66 4.9 0 10.15 1.3 15.76 3.9 5.6 2.61 9.3 3.91 11.1 3.91 1.52 0 5.37-1.38 11.55-4.14 6.18-2.76 11.45-4.04 15.82-3.85 10.36.76 18.57 5.04 24.63 12.83-9.35 5.72-13.93 13.43-13.73 23.15.22 7.6 3.14 13.88 8.77 18.83 5.62 4.95 12.44 7.55 20.45 7.82-1.85 5.66-4.14 11.31-6.88 16.97zM119.22 31.33c0-7.39 2.68-14.25 8.04-20.58 5.36-6.33 12.18-10.23 20.45-11.72.11.87.16 1.69.16 2.47 0 7.18-2.83 14.28-8.5 23.3-5.66 9.02-12.39 13.6-20.15 13.73-.01-.89-.01-1.78 0-3.2z"/></svg>
+            <svg width="20" height="20" viewBox="0 0 170 170" fill="#0a84ff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.1-1.9-14.24-6.08-3.05-2.61-6.91-7.2-11.58-13.78-6.1-8.57-11.05-18.15-14.85-28.74-3.8-10.59-5.7-20.73-5.7-30.43 0-11.58 3.02-21.2 9.07-28.85 6.04-7.65 13.68-11.54 22.9-11.66 4.9 0 10.15 1.3 15.76 3.9 5.6 2.61 9.3 3.91 11.1 3.91 1.52 0 5.37-1.38 11.55-4.14 6.18-2.76 11.45-4.04 15.82-3.85 10.36.76 18.57 5.04 24.63 12.83-9.35 5.72-13.93 13.43-13.73 23.15.22 7.6 3.14 13.88 8.77 18.83 5.62 4.95 12.44 7.55 20.45 7.82-1.85 5.66-4.14 11.31-6.88 16.97zM119.22 31.33c0-7.39 2.68-14.25 8.04-20.58 5.36-6.33 12.18-10.23 20.45-11.72.11.87.16 1.69.16 2.47 0 7.18-2.83 14.28-8.5 23.3-5.66 9.02-12.39 13.6-20.15 13.73-.01-.89-.01-1.78 0-3.2z"/></svg>
             i<span>Store</span>
         </div>
         <div class="header-icons">
             <div class="icon-btn" onclick="openAccountModal()" title="حساب المستخدم">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
-            <button onclick="openAddAppModal()" style="background:rgba(255,59,48,0.2); border:1px solid rgba(255,59,48,0.4); color:#ff3b30; padding:6px 12px; border-radius:12px; font-weight:bold; font-size:11px; cursor:pointer; font-family:'Cairo',sans-serif;">+ أضف تطبيقك</button>
         </div>
     </div>
 
@@ -370,7 +364,7 @@
 
     <button class="admin-add-float" id="adminAddFloatBtn" onclick="openAddAppModal()">+ إضافة تطبيق جديد</button>
 
-    <!-- القائمة السفلية العائمة -->
+    <!-- القائمة السفلية العائمة الشفافة والمعدلة -->
     <div class="floating-nav">
         <button class="nav-item active" onclick="switchTab('today', this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -388,7 +382,7 @@
             <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
             الأدوات
         </button>
-        <button class="nav-item" id="adminNavTab" style="display:none; color:#ff3b30;" onclick="switchTab('admin_panel', this)">
+        <button class="nav-item" id="adminNavTab" style="display:none; color:#0a84ff;" onclick="switchTab('admin_panel', this)">
             <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
             لوحة الأدمن
         </button>
@@ -397,9 +391,10 @@
     <!-- نافذة الحساب وتسجيل الدخول -->
     <div id="accountModal" class="modal">
         <div class="modal-box" style="text-align: center;">
+            <button class="modal-close-x" onclick="document.getElementById('accountModal').style.display='none'">✕</button>
             <div id="loggedOutView">
                 <h3 style="margin-top:0; color:#fff; font-size:16px;">حساب المستخدم</h3>
-                <p style="color:#8e8e93; font-size:12px; margin-bottom:15px;">سجل الدخول بحسابك لتقييم التطبيقات وكتابة التعليقات وإضافة التطبيقات.</p>
+                <p style="color:#8e8e93; font-size:12px; margin-bottom:15px;">سجل الدخول بحسابك لتقييم التطبيقات وكتابة التعليقات.</p>
                 <button onclick="loginWithGoogle()" style="background:#fff; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px;">
                     <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
                     تسجيل الدخول بـ Google
@@ -407,43 +402,36 @@
             </div>
             <div id="loggedInView" style="display:none;">
                 <h3 id="userEmailText" style="color:#32d74b; font-size:12px; margin-bottom:8px; word-break: break-all;"></h3>
-                <p id="adminBadge" style="color:#ff3b30; font-size:12px; font-weight:bold; margin-bottom:15px; display:none;">👑 أنت الأدمن المسؤول عن المتجر</p>
-                <button onclick="auth.signOut()" style="background:#ff3b30; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">تسجيل الخروج</button>
+                <p id="adminBadge" style="color:#0a84ff; font-size:12px; font-weight:bold; margin-bottom:15px; display:none;">👑 أنت الأدمن المسؤول عن المتجر</p>
+                <button onclick="auth.signOut()" style="background:#ff453a; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">تسجيل الخروج</button>
             </div>
             <button onclick="document.getElementById('accountModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:12px; cursor:pointer;">إغلاق</button>
         </div>
     </div>
 
-    <!-- نافذة إضافة أو تعديل تطبيق مع الشرح المفصل فوق كل خانة -->
+    <!-- نافذة إضافة أو تعديل تطبيق مع حقل لقطات الشاشة للأدمن وزر الخروج X -->
     <div id="addAppModal" class="modal">
         <div class="modal-box">
-            <h3 id="modalTitleText" style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق جديد</h3>
+            <button class="modal-close-x" onclick="document.getElementById('addAppModal').style.display='none'">✕</button>
+            <h3 id="modalTitleText" style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق للسحابة</h3>
             <input type="hidden" id="editingAppId">
-            
-            <div class="field-label-desc">اختر القسم المناسب لتطبيقك:</div>
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">اختر القسم:</div>
             <select id="appCategory" class="input-field">
                 <option value="today">قسم اليوم (واجهة رئيسية مميزة)</option>
                 <option value="games">قسم الألعاب</option>
                 <option value="apps">قسم التطبيقات</option>
                 <option value="tools">قسم الأدوات</option>
             </select>
-            
-            <div class="field-label-desc">أيقونة التطبيق (صورة مربعة واضحة):</div>
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">أيقونة التطبيق (صورة):</div>
             <input type="file" id="appImgFile" class="input-field" accept="image/*">
             
-            <div class="field-label-desc">صور من داخل التطبيق (Screenshots متعددة):</div>
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">صور من داخل التطبيق (Screenshots متعددة):</div>
             <input type="file" id="appScreenshotsFile" class="input-field" accept="image/*" multiple>
 
-            <div class="field-label-desc">اسم التطبيق:</div>
-            <input type="text" id="appName" class="input-field" placeholder="مثال: GTA San Andreas">
-            
-            <div class="field-label-desc">الحجم والوصف (حجم التطبيق والميزات مثل مهكرة وديموند لا نهائي):</div>
-            <input type="text" id="appDesc" class="input-field" placeholder="مثال: 2.1 GB • مهكرة وديموند لا نهائي">
-            
-            <div class="field-label-desc">رابط الـ URL المباشر لتحميل ملف الـ IPA (يجب أن يكون رابطاً رسمياً مباشراً وينتهي بـ .ipa):</div>
-            <input type="text" id="appUrl" class="input-field" placeholder="https://example.com/app.ipa">
-
-            <button onclick="saveNewApp()" style="background:#ff3b30; color:#fff; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif; margin-top:10px;">إرسال للمراجعة / نشر فوري</button>
+            <input type="text" id="appName" class="input-field" placeholder="اسم التطبيق (مثال: GTA San Andreas)">
+            <input type="text" id="appDesc" class="input-field" placeholder="الوصف أو الحجم (مثال: Action • 2.1 GB)">
+            <input type="text" id="appUrl" class="input-field" placeholder="رابط التحميل المباشر (.ipa)">
+            <button onclick="saveNewApp()" style="background:#32d74b; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">حفظ ونشر فوري</button>
             <button onclick="document.getElementById('addAppModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إلغاء</button>
         </div>
     </div>
@@ -458,16 +446,18 @@
     <!-- نافذة الإبلاغ عن مشكلة -->
     <div id="reportModal" class="modal">
         <div class="modal-box">
+            <button class="modal-close-x" onclick="document.getElementById('reportModal').style.display='none'">✕</button>
             <h3 style="margin-top:0; color:#fff; font-size:16px;">إبلاغ عن مشكلة في التطبيق</h3>
             <input type="hidden" id="reportAppId">
             <div style="font-size:11px; color:#8e8e93; margin-bottom:6px;">اختر سبباً جاهزاً بضغطة زر:</div>
             <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
                 <button type="button" onclick="setReportReasonText('رابط لا يشتغل')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">🔗 رابط لا يشتغل</button>
                 <button type="button" onclick="setReportReasonText('منتهي صلاحية')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">⏳ منتهي صلاحية</button>
+                <button type="button" onclick="setReportReasonText('لعبة غير اخلاقية')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">⚠️ لعبة غير اخلاقية</button>
                 <button type="button" onclick="setReportReasonText('تطبيق يحتوي على محتوى غير اخلاقي')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">🛑 تطبيق يحتوي على محتوى غير اخلاقي</button>
             </div>
             <textarea id="reportReason" class="input-field" placeholder="أو اكتب تفاصيل المشكلة بنفسك..." style="height:70px; resize:none;"></textarea>
-            <button onclick="submitReport()" style="background:#ff3b30; color:#fff; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">إرسال البلاغ للأدمن</button>
+            <button onclick="submitReport()" style="background:#ff9f0a; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">إرسال البلاغ للأدمن</button>
             <button onclick="document.getElementById('reportModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إغلاق</button>
         </div>
     </div>
@@ -490,7 +480,6 @@
         let isAdmin = false;
         let currentTab = 'today';
         let allAppsCache = [];
-        let allPendingCache = [];
         let allReportsCache = [];
 
         function getActualDateString() {
@@ -506,7 +495,7 @@
             renderUI();
         }
 
-        // جلب التطبيقات المقبولة
+        // جلب التطبيقات بشكل حي من سحابة فايرباس
         db.collection("apps").orderBy("createdAt", "desc").onSnapshot(snapshot => {
             allAppsCache = [];
             snapshot.forEach(doc => {
@@ -515,16 +504,7 @@
             renderUI();
         });
 
-        // جلب التطبيقات قيد الانتظار (للمراجعة من طرف الأدمن)
-        db.collection("pending_apps").orderBy("createdAt", "desc").onSnapshot(snapshot => {
-            allPendingCache = [];
-            snapshot.forEach(doc => {
-                allPendingCache.push({ id: doc.id, ...doc.data() });
-            });
-            if(currentTab === 'admin_panel') renderUI();
-        });
-
-        // جلب البلاغات
+        // جلب البلاغات بشكل حي للأدمن
         db.collection("reports").orderBy("createdAt", "desc").onSnapshot(snapshot => {
             allReportsCache = [];
             snapshot.forEach(doc => {
@@ -537,6 +517,7 @@
             renderUI();
         }
 
+        // دالة حساب نقاط التصدير (Trending Score) لتصنيف #1
         function getTrendingScore(app) {
             const rating = app.ratingCount ? (app.ratingSum / app.ratingCount) : 0;
             const downloads = app.downloads || 0;
@@ -546,12 +527,13 @@
 
         function renderUI() {
             const container = document.getElementById('dynamicContent');
-            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const searchInputEl = document.getElementById('searchInput');
+            const searchQuery = searchInputEl ? searchInputEl.value.toLowerCase() : '';
             
             let filtered = allAppsCache;
             if (searchQuery.trim() !== "") {
                 filtered = allAppsCache.filter(app => app.name.toLowerCase().includes(searchQuery) || app.desc.toLowerCase().includes(searchQuery));
-                container.innerHTML = `<div class="section-heading" style="color:#fff; font-size:16px; margin-bottom:12px;">نتائج البحث (${filtered.length})</div><div id="searchResContainer"></div>`;
+                container.innerHTML = `<div class="section-heading">نتائج البحث (${filtered.length})</div><div id="searchResContainer"></div>`;
                 const sContainer = document.getElementById('searchResContainer');
                 if(filtered.length === 0) {
                     sContainer.innerHTML = `<p style="color:#8e8e93; text-align:center; font-size:13px; margin-top:30px;">لا توجد تطبيقات مطابقة لبحثك.</p>`;
@@ -564,41 +546,28 @@
             if (currentTab === 'admin_panel' && isAdmin) {
                 let totalApps = allAppsCache.length;
                 let totalReports = allReportsCache.length;
-                let totalPending = allPendingCache.length;
-
-                let pendingHTML = "";
-                if(totalPending === 0) {
-                    pendingHTML = `<p style="color:#8e8e93; text-align:center; font-size:12px;">لا توجد تطبيقات جديدة تنتظر المراجعة.</p>`;
-                } else {
-                    allPendingCache.forEach(app => {
-                        pendingHTML += `
-                            <div class="report-admin-item" style="border-color:rgba(255,159,10,0.4);">
-                                <div style="color:#ff9f0a; font-weight:bold; margin-bottom:3px;">📱 تطبيق مقترح: ${app.name}</div>
-                                <div style="color:#fff; font-size:12px; margin-bottom:3px;">👤 بواسطة: ${app.submittedBy || 'مستخدم'}</div>
-                                <div style="color:#8e8e93; font-size:11px; margin-bottom:5px; word-break:break-all;">🔗 الرابط: ${app.url}</div>
-                                <div style="display:flex; gap:8px; margin-top:8px;">
-                                    <button onclick="approveApp('${app.id}')" style="background:#32d74b; color:#000; border:none; padding:5px 12px; border-radius:8px; font-weight:bold; cursor:pointer;">قبول ونشر</button>
-                                    <button onclick="rejectApp('${app.id}')" style="background:#ff3b30; color:#fff; border:none; padding:5px 12px; border-radius:8px; font-weight:bold; cursor:pointer;">رفض وحذف</button>
-                                </div>
-                            </div>
-                        `;
-                    });
+                let mostActiveApp = "لا توجد بعد";
+                if(totalApps > 0) {
+                    let sortedByRating = [...allAppsCache].sort((a,b) => getTrendingScore(b) - getTrendingScore(a));
+                    mostActiveApp = sortedByRating[0].name + " (متصدر #1)";
                 }
 
                 let reportsHTML = "";
                 if(totalReports === 0) {
-                    reportsHTML = `<p style="color:#8e8e93; text-align:center; font-size:12px;">لا توجد بلاغات حالياً.</p>`;
+                    reportsHTML = `<div style="text-align:center; padding:25px 0;"><p style="color:#32d74b; font-weight:700; font-size:13px; margin:0;">✨ ممتاز! لا توجد أي بلاغات معلقة حالياً.</p></div>`;
                 } else {
                     allReportsCache.forEach(rep => {
                         let targetApp = allAppsCache.find(a => a.id === rep.appId);
-                        let appName = targetApp ? targetApp.name : "تطبيق غير معروف";
+                        let appName = targetApp ? targetApp.name : "تطبيق محذوف أو غير معروف";
                         reportsHTML += `
                             <div class="report-admin-item">
-                                <div style="color:#ff3b30; font-weight:bold; margin-bottom:3px;">🚨 تطبيق: ${appName}</div>
-                                <div style="color:#fff; font-size:13px; margin-bottom:5px;">💬 سبب البلاغ: "${rep.reason}"</div>
-                                <div style="display:flex; justify-content:space-between; color:#8e8e93; font-size:10px;">
-                                    <span>المبلغ: ${rep.user}</span>
-                                    <button onclick="deleteReport('${rep.id}')" style="background:#ff3b30; color:#fff; border:none; padding:2px 8px; border-radius:6px; cursor:pointer;">حذف البلاغ</button>
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                    <span style="color:#ff453a; font-weight:900; font-size:13px;">🚨 تطبيق: ${appName}</span>
+                                    <span style="color:#8e8e93; font-size:10px;">المبلغ: ${rep.user}</span>
+                                </div>
+                                <div style="color:#ffffff; font-size:13px; margin-bottom:10px; background:#16161c; padding:8px 10px; border-radius:8px;">💬 السبب: "${rep.reason}"</div>
+                                <div style="display:flex; justify-content:flex-end;">
+                                    <button onclick="deleteReport('${rep.id}')" style="background:#ff453a; color:#fff; border:none; padding:5px 12px; border-radius:8px; font-weight:bold; font-size:11px; cursor:pointer; font-family:'Cairo',sans-serif;">حذف البلاغ وتسويته</button>
                                 </div>
                             </div>
                         `;
@@ -608,29 +577,38 @@
                 container.innerHTML = `
                     <div class="today-header">
                         <div class="today-title">لوحة تحكم الأدمن</div>
-                        <div class="today-subtitle">👑 مراجعة طلبات التطبيقات والبلاغات</div>
+                        <div class="today-subtitle">👑 مركز إدارة ومراقبة متجر iStore</div>
                     </div>
                     
-                    <div class="admin-dashboard-card">
-                        <div class="admin-stats-grid">
-                            <div class="stat-box">
-                                <h5>التطبيقات المنشورة</h5>
-                                <p>${totalApps}</p>
+                    <div class="admin-dashboard-wrapper">
+                        <!-- قسم الإحصائيات السريعة -->
+                        <div class="admin-section-card">
+                            <h4 style="font-size:14px; margin:0 0 12px 0; color:#fff; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px; display:flex; align-items:center; gap:6px;">📊 ملخص أداء المنصة</h4>
+                            <div class="admin-stats-grid">
+                                <div class="stat-box">
+                                    <h5>إجمالي التطبيقات</h5>
+                                    <p>${totalApps}</p>
+                                </div>
+                                <div class="stat-box">
+                                    <h5>إجمالي البلاغات</h5>
+                                    <p style="color: ${totalReports > 0 ? '#ff453a' : '#32d74b'};">${totalReports}</p>
+                                </div>
                             </div>
-                            <div class="stat-box">
-                                <h5>قيد الانتظار للمراجعة</h5>
-                                <p style="color:#ff9f0a;">${totalPending}</p>
+                            <div class="admin-trending-box">
+                                <span style="color:#8e8e93;">التطبيق الأعلى تفاعلاً (#1):</span>
+                                <strong style="color:#fff;">${mostActiveApp}</strong>
                             </div>
                         </div>
 
-                        <h4 style="font-size:14px; margin:0 0 10px 0; color:#ff9f0a; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">طلبات التطبيقات الواردة من المستخدمين (${totalPending}):</h4>
-                        <div style="max-height:300px; overflow-y:auto; margin-bottom:15px;">
-                            ${pendingHTML}
-                        </div>
-                        
-                        <h4 style="font-size:14px; margin:0 0 10px 0; color:#ff3b30; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">بلاغات المستخدمين الواردة (${totalReports}):</h4>
-                        <div style="max-height:300px; overflow-y:auto;">
-                            ${reportsHTML}
+                        <!-- قسم البلاغات الواردة -->
+                        <div class="admin-section-card">
+                            <h4 style="font-size:14px; margin:0 0 12px 0; color:#fff; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                                <span>🚨 تنبيهات وبلاغات المستخدمين</span>
+                                <span style="background:rgba(255,59,48,0.15); color:#ff453a; font-size:10px; padding:2px 8px; border-radius:6px; font-weight:900;">${totalReports} نشط</span>
+                            </h4>
+                            <div style="max-height:400px; overflow-y:auto; padding-left:4px;">
+                                ${reportsHTML}
+                            </div>
                         </div>
                     </div>
                 `;
@@ -642,10 +620,10 @@
                     <div class="today-header">
                         <div class="today-date">${getActualDateString()}</div>
                         <div class="today-title">اليوم</div>
-                        <div class="today-subtitle">🔥 أحدث الإصدارات والألعاب المعدلة</div>
+                        <div class="today-subtitle">🔥 تحديثات وأحداث خاصة</div>
                     </div>
                     <div id="todayAppsContainer"></div>
-                    <div style="font-size:17px; font-weight:800; margin:20px 0 12px 0; color:#fff;">التطبيقات والألعاب المتصدرة</div>
+                    <div class="section-heading">التطبيقات المتصدرة (#1) والعامة</div>
                     <div id="generalAppsContainer"></div>
                 `;
                 
@@ -655,26 +633,26 @@
 
                 const tContainer = document.getElementById('todayAppsContainer');
                 if (todayList.length === 0) {
-                    tContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات مميزة حالياً.</p>`;
+                    tContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات مميزة في قسم اليوم حالياً.</p>`;
                 } else {
                     todayList.forEach((app, index) => {
                         let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
-                        let isTopOne = (index === 0) ? '<span style="background:#ff3b30; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:6px; margin-left:6px;">#1 متصدر</span>' : '';
+                        let isTopOne = (index === 0) ? '<span style="background:#32d74b; color:#000; font-size:10px; font-weight:900; padding:2px 8px; border-radius:6px; margin-left:6px;">#1 متصدر</span>' : '';
                         tContainer.innerHTML += `
                             <div class="featured-card">
                                 <img src="${app.icon || 'https://via.placeholder.com/300'}" class="featured-img" style="cursor:pointer;" onclick="openAppDetails('${app.id}')">
                                 <div class="featured-body">
                                     <div style="display:flex; align-items:center; margin-bottom:6px;">
-                                        <span class="badge-tag" style="margin-bottom:0;">مميز • ⭐ ${avgRating}</span>
+                                        <span class="badge-tag" style="margin-bottom:0;">تطبيق اليوم المميز • ⭐ ${avgRating}</span>
                                         ${isTopOne}
                                     </div>
                                     <h3 style="margin:5px 0 2px 0; font-size:17px; cursor:pointer;" onclick="openAppDetails('${app.id}')">${app.name}</h3>
-                                    <div class="app-category-sub" style="margin-bottom:4px;">${getCategoryNameAr(app.category)}</div>
-                                    <div class="stickers-tag">${app.desc}</div>
-                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px;">
-                                        <button class="btn-view-details" onclick="openAppDetails('${app.id}')">عرض</button>
+                                    <div class="app-category-sub" style="margin-bottom:6px;">${getCategoryNameAr(app.category)}</div>
+                                    <p style="color:#8e8e93; font-size:12px; margin:0 0 14px 0;">${app.desc}</p>
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <a href="${app.url}" class="btn-install" target="_blank" onclick="incrementDownload('${app.id}')">تثبيت فوري</a>
                                         <div style="display:flex; gap:6px;">
-                                            <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff3b30; border:none; padding:5px 9px; border-radius:8px; font-size:10px; cursor:pointer;">إبلاغ</button>
+                                            <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff9f0a; border:none; padding:5px 9px; border-radius:8px; font-size:10px; cursor:pointer;">إبلاغ</button>
                                             ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">تعديل</button><button class="btn-del" onclick="deleteApp('${app.id}')">حذف</button></div>` : ''}
                                         </div>
                                     </div>
@@ -686,10 +664,10 @@
 
                 const gContainer = document.getElementById('generalAppsContainer');
                 if (generalList.length === 0) {
-                    gContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات أخرى متاحة.</p>`;
+                    gContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات أخرى متاحة حالياً.</p>`;
                 } else {
                     generalList.forEach((app, idx) => {
-                        let rankBadge = (idx === 0) ? '<span style="color:#ff3b30; font-weight:900; margin-left:6px;">#1</span>' : '';
+                        let rankBadge = (idx === 0) ? '<span style="color:#32d74b; font-weight:900; margin-left:6px;">#1</span>' : '';
                         gContainer.innerHTML += createAppCardHTML(app, rankBadge);
                     });
                 }
@@ -698,13 +676,17 @@
                 container.innerHTML = `
                     <div class="today-header">
                         <div class="today-title">أدوات التثبيت والجلبريك</div>
-                        <div class="today-subtitle">دليل استخدام متجر وبرامج التوقيع</div>
+                        <div class="today-subtitle">دليل رسمي لاستخدام متجر وبرامج التوقيع</div>
                     </div>
                     <div style="margin-top:15px;">
                         <div class="tool-guide-card">
                             <h3>تطبيق E-Sign (توقيع الشهادات)</h3>
-                            <p>يعتبر برنامج <strong>E-Sign</strong> من أفضل أدوات تثبيت وتوقيع ملفات الـ IPA مباشرة على آيفونك بدون كمبيوتر، باستخدام شهادات التوزيع.</p>
-                            <p><strong>طريقة الاستخدام:</strong><br>1. ثبت برنامج E-Sign من الروابط الموثوقة.<br>2. ادخل للبرنامج، اضغط على الإعدادات ثم استيراد ملف الـ IPA الذي حملته لتثبيته بنجاح.</p>
+                            <p>يعتبر برنامج <strong>E-Sign</strong> من أفضل أدوات تثبيت وتوقيع ملفات الـ IPA مباشرة على آيفونك بدون كمبيوتر، باستخدام شهادات التوزيع (Enterprise Certificates).</p>
+                            <p><strong>طريقة الاستخدام:</strong><br>1. حمل شهادة التطبيق الموثوقة.<br>2. ثبت برنامج E-Sign من الروابط الرسمية.<br>3. ادخل للبرنامج، اضغط على زر الإعدادات ثم استيراد ملف الـ IPA الذي حملته من متجرنا لتثبيته بنجاح.</p>
+                        </div>
+                        <div class="tool-guide-card">
+                            <h3>تطبيق Scarlet أو TrollStore</h3>
+                            <p>بدائل قوية لتثبيت التطبيقات الموقعة، تمنحك استقراراً تاماً وتجنبك مشاكل توقف الشهادات المتكررة إذا كان جهازك يدعم إصداراً مناسباً.</p>
                         </div>
                     </div>
                 `;
@@ -716,17 +698,17 @@
                 container.innerHTML = `
                     <div class="today-header">
                         <div class="today-title">${titles[currentTab] || 'التطبيقات'}</div>
-                        <div class="today-subtitle">مكتبة IPA محدثة</div>
+                        <div class="today-subtitle">مكتبة IPA محدثة باستمرار</div>
                     </div>
                     <div style="margin-top:15px;" id="filteredContainer"></div>
                 `;
                 
                 const fContainer = document.getElementById('filteredContainer');
                 if (tabFiltered.length === 0) {
-                    fContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center; margin-top:40px;">لا توجد تطبيقات في هذا القسم.</p>`;
+                    fContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center; margin-top:40px;">لا توجد تطبيقات في هذا القسم حالياً.</p>`;
                 } else {
                     tabFiltered.forEach((app, idx) => {
-                        let rankBadge = (idx === 0) ? '<span style="color:#ff3b30; font-weight:900; margin-left:6px;">#1</span>' : '';
+                        let rankBadge = (idx === 0) ? '<span style="color:#32d74b; font-weight:900; margin-left:6px;">#1</span>' : '';
                         fContainer.innerHTML += createAppCardHTML(app, rankBadge);
                     });
                 }
@@ -748,13 +730,13 @@
                         <img src="${app.icon || 'https://via.placeholder.com/60'}" class="app-icon-img">
                         <div class="app-details">
                             <h4>${rankBadge}${app.name}</h4>
-                            <div class="app-category-sub">${getCategoryNameAr(app.category)} • ⭐ ${avgRating}</div>
-                            <div class="stickers-tag">${app.desc}</div>
+                            <div class="app-category-sub">${getCategoryNameAr(app.category)}</div>
+                            <p>${app.desc} • ⭐ ${avgRating}</p>
                         </div>
                     </div>
                     <div class="app-actions">
-                        <button class="btn-view-details" onclick="openAppDetails('${app.id}')">عرض</button>
-                        <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff3b30; border:none; padding:7px 10px; border-radius:12px; font-size:10px; cursor:pointer;" title="إبلاغ">⚠️</button>
+                        <a href="${app.url}" class="btn-install" target="_blank" onclick="incrementDownload('${app.id}')">تثبيت</a>
+                        <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff9f0a; border:none; padding:6px 8px; border-radius:10px; font-size:10px; cursor:pointer;" title="إبلاغ">⚠️</button>
                         ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">تعديل</button><button class="btn-del" onclick="deleteApp('${app.id}')">حذف</button></div>` : ''}
                     </div>
                 </div>
@@ -768,19 +750,19 @@
             }).catch(() => {});
         }
 
-        // فتح صفحة تفاصيل التطبيق مع لقطات الشاشة، الحجم، الوصف، التحميلات، التقييمات، التعليقات والابلاغ
         function openAppDetails(appId) {
             const app = allAppsCache.find(a => a.id === appId);
             if (!app) return;
             
             let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
+            
             let screenshotsHTML = '';
             if (app.screenshots && app.screenshots.length > 0) {
                 app.screenshots.forEach(imgUrl => {
                     screenshotsHTML += `<img src="${imgUrl}" class="screenshot-item">`;
                 });
             } else {
-                screenshotsHTML = `<p style="color:#8e8e93; font-size:11px;">لا توجد صور إضافية داخل التطبيق.</p>`;
+                screenshotsHTML = `<p style="color:#8e8e93; font-size:11px;">لا توجد صور إضافية من داخل التطبيق.</p>`;
             }
 
             db.collection("apps").doc(appId).collection("comments").orderBy("createdAt", "desc").get().then(snapshot => {
@@ -789,7 +771,7 @@
                 
                 let commentsHTML = '';
                 if(commentsList.length === 0) {
-                    commentsHTML = `<p style="color:#8e8e93; font-size:12px; text-align:center;">لا توجد تعليقات بعد. كن أول من يعلق!</p>`;
+                    commentsHTML = `<p style="color:#8e8e93; font-size:12px; text-align:center;">0 تعليقات حتى الآن. كن اول من يعلق!</p>`;
                 } else {
                     commentsList.forEach(c => {
                         commentsHTML += `
@@ -808,14 +790,13 @@
                         <div>
                             <h3 style="margin:0 0 2px 0; font-size:17px; color:#fff;">${app.name}</h3>
                             <div style="font-size:11px; color:#8e8e93; font-weight:600; margin-bottom:3px;">${getCategoryNameAr(app.category)}</div>
-                            <div class="stickers-tag" style="margin-bottom:4px;">${app.desc}</div>
-                            <div class="star-rating">⭐ ${avgRating} <span style="font-size:11px; color:#8e8e93;">(${app.ratingCount || 0} تقييم) • ${app.downloads || 0} تحميل</span></div>
+                            <p style="margin:0; font-size:12px; color:#a1a1a6;">${app.desc}</p>
+                            <div class="star-rating">⭐ ${avgRating} <span style="font-size:11px; color:#8e8e93;">(${app.ratingCount || 0} تقييم)</span></div>
                         </div>
                     </div>
 
-                    <a href="${app.url}" class="btn-install" style="display:block; text-align:center; padding:12px; margin-bottom:15px; font-size:14px;" target="_blank" onclick="incrementDownload('${app.id}')">تثبيت وتنزيل ملف IPA فوري</a>
+                    <a href="${app.url}" class="btn-install" style="display:block; text-align:center; padding:11px; margin-bottom:15px;" target="_blank" onclick="incrementDownload('${app.id}')">تحميل وتثبيت مباشر (.ipa)</a>
                     
-                    <!-- صور من داخل التطبيق -->
                     <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-bottom:12px;">
                         <h4 style="font-size:13px; margin:0 0 6px 0; color:#fff;">صور من داخل التطبيق:</h4>
                         <div class="screenshots-container">
@@ -823,23 +804,15 @@
                         </div>
                     </div>
 
-                    <!-- قسم التقييم -->
                     <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-bottom:12px;">
                         <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">قيم هذا التطبيق:</h4>
                         <div style="display:flex; gap:10px; justify-content:center;">
-                            <button onclick="rateApp('${app.id}', 1)" style="background:#1c1c24; border:1px solid #ff3b30; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐ 1</button>
-                            <button onclick="rateApp('${app.id}', 3)" style="background:#1c1c24; border:1px solid #ff3b30; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐ 3</button>
-                            <button onclick="rateApp('${app.id}', 5)" style="background:#1c1c24; border:1px solid #ff3b30; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐⭐⭐ 5</button>
+                            <button onclick="rateApp('${app.id}', 1)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐ 1</button>
+                            <button onclick="rateApp('${app.id}', 3)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐ 3</button>
+                            <button onclick="rateApp('${app.id}', 5)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐⭐⭐ 5</button>
                         </div>
                     </div>
 
-                    <!-- زر الإبلاغ داخل تفاصيل التطبيق -->
-                    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-size:12px; color:#8e8e93;">هل واجهتك مشكلة في هذا التطبيق؟</span>
-                        <button onclick="openReportModal('${app.id}')" style="background:rgba(255,59,48,0.2); border:1px solid rgba(255,59,48,0.4); color:#ff3b30; padding:6px 14px; border-radius:12px; font-weight:bold; font-size:12px; cursor:pointer;">إبلاغ</button>
-                    </div>
-
-                    <!-- قسم التعليقات -->
                     <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
                         <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">التعليقات (${commentsList.length}):</h4>
                         <div style="max-height:160px; overflow-y:auto; margin-bottom:10px;" id="commentsListArea">
@@ -847,8 +820,8 @@
                         </div>
                         ${currentUser ? `
                             <input type="text" id="newCommentText" class="input-field" placeholder="اكتب تعليقاً..." style="margin-bottom:6px;">
-                            <button onclick="postComment('${app.id}')" style="background:#ff3b30; color:#fff; border:none; width:100%; padding:9px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:12px;">إرسال التعليق</button>
-                        ` : `<p style="color:#ff3b30; font-size:11px; text-align:center;">سجل دخولك عبر زر الحساب بالأعلى لتتمكن من التعليق.</p>`}
+                            <button onclick="postComment('${app.id}')" style="background:#0a84ff; color:#fff; border:none; width:100%; padding:9px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:12px;">إرسال التعليق</button>
+                        ` : `<p style="color:#ff9f0a; font-size:11px; text-align:center;">سجل دخولك عبر زر الحساب بالأعلى لتتمكن من التعليق.</p>`}
                     </div>
                     
                     <button onclick="document.getElementById('appDetailModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:12px; margin-top:16px; cursor:pointer; font-weight:bold;">إغلاق</button>
@@ -913,14 +886,14 @@
                 user: currentUser ? currentUser.email : 'زائر',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                alert('تم إرسال بلاغك للإدارة بنجاح.');
+                alert('تم إرسال بلاغك للإدارة بنجاح. شكراً لمساهمتك!');
                 document.getElementById('reportModal').style.display = 'none';
             });
         }
 
         function deleteReport(reportId) {
             if (!isAdmin) return;
-            if (confirm('حذف هذا البلاغ؟')) {
+            if (confirm('هل تريد حذف هذا البلاغ نهائياً؟')) {
                 db.collection("reports").doc(reportId).delete();
             }
         }
@@ -966,7 +939,8 @@
         function openAccountModal() { document.getElementById('accountModal').style.display = 'flex'; }
         
         function openAddAppModal() {
-            document.getElementById('modalTitleText').innerText = "إضافة تطبيق جديد";
+            if (!isAdmin) return;
+            document.getElementById('modalTitleText').innerText = "إضافة تطبيق للسحابة";
             document.getElementById('editingAppId').value = "";
             document.getElementById('appName').value = "";
             document.getElementById('appDesc').value = "";
@@ -980,7 +954,7 @@
             if (!isAdmin) return;
             const app = allAppsCache.find(a => a.id === id);
             if (!app) return;
-            document.getElementById('modalTitleText').innerText = "تعديل التطبيق";
+            document.getElementById('modalTitleText').innerText = "تعديل التطبيق أو الـ URL";
             document.getElementById('editingAppId').value = app.id;
             document.getElementById('appCategory').value = app.category || 'today';
             document.getElementById('appName').value = app.name || '';
@@ -989,17 +963,17 @@
             document.getElementById('addAppModal').style.display = 'flex';
         }
 
-        // حفظ التطبيق وإرساله للتدقيق إذا لم يكن أدمن
         function saveNewApp() {
+            if (!isAdmin) return;
             const editingId = document.getElementById('editingAppId').value;
             const category = document.getElementById('appCategory').value;
-            const name = document.getElementById('appName').value.trim();
-            const desc = document.getElementById('appDesc').value.trim();
-            const url = document.getElementById('appUrl').value.trim();
+            const name = document.getElementById('appName').value;
+            const desc = document.getElementById('appDesc').value;
+            const url = document.getElementById('appUrl').value || '#';
             const fileInput = document.getElementById('appImgFile');
             const screenshotsInput = document.getElementById('appScreenshotsFile');
 
-            if (!name || !url) { alert('أدخل اسم التطبيق ورابط الـ URL من فضلك'); return; }
+            if (!name) { alert('أدخل اسم التطبيق من فضلك'); return; }
 
             let iconResult = 'https://via.placeholder.com/60';
             if (editingId) {
@@ -1047,65 +1021,35 @@
         }
 
         function commitAppToCloud(editingId, category, name, desc, url, icon, screenshots) {
-            if (isAdmin && editingId) {
+            if (editingId) {
                 db.collection("apps").doc(editingId).update({
                     category, name, desc, url, icon, screenshots
                 }).then(() => {
                     document.getElementById('addAppModal').style.display = 'none';
                     alert('تم تحديث التطبيق بنجاح!');
-                });
-            } else if (isAdmin && !editingId) {
+                }).catch(err => alert("خطأ: " + err.message));
+            } else {
                 db.collection("apps").add({
                     category, name, desc, url, icon, screenshots,
-                    ratingSum: 0, ratingCount: 0, downloads: 0, commentsCount: 0,
+                    ratingSum: 0,
+                    ratingCount: 0,
+                    downloads: 0,
+                    commentsCount: 0,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
+                    document.getElementById('appName').value = '';
+                    document.getElementById('appDesc').value = '';
+                    document.getElementById('appUrl').value = '';
+                    document.getElementById('appImgFile').value = '';
+                    document.getElementById('appScreenshotsFile').value = '';
                     document.getElementById('addAppModal').style.display = 'none';
-                    alert('تم نشر التطبيق مباشرة بنجاح!');
-                });
-            } else {
-                // إذا كان مستخدماً عادياً، يذهب إلى pending_apps للمراجعة من طرف الأدمن
-                db.collection("pending_apps").add({
-                    category, name, desc, url, icon, screenshots,
-                    submittedBy: currentUser ? currentUser.email : 'زائر',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    document.getElementById('addAppModal').style.display = 'none';
-                    alert('تم إرسال تطبيقك بنجاح! سيتم مراجعته من طرف الأدمن وقبوله قريباً.');
-                });
-            }
-        }
-
-        function approveApp(pendingId) {
-            if (!isAdmin) return;
-            const target = allPendingCache.find(p => p.id === pendingId);
-            if (!target) return;
-
-            db.collection("apps").add({
-                category: target.category,
-                name: target.name,
-                desc: target.desc,
-                url: target.url,
-                icon: target.icon,
-                screenshots: target.screenshots || [],
-                ratingSum: 0, ratingCount: 0, downloads: 0, commentsCount: 0,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                db.collection("pending_apps").doc(pendingId).delete();
-                alert('تم قبول ونشر التطبيق بنجاح!');
-            });
-        }
-
-        function rejectApp(pendingId) {
-            if (!isAdmin) return;
-            if (confirm('رفض وحذف هذا الطلب؟')) {
-                db.collection("pending_apps").doc(pendingId).delete();
+                }).catch(err => alert("خطأ: " + err.message));
             }
         }
 
         function deleteApp(id) {
             if (!isAdmin) return;
-            if (confirm('هل أنت متأكد من حذف هذا التطبيق نهائياً؟')) {
+            if (confirm('هل أنت متأكد من حذف هذا التطبيق نهائياً من السحابة؟')) {
                 db.collection("apps").doc(id).delete();
             }
         }
