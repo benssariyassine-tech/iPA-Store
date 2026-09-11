@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 
-app = Flask(__name__, template_folder='templates')
+app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
 # قاعدة بيانات المتجر المنظمة بدقة حسب الأقسام (يمكنك تحديثها أو إضافة تطبيقات قناتك هنا بكل سهولة)
