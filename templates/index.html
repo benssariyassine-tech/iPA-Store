@@ -86,7 +86,7 @@
             font-weight: 700;
             border: none;
             cursor: pointer;
-            display: none; /* تظهر فقط للأدمن */
+            display: none;
         }
         .admin-add-btn {
             background: #32d74b;
@@ -97,7 +97,7 @@
             font-weight: 700;
             border: none;
             cursor: pointer;
-            display: none; /* تظهر فقط للأدمن */
+            display: none;
         }
 
         .modal {
@@ -163,8 +163,10 @@
         }
     </style>
 
+    <!-- استدعاء مكتبات فيرسباس (Auth + Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -182,7 +184,8 @@
         </div>
 
         <div id="appsListContainer">
-            <!-- التطبيقات تظهر هنا ديناميكياً -->
+            <!-- التطبيقات تسحب سحابياً هنا -->
+            <p style="text-align: center; color: #8e8e93; font-size: 13px;">جاري تحميل التطبيقات...</p>
         </div>
     </div>
 
@@ -212,10 +215,12 @@
     <div id="addAppModal" class="modal">
         <div class="modal-content">
             <h3 style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق IPA جديد</h3>
+            <div style="text-align: right; margin-bottom: 8px; font-size: 12px; color: #8e8e93;">أيقونة التطبيق:</div>
+            <input type="file" id="appImageInput" class="admin-input" accept="image/*">
             <input type="text" id="appNameInput" class="admin-input" placeholder="اسم التطبيق (مثال: يوتيوب بلس)">
             <input type="text" id="appDescInput" class="admin-input" placeholder="الوصف (مثال: بدون إعلانات)">
             <input type="text" id="appUrlInput" class="admin-input" placeholder="رابط التحميل (.ipa)">
-            <button class="install-btn" onclick="addNewApp()" style="width:100%; margin-bottom:10px; background:#32d74b; color:#000;">حفظ ونشر</button>
+            <button class="install-btn" onclick="addNewAppToCloud()" style="width:100%; margin-bottom:10px; background:#32d74b; color:#000;">حفظ ونشر سحابياً</button>
             <button class="close-modal" onclick="closeAddAppModal()">إلغاء</button>
         </div>
     </div>
@@ -234,39 +239,49 @@
             firebase.initializeApp(firebaseConfig);
         }
         const auth = firebase.auth();
+        const db = firebase.firestore();
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
         const ADMIN_EMAIL = "benssariyassine@gmail.com";
         let isAdmin = false;
 
-        // قائمة التطبيقات الافتراضية أو المخزنة
-        let appsData = JSON.parse(localStorage.getItem('istore_apps')) || [
-            { name: "يوتيوب بلس", desc: "بدون إعلانات - تشغيل بالخلفية", url: "#" }
-        ];
+        // جلب التطبيقات مباشرة من قاعدة بيانات Firestore السحابية وعرضها لحظياً للجميع
+        function fetchAppsFromCloud() {
+            db.collection("apps").onSnapshot((snapshot) => {
+                const container = document.getElementById('appsListContainer');
+                container.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="text-align: center; color: #8e8e93; font-size: 13px;">لا توجد تطبيقات مضافة حالياً.</p>';
+                    return;
+                }
 
-        function renderApps() {
-            const container = document.getElementById('appsListContainer');
-            container.innerHTML = '';
-            
-            appsData.forEach((app, index) => {
-                container.innerHTML += `
-                    <div class="app-card">
-                        <div class="app-info">
-                            <h3>${app.name} <span class="pro-badge">PRO</span></h3>
-                            <p>${app.desc}</p>
+                snapshot.forEach((doc) => {
+                    const app = doc.data();
+                    const docId = doc.id;
+                    const appIcon = app.icon || 'https://via.placeholder.com/60';
+
+                    container.innerHTML += `
+                        <div class="app-card">
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <img src="${appIcon}" style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover;">
+                                <div class="app-info">
+                                    <h3>${app.name} <span class="pro-badge">PRO</span></h3>
+                                    <p>${app.desc}</p>
+                                </div>
+                            </div>
+                            <div class="actions-group">
+                                <a href="${app.url}" class="install-btn">تثبيت</a>
+                                <button class="delete-btn" id="del-${docId}" onclick="deleteAppFromCloud('${docId}')" style="display: ${isAdmin ? 'block' : 'none'};">حذف</button>
+                            </div>
                         </div>
-                        <div class="actions-group">
-                            <a href="${app.url}" class="install-btn" onclick="event.preventDefault(); alert('جارٍ بدء التثبيت...');">تثبيت</a>
-                            <button class="delete-btn" id="del-btn-${index}" onclick="deleteApp(${index})" style="display: ${isAdmin ? 'block' : 'none'};">حذف</button>
-                        </div>
-                    </div>
-                `;
+                    `;
+                });
             });
         }
 
         function openAccountModal() { document.getElementById('accountModal').style.display = 'flex'; }
         function closeAccountModal() { document.getElementById('accountModal').style.display = 'none'; }
-        
         function openAddAppModal() { document.getElementById('addAppModal').style.display = 'flex'; }
         function closeAddAppModal() { document.getElementById('addAppModal').style.display = 'none'; }
 
@@ -290,7 +305,6 @@
                 document.getElementById('userEmailText').innerText = user.email;
                 document.getElementById('userAvatarBtn').innerText = user.email.charAt(0).toUpperCase();
 
-                // التحقق من صلاحيات الأدمن بدقة
                 if (user.email.toLowerCase() === ADMIN_EMAIL) {
                     isAdmin = true;
                     addBtn.style.display = 'block';
@@ -308,37 +322,61 @@
                 addBtn.style.display = 'none';
                 adminBadge.style.display = 'none';
             }
-            renderApps();
+            // إعادة تحديث الواجهة لإظهار أزرار الحذف للأدمن فوراً
+            fetchAppsFromCloud();
         });
 
-        function addNewApp() {
+        // إضافة التطبيق مباشرة للسيرفر السحابي
+        function addNewAppToCloud() {
             if (!isAdmin) return;
             const name = document.getElementById('appNameInput').value;
             const desc = document.getElementById('appDescInput').value;
             const url = document.getElementById('appUrlInput').value || '#';
+            const imageInput = document.getElementById('appImageInput');
 
             if (!name) {
                 alert('الرجاء إدخال اسم التطبيق على الأقل');
                 return;
             }
 
-            appsData.push({ name, desc, url });
-            localStorage.setItem('istore_apps', JSON.stringify(appsData));
-            
-            document.getElementById('appNameInput').value = '';
-            document.getElementById('appDescInput').value = '';
-            document.getElementById('appUrlInput').value = '';
-            
-            closeAddAppModal();
-            renderApps();
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const icon = e.target.result;
+                    saveToFirestore(name, desc, url, icon);
+                };
+                reader.readAsDataURL(imageInput.files[0]);
+            } else {
+                saveToFirestore(name, desc, url, 'https://via.placeholder.com/60');
+            }
         }
 
-        function deleteApp(index) {
+        function saveToFirestore(name, desc, url, icon) {
+            db.collection("apps").add({
+                name: name,
+                desc: desc,
+                url: url,
+                icon: icon,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(() => {
+                document.getElementById('appNameInput').value = '';
+                document.getElementById('appDescInput').value = '';
+                document.getElementById('appUrlInput').value = '';
+                document.getElementById('appImageInput').value = '';
+                closeAddAppModal();
+            })
+            .catch((error) => {
+                alert("حدث خطأ أثناء الرفع: " + error.message);
+            });
+        }
+
+        function deleteAppFromCloud(docId) {
             if (!isAdmin) return;
-            if (confirm('هل أنت متأكد من حذف هذا التطبيق؟')) {
-                appsData.splice(index, 1);
-                localStorage.setItem('istore_apps', JSON.stringify(appsData));
-                renderApps();
+            if (confirm('هل أنت متأكد من حذف هذا التطبيق نهائياً من السيرفر؟')) {
+                db.collection("apps").doc(docId).delete().catch((error) => {
+                    alert("خطأ في الحذف: " + error.message);
+                });
             }
         }
 
@@ -348,8 +386,8 @@
             });
         }
 
-        // تشغيل أولى لعرض القائمة
-        renderApps();
+        // تشغيل الجلب السحابي عند فتح الصفحة لأول مرة
+        fetchAppsFromCloud();
     </script>
 </body>
 </html>
