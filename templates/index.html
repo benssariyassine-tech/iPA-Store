@@ -188,6 +188,52 @@
             display: none;
         }
 
+        /* لوحة تحكم الأدمن المخصصة */
+        .admin-dashboard-card {
+            background: #16161c;
+            border: 1px solid rgba(10,132,255,0.3);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+        .admin-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .stat-box {
+            background: #0b0b0f;
+            border: 1px solid rgba(255,255,255,0.06);
+            padding: 12px;
+            border-radius: 14px;
+            text-align: center;
+        }
+        .stat-box h5 { margin: 0 0 5px 0; color: #8e8e93; font-size: 11px; }
+        .stat-box p { margin: 0; color: #0a84ff; font-size: 18px; font-weight: 900; }
+        
+        .report-admin-item {
+            background: #0b0b0f;
+            border: 1px solid rgba(255,59,48,0.3);
+            padding: 12px;
+            border-radius: 14px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+        .quick-reply-btn {
+            background: #2c2c2e;
+            color: #ff9f0a;
+            border: 1px solid rgba(255,159,10,0.3);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-left: 4px;
+            font-family: 'Cairo', sans-serif;
+        }
+
         /* صفحة تفاصيل التطبيق والتعليقات والتقييمات */
         .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .detail-icon { width: 75px; height: 75px; border-radius: 18px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
@@ -257,6 +303,10 @@
             <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
             الأدوات
         </button>
+        <button class="nav-item" id="adminNavTab" style="display:none; color:#0a84ff;" onclick="switchTab('admin_panel', this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            لوحة الأدمن
+        </button>
     </div>
 
     <!-- نافذة الحساب وتسجيل الدخول العامة -->
@@ -308,12 +358,21 @@
         </div>
     </div>
 
-    <!-- نافذة الإبلاغ عن مشكلة -->
+    <!-- نافذة الإبلاغ عن مشكلة مع الردود الفورية -->
     <div id="reportModal" class="modal">
         <div class="modal-box">
-            <h3 style="margin-top:0; color:#fff; font-size:16px;">إبلاغ عن رابط لا يعمل أو مشكلة</h3>
+            <h3 style="margin-top:0; color:#fff; font-size:16px;">إبلاغ عن مشكلة في التطبيق</h3>
             <input type="hidden" id="reportAppId">
-            <textarea id="reportReason" class="input-field" placeholder="اكتب تفاصيل المشكلة (مثال: رابط التحميل منتهٍ)..." style="height:80px; resize:none;"></textarea>
+            
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:6px;">اختر سبباً جاهزاً بضغطة زر:</div>
+            <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
+                <button type="button" onclick="setReportReasonText('رابط لا يشتغل')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">🔗 رابط لا يشتغل</button>
+                <button type="button" onclick="setReportReasonText('منتهي صلاحية')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">⏳ منتهي صلاحية</button>
+                <button type="button" onclick="setReportReasonText('لعبة غير اخلاقية')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">⚠️ لعبة غير اخلاقية</button>
+                <button type="button" onclick="setReportReasonText('تطبيق يحتوي على محتوى غير اخلاقي')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">🛑 تطبيق يحتوي على محتوى غير اخلاقي</button>
+            </div>
+
+            <textarea id="reportReason" class="input-field" placeholder="أو اكتب تفاصيل المشكلة بنفسك..." style="height:70px; resize:none;"></textarea>
             <button onclick="submitReport()" style="background:#ff9f0a; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">إرسال البلاغ للأدمن</button>
             <button onclick="document.getElementById('reportModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إغلاق</button>
         </div>
@@ -337,6 +396,7 @@
         let isAdmin = false;
         let currentTab = 'today';
         let allAppsCache = [];
+        let allReportsCache = [];
 
         // الحصول على التاريخ الفعلي الحقيقي بالعربية
         function getActualDateString() {
@@ -361,6 +421,15 @@
             renderUI();
         });
 
+        // جلب البلاغات بشكل حي للأدمن
+        db.collection("reports").orderBy("createdAt", "desc").onSnapshot(snapshot => {
+            allReportsCache = [];
+            snapshot.forEach(doc => {
+                allReportsCache.push({ id: doc.id, ...doc.data() });
+            });
+            if(currentTab === 'admin_panel') renderUI();
+        });
+
         function filterAppsSearch() {
             renderUI();
         }
@@ -379,6 +448,65 @@
                 } else {
                     filtered.forEach(app => sContainer.innerHTML += createAppCardHTML(app));
                 }
+                return;
+            }
+
+            if (currentTab === 'admin_panel' && isAdmin) {
+                let totalApps = allAppsCache.length;
+                let totalReports = allReportsCache.length;
+                let mostActiveApp = "لا توجد بعد";
+                if(totalApps > 0) {
+                    let sortedByRating = [...allAppsCache].sort((a,b) => (b.ratingCount||0) - (a.ratingCount||0));
+                    mostActiveApp = sortedByRating[0].name;
+                }
+
+                let reportsHTML = "";
+                if(totalReports === 0) {
+                    reportsHTML = `<p style="color:#8e8e93; text-align:center; font-size:12px;">لا توجد بلاغات من المستخدمين حالياً.</p>`;
+                } else {
+                    allReportsCache.forEach(rep => {
+                        let targetApp = allAppsCache.find(a => a.id === rep.appId);
+                        let appName = targetApp ? targetApp.name : "تطبيق محذوف أو غير معروف";
+                        reportsHTML += `
+                            <div class="report-admin-item">
+                                <div style="color:#ff453a; font-weight:bold; margin-bottom:3px;">🚨 تطبيق: ${appName}</div>
+                                <div style="color:#fff; font-size:13px; margin-bottom:5px;">💬 ما قاله المستخدم: "${rep.reason}"</div>
+                                <div style="display:flex; justify-content:space-between; color:#8e8e93; font-size:10px;">
+                                    <span>المبلغ: ${rep.user}</span>
+                                    <button onclick="deleteReport('${rep.id}')" style="background:#ff453a; color:#fff; border:none; padding:2px 8px; border-radius:6px; cursor:pointer;">حذف البلاغ</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                container.innerHTML = `
+                    <div class="today-header">
+                        <div class="today-title">لوحة تحكم الأدمن</div>
+                        <div class="today-subtitle">👑 مركز إدارة التطبيقات، البلاغات والتفاعل</div>
+                    </div>
+                    
+                    <div class="admin-dashboard-card">
+                        <div class="admin-stats-grid">
+                            <div class="stat-box">
+                                <h5>إجمالي التطبيقات</h5>
+                                <p>${totalApps}</p>
+                            </div>
+                            <div class="stat-box">
+                                <h5>إجمالي البلاغات</h5>
+                                <p>${totalReports}</p>
+                            </div>
+                        </div>
+                        <div style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.06); padding:10px; border-radius:12px; font-size:12px; margin-bottom:15px;">
+                            <span style="color:#8e8e93;">أكثر تطبيق تفاعلاً:</span> <strong>${mostActiveApp}</strong>
+                        </div>
+                        
+                        <h4 style="font-size:14px; margin:0 0 10px 0; color:#fff; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">بلاغات المستخدمين الواردة (${totalReports}):</h4>
+                        <div style="max-height:350px; overflow-y:auto;">
+                            ${reportsHTML}
+                        </div>
+                    </div>
+                `;
                 return;
             }
 
@@ -592,10 +720,14 @@
             document.getElementById('reportModal').style.display = 'flex';
         }
 
+        function setReportReasonText(reasonText) {
+            document.getElementById('reportReason').value = reasonText;
+        }
+
         function submitReport() {
             const appId = document.getElementById('reportAppId').value;
             const reason = document.getElementById('reportReason').value.trim();
-            if (!reason) { alert('اكتب سبب الإبلاغ من فضلك'); return; }
+            if (!reason) { alert('اكتب سبب الإبلاغ من فضلك أو اختر رداً فورياً'); return; }
 
             db.collection("reports").add({
                 appId, reason,
@@ -607,11 +739,19 @@
             });
         }
 
+        function deleteReport(reportId) {
+            if (!isAdmin) return;
+            if (confirm('هل تريد حذف هذا البلاغ نهائياً؟')) {
+                db.collection("reports").doc(reportId).delete();
+            }
+        }
+
         // المصادقة والتحقق من حساب الأدمن
         auth.onAuthStateChanged(user => {
             currentUser = user;
             const floatBtn = document.getElementById('adminAddFloatBtn');
             const adminBadge = document.getElementById('adminBadge');
+            const adminNavTab = document.getElementById('adminNavTab');
             
             if (user) {
                 document.getElementById('loggedOutView').style.display = 'none';
@@ -622,15 +762,18 @@
                     isAdmin = true;
                     floatBtn.style.display = 'block';
                     adminBadge.style.display = 'block';
+                    adminNavTab.style.display = 'flex';
                 } else {
                     isAdmin = false;
                     floatBtn.style.display = 'none';
                     adminBadge.style.display = 'none';
+                    adminNavTab.style.display = 'none';
                 }
             } else {
                 isAdmin = false;
                 floatBtn.style.display = 'none';
                 adminBadge.style.display = 'none';
+                adminNavTab.style.display = 'none';
                 document.getElementById('loggedOutView').style.display = 'block';
                 document.getElementById('loggedInView').style.display = 'none';
             }
