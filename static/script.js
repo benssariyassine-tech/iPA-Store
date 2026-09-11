@@ -1,4 +1,6 @@
-// 1. تهيئة خدمات Firebase
+// ==========================================
+// 1. إعدادات الاتصال بـ Firebase و API
+// ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyC3r9wr8tgjRNwWFY01mxrVy640sQFs2bg",
   authDomain: "istore-ipa.firebaseapp.com",
@@ -15,7 +17,9 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// ==========================================
 // 2. القائمة الجانبية
+// ==========================================
 function toggleSideMenu() {
     const sideMenu = document.getElementById('sideMenu');
     const overlay = document.getElementById('sideMenuOverlay');
@@ -23,7 +27,9 @@ function toggleSideMenu() {
     if (overlay) overlay.classList.toggle('active');
 }
 
-// 3. النوافذ المنبثقة للـ Auth
+// ==========================================
+// 3. النوافذ المنبثقة وتسجيل الدخول
+// ==========================================
 let isSignUpMode = false;
 
 function openAuthModal() {
@@ -93,7 +99,9 @@ function handleAuthSubmit(e) {
     }
 }
 
-// 4. جلب التطبيقات من Firestore
+// ==========================================
+// 4. جلب وعرض التطبيقات من Firestore
+// ==========================================
 function loadApps() {
     const appsContainer = document.getElementById('appsContainer');
     if (!appsContainer) return;
@@ -108,20 +116,23 @@ function loadApps() {
         snapshot.forEach((doc) => {
             const app = doc.data();
             html += `
-                <div class="app-card" style="background:#1c1c1e; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
-                    <div style="color:#fff;">
-                        <h3 style="margin:0; font-size:16px;">${app.title || 'تطبيق IPA'}</h3>
-                        <p style="margin:4px 0 0; color:#8e8e93; font-size:12px;">${app.category || 'عام'}</p>
+                <div class="app-card" style="background:#1c1c1e; padding:16px; border-radius:16px; margin-bottom:12px; border:1px solid #2c2c2e;">
+                    <div style="display:flex; align-items:center; justify-content:space-between;">
+                        <div>
+                            <h3 style="color:#ffffff; margin:0 0 4px 0; font-size:16px;">${app.title || 'تطبيق'}</h3>
+                            <p style="color:#8e8e93; margin:0; font-size:13px;">${app.description || app.category || 'تطبيق IPA'}</p>
+                        </div>
+                        <a href="${app.download_url || '#'}" style="background:#0a84ff; color:#ffffff; padding:8px 18px; border-radius:20px; text-decoration:none; font-weight:bold; font-size:13px;">تثبيت</a>
                     </div>
-                    <a href="${app.download_url || '#'}" style="background:#0a84ff; color:#fff; padding:6px 16px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:bold;">تثبيت</a>
                 </div>
             `;
         });
         appsContainer.innerHTML = html;
     }).catch((error) => {
+        console.error("خطأ في جلب التطبيقات:", error);
         appsContainer.innerHTML = '<p style="text-align:center; color:#ff453a; padding: 20px;">حدث خطأ أثناء تحميل البيانات.</p>';
-        console.error("خطأ في التحميل:", error);
     });
 }
 
+// تشغيل الدالة فور تحميل الصفحة
 document.addEventListener('DOMContentLoaded', loadApps);
