@@ -258,23 +258,10 @@
             document.getElementById('accountModal').style.display = 'none';
         }
 
-        // استخدام التوجيه المباشر لتفادي حظر النوافذ في الآيفون
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithRedirect(provider);
         }
-
-        // فحص نتيجة تسجيل الدخول المباشر عند عودة المستخدم للموقع
-        auth.getRedirectResult()
-            .then((result) => {
-                if (result.user) {
-                    closeAccountModal();
-                    updateUserUI(result.user);
-                }
-            })
-            .catch((error) => {
-                console.log(error.message);
-            });
 
         let isSignupMode = false;
         function toggleAuthMode() {
@@ -344,6 +331,15 @@
             }
         }
 
+        // التعامل التلقائي مع نتيجة إعادة التوجيه وتثبيت الجلسة فور العودة
+        auth.getRedirectResult().then((result) => {
+            if (result.user) {
+                updateUserUI(result.user);
+            }
+        }).catch((error) => {
+            console.log(error);
+        });
+
         auth.onAuthStateChanged((user) => {
             updateUserUI(user);
         });
@@ -351,6 +347,7 @@
         function logoutUser() {
             auth.signOut().then(() => {
                 closeAccountModal();
+                updateUserUI(null);
             });
         }
     </script>
