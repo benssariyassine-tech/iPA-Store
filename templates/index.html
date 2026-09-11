@@ -3,167 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>iStore IPA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>IPAOMTK</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body {
-            background-color: #000000;
+            background-color: #0b0b0f;
             color: #ffffff;
             font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 0 0 90px 0;
             direction: rtl;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            background: #000000;
-            border-bottom: 1px solid #1c1c1e;
+            padding: 18px 20px;
+            background: rgba(11, 11, 15, 0.85);
+            backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .header h1 { font-size: 20px; margin: 0; font-weight: 800; }
+        .logo-area { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 22px; letter-spacing: 0.5px; }
+        .logo-area span { color: #ff3b30; }
         
-        .user-avatar-btn {
+        .header-icons { display: flex; gap: 12px; align-items: center; }
+        .icon-btn {
+            background: #1c1c24;
+            border: 1px solid rgba(255,255,255,0.08);
             width: 38px;
             height: 38px;
-            background: #1c1c1e;
-            border: 1px solid #2c2c2e;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #0a84ff;
+            color: #fff;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 15px;
-            overflow: hidden;
         }
+
         .container { padding: 20px; max-width: 600px; margin: auto; }
-        .section-title { font-size: 17px; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
-        .app-card {
-            background: #1c1c1e;
-            border: 1px solid #2c2c2e;
-            border-radius: 16px;
-            padding: 16px;
+        /* ستايل صفحة اليوم */
+        .today-header { margin-bottom: 20px; }
+        .today-date { color: #8e8e93; font-size: 13px; font-weight: 600; }
+        .today-title { font-size: 32px; font-weight: 900; margin: 2px 0; }
+        .today-subtitle { font-size: 14px; color: #ff9f0a; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+
+        .featured-card {
+            background: #16161c;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .featured-img { width: 100%; height: 200px; object-fit: cover; }
+        .featured-body { padding: 18px; }
+        .badge-tag { background: rgba(255,159,10,0.15); color: #ff9f0a; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 8px; display: inline-block; margin-bottom: 8px; }
+        
+        .section-heading { font-size: 18px; font-weight: 800; margin: 25px 0 15px 0; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* كارد التطبيق الاحترافي */
+        .app-card-pro {
+            background: #16161c;
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 20px;
+            padding: 14px;
             margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: transform 0.2s;
         }
-        .app-info h3 { margin: 0 0 4px 0; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 6px; }
-        .app-info p { margin: 0; font-size: 13px; color: #8e8e93; }
-        .pro-badge {
-            background: linear-gradient(135deg, #ff9500, #ffcc00);
-            color: #000;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
-        .actions-group { display: flex; gap: 8px; align-items: center; }
-        .install-btn {
-            background: #0a84ff;
+        .app-meta { display: flex; align-items: center; gap: 12px; overflow: hidden; }
+        .app-icon-img { width: 56px; height: 56px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
+        .app-details h4 { margin: 0 0 3px 0; font-size: 15px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 6px; }
+        .app-details p { margin: 0; font-size: 12px; color: #8e8e93; }
+        
+        .app-actions { display: flex; gap: 8px; align-items: center; }
+        .btn-install {
+            background: linear-gradient(135deg, #ff3b30, #ff453a);
             color: #fff;
-            padding: 8px 18px;
+            padding: 8px 16px;
             border-radius: 20px;
             text-decoration: none;
-            font-size: 13px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-        }
-        .delete-btn {
-            background: #ff453a;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 20px;
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 800;
             border: none;
-            cursor: pointer;
-            display: none;
+            box-shadow: 0 4px 12px rgba(255,59,48,0.3);
         }
-        .admin-add-btn {
+        .btn-edit { background: #ff9f0a; color: #000; padding: 6px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; display: none; }
+        .btn-del { background: #ff453a; color: #fff; padding: 6px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; display: none; }
+
+        /* القائمة السفلية العائمة */
+        .floating-nav {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%;
+            max-width: 480px;
+            background: rgba(22, 22, 28, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 5px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: #8e8e93;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.2s;
+        }
+        .nav-item.active { color: #0a84ff; }
+        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        /* الأ modal والنافذة المنبثقة */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justifyContent: center; }
+        .modal-box { background: #16161c; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 24px; width: 85%; max-width: 350px; box-sizing: border-box; }
+        .input-field { width: 100%; padding: 12px; margin-bottom: 12px; background: #0b0b0f; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; box-sizing: border-box; font-family: 'Cairo', sans-serif; font-size: 13px; }
+        select.input-field { appearance: none; }
+        .admin-add-float {
+            position: fixed;
+            bottom: 85px;
+            left: 20px;
             background: #32d74b;
             color: #000;
-            padding: 6px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-            display: none;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background-color: #1c1c1e;
-            border: 1px solid #2c2c2e;
-            border-radius: 20px;
-            padding: 24px;
-            width: 85%;
-            max-width: 340px;
-            box-sizing: border-box;
-            text-align: center;
-        }
-        .google-btn {
-            background: #ffffff;
-            color: #000000;
-            border: none;
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: 'Cairo', sans-serif;
-            margin-bottom: 20px;
-        }
-        .close-modal {
-            background: #2c2c2e;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            width: 100%;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-weight: 800;
             font-size: 13px;
-        }
-        .admin-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            background: #2c2c2e;
-            border: 1px solid #3a3a3c;
-            border-radius: 10px;
-            color: #fff;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
+            border: none;
+            box-shadow: 0 4px 15px rgba(50,215,75,0.4);
+            cursor: pointer;
+            z-index: 999;
+            display: none;
         }
     </style>
 
-    <!-- استدعاء مكتبات فيرسباس (Auth + Firestore) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -171,57 +162,77 @@
 <body>
 
     <div class="header">
-        <h1>iStore IPA</h1>
-        <div class="user-avatar-btn" id="userAvatarBtn" onclick="openAccountModal()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <div class="logo-area">
+            <svg width="22" height="22" viewBox="0 0 170 170" fill="#fff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.1-1.9-14.24-6.08-3.05-2.61-6.91-7.2-11.58-13.78-6.1-8.57-11.05-18.15-14.85-28.74-3.8-10.59-5.7-20.73-5.7-30.43 0-11.58 3.02-21.2 9.07-28.85 6.04-7.65 13.68-11.54 22.9-11.66 4.9 0 10.15 1.3 15.76 3.9 5.6 2.61 9.3 3.91 11.1 3.91 1.52 0 5.37-1.38 11.55-4.14 6.18-2.76 11.45-4.04 15.82-3.85 10.36.76 18.57 5.04 24.63 12.83-9.35 5.72-13.93 13.43-13.73 23.15.22 7.6 3.14 13.88 8.77 18.83 5.62 4.95 12.44 7.55 20.45 7.82-1.85 5.66-4.14 11.31-6.88 16.97zM119.22 31.33c0-7.39 2.68-14.25 8.04-20.58 5.36-6.33 12.18-10.23 20.45-11.72.11.87.16 1.69.16 2.47 0 7.18-2.83 14.28-8.5 23.3-5.66 9.02-12.39 13.6-20.15 13.73-.01-.89-.01-1.78 0-3.2z"/></svg>
+            IPA<span>OMTK</span>
+        </div>
+        <div class="header-icons">
+            <div class="icon-btn" onclick="openAccountModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="section-title">
-            <span>تطبيقات الـ Pro المميزة</span>
-            <button class="admin-add-btn" id="adminAddBtn" onclick="openAddAppModal()">+ إضافة تطبيق</button>
-        </div>
+    <div class="container" id="mainContainer">
+        <!-- المحتوى يتغير حسب التبويب -->
+    </div>
 
-        <div id="appsListContainer">
-            <!-- التطبيقات تسحب سحابياً هنا -->
-            <p style="text-align: center; color: #8e8e93; font-size: 13px;">جاري تحميل التطبيقات...</p>
-        </div>
+    <button class="admin-add-float" id="adminAddFloatBtn" onclick="openAddAppModal()">+ إضافة تطبيق جديد</button>
+
+    <!-- القائمة السفلية العائمة -->
+    <div class="floating-nav">
+        <button class="nav-item active" onclick="switchTab('today', this)">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            اليوم
+        </button>
+        <button class="nav-item" onclick="switchTab('games', this)">
+            <svg viewBox="0 0 24 24"><path d="M6 11h4m-2-2v4m10-2a2 2 0 11-4 0 2 2 0 014 0zm-4 4a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            الألعاب
+        </button>
+        <button class="nav-item" onclick="switchTab('apps', this)">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            التطبيقات
+        </button>
+        <button class="nav-item" onclick="switchTab('tools', this)">
+            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            الأدوات
+        </button>
     </div>
 
     <!-- نافذة الحساب -->
     <div id="accountModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-box" style="text-align: center;">
             <div id="loggedOutView">
-                <h3 style="margin-top:0; margin-bottom: 20px; color:#fff; font-size:17px;">تسجيل الدخول إلى iStore IPA</h3>
-                <button class="google-btn" onclick="loginWithGoogle()">
-                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.15v3.14C3.11 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.15C.42 8.1 0 9.77 0 11.5s.42 3.4 1.15 4.88l4.12-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.11 2.64 1.15 6.62l4.12 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
-                    المتابعة بواسطة Google
-                </button>
+                <h3 style="margin-top:0; color:#fff; font-size:16px;">حساب الأدمن</h3>
+                <button onclick="loginWithGoogle()" style="background:#fff; color:#000; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">تسجيل الدخول بـ Google</button>
             </div>
-
-            <div id="loggedInView" style="display:none; text-align:center;">
-                <h3 style="margin-top:0; color:#0a84ff;" id="userNameText">حسابي</h3>
-                <p style="color:#8e8e93; font-size:12px; margin-bottom: 20px;" id="userEmailText"></p>
-                <div id="adminBadgeText" style="color: #32d74b; font-weight: bold; font-size: 13px; margin-bottom: 15px; display:none;">👑 أنت مسجل بصفتك الأدمن</div>
-                <button class="install-btn" onclick="logoutUser()" style="background:#ff453a; width:100%; margin-bottom: 10px;">تسجيل الخروج</button>
+            <div id="loggedInView" style="display:none;">
+                <h3 id="adminEmailText" style="color:#32d74b; font-size:13px; margin-bottom:10px;"></h3>
+                <p style="color:#ff9f0a; font-size:12px; font-weight:bold;">👑 ممتلك صلاحيات الأدمن الكاملة</p>
+                <button onclick="auth.signOut()" style="background:#ff453a; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px;">تسجيل الخروج</button>
             </div>
-
-            <button class="close-modal" onclick="closeAccountModal()">إغلاق</button>
+            <button onclick="document.getElementById('accountModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:12px; cursor:pointer;">إغلاق</button>
         </div>
     </div>
 
-    <!-- نافذة إضافة تطبيق للأدمن -->
+    <!-- نافذة إضافة تطبيق -->
     <div id="addAppModal" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق IPA جديد</h3>
-            <div style="text-align: right; margin-bottom: 8px; font-size: 12px; color: #8e8e93;">أيقونة التطبيق:</div>
-            <input type="file" id="appImageInput" class="admin-input" accept="image/*">
-            <input type="text" id="appNameInput" class="admin-input" placeholder="اسم التطبيق (مثال: يوتيوب بلس)">
-            <input type="text" id="appDescInput" class="admin-input" placeholder="الوصف (مثال: بدون إعلانات)">
-            <input type="text" id="appUrlInput" class="admin-input" placeholder="رابط التحميل (.ipa)">
-            <button class="install-btn" onclick="addNewAppToCloud()" style="width:100%; margin-bottom:10px; background:#32d74b; color:#000;">حفظ ونشر سحابياً</button>
-            <button class="close-modal" onclick="closeAddAppModal()">إلغاء</button>
+        <div class="modal-box">
+            <h3 style="margin-top:0; color:#fff; font-size:16px;">نشر تطبيق جديد</h3>
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">اختر القسم (أين يظهر؟):</div>
+            <select id="appCategory" class="input-field">
+                <option value="today">قسم اليوم (مميز في الواجهة)</option>
+                <option value="games">قسم الألعاب</option>
+                <option value="apps">قسم التطبيقات</option>
+                <option value="tools">قسم الأدوات</option>
+            </select>
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">أيقونة التطبيق:</div>
+            <input type="file" id="appImgFile" class="input-field" accept="image/*">
+            <input type="text" id="appName" class="input-field" placeholder="اسم التطبيق (مثال: GTA Vice City)">
+            <input type="text" id="appDesc" class="input-field" placeholder="الوصف (مثال: Arcade 1.72.4)">
+            <input type="text" id="appUrl" class="input-field" placeholder="رابط التحميل مباشر (.ipa)">
+            <button onclick="saveNewApp()" style="background:#32d74b; color:#000; border:none; width:100%; padding:12px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">حفظ ونشر فوري</button>
+            <button onclick="document.getElementById('addAppModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إلغاء</button>
         </div>
     </div>
 
@@ -234,160 +245,182 @@
           messagingSenderId: "262724812706",
           appId: "1:262724812706:web:b9fae4bb87f0417f557cfb"
         };
-
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
         const ADMIN_EMAIL = "benssariyassine@gmail.com";
         let isAdmin = false;
+        let currentTab = 'today';
+        let allAppsCache = [];
 
-        // جلب التطبيقات مباشرة من قاعدة بيانات Firestore السحابية وعرضها لحظياً للجميع
-        function fetchAppsFromCloud() {
-            db.collection("apps").onSnapshot((snapshot) => {
-                const container = document.getElementById('appsListContainer');
-                container.innerHTML = '';
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="text-align: center; color: #8e8e93; font-size: 13px;">لا توجد تطبيقات مضافة حالياً.</p>';
-                    return;
-                }
-
-                snapshot.forEach((doc) => {
-                    const app = doc.data();
-                    const docId = doc.id;
-                    const appIcon = app.icon || 'https://via.placeholder.com/60';
-
-                    container.innerHTML += `
-                        <div class="app-card">
-                            <div style="display: flex; align-items: center; gap: 12px;">
-                                <img src="${appIcon}" style="width: 50px; height: 50px; border-radius: 12px; object-fit: cover;">
-                                <div class="app-info">
-                                    <h3>${app.name} <span class="pro-badge">PRO</span></h3>
-                                    <p>${app.desc}</p>
-                                </div>
-                            </div>
-                            <div class="actions-group">
-                                <a href="${app.url}" class="install-btn">تثبيت</a>
-                                <button class="delete-btn" id="del-${docId}" onclick="deleteAppFromCloud('${docId}')" style="display: ${isAdmin ? 'block' : 'none'};">حذف</button>
-                            </div>
-                        </div>
-                    `;
-                });
-            });
+        function switchTab(tabName, btnElement) {
+            currentTab = tabName;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+            renderUI();
         }
 
-        function openAccountModal() { document.getElementById('accountModal').style.display = 'flex'; }
-        function closeAccountModal() { document.getElementById('accountModal').style.display = 'none'; }
-        function openAddAppModal() { document.getElementById('addAppModal').style.display = 'flex'; }
-        function closeAddAppModal() { document.getElementById('addAppModal').style.display = 'none'; }
+        db.collection("apps").onSnapshot(snapshot => {
+            allAppsCache = [];
+            snapshot.forEach(doc => {
+                allAppsCache.push({ id: doc.id, ...doc.data() });
+            });
+            renderUI();
+        });
+
+        function renderUI() {
+            const container = document.getElementById('mainContainer');
+            container.innerHTML = '';
+
+            if (currentTab === 'today') {
+                container.innerHTML = `
+                    <div class="today-header">
+                        <div class="today-date">الخميس، 11 سبتمبر</div>
+                        <div class="today-title">اليوم</div>
+                        <div class="today-subtitle">🔥 تحديثات وأحداث خاصة</div>
+                    </div>
+                    <div id="todayAppsContainer"></div>
+                    <div class="section-heading">القائمة العامة</div>
+                    <div id="generalAppsContainer"></div>
+                `;
+                
+                const todayList = allAppsCache.filter(app => app.category === 'today' || !app.category);
+                const generalList = allAppsCache.filter(app => app.category && app.category !== 'today');
+
+                const tContainer = document.getElementById('todayAppsContainer');
+                if (todayList.length === 0) {
+                    tContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات مميزة في قسم اليوم حالياً.</p>`;
+                } else {
+                    todayList.forEach(app => {
+                        tContainer.innerHTML += `
+                            <div class="featured-card">
+                                <img src="${app.icon || 'https://via.placeholder.com/300'}" class="featured-img">
+                                <div class="featured-body">
+                                    <span class="badge-tag">تطبيق اليوم المميز</span>
+                                    <h3 style="margin:5px 0 5px 0; font-size:18px;">${app.name}</h3>
+                                    <p style="color:#8e8e93; font-size:13px; margin:0 0 15px 0;">${app.desc}</p>
+                                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                                        <a href="${app.url}" class="btn-install">تثبيت فوري</a>
+                                        ${isAdmin ? `<button onclick="deleteApp('${app.id}')" style="background:#ff453a; color:#fff; border:none; padding:5px 10px; border-radius:8px; font-size:11px; cursor:pointer;">حذف</button>` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                const gContainer = document.getElementById('generalAppsContainer');
+                if (generalList.length === 0) {
+                    gContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات أخرى متاحة حالياً.</p>`;
+                } else {
+                    generalList.forEach(app => gContainer.innerHTML += createAppCardHTML(app));
+                }
+
+            } else {
+                // الأقسام الأخرى: ألعاب، تطبيقات، أدوات
+                const filtered = allAppsCache.filter(app => app.category === currentTab);
+                const titles = { games: 'ألعاب الآيفون', apps: 'التطبيقات المميزة', tools: 'أدوات السيديا والجلبريك' };
+                
+                container.innerHTML = `
+                    <div class="today-header">
+                        <div class="today-title">${titles[currentTab] || 'التطبيقات'}</div>
+                        <div class="today-subtitle">مكتبة IPA محدثة باستمرار</div>
+                    </div>
+                    <div style="margin-top:20px;" id="filteredContainer"></div>
+                `;
+                
+                const fContainer = document.getElementById('filteredContainer');
+                if (filtered.length === 0) {
+                    fContainer.innerHTML = `<p style="color:#8e8e93; font-size:14px; text-align:center; margin-top:40px;">لا توجد تطبيقات في هذا القسم حالياً.</p>`;
+                } else {
+                    filtered.forEach(app => fContainer.innerHTML += createAppCardHTML(app));
+                }
+            }
+        }
+
+        function createAppCardHTML(app) {
+            return `
+                <div class="app-card-pro">
+                    <div class="app-meta">
+                        <img src="${app.icon || 'https://via.placeholder.com/60'}" class="app-icon-img">
+                        <div class="app-details">
+                            <h4>🍎 ${app.name}</h4>
+                            <p>${app.desc}</p>
+                        </div>
+                    </div>
+                    <div class="app-actions">
+                        <a href="${app.url}" class="btn-install">تثبيت</a>
+                        ${isAdmin ? `<button class="btn-del" style="display:block;" onclick="deleteApp('${app.id}')">حذف</button>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        auth.onAuthStateChanged(user => {
+            const floatBtn = document.getElementById('adminAddFloatBtn');
+            if (user && user.email.toLowerCase() === ADMIN_EMAIL) {
+                isAdmin = true;
+                floatBtn.style.display = 'block';
+                document.getElementById('adminEmailText').innerText = user.email;
+                document.getElementById('loggedOutView').style.display = 'none';
+                document.getElementById('loggedInView').style.display = 'block';
+            } else {
+                isAdmin = false;
+                floatBtn.style.display = 'none';
+                document.getElementById('loggedOutView').style.display = 'block';
+                document.getElementById('loggedInView').style.display = 'none';
+            }
+            renderUI();
+        });
 
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider).catch(() => {
-                auth.signInWithRedirect(provider);
-            });
+            auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
         }
 
-        auth.getRedirectResult().catch(err => console.log(err));
+        function openAddAppModal() { document.getElementById('addAppModal').style.display = 'flex'; }
 
-        auth.onAuthStateChanged((user) => {
-            const addBtn = document.getElementById('adminAddBtn');
-            const adminBadge = document.getElementById('adminBadgeText');
-
-            if (user) {
-                document.getElementById('loggedOutView').style.display = 'none';
-                document.getElementById('loggedInView').style.display = 'block';
-                document.getElementById('userNameText').innerText = user.displayName || user.email.split('@')[0];
-                document.getElementById('userEmailText').innerText = user.email;
-                document.getElementById('userAvatarBtn').innerText = user.email.charAt(0).toUpperCase();
-
-                if (user.email.toLowerCase() === ADMIN_EMAIL) {
-                    isAdmin = true;
-                    addBtn.style.display = 'block';
-                    adminBadge.style.display = 'block';
-                } else {
-                    isAdmin = false;
-                    addBtn.style.display = 'none';
-                    adminBadge.style.display = 'none';
-                }
-            } else {
-                isAdmin = false;
-                document.getElementById('loggedOutView').style.display = 'block';
-                document.getElementById('loggedInView').style.display = 'none';
-                document.getElementById('userAvatarBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
-                addBtn.style.display = 'none';
-                adminBadge.style.display = 'none';
-            }
-            // إعادة تحديث الواجهة لإظهار أزرار الحذف للأدمن فوراً
-            fetchAppsFromCloud();
-        });
-
-        // إضافة التطبيق مباشرة للسيرفر السحابي
-        function addNewAppToCloud() {
+        function saveNewApp() {
             if (!isAdmin) return;
-            const name = document.getElementById('appNameInput').value;
-            const desc = document.getElementById('appDescInput').value;
-            const url = document.getElementById('appUrlInput').value || '#';
-            const imageInput = document.getElementById('appImageInput');
+            const category = document.getElementById('appCategory').value;
+            const name = document.getElementById('appName').value;
+            const desc = document.getElementById('appDesc').value;
+            const url = document.getElementById('appUrl').value || '#';
+            const fileInput = document.getElementById('appImgFile');
 
-            if (!name) {
-                alert('الرجاء إدخال اسم التطبيق على الأقل');
-                return;
-            }
+            if (!name) { alert('أدخل اسم التطبيق من فضلك'); return; }
 
-            if (imageInput.files && imageInput.files[0]) {
+            if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const icon = e.target.result;
-                    saveToFirestore(name, desc, url, icon);
+                    commitAppToCloud(category, name, desc, url, e.target.result);
                 };
-                reader.readAsDataURL(imageInput.files[0]);
+                reader.readAsDataURL(fileInput.files[0]);
             } else {
-                saveToFirestore(name, desc, url, 'https://via.placeholder.com/60');
+                commitAppToCloud(category, name, desc, url, 'https://via.placeholder.com/60');
             }
         }
 
-        function saveToFirestore(name, desc, url, icon) {
+        function commitAppToCloud(category, name, desc, url, icon) {
             db.collection("apps").add({
-                name: name,
-                desc: desc,
-                url: url,
-                icon: icon,
+                category, name, desc, url, icon,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            })
-            .then(() => {
-                document.getElementById('appNameInput').value = '';
-                document.getElementById('appDescInput').value = '';
-                document.getElementById('appUrlInput').value = '';
-                document.getElementById('appImageInput').value = '';
-                closeAddAppModal();
-            })
-            .catch((error) => {
-                alert("حدث خطأ أثناء الرفع: " + error.message);
-            });
+            }).then(() => {
+                document.getElementById('appName').value = '';
+                document.getElementById('appDesc').value = '';
+                document.getElementById('appUrl').value = '';
+                document.getElementById('appImgFile').value = '';
+                document.getElementById('addAppModal').style.display = 'none';
+            }).catch(err => alert("خطأ: " + err.message));
         }
 
-        function deleteAppFromCloud(docId) {
+        function deleteApp(id) {
             if (!isAdmin) return;
-            if (confirm('هل أنت متأكد من حذف هذا التطبيق نهائياً من السيرفر؟')) {
-                db.collection("apps").doc(docId).delete().catch((error) => {
-                    alert("خطأ في الحذف: " + error.message);
-                });
+            if (confirm('هل أنت متأكد من حذف هذا التطبيق نهائياً؟')) {
+                db.collection("apps").doc(id).delete();
             }
         }
-
-        function logoutUser() {
-            auth.signOut().then(() => {
-                closeAccountModal();
-            });
-        }
-
-        // تشغيل الجلب السحابي عند فتح الصفحة لأول مرة
-        fetchAppsFromCloud();
     </script>
 </body>
 </html>
