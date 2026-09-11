@@ -183,17 +183,25 @@
     <div id="searchResultsList" style="margin-top:15px;"></div>
   </div>
 
-  <!-- نافذة تسجيل الدخول -->
-  <div class="full-modal" id="accountPage">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <h2 style="font-size:1.3rem; font-weight:800;">إدارة الحساب</h2>
-      <button class="btn-get" onclick="closeFullModal('accountPage')">تم</button>
+  <!-- نافذة إدارة الحساب -->
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <h2 id="authTitle">تسجيل الدخول</h2>
+    
+    <form id="authForm" onsubmit="handleAuthSubmit(event)">
+      <input type="email" id="authEmail" placeholder="البريد الإلكتروني" required>
+      <input type="password" id="authPassword" placeholder="كلمة المرور" required>
+      
+      <button type="submit" id="authSubmitBtn" class="btn-primary">تسجيل الدخول</button>
+    </form>
+
+    <div style="margin-top: 15px; text-align: center;">
+      <span id="authToggleText">ليس لديك حساب؟</span>
+      <a href="#" id="authToggleBtn" onclick="toggleAuthMode(event)" style="color: #0a84ff; text-decoration: none; font-weight: bold;">إنشاء حساب جديد</a>
     </div>
-    <div class="info-card">قم بتسجيل الدخول أو إنشاء حساب جديد لإدارة بياناتك عبر المنصة.</div>
-    <input type="email" id="authEmail" class="search-input" placeholder="البريد الإلكتروني">
-    <input type="password" id="authPassword" class="search-input" placeholder="كلمة المرور">
-    <button class="sheet-btn-blue" onclick="handleFirebaseLogin()">تسجيل الدخول</button>
   </div>
+</div>
+
 
   <!-- نافذة إضافة تطبيق -->
   <div class="full-modal" id="addAppPage">
