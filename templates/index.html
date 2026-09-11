@@ -11,7 +11,7 @@
             color: #ffffff;
             font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 0 0 100px 0;
+            padding: 0 0 110px 0;
             direction: rtl;
         }
         .header {
@@ -43,7 +43,12 @@
             cursor: pointer;
         }
 
-        .container { padding: 16px 20px; max-width: 600px; margin: auto; }
+        .container { padding: 16px 20px; max-width: 600px; margin: auto; animation: fadeInUp 0.3s ease; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         
         /* شريط البحث الاحترافي */
         .search-box {
@@ -73,7 +78,7 @@
             height: 18px;
         }
 
-        .today-header { margin-bottom: 15px; }
+        .today-header { margin-bottom: 15px; animation: fadeInUp 0.4s ease; }
         .today-date { color: #8e8e93; font-size: 12px; font-weight: 600; }
         .today-title { font-size: 28px; font-weight: 900; margin: 2px 0; }
         .today-subtitle { font-size: 13px; color: #ff9f0a; font-weight: 700; display: flex; align-items: center; gap: 5px; }
@@ -103,7 +108,7 @@
             align-items: center;
             justify-content: space-between;
         }
-        .app-meta { display: flex; align-items: center; gap: 12px; overflow: hidden; }
+        .app-meta { display: flex; align-items: center; gap: 12px; overflow: hidden; flex: 1; cursor: pointer; }
         .app-icon-img { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
         .app-details h4 { margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #fff; }
         .app-details p { margin: 0; font-size: 12px; color: #8e8e93; }
@@ -119,10 +124,13 @@
             font-weight: 800;
             border: none;
             box-shadow: 0 4px 12px rgba(10,132,255,0.3);
+            white-space: nowrap;
         }
-        .btn-del { background: #ff453a; color: #fff; padding: 5px 9px; border-radius: 10px; font-size: 11px; font-weight: 700; border: none; cursor: pointer; display: none; }
+        .admin-btns { display: flex; gap: 4px; }
+        .btn-edit { background: #ff9f0a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
+        .btn-del { background: #ff453a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
 
-        /* القائمة السفلية العائمة */
+        /* القائمة السفلية العائمة الواضحة */
         .floating-nav {
             position: fixed;
             bottom: 12px;
@@ -130,36 +138,36 @@
             transform: translateX(-50%);
             width: 92%;
             max-width: 480px;
-            background: rgba(22, 22, 28, 0.88);
+            background: rgba(22, 22, 28, 0.92);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.12);
             border-radius: 22px;
             display: flex;
             justify-content: space-around;
             padding: 8px 4px;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
         }
         .nav-item {
             background: none;
             border: none;
-            color: #8e8e93;
+            color: #a1a1a6;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
             cursor: pointer;
             font-family: 'Cairo', sans-serif;
-            transition: 0.2s;
+            transition: 0.25s;
         }
-        .nav-item.active { color: #0a84ff; }
-        .nav-item svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+        .nav-item.active { color: #0a84ff; transform: scale(1.05); }
+        .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
 
         /* النافذة المنبثقة Modal */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
-        .modal-box { background: #16161c; border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; width: 85%; max-width: 340px; box-sizing: border-box; }
+        .modal-box { background: #16161c; border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; width: 88%; max-width: 360px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
         .input-field { width: 100%; padding: 11px; margin-bottom: 10px; background: #0b0b0f; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; box-sizing: border-box; font-family: 'Cairo', sans-serif; font-size: 13px; outline: none; }
         select.input-field { appearance: none; }
         
@@ -179,6 +187,24 @@
             z-index: 999;
             display: none;
         }
+
+        /* صفحة تفاصيل التطبيق والتعليقات والتقييمات */
+        .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .detail-icon { width: 75px; height: 75px; border-radius: 18px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+        .star-rating { color: #ff9f0a; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 4px; margin: 6px 0; }
+        .comment-box { background: #0b0b0f; border: 1px solid rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; font-size: 12px; }
+        .comment-user { color: #0a84ff; font-weight: 700; margin-bottom: 3px; }
+        
+        /* قسم الأدوات وشرح E-Sign */
+        .tool-guide-card {
+            background: #16161c;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 18px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+        .tool-guide-card h3 { color: #32d74b; margin-top: 0; font-size: 16px; }
+        .tool-guide-card p { color: #a1a1a6; font-size: 13px; line-height: 1.6; margin-bottom: 10px; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -193,7 +219,7 @@
             i<span>Store</span>
         </div>
         <div class="header-icons">
-            <div class="icon-btn" onclick="openAccountModal()" title="إدارة الحساب">
+            <div class="icon-btn" onclick="openAccountModal()" title="حساب المستخدم">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             </div>
         </div>
@@ -213,7 +239,7 @@
 
     <button class="admin-add-float" id="adminAddFloatBtn" onclick="openAddAppModal()">+ إضافة تطبيق جديد</button>
 
-    <!-- القائمة السفلية العائمة الاحترافية -->
+    <!-- القائمة السفلية العائمة -->
     <div class="floating-nav">
         <button class="nav-item active" onclick="switchTab('today', this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -233,27 +259,31 @@
         </button>
     </div>
 
-    <!-- نافذة الحساب وتسجيل الدخول -->
+    <!-- نافذة الحساب وتسجيل الدخول العامة -->
     <div id="accountModal" class="modal">
         <div class="modal-box" style="text-align: center;">
             <div id="loggedOutView">
-                <h3 style="margin-top:0; color:#fff; font-size:16px;">حساب المسؤول (Admin)</h3>
-                <p style="color:#8e8e93; font-size:12px; margin-bottom:15px;">سجل الدخول بإيميلك الخاص للتحكم في المتجر والسحابة.</p>
-                <button onclick="loginWithGoogle()" style="background:#fff; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">تسجيل الدخول بـ Google</button>
+                <h3 style="margin-top:0; color:#fff; font-size:16px;">حساب المستخدم</h3>
+                <p style="color:#8e8e93; font-size:12px; margin-bottom:15px;">سجل الدخول بحسابك لتقييم التطبيقات وكتابة التعليقات.</p>
+                <button onclick="loginWithGoogle()" style="background:#fff; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                    تسجيل الدخول بـ Google
+                </button>
             </div>
             <div id="loggedInView" style="display:none;">
-                <h3 id="adminEmailText" style="color:#32d74b; font-size:12px; margin-bottom:8px; word-break: break-all;"></h3>
-                <p style="color:#0a84ff; font-size:12px; font-weight:bold; margin-bottom:15px;">👑 أنت الأدمن المسؤول عن المتجر</p>
+                <h3 id="userEmailText" style="color:#32d74b; font-size:12px; margin-bottom:8px; word-break: break-all;"></h3>
+                <p id="adminBadge" style="color:#0a84ff; font-size:12px; font-weight:bold; margin-bottom:15px; display:none;">👑 أنت الأدمن المسؤول عن المتجر</p>
                 <button onclick="auth.signOut()" style="background:#ff453a; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">تسجيل الخروج</button>
             </div>
             <button onclick="document.getElementById('accountModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:12px; cursor:pointer;">إغلاق</button>
         </div>
     </div>
 
-    <!-- نافذة إضافة تطبيق جديد للسحابة -->
+    <!-- نافذة إضافة أو تعديل تطبيق -->
     <div id="addAppModal" class="modal">
         <div class="modal-box">
-            <h3 style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق للسحابة</h3>
+            <h3 id="modalTitleText" style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق للسحابة</h3>
+            <input type="hidden" id="editingAppId">
             <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">اختر القسم:</div>
             <select id="appCategory" class="input-field">
                 <option value="today">قسم اليوم (واجهة رئيسية مميزة)</option>
@@ -266,8 +296,26 @@
             <input type="text" id="appName" class="input-field" placeholder="اسم التطبيق (مثال: GTA San Andreas)">
             <input type="text" id="appDesc" class="input-field" placeholder="الوصف أو الحجم (مثال: Action • 2.1 GB)">
             <input type="text" id="appUrl" class="input-field" placeholder="رابط التحميل المباشر (.ipa)">
-            <button onclick="saveNewApp()" style="background:#32d74b; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">نشر فوري للعامة</button>
+            <button onclick="saveNewApp()" style="background:#32d74b; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">حفظ ونشر فوري</button>
             <button onclick="document.getElementById('addAppModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إلغاء</button>
+        </div>
+    </div>
+
+    <!-- نافذة تفاصيل التطبيق، التقييمات، والتعليقات -->
+    <div id="appDetailModal" class="modal">
+        <div class="modal-box" id="appDetailBody">
+            <!-- يتم تعبئتها ديناميكياً -->
+        </div>
+    </div>
+
+    <!-- نافذة الإبلاغ عن مشكلة -->
+    <div id="reportModal" class="modal">
+        <div class="modal-box">
+            <h3 style="margin-top:0; color:#fff; font-size:16px;">إبلاغ عن رابط لا يعمل أو مشكلة</h3>
+            <input type="hidden" id="reportAppId">
+            <textarea id="reportReason" class="input-field" placeholder="اكتب تفاصيل المشكلة (مثال: رابط التحميل منتهٍ)..." style="height:80px; resize:none;"></textarea>
+            <button onclick="submitReport()" style="background:#ff9f0a; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">إرسال البلاغ للأدمن</button>
+            <button onclick="document.getElementById('reportModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إغلاق</button>
         </div>
     </div>
 
@@ -285,18 +333,26 @@
         const db = firebase.firestore();
 
         const ADMIN_EMAIL = "benssariyassine@gmail.com";
+        let currentUser = null;
         let isAdmin = false;
         let currentTab = 'today';
         let allAppsCache = [];
+
+        // الحصول على التاريخ الفعلي الحقيقي بالعربية
+        function getActualDateString() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date().toLocaleDateString('ar-DZ', options);
+        }
 
         function switchTab(tabName, btnElement) {
             currentTab = tabName;
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             renderUI();
         }
 
-        // جلب البيانات实时 (Real-time sync) من سحابة فايرباس لكي يراها الجميع
+        // جلب التطبيقات بشكل حي من سحابة فايرباس
         db.collection("apps").orderBy("createdAt", "desc").onSnapshot(snapshot => {
             allAppsCache = [];
             snapshot.forEach(doc => {
@@ -313,14 +369,13 @@
             const container = document.getElementById('dynamicContent');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
             
-            // تصفية التطبيقات حسب البحث أو التبويب الحالي
             let filtered = allAppsCache;
             if (searchQuery.trim() !== "") {
                 filtered = allAppsCache.filter(app => app.name.toLowerCase().includes(searchQuery) || app.desc.toLowerCase().includes(searchQuery));
                 container.innerHTML = `<div class="section-heading">نتائج البحث (${filtered.length})</div><div id="searchResContainer"></div>`;
                 const sContainer = document.getElementById('searchResContainer');
                 if(filtered.length === 0) {
-                    sContainer.innerHTML = `<p style="color:#8e8e93; text-align:center; font-size:13px; margin-top:30px;">لا توجد تطبقات مطابقة لبحثك.</p>`;
+                    sContainer.innerHTML = `<p style="color:#8e8e93; text-align:center; font-size:13px; margin-top:30px;">لا توجد تطبيقات مطابقة لبحثك.</p>`;
                 } else {
                     filtered.forEach(app => sContainer.innerHTML += createAppCardHTML(app));
                 }
@@ -330,7 +385,7 @@
             if (currentTab === 'today') {
                 container.innerHTML = `
                     <div class="today-header">
-                        <div class="today-date">الجمعة، 11 سبتمبر</div>
+                        <div class="today-date">${getActualDateString()}</div>
                         <div class="today-title">اليوم</div>
                         <div class="today-subtitle">🔥 تحديثات وأحداث خاصة</div>
                     </div>
@@ -347,16 +402,20 @@
                     tContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات مميزة في قسم اليوم حالياً.</p>`;
                 } else {
                     todayList.forEach(app => {
+                        let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
                         tContainer.innerHTML += `
                             <div class="featured-card">
-                                <img src="${app.icon || 'https://via.placeholder.com/300'}" class="featured-img">
+                                <img src="${app.icon || 'https://via.placeholder.com/300'}" class="featured-img" style="cursor:pointer;" onclick="openAppDetails('${app.id}')">
                                 <div class="featured-body">
-                                    <span class="badge-tag">تطبيق اليوم المميز</span>
-                                    <h3 style="margin:5px 0 4px 0; font-size:17px;">${app.name}</h3>
+                                    <span class="badge-tag">تطبيق اليوم المميز • ⭐ ${avgRating}</span>
+                                    <h3 style="margin:5px 0 4px 0; font-size:17px; cursor:pointer;" onclick="openAppDetails('${app.id}')">${app.name}</h3>
                                     <p style="color:#8e8e93; font-size:12px; margin:0 0 14px 0;">${app.desc}</p>
                                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <a href="${app.url}" class="btn-install">تثبيت فوري</a>
-                                        ${isAdmin ? `<button onclick="deleteApp('${app.id}')" style="background:#ff453a; color:#fff; border:none; padding:5px 10px; border-radius:8px; font-size:11px; cursor:pointer;">حذف</button>` : ''}
+                                        <a href="${app.url}" class="btn-install" target="_blank">تثبيت فوري</a>
+                                        <div style="display:flex; gap:6px;">
+                                            <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff9f0a; border:none; padding:5px 9px; border-radius:8px; font-size:10px; cursor:pointer;">إبلاغ</button>
+                                            ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">تعديل</button><button class="btn-del" onclick="deleteApp('${app.id}')">حذف</button></div>` : ''}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -371,9 +430,27 @@
                     generalList.forEach(app => gContainer.innerHTML += createAppCardHTML(app));
                 }
 
+            } else if (currentTab === 'tools') {
+                container.innerHTML = `
+                    <div class="today-header">
+                        <div class="today-title">أدوات التثبيت والجلبريك</div>
+                        <div class="today-subtitle">دليل رسمي لاستخدام متجر وبرامج التوقيع</div>
+                    </div>
+                    <div style="margin-top:15px;">
+                        <div class="tool-guide-card">
+                            <h3>تطبيق E-Sign (توقيع الشهادات)</h3>
+                            <p>يعتبر برنامج <strong>E-Sign</strong> من أفضل أدوات تثبيت وتوقيع ملفات الـ IPA مباشرة على آيفونك بدون كمبيوتر، باستخدام شهادات التوزيع (Enterprise Certificates).</p>
+                            <p><strong>طريقة الاستخدام:</strong><br>1. حمل شهادة التطبيق الموثوقة.<br>2. ثبت برنامج E-Sign من الروابط الرسمية.<br>3. ادخل للبرنامج، اضغط على زر الإعدادات ثم استيراد ملف الـ IPA الذي حملته من متجرنا لتثبيته بنجاح.</p>
+                        </div>
+                        <div class="tool-guide-card">
+                            <h3>تطبيق Scarlet أو TrollStore</h3>
+                            <p>بدائل قوية لتثبيت التطبيقات الموقعة، تمنحك استقراراً تاماً وتجنبك مشاكل توقف الشهادات المتكررة إذا كان جهازك يدعم إصداراً مناسباً.</p>
+                        </div>
+                    </div>
+                `;
             } else {
                 const tabFiltered = allAppsCache.filter(app => app.category === currentTab);
-                const titles = { games: 'ألعاب الآيفون', apps: 'التطبيقات المميزة', tools: 'أدوات السيديا والجلبريك' };
+                const titles = { games: 'ألعاب الآيفون', apps: 'التطبيقات المميزة' };
                 
                 container.innerHTML = `
                     <div class="today-header">
@@ -393,35 +470,167 @@
         }
 
         function createAppCardHTML(app) {
+            let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
             return `
                 <div class="app-card-pro">
-                    <div class="app-meta">
+                    <div class="app-meta" onclick="openAppDetails('${app.id}')">
                         <img src="${app.icon || 'https://via.placeholder.com/60'}" class="app-icon-img">
                         <div class="app-details">
                             <h4>${app.name}</h4>
-                            <p>${app.desc}</p>
+                            <p>${app.desc} • ⭐ ${avgRating}</p>
                         </div>
                     </div>
                     <div class="app-actions">
-                        <a href="${app.url}" class="btn-install">تثبيت</a>
-                        ${isAdmin ? `<button class="btn-del" style="display:block;" onclick="deleteApp('${app.id}')">حذف</button>` : ''}
+                        <a href="${app.url}" class="btn-install" target="_blank">تثبيت</a>
+                        <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff9f0a; border:none; padding:6px 8px; border-radius:10px; font-size:10px; cursor:pointer;" title="إبلاغ">⚠️</button>
+                        ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">تعديل</button><button class="btn-del" onclick="deleteApp('${app.id}')">حذف</button></div>` : ''}
                     </div>
                 </div>
             `;
         }
 
-        // التحقق من حساب الأدمن عبر Firebase Auth
+        // تفاصيل التطبيق والتعليقات والتقييمات الحقيقية
+        function openAppDetails(appId) {
+            const app = allAppsCache.find(a => a.id === appId);
+            if (!app) return;
+            
+            let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
+            let commentsHTML = '';
+            
+            db.collection("apps").doc(appId).collection("comments").orderBy("createdAt", "desc").get().then(snapshot => {
+                let commentsList = [];
+                snapshot.forEach(doc => commentsList.push(doc.data()));
+                
+                if(commentsList.length === 0) {
+                    commentsHTML = `<p style="color:#8e8e93; font-size:12px; text-align:center;">0 تعليقات حتى الآن. كن اول من يعلق!</p>`;
+                } else {
+                    commentsList.forEach(c => {
+                        commentsHTML += `
+                            <div class="comment-box">
+                                <div class="comment-user">${c.userName}</div>
+                                <div>${c.text}</div>
+                            </div>
+                        `;
+                    });
+                }
+
+                document.getElementById('appDetailBody').innerHTML = `
+                    <div class="detail-header">
+                        <img src="${app.icon || 'https://via.placeholder.com/75'}" class="detail-icon">
+                        <div>
+                            <h3 style="margin:0 0 4px 0; font-size:16px; color:#fff;">${app.name}</h3>
+                            <p style="margin:0; font-size:12px; color:#8e8e93;">${app.desc}</p>
+                            <div class="star-rating">⭐ ${avgRating} <span style="font-size:11px; color:#8e8e93;">(${app.ratingCount || 0} تقييم)</span></div>
+                        </div>
+                    </div>
+                    <a href="${app.url}" class="btn-install" style="display:block; text-align:center; padding:10px; margin-bottom:15px;" target="_blank">تحميل وتثبيت مباشر (.ipa)</a>
+                    
+                    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-bottom:12px;">
+                        <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">قيم هذا التطبيق:</h4>
+                        <div style="display:flex; gap:10px; justify-content:center;">
+                            <button onclick="rateApp('${app.id}', 1)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:5px 12px; border-radius:8px; cursor:pointer;">⭐ 1</button>
+                            <button onclick="rateApp('${app.id}', 3)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:5px 12px; border-radius:8px; cursor:pointer;">⭐⭐⭐ 3</button>
+                            <button onclick="rateApp('${app.id}', 5)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:5px 12px; border-radius:8px; cursor:pointer;">⭐⭐⭐⭐⭐ 5</button>
+                        </div>
+                    </div>
+
+                    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
+                        <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">التعليقات (${commentsList.length}):</h4>
+                        <div style="max-height:140px; overflow-y:auto; margin-bottom:10px;" id="commentsListArea">
+                            ${commentsHTML}
+                        </div>
+                        ${currentUser ? `
+                            <input type="text" id="newCommentText" class="input-field" placeholder="اكتب تعليقاً..." style="margin-bottom:6px;">
+                            <button onclick="postComment('${app.id}')" style="background:#0a84ff; color:#fff; border:none; width:100%; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:12px;">إرسال التعليق</button>
+                        ` : `<p style="color:#ff9f0a; font-size:11px; text-align:center;">سجل دخولك عبر زر الحساب بالأعلى لتتمكن من التعليق.</p>`}
+                    </div>
+                    
+                    <button onclick="document.getElementById('appDetailModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:9px; border-radius:10px; margin-top:15px; cursor:pointer;">إغلاق</button>
+                `;
+                document.getElementById('appDetailModal').style.display = 'flex';
+            });
+        }
+
+        // التقييم الفعلي (لا توهم)
+        function rateApp(appId, stars) {
+            if (!currentUser) { alert('الرجاء تسجيل الدخول أولاً للتقييم'); return; }
+            const appRef = db.collection("apps").doc(appId);
+            db.runTransaction(transaction => {
+                return transaction.get(appRef).then(doc => {
+                    if (!doc.exists) return;
+                    let data = doc.data();
+                    let newSum = (data.ratingSum || 0) + stars;
+                    let newCount = (data.ratingCount || 0) + 1;
+                    transaction.update(appRef, { ratingSum: newSum, ratingCount: newCount });
+                });
+            }).then(() => {
+                alert('شكراً لك، تم تسجيل تقييمك بنجاح!');
+                openAppDetails(appId);
+            }).catch(err => alert("خطأ: " + err.message));
+        }
+
+        // نشر تعليق حقيقي
+        function postComment(appId) {
+            if (!currentUser) { alert('سجل دخولك أولاً'); return; }
+            const text = document.getElementById('newCommentText').value.trim();
+            if (!text) return;
+
+            db.collection("apps").doc(appId).collection("comments").add({
+                userName: currentUser.email.split('@')[0],
+                text: text,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById('newCommentText').value = '';
+                openAppDetails(appId);
+            });
+        }
+
+        // إبلاغ عن مشكلة
+        function openReportModal(appId) {
+            document.getElementById('reportAppId').value = appId;
+            document.getElementById('reportReason').value = '';
+            document.getElementById('reportModal').style.display = 'flex';
+        }
+
+        function submitReport() {
+            const appId = document.getElementById('reportAppId').value;
+            const reason = document.getElementById('reportReason').value.trim();
+            if (!reason) { alert('اكتب سبب الإبلاغ من فضلك'); return; }
+
+            db.collection("reports").add({
+                appId, reason,
+                user: currentUser ? currentUser.email : 'زائر',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert('تم إرسال بلاغك للإدارة بنجاح. شكراً لمساهمتك!');
+                document.getElementById('reportModal').style.display = 'none';
+            });
+        }
+
+        // المصادقة والتحقق من حساب الأدمن
         auth.onAuthStateChanged(user => {
+            currentUser = user;
             const floatBtn = document.getElementById('adminAddFloatBtn');
-            if (user && user.email.toLowerCase() === ADMIN_EMAIL) {
-                isAdmin = true;
-                floatBtn.style.display = 'block';
-                document.getElementById('adminEmailText').innerText = user.email;
+            const adminBadge = document.getElementById('adminBadge');
+            
+            if (user) {
                 document.getElementById('loggedOutView').style.display = 'none';
                 document.getElementById('loggedInView').style.display = 'block';
+                document.getElementById('userEmailText').innerText = user.email;
+                
+                if (user.email.toLowerCase() === ADMIN_EMAIL) {
+                    isAdmin = true;
+                    floatBtn.style.display = 'block';
+                    adminBadge.style.display = 'block';
+                } else {
+                    isAdmin = false;
+                    floatBtn.style.display = 'none';
+                    adminBadge.style.display = 'none';
+                }
             } else {
                 isAdmin = false;
                 floatBtn.style.display = 'none';
+                adminBadge.style.display = 'none';
                 document.getElementById('loggedOutView').style.display = 'block';
                 document.getElementById('loggedInView').style.display = 'none';
             }
@@ -434,10 +643,34 @@
         }
 
         function openAccountModal() { document.getElementById('accountModal').style.display = 'flex'; }
-        function openAddAppModal() { document.getElementById('addAppModal').style.display = 'flex'; }
+        
+        function openAddAppModal() {
+            if (!isAdmin) return;
+            document.getElementById('modalTitleText').innerText = "إضافة تطبيق للسحابة";
+            document.getElementById('editingAppId').value = "";
+            document.getElementById('appName').value = "";
+            document.getElementById('appDesc').value = "";
+            document.getElementById('appUrl').value = "";
+            document.getElementById('appImgFile').value = "";
+            document.getElementById('addAppModal').style.display = 'flex';
+        }
+
+        function openEditAppModal(id) {
+            if (!isAdmin) return;
+            const app = allAppsCache.find(a => a.id === id);
+            if (!app) return;
+            document.getElementById('modalTitleText').innerText = "تعديل التطبيق أو الـ URL";
+            document.getElementById('editingAppId').value = app.id;
+            document.getElementById('appCategory').value = app.category || 'today';
+            document.getElementById('appName').value = app.name || '';
+            document.getElementById('appDesc').value = app.desc || '';
+            document.getElementById('appUrl').value = app.url || '';
+            document.getElementById('addAppModal').style.display = 'flex';
+        }
 
         function saveNewApp() {
             if (!isAdmin) return;
+            const editingId = document.getElementById('editingAppId').value;
             const category = document.getElementById('appCategory').value;
             const name = document.getElementById('appName').value;
             const desc = document.getElementById('appDesc').value;
@@ -449,25 +682,41 @@
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    commitAppToCloud(category, name, desc, url, e.target.result);
+                    commitAppToCloud(editingId, category, name, desc, url, e.target.result);
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                commitAppToCloud(category, name, desc, url, 'https://via.placeholder.com/60');
+                let existingIcon = 'https://via.placeholder.com/60';
+                if (editingId) {
+                    const found = allAppsCache.find(a => a.id === editingId);
+                    if (found) existingIcon = found.icon;
+                }
+                commitAppToCloud(editingId, category, name, desc, url, existingIcon);
             }
         }
 
-        function commitAppToCloud(category, name, desc, url, icon) {
-            db.collection("apps").add({
-                category, name, desc, url, icon,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                document.getElementById('appName').value = '';
-                document.getElementById('appDesc').value = '';
-                document.getElementById('appUrl').value = '';
-                document.getElementById('appImgFile').value = '';
-                document.getElementById('addAppModal').style.display = 'none';
-            }).catch(err => alert("خطأ: " + err.message));
+        function commitAppToCloud(editingId, category, name, desc, url, icon) {
+            if (editingId) {
+                db.collection("apps").doc(editingId).update({
+                    category, name, desc, url, icon
+                }).then(() => {
+                    document.getElementById('addAppModal').style.display = 'none';
+                    alert('تم تحديث التطبيق بنجاح!');
+                }).catch(err => alert("خطأ: " + err.message));
+            } else {
+                db.collection("apps").add({
+                    category, name, desc, url, icon,
+                    ratingSum: 0,
+                    ratingCount: 0,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    document.getElementById('appName').value = '';
+                    document.getElementById('appDesc').value = '';
+                    document.getElementById('appUrl').value = '';
+                    document.getElementById('appImgFile').value = '';
+                    document.getElementById('addAppModal').style.display = 'none';
+                }).catch(err => alert("خطأ: " + err.message));
+            }
         }
 
         function deleteApp(id) {
