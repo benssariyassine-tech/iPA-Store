@@ -15,16 +15,12 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// 2. القائمة الجانبية للنظام
+// 2. القائمة الجانبية
 function toggleSideMenu() {
     const sideMenu = document.getElementById('sideMenu');
     const overlay = document.getElementById('sideMenuOverlay');
-    if (sideMenu) {
-        sideMenu.classList.toggle('active');
-    }
-    if (overlay) {
-        overlay.classList.toggle('active');
-    }
+    if (sideMenu) sideMenu.classList.toggle('active');
+    if (overlay) overlay.classList.toggle('active');
 }
 
 // 3. النوافذ المنبثقة للـ Auth
@@ -32,17 +28,18 @@ let isSignUpMode = false;
 
 function openAuthModal() {
     const modal = document.getElementById('authModal');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
+    if (modal) modal.style.display = 'flex';
 }
 
 function closeAuthModal() {
     const modal = document.getElementById('authModal');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+    if (modal) modal.style.display = 'none';
 }
+
+window.onclick = function(event) {
+    const modal = document.getElementById('authModal');
+    if (event.target === modal) closeAuthModal();
+};
 
 function toggleAuthMode(e) {
     if (e) e.preventDefault();
@@ -96,12 +93,12 @@ function handleAuthSubmit(e) {
     }
 }
 
-// 4. جلب وعرض التطبيقات الحقيقية من Firestore
+// 4. جلب التطبيقات من Firestore
 function loadApps() {
-    db.collection("apps").get().then((snapshot) => {
-        const appsContainer = document.getElementById('appsContainer');
-        if (!appsContainer) return;
+    const appsContainer = document.getElementById('appsContainer');
+    if (!appsContainer) return;
 
+    db.collection("apps").get().then((snapshot) => {
         if (snapshot.empty) {
             appsContainer.innerHTML = '<p style="text-align:center; color:#8e8e93; padding: 20px;">لا توجد تطبيقات متاحة حالياً.</p>';
             return;
@@ -111,23 +108,20 @@ function loadApps() {
         snapshot.forEach((doc) => {
             const app = doc.data();
             html += `
-                <div class="app-card">
-                    <img src="${app.icon || '/static/default-icon.png'}" alt="${app.title}" class="app-icon">
-                    <div class="app-info">
-                        <h3>${app.title}</h3>
-                        <p>${app.category || 'تطبيق IPA'}</p>
+                <div class="app-card" style="background:#1c1c1e; padding:15px; border-radius:12px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+                    <div style="color:#fff;">
+                        <h3 style="margin:0; font-size:16px;">${app.title || 'تطبيق IPA'}</h3>
+                        <p style="margin:4px 0 0; color:#8e8e93; font-size:12px;">${app.category || 'عام'}</p>
                     </div>
-                    <a href="${app.download_url || '#'}" class="btn-download">تثبيت</a>
+                    <a href="${app.download_url || '#'}" style="background:#0a84ff; color:#fff; padding:6px 16px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:bold;">تثبيت</a>
                 </div>
             `;
         });
         appsContainer.innerHTML = html;
     }).catch((error) => {
-        console.error("خطأ في تحميل التطبيقات: ", error);
+        appsContainer.innerHTML = '<p style="text-align:center; color:#ff453a; padding: 20px;">حدث خطأ أثناء تحميل البيانات.</p>';
+        console.error("خطأ في التحميل:", error);
     });
 }
 
-// تشغيل جلب التطبيقات عند فتح الصفحة
-document.addEventListener('DOMContentLoaded', () => {
-    loadApps();
-});
+document.addEventListener('DOMContentLoaded', loadApps);
