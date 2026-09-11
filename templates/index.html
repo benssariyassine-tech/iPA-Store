@@ -189,6 +189,9 @@
         }
         const auth = firebase.auth();
 
+        // فرض بقاء الجلسة مسجلة محلياً في المتصفح لتفادي ضياعها
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
         function openAccountModal() {
             document.getElementById('accountModal').style.display = 'flex';
         }
@@ -196,10 +199,19 @@
             document.getElementById('accountModal').style.display = 'none';
         }
 
-        // استخدام التوجيه المباشر Redirect لتفادي حظر النوافذ المنبثقة على الهواتف
+        // استخدام الـ Popup مع التقاط الخطأ وتوجيه ذكي
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithRedirect(provider);
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    closeAccountModal();
+                    updateUserUI(result.user);
+                })
+                .catch((error) => {
+                    console.log("Popup error, switching to redirect:", error);
+                    // إذا أُغلقت أو حدث خطأ في البُوب أب، نلجأ للـ Redirect كبديل آمن
+                    auth.signInWithRedirect(provider);
+                });
         }
 
         function updateUserUI(user) {
@@ -218,13 +230,14 @@
             }
         }
 
-        // جلب نتيجة إعادة التوجيه بعد رجوع المستخدم من صفحة قوقل
+        // تفقد نتيجة الـ Redirect فور العودة للصفحة
         auth.getRedirectResult().then((result) => {
             if (result && result.user) {
+                closeAccountModal();
                 updateUserUI(result.user);
             }
         }).catch((error) => {
-            console.error("Redirect error:", error);
+            console.error("Redirect result error:", error);
         });
 
         auth.onAuthStateChanged((user) => {
