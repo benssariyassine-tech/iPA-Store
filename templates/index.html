@@ -112,6 +112,7 @@
         .app-icon-img { width: 52px; height: 52px; border-radius: 14px; object-fit: cover; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
         .app-details h4 { margin: 0 0 3px 0; font-size: 14px; font-weight: 700; color: #fff; }
         .app-details p { margin: 0; font-size: 12px; color: #8e8e93; }
+        .app-category-sub { font-size: 11px; color: #8e8e93; font-weight: 600; margin-top: 2px; }
         
         .app-actions { display: flex; gap: 8px; align-items: center; }
         .btn-install {
@@ -125,28 +126,30 @@
             border: none;
             box-shadow: 0 4px 12px rgba(10,132,255,0.3);
             white-space: nowrap;
+            cursor: pointer;
         }
         .admin-btns { display: flex; gap: 4px; }
         .btn-edit { background: #ff9f0a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
         .btn-del { background: #ff453a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
 
-        /* القائمة السفلية العائمة الواضحة */
+        /* القائمة السفلية العائمة الشفافة والمعدلة */
         .floating-nav {
             position: fixed;
-            bottom: 12px;
+            bottom: 14px;
             left: 50%;
             transform: translateX(-50%);
             width: 92%;
             max-width: 480px;
-            background: rgba(22, 22, 28, 0.92);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 22px;
+            background: rgba(18, 18, 24, 0.75);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 24px;
             display: flex;
             justify-content: space-around;
-            padding: 8px 4px;
+            padding: 10px 6px;
             z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.8);
         }
         .nav-item {
             background: none;
@@ -162,18 +165,71 @@
             font-family: 'Cairo', sans-serif;
             transition: 0.25s;
         }
-        .nav-item.active { color: #0a84ff; transform: scale(1.05); }
-        .nav-item svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+        .nav-item.active { color: #0a84ff; transform: scale(1.08); }
+        .nav-item svg { width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 2.2; }
 
-        /* النافذة المنبثقة Modal */
+        /* النافذة المنبثقة العادية Modal */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); align-items: center; justify-content: center; }
         .modal-box { background: #16161c; border: 1px solid rgba(255,255,255,0.1); border-radius: 22px; padding: 22px; width: 88%; max-width: 360px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; }
+        
+        /* صفحة تفاصيل التطبيق المنبثقة من الأسفل للأعلى */
+        .bottom-sheet-modal {
+            display: none;
+            position: fixed;
+            z-index: 2500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .bottom-sheet-content {
+            background: #16161c;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-top-left-radius: 28px;
+            border-top-right-radius: 28px;
+            padding: 24px 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+            animation: slideUpSheet 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUpSheet {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        /* لقطات الشاشة الأفقية داخل صفحة التفاصيل */
+        .screenshots-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0;
+            margin: 12px 0;
+            scroll-snap-type: x mandatory;
+        }
+        .screenshots-container::-webkit-scrollbar { height: 4px; }
+        .screenshots-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        .screenshot-item {
+            width: 130px;
+            height: 230px;
+            border-radius: 14px;
+            object-fit: cover;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            scroll-snap-align: start;
+        }
+
         .input-field { width: 100%; padding: 11px; margin-bottom: 10px; background: #0b0b0f; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; box-sizing: border-box; font-family: 'Cairo', sans-serif; font-size: 13px; outline: none; }
         select.input-field { appearance: none; }
         
         .admin-add-float {
             position: fixed;
-            bottom: 78px;
+            bottom: 84px;
             left: 20px;
             background: #32d74b;
             color: #000;
@@ -188,7 +244,7 @@
             display: none;
         }
 
-        /* لوحة تحكم الأدمن المخصصة */
+        /* لوحة تحكم الأدمن */
         .admin-dashboard-card {
             background: #16161c;
             border: 1px solid rgba(10,132,255,0.3);
@@ -220,28 +276,13 @@
             margin-bottom: 10px;
             font-size: 12px;
         }
-        .quick-reply-btn {
-            background: #2c2c2e;
-            color: #ff9f0a;
-            border: 1px solid rgba(255,159,10,0.3);
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 10px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 5px;
-            margin-left: 4px;
-            font-family: 'Cairo', sans-serif;
-        }
 
-        /* صفحة تفاصيل التطبيق والتعليقات والتقييمات */
-        .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
+        .detail-header { display: flex; align-items: center; gap: 15px; margin-bottom: 12px; }
         .detail-icon { width: 75px; height: 75px; border-radius: 18px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
-        .star-rating { color: #ff9f0a; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 4px; margin: 6px 0; }
+        .star-rating { color: #ff9f0a; font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 4px; margin: 4px 0; }
         .comment-box { background: #0b0b0f; border: 1px solid rgba(255,255,255,0.06); padding: 10px 12px; border-radius: 12px; margin-bottom: 8px; font-size: 12px; }
         .comment-user { color: #0a84ff; font-weight: 700; margin-bottom: 3px; }
         
-        /* قسم الأدوات وشرح E-Sign */
         .tool-guide-card {
             background: #16161c;
             border: 1px solid rgba(255,255,255,0.08);
@@ -285,14 +326,15 @@
 
     <button class="admin-add-float" id="adminAddFloatBtn" onclick="openAddAppModal()">+ إضافة تطبيق جديد</button>
 
-    <!-- القائمة السفلية العائمة -->
+    <!-- القائمة السفلية العائمة الشفافة والمعدلة -->
     <div class="floating-nav">
         <button class="nav-item active" onclick="switchTab('today', this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             اليوم
         </button>
+        <!-- رمز الألعاب السداسي الواضح والمعدل SVG -->
         <button class="nav-item" onclick="switchTab('games', this)">
-            <svg viewBox="0 0 24 24"><path d="M6 11h4m-2-2v4m10-2a2 2 0 11-4 0 2 2 0 014 0zm-4 4a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1.2" fill="currentColor"></circle><circle cx="18" cy="13" r="1.2" fill="currentColor"></circle></svg>
             الألعاب
         </button>
         <button class="nav-item" onclick="switchTab('apps', this)">
@@ -309,7 +351,7 @@
         </button>
     </div>
 
-    <!-- نافذة الحساب وتسجيل الدخول العامة -->
+    <!-- نافذة الحساب وتسجيل الدخول -->
     <div id="accountModal" class="modal">
         <div class="modal-box" style="text-align: center;">
             <div id="loggedOutView">
@@ -329,7 +371,7 @@
         </div>
     </div>
 
-    <!-- نافذة إضافة أو تعديل تطبيق -->
+    <!-- نافذة إضافة أو تعديل تطبيق مع حقل لقطات الشاشة للأدمن -->
     <div id="addAppModal" class="modal">
         <div class="modal-box">
             <h3 id="modalTitleText" style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق للسحابة</h3>
@@ -343,6 +385,10 @@
             </select>
             <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">أيقونة التطبيق (صورة):</div>
             <input type="file" id="appImgFile" class="input-field" accept="image/*">
+            
+            <div style="font-size:11px; color:#8e8e93; margin-bottom:4px;">صور من داخل التطبيق (Screenshots متعددة):</div>
+            <input type="file" id="appScreenshotsFile" class="input-field" accept="image/*" multiple>
+
             <input type="text" id="appName" class="input-field" placeholder="اسم التطبيق (مثال: GTA San Andreas)">
             <input type="text" id="appDesc" class="input-field" placeholder="الوصف أو الحجم (مثال: Action • 2.1 GB)">
             <input type="text" id="appUrl" class="input-field" placeholder="رابط التحميل المباشر (.ipa)">
@@ -351,19 +397,18 @@
         </div>
     </div>
 
-    <!-- نافذة تفاصيل التطبيق، التقييمات، والتعليقات -->
-    <div id="appDetailModal" class="modal">
-        <div class="modal-box" id="appDetailBody">
+    <!-- صفحة تفاصيل التطبيق المنبثقة من الأسفل للأعلى (Bottom Sheet) -->
+    <div id="appDetailModal" class="bottom-sheet-modal">
+        <div class="bottom-sheet-content" id="appDetailBody">
             <!-- يتم تعبئتها ديناميكياً -->
         </div>
     </div>
 
-    <!-- نافذة الإبلاغ عن مشكلة مع الردود الفورية -->
+    <!-- نافذة الإبلاغ عن مشكلة -->
     <div id="reportModal" class="modal">
         <div class="modal-box">
             <h3 style="margin-top:0; color:#fff; font-size:16px;">إبلاغ عن مشكلة في التطبيق</h3>
             <input type="hidden" id="reportAppId">
-            
             <div style="font-size:11px; color:#8e8e93; margin-bottom:6px;">اختر سبباً جاهزاً بضغطة زر:</div>
             <div style="display:flex; flex-direction:column; gap:6px; margin-bottom:10px;">
                 <button type="button" onclick="setReportReasonText('رابط لا يشتغل')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">🔗 رابط لا يشتغل</button>
@@ -371,7 +416,6 @@
                 <button type="button" onclick="setReportReasonText('لعبة غير اخلاقية')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">⚠️ لعبة غير اخلاقية</button>
                 <button type="button" onclick="setReportReasonText('تطبيق يحتوي على محتوى غير اخلاقي')" style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.1); color:#fff; padding:8px; border-radius:8px; text-align:right; font-size:12px; cursor:pointer; font-family:'Cairo',sans-serif;">🛑 تطبيق يحتوي على محتوى غير اخلاقي</button>
             </div>
-
             <textarea id="reportReason" class="input-field" placeholder="أو اكتب تفاصيل المشكلة بنفسك..." style="height:70px; resize:none;"></textarea>
             <button onclick="submitReport()" style="background:#ff9f0a; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Cairo',sans-serif;">إرسال البلاغ للأدمن</button>
             <button onclick="document.getElementById('reportModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; margin-top:8px; cursor:pointer;">إغلاق</button>
@@ -398,7 +442,6 @@
         let allAppsCache = [];
         let allReportsCache = [];
 
-        // الحصول على التاريخ الفعلي الحقيقي بالعربية
         function getActualDateString() {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return new Date().toLocaleDateString('ar-DZ', options);
@@ -434,6 +477,14 @@
             renderUI();
         }
 
+        // دالة حساب نقاط التصدير (Trending Score) لتصنيف #1
+        function getTrendingScore(app) {
+            const rating = app.ratingCount ? (app.ratingSum / app.ratingCount) : 0;
+            const downloads = app.downloads || 0;
+            const comments = app.commentsCount || 0;
+            return (rating * 15) + (downloads * 5) + (comments * 10);
+        }
+
         function renderUI() {
             const container = document.getElementById('dynamicContent');
             const searchQuery = document.getElementById('searchInput').value.toLowerCase();
@@ -456,8 +507,8 @@
                 let totalReports = allReportsCache.length;
                 let mostActiveApp = "لا توجد بعد";
                 if(totalApps > 0) {
-                    let sortedByRating = [...allAppsCache].sort((a,b) => (b.ratingCount||0) - (a.ratingCount||0));
-                    mostActiveApp = sortedByRating[0].name;
+                    let sortedByRating = [...allAppsCache].sort((a,b) => getTrendingScore(b) - getTrendingScore(a));
+                    mostActiveApp = sortedByRating[0].name + " (رقم #1 متصدر)";
                 }
 
                 let reportsHTML = "";
@@ -498,7 +549,7 @@
                             </div>
                         </div>
                         <div style="background:#0b0b0f; border:1px solid rgba(255,255,255,0.06); padding:10px; border-radius:12px; font-size:12px; margin-bottom:15px;">
-                            <span style="color:#8e8e93;">أكثر تطبيق تفاعلاً:</span> <strong>${mostActiveApp}</strong>
+                            <span style="color:#8e8e93;">أكثر تطبيق متصدر (#1):</span> <strong>${mostActiveApp}</strong>
                         </div>
                         
                         <h4 style="font-size:14px; margin:0 0 10px 0; color:#fff; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">بلاغات المستخدمين الواردة (${totalReports}):</h4>
@@ -518,28 +569,35 @@
                         <div class="today-subtitle">🔥 تحديثات وأحداث خاصة</div>
                     </div>
                     <div id="todayAppsContainer"></div>
-                    <div class="section-heading">القائمة العامة</div>
+                    <div class="section-heading">التطبيقات المتصدرة (#1) والعامة</div>
                     <div id="generalAppsContainer"></div>
                 `;
                 
-                const todayList = allAppsCache.filter(app => app.category === 'today' || !app.category);
-                const generalList = allAppsCache.filter(app => app.category && app.category !== 'today');
+                // ترتيب التطبيقات حسب نقاط التصدير (Trending Score) لتحديد المتصدر #1
+                let sortedByTrending = [...allAppsCache].sort((a,b) => getTrendingScore(b) - getTrendingScore(a));
+                const todayList = sortedByTrending.filter(app => app.category === 'today' || !app.category);
+                const generalList = sortedByTrending;
 
                 const tContainer = document.getElementById('todayAppsContainer');
                 if (todayList.length === 0) {
                     tContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات مميزة في قسم اليوم حالياً.</p>`;
                 } else {
-                    todayList.forEach(app => {
+                    todayList.forEach((app, index) => {
                         let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
+                        let isTopOne = (index === 0) ? '<span style="background:#32d74b; color:#000; font-size:10px; font-weight:900; padding:2px 8px; border-radius:6px; margin-left:6px;">#1 متصدر</span>' : '';
                         tContainer.innerHTML += `
                             <div class="featured-card">
                                 <img src="${app.icon || 'https://via.placeholder.com/300'}" class="featured-img" style="cursor:pointer;" onclick="openAppDetails('${app.id}')">
                                 <div class="featured-body">
-                                    <span class="badge-tag">تطبيق اليوم المميز • ⭐ ${avgRating}</span>
-                                    <h3 style="margin:5px 0 4px 0; font-size:17px; cursor:pointer;" onclick="openAppDetails('${app.id}')">${app.name}</h3>
+                                    <div style="display:flex; align-items:center; margin-bottom:6px;">
+                                        <span class="badge-tag" style="margin-bottom:0;">تطبيق اليوم المميز • ⭐ ${avgRating}</span>
+                                        ${isTopOne}
+                                    </div>
+                                    <h3 style="margin:5px 0 2px 0; font-size:17px; cursor:pointer;" onclick="openAppDetails('${app.id}')">${app.name}</h3>
+                                    <div class="app-category-sub" style="margin-bottom:6px;">${getCategoryNameAr(app.category)}</div>
                                     <p style="color:#8e8e93; font-size:12px; margin:0 0 14px 0;">${app.desc}</p>
                                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <a href="${app.url}" class="btn-install" target="_blank">تثبيت فوري</a>
+                                        <a href="${app.url}" class="btn-install" target="_blank" onclick="incrementDownload('${app.id}')">تثبيت فوري</a>
                                         <div style="display:flex; gap:6px;">
                                             <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff9f0a; border:none; padding:5px 9px; border-radius:8px; font-size:10px; cursor:pointer;">إبلاغ</button>
                                             ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">تعديل</button><button class="btn-del" onclick="deleteApp('${app.id}')">حذف</button></div>` : ''}
@@ -555,7 +613,10 @@
                 if (generalList.length === 0) {
                     gContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center;">لا توجد تطبيقات أخرى متاحة حالياً.</p>`;
                 } else {
-                    generalList.forEach(app => gContainer.innerHTML += createAppCardHTML(app));
+                    generalList.forEach((app, idx) => {
+                        let rankBadge = (idx === 0) ? '<span style="color:#32d74b; font-weight:900; margin-left:6px;">#1</span>' : '';
+                        gContainer.innerHTML += createAppCardHTML(app, rankBadge);
+                    });
                 }
 
             } else if (currentTab === 'tools') {
@@ -577,7 +638,9 @@
                     </div>
                 `;
             } else {
-                const tabFiltered = allAppsCache.filter(app => app.category === currentTab);
+                let tabFiltered = allAppsCache.filter(app => app.category === currentTab);
+                // ترتيب حسب التصدير
+                tabFiltered.sort((a,b) => getTrendingScore(b) - getTrendingScore(a));
                 const titles = { games: 'ألعاب الآيفون', apps: 'التطبيقات المميزة' };
                 
                 container.innerHTML = `
@@ -592,24 +655,35 @@
                 if (tabFiltered.length === 0) {
                     fContainer.innerHTML = `<p style="color:#8e8e93; font-size:13px; text-align:center; margin-top:40px;">لا توجد تطبيقات في هذا القسم حالياً.</p>`;
                 } else {
-                    tabFiltered.forEach(app => fContainer.innerHTML += createAppCardHTML(app));
+                    tabFiltered.forEach((app, idx) => {
+                        let rankBadge = (idx === 0) ? '<span style="color:#32d74b; font-weight:900; margin-left:6px;">#1</span>' : '';
+                        fContainer.innerHTML += createAppCardHTML(app, rankBadge);
+                    });
                 }
             }
         }
 
-        function createAppCardHTML(app) {
+        function getCategoryNameAr(cat) {
+            if(cat === 'games') return 'ألعاب';
+            if(cat === 'apps') return 'تطبيقات';
+            if(cat === 'tools') return 'أدوات';
+            return 'أدوات وخدمات';
+        }
+
+        function createAppCardHTML(app, rankBadge = '') {
             let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
             return `
                 <div class="app-card-pro">
                     <div class="app-meta" onclick="openAppDetails('${app.id}')">
                         <img src="${app.icon || 'https://via.placeholder.com/60'}" class="app-icon-img">
                         <div class="app-details">
-                            <h4>${app.name}</h4>
+                            <h4>${rankBadge}${app.name}</h4>
+                            <div class="app-category-sub">${getCategoryNameAr(app.category)}</div>
                             <p>${app.desc} • ⭐ ${avgRating}</p>
                         </div>
                     </div>
                     <div class="app-actions">
-                        <a href="${app.url}" class="btn-install" target="_blank">تثبيت</a>
+                        <a href="${app.url}" class="btn-install" target="_blank" onclick="incrementDownload('${app.id}')">تثبيت</a>
                         <button onclick="openReportModal('${app.id}')" style="background:#2c2c2e; color:#ff9f0a; border:none; padding:6px 8px; border-radius:10px; font-size:10px; cursor:pointer;" title="إبلاغ">⚠️</button>
                         ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">تعديل</button><button class="btn-del" onclick="deleteApp('${app.id}')">حذف</button></div>` : ''}
                     </div>
@@ -617,18 +691,36 @@
             `;
         }
 
-        // تفاصيل التطبيق والتعليقات والتقييمات الحقيقية
+        // زيادة عداد التحميلات عند الضغط على التثبيت
+        function incrementDownload(appId) {
+            const appRef = db.collection("apps").doc(appId);
+            appRef.update({
+                downloads: firebase.firestore.FieldValue.increment(1)
+            }).catch(() => {});
+        }
+
+        // فتح صفحة تفاصيل التطبيق المنبثقة من الأسفل للأعلى (Bottom Sheet) مع لقطات الشاشة والتعليقات والتقييمات
         function openAppDetails(appId) {
             const app = allAppsCache.find(a => a.id === appId);
             if (!app) return;
             
             let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
-            let commentsHTML = '';
             
+            // بناء لقطات الشاشة الأفقية إذا كانت موجودة
+            let screenshotsHTML = '';
+            if (app.screenshots && app.screenshots.length > 0) {
+                app.screenshots.forEach(imgUrl => {
+                    screenshotsHTML += `<img src="${imgUrl}" class="screenshot-item">`;
+                });
+            } else {
+                screenshotsHTML = `<p style="color:#8e8e93; font-size:11px;">لا توجد صور إضافية من داخل التطبيق.</p>`;
+            }
+
             db.collection("apps").doc(appId).collection("comments").orderBy("createdAt", "desc").get().then(snapshot => {
                 let commentsList = [];
                 snapshot.forEach(doc => commentsList.push(doc.data()));
                 
+                let commentsHTML = '';
                 if(commentsList.length === 0) {
                     commentsHTML = `<p style="color:#8e8e93; font-size:12px; text-align:center;">0 تعليقات حتى الآن. كن اول من يعلق!</p>`;
                 } else {
@@ -643,43 +735,55 @@
                 }
 
                 document.getElementById('appDetailBody').innerHTML = `
+                    <div style="width:40px; height:4px; background:rgba(255,255,255,0.2); border-radius:10px; margin:0 auto 16px auto;"></div>
                     <div class="detail-header">
                         <img src="${app.icon || 'https://via.placeholder.com/75'}" class="detail-icon">
                         <div>
-                            <h3 style="margin:0 0 4px 0; font-size:16px; color:#fff;">${app.name}</h3>
-                            <p style="margin:0; font-size:12px; color:#8e8e93;">${app.desc}</p>
+                            <h3 style="margin:0 0 2px 0; font-size:17px; color:#fff;">${app.name}</h3>
+                            <div style="font-size:11px; color:#8e8e93; font-weight:600; margin-bottom:3px;">${getCategoryNameAr(app.category)}</div>
+                            <p style="margin:0; font-size:12px; color:#a1a1a6;">${app.desc}</p>
                             <div class="star-rating">⭐ ${avgRating} <span style="font-size:11px; color:#8e8e93;">(${app.ratingCount || 0} تقييم)</span></div>
                         </div>
                     </div>
-                    <a href="${app.url}" class="btn-install" style="display:block; text-align:center; padding:10px; margin-bottom:15px;" target="_blank">تحميل وتثبيت مباشر (.ipa)</a>
+
+                    <a href="${app.url}" class="btn-install" style="display:block; text-align:center; padding:11px; margin-bottom:15px;" target="_blank" onclick="incrementDownload('${app.id}')">تحميل وتثبيت مباشر (.ipa)</a>
                     
+                    <!-- صور من داخل التطبيق (أفقي) -->
                     <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-bottom:12px;">
-                        <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">قيم هذا التطبيق:</h4>
-                        <div style="display:flex; gap:10px; justify-content:center;">
-                            <button onclick="rateApp('${app.id}', 1)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:5px 12px; border-radius:8px; cursor:pointer;">⭐ 1</button>
-                            <button onclick="rateApp('${app.id}', 3)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:5px 12px; border-radius:8px; cursor:pointer;">⭐⭐⭐ 3</button>
-                            <button onclick="rateApp('${app.id}', 5)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:5px 12px; border-radius:8px; cursor:pointer;">⭐⭐⭐⭐⭐ 5</button>
+                        <h4 style="font-size:13px; margin:0 0 6px 0; color:#fff;">صور من داخل التطبيق:</h4>
+                        <div class="screenshots-container">
+                            ${screenshotsHTML}
                         </div>
                     </div>
 
+                    <!-- قسم التقييم -->
+                    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-bottom:12px;">
+                        <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">قيم هذا التطبيق:</h4>
+                        <div style="display:flex; gap:10px; justify-content:center;">
+                            <button onclick="rateApp('${app.id}', 1)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐ 1</button>
+                            <button onclick="rateApp('${app.id}', 3)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐ 3</button>
+                            <button onclick="rateApp('${app.id}', 5)" style="background:#1c1c24; border:1px solid #ff9f0a; color:#fff; padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐⭐⭐ 5</button>
+                        </div>
+                    </div>
+
+                    <!-- قسم التعليقات -->
                     <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:12px;">
                         <h4 style="font-size:13px; margin:0 0 8px 0; color:#fff;">التعليقات (${commentsList.length}):</h4>
-                        <div style="max-height:140px; overflow-y:auto; margin-bottom:10px;" id="commentsListArea">
+                        <div style="max-height:160px; overflow-y:auto; margin-bottom:10px;" id="commentsListArea">
                             ${commentsHTML}
                         </div>
                         ${currentUser ? `
                             <input type="text" id="newCommentText" class="input-field" placeholder="اكتب تعليقاً..." style="margin-bottom:6px;">
-                            <button onclick="postComment('${app.id}')" style="background:#0a84ff; color:#fff; border:none; width:100%; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:12px;">إرسال التعليق</button>
+                            <button onclick="postComment('${app.id}')" style="background:#0a84ff; color:#fff; border:none; width:100%; padding:9px; border-radius:10px; font-weight:bold; cursor:pointer; font-size:12px;">إرسال التعليق</button>
                         ` : `<p style="color:#ff9f0a; font-size:11px; text-align:center;">سجل دخولك عبر زر الحساب بالأعلى لتتمكن من التعليق.</p>`}
                     </div>
                     
-                    <button onclick="document.getElementById('appDetailModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:9px; border-radius:10px; margin-top:15px; cursor:pointer;">إغلاق</button>
+                    <button onclick="document.getElementById('appDetailModal').style.display='none'" style="background:#2c2c2e; color:#fff; border:none; width:100%; padding:10px; border-radius:12px; margin-top:16px; cursor:pointer; font-weight:bold;">إغلاق</button>
                 `;
                 document.getElementById('appDetailModal').style.display = 'flex';
             });
         }
 
-        // التقييم الفعلي (لا توهم)
         function rateApp(appId, stars) {
             if (!currentUser) { alert('الرجاء تسجيل الدخول أولاً للتقييم'); return; }
             const appRef = db.collection("apps").doc(appId);
@@ -697,7 +801,6 @@
             }).catch(err => alert("خطأ: " + err.message));
         }
 
-        // نشر تعليق حقيقي
         function postComment(appId) {
             if (!currentUser) { alert('سجل دخولك أولاً'); return; }
             const text = document.getElementById('newCommentText').value.trim();
@@ -708,12 +811,16 @@
                 text: text,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
+                // تحديث عداد التعليقات لرفع نقاط التصدير
+                db.collection("apps").doc(appId).update({
+                    commentsCount: firebase.firestore.FieldValue.increment(1)
+                }).catch(()=>{});
+
                 document.getElementById('newCommentText').value = '';
                 openAppDetails(appId);
             });
         }
 
-        // إبلاغ عن مشكلة
         function openReportModal(appId) {
             document.getElementById('reportAppId').value = appId;
             document.getElementById('reportReason').value = '';
@@ -746,7 +853,6 @@
             }
         }
 
-        // المصادقة والتحقق من حساب الأدمن
         auth.onAuthStateChanged(user => {
             currentUser = user;
             const floatBtn = document.getElementById('adminAddFloatBtn');
@@ -795,6 +901,7 @@
             document.getElementById('appDesc').value = "";
             document.getElementById('appUrl').value = "";
             document.getElementById('appImgFile').value = "";
+            document.getElementById('appScreenshotsFile').value = "";
             document.getElementById('addAppModal').style.display = 'flex';
         }
 
@@ -819,44 +926,78 @@
             const desc = document.getElementById('appDesc').value;
             const url = document.getElementById('appUrl').value || '#';
             const fileInput = document.getElementById('appImgFile');
+            const screenshotsInput = document.getElementById('appScreenshotsFile');
 
             if (!name) { alert('أدخل اسم التطبيق من فضلك'); return; }
+
+            // معالجة الأيقونة والصور المرفقة
+            let iconResult = 'https://via.placeholder.com/60';
+            if (editingId) {
+                const found = allAppsCache.find(a => a.id === editingId);
+                if (found) iconResult = found.icon;
+            }
+
+            let existingScreenshots = [];
+            if (editingId) {
+                const found = allAppsCache.find(a => a.id === editingId);
+                if (found && found.screenshots) existingScreenshots = found.screenshots;
+            }
+
+            const processFilesAndSave = () => {
+                let screenshotsList = [...existingScreenshots];
+                
+                if (screenshotsInput.files && screenshotsInput.files.length > 0) {
+                    let filesLoaded = 0;
+                    Array.from(screenshotsInput.files).forEach((file) => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            screenshotsList.push(e.target.result);
+                            filesLoaded++;
+                            if (filesLoaded === screenshotsInput.files.length) {
+                                commitAppToCloud(editingId, category, name, desc, url, iconResult, screenshotsList);
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                } else {
+                    commitAppToCloud(editingId, category, name, desc, url, iconResult, screenshotsList);
+                }
+            };
 
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    commitAppToCloud(editingId, category, name, desc, url, e.target.result);
+                    iconResult = e.target.result;
+                    processFilesAndSave();
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
-                let existingIcon = 'https://via.placeholder.com/60';
-                if (editingId) {
-                    const found = allAppsCache.find(a => a.id === editingId);
-                    if (found) existingIcon = found.icon;
-                }
-                commitAppToCloud(editingId, category, name, desc, url, existingIcon);
+                processFilesAndSave();
             }
         }
 
-        function commitAppToCloud(editingId, category, name, desc, url, icon) {
+        function commitAppToCloud(editingId, category, name, desc, url, icon, screenshots) {
             if (editingId) {
                 db.collection("apps").doc(editingId).update({
-                    category, name, desc, url, icon
+                    category, name, desc, url, icon, screenshots
                 }).then(() => {
                     document.getElementById('addAppModal').style.display = 'none';
                     alert('تم تحديث التطبيق بنجاح!');
                 }).catch(err => alert("خطأ: " + err.message));
             } else {
                 db.collection("apps").add({
-                    category, name, desc, url, icon,
+                    category, name, desc, url, icon, screenshots,
                     ratingSum: 0,
                     ratingCount: 0,
+                    downloads: 0,
+                    commentsCount: 0,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
                     document.getElementById('appName').value = '';
                     document.getElementById('appDesc').value = '';
                     document.getElementById('appUrl').value = '';
                     document.getElementById('appImgFile').value = '';
+                    document.getElementById('appScreenshotsFile').value = '';
                     document.getElementById('addAppModal').style.display = 'none';
                 }).catch(err => alert("خطأ: " + err.message));
             }
