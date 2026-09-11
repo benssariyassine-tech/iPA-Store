@@ -43,7 +43,7 @@
             overflow: hidden;
         }
         .container { padding: 20px; max-width: 600px; margin: auto; }
-        .section-title { font-size: 17px; font-weight: 700; margin-bottom: 15px; }
+        .section-title { font-size: 17px; font-weight: 700; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
         .app-card {
             background: #1c1c1e;
@@ -65,6 +65,7 @@
             padding: 2px 6px;
             border-radius: 6px;
         }
+        .actions-group { display: flex; gap: 8px; align-items: center; }
         .install-btn {
             background: #0a84ff;
             color: #fff;
@@ -75,6 +76,28 @@
             font-weight: 700;
             border: none;
             cursor: pointer;
+        }
+        .delete-btn {
+            background: #ff453a;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: none; /* تظهر فقط للأدمن */
+        }
+        .admin-add-btn {
+            background: #32d74b;
+            color: #000;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: none; /* تظهر فقط للأدمن */
         }
 
         .modal {
@@ -127,6 +150,17 @@
             font-family: 'Cairo', sans-serif;
             font-size: 13px;
         }
+        .admin-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #2c2c2e;
+            border: 1px solid #3a3a3c;
+            border-radius: 10px;
+            color: #fff;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -142,22 +176,21 @@
     </div>
 
     <div class="container">
-        <div class="section-title">تطبيقات الـ Pro المميزة</div>
+        <div class="section-title">
+            <span>تطبيقات الـ Pro المميزة</span>
+            <button class="admin-add-btn" id="adminAddBtn" onclick="openAddAppModal()">+ إضافة تطبيق</button>
+        </div>
 
-        <div class="app-card">
-            <div class="app-info">
-                <h3>يوتيوب بلس <span class="pro-badge">PRO</span></h3>
-                <p>بدون إعلانات - تشغيل بالخلفية</p>
-            </div>
-            <a href="#" class="install-btn" onclick="alert('جارٍ التثبيت...')">تثبيت</a>
+        <div id="appsListContainer">
+            <!-- التطبيقات تظهر هنا ديناميكياً -->
         </div>
     </div>
 
+    <!-- نافذة الحساب -->
     <div id="accountModal" class="modal">
         <div class="modal-content">
             <div id="loggedOutView">
                 <h3 style="margin-top:0; margin-bottom: 20px; color:#fff; font-size:17px;">تسجيل الدخول إلى iStore IPA</h3>
-
                 <button class="google-btn" onclick="loginWithGoogle()">
                     <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.15v3.14C3.11 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.15C.42 8.1 0 9.77 0 11.5s.42 3.4 1.15 4.88l4.12-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.11 2.64 1.15 6.62l4.12 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
                     المتابعة بواسطة Google
@@ -167,10 +200,23 @@
             <div id="loggedInView" style="display:none; text-align:center;">
                 <h3 style="margin-top:0; color:#0a84ff;" id="userNameText">حسابي</h3>
                 <p style="color:#8e8e93; font-size:12px; margin-bottom: 20px;" id="userEmailText"></p>
+                <div id="adminBadgeText" style="color: #32d74b; font-weight: bold; font-size: 13px; margin-bottom: 15px; display:none;">👑 أنت مسجل بصفتك الأدمن</div>
                 <button class="install-btn" onclick="logoutUser()" style="background:#ff453a; width:100%; margin-bottom: 10px;">تسجيل الخروج</button>
             </div>
 
             <button class="close-modal" onclick="closeAccountModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نافذة إضافة تطبيق للأدمن -->
+    <div id="addAppModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-top:0; color:#fff; font-size:16px;">إضافة تطبيق IPA جديد</h3>
+            <input type="text" id="appNameInput" class="admin-input" placeholder="اسم التطبيق (مثال: يوتيوب بلس)">
+            <input type="text" id="appDescInput" class="admin-input" placeholder="الوصف (مثال: بدون إعلانات)">
+            <input type="text" id="appUrlInput" class="admin-input" placeholder="رابط التحميل (.ipa)">
+            <button class="install-btn" onclick="addNewApp()" style="width:100%; margin-bottom:10px; background:#32d74b; color:#000;">حفظ ونشر</button>
+            <button class="close-modal" onclick="closeAddAppModal()">إلغاء</button>
         </div>
     </div>
 
@@ -188,68 +234,122 @@
             firebase.initializeApp(firebaseConfig);
         }
         const auth = firebase.auth();
-
-        // فرض بقاء الجلسة مسجلة محلياً في المتصفح لتفادي ضياعها
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-        function openAccountModal() {
-            document.getElementById('accountModal').style.display = 'flex';
-        }
-        function closeAccountModal() {
-            document.getElementById('accountModal').style.display = 'none';
+        const ADMIN_EMAIL = "benssariyassine@gmail.com";
+        let isAdmin = false;
+
+        // قائمة التطبيقات الافتراضية أو المخزنة
+        let appsData = JSON.parse(localStorage.getItem('istore_apps')) || [
+            { name: "يوتيوب بلس", desc: "بدون إعلانات - تشغيل بالخلفية", url: "#" }
+        ];
+
+        function renderApps() {
+            const container = document.getElementById('appsListContainer');
+            container.innerHTML = '';
+            
+            appsData.forEach((app, index) => {
+                container.innerHTML += `
+                    <div class="app-card">
+                        <div class="app-info">
+                            <h3>${app.name} <span class="pro-badge">PRO</span></h3>
+                            <p>${app.desc}</p>
+                        </div>
+                        <div class="actions-group">
+                            <a href="${app.url}" class="install-btn" onclick="event.preventDefault(); alert('جارٍ بدء التثبيت...');">تثبيت</a>
+                            <button class="delete-btn" id="del-btn-${index}" onclick="deleteApp(${index})" style="display: ${isAdmin ? 'block' : 'none'};">حذف</button>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
-        // استخدام الـ Popup مع التقاط الخطأ وتوجيه ذكي
+        function openAccountModal() { document.getElementById('accountModal').style.display = 'flex'; }
+        function closeAccountModal() { document.getElementById('accountModal').style.display = 'none'; }
+        
+        function openAddAppModal() { document.getElementById('addAppModal').style.display = 'flex'; }
+        function closeAddAppModal() { document.getElementById('addAppModal').style.display = 'none'; }
+
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    closeAccountModal();
-                    updateUserUI(result.user);
-                })
-                .catch((error) => {
-                    console.log("Popup error, switching to redirect:", error);
-                    // إذا أُغلقت أو حدث خطأ في البُوب أب، نلجأ للـ Redirect كبديل آمن
-                    auth.signInWithRedirect(provider);
-                });
+            auth.signInWithPopup(provider).catch(() => {
+                auth.signInWithRedirect(provider);
+            });
         }
 
-        function updateUserUI(user) {
+        auth.getRedirectResult().catch(err => console.log(err));
+
+        auth.onAuthStateChanged((user) => {
+            const addBtn = document.getElementById('adminAddBtn');
+            const adminBadge = document.getElementById('adminBadgeText');
+
             if (user) {
                 document.getElementById('loggedOutView').style.display = 'none';
                 document.getElementById('loggedInView').style.display = 'block';
                 document.getElementById('userNameText').innerText = user.displayName || user.email.split('@')[0];
                 document.getElementById('userEmailText').innerText = user.email;
+                document.getElementById('userAvatarBtn').innerText = user.email.charAt(0).toUpperCase();
 
-                const initial = user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
-                document.getElementById('userAvatarBtn').innerText = initial;
+                // التحقق من صلاحيات الأدمن بدقة
+                if (user.email.toLowerCase() === ADMIN_EMAIL) {
+                    isAdmin = true;
+                    addBtn.style.display = 'block';
+                    adminBadge.style.display = 'block';
+                } else {
+                    isAdmin = false;
+                    addBtn.style.display = 'none';
+                    adminBadge.style.display = 'none';
+                }
             } else {
+                isAdmin = false;
                 document.getElementById('loggedOutView').style.display = 'block';
                 document.getElementById('loggedInView').style.display = 'none';
                 document.getElementById('userAvatarBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
+                addBtn.style.display = 'none';
+                adminBadge.style.display = 'none';
             }
+            renderApps();
+        });
+
+        function addNewApp() {
+            if (!isAdmin) return;
+            const name = document.getElementById('appNameInput').value;
+            const desc = document.getElementById('appDescInput').value;
+            const url = document.getElementById('appUrlInput').value || '#';
+
+            if (!name) {
+                alert('الرجاء إدخال اسم التطبيق على الأقل');
+                return;
+            }
+
+            appsData.push({ name, desc, url });
+            localStorage.setItem('istore_apps', JSON.stringify(appsData));
+            
+            document.getElementById('appNameInput').value = '';
+            document.getElementById('appDescInput').value = '';
+            document.getElementById('appUrlInput').value = '';
+            
+            closeAddAppModal();
+            renderApps();
         }
 
-        // تفقد نتيجة الـ Redirect فور العودة للصفحة
-        auth.getRedirectResult().then((result) => {
-            if (result && result.user) {
-                closeAccountModal();
-                updateUserUI(result.user);
+        function deleteApp(index) {
+            if (!isAdmin) return;
+            if (confirm('هل أنت متأكد من حذف هذا التطبيق؟')) {
+                appsData.splice(index, 1);
+                localStorage.setItem('istore_apps', JSON.stringify(appsData));
+                renderApps();
             }
-        }).catch((error) => {
-            console.error("Redirect result error:", error);
-        });
-
-        auth.onAuthStateChanged((user) => {
-            updateUserUI(user);
-        });
+        }
 
         function logoutUser() {
             auth.signOut().then(() => {
                 closeAccountModal();
-                updateUserUI(null);
             });
         }
+
+        // تشغيل أولى لعرض القائمة
+        renderApps();
     </script>
 </body>
 </html>
