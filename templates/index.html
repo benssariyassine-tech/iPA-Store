@@ -26,45 +26,28 @@
             z-index: 100;
         }
         .header h1 { font-size: 20px; margin: 0; font-weight: 800; }
-        .user-btn {
+        
+        /* أيقونة الحساب الدائرية العلوية */
+        .user-avatar-btn {
+            width: 38px;
+            height: 38px;
             background: #1c1c1e;
             border: 1px solid #2c2c2e;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #0a84ff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 700;
             cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
         }
         .container { padding: 20px; max-width: 600px; margin: auto; }
-        
-        /* التبويبات للتنقل */
-        .tabs {
-            display: flex;
-            background: #1c1c1e;
-            border-radius: 12px;
-            padding: 4px;
-            margin-bottom: 20px;
-        }
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-            font-weight: 700;
-            color: #8e8e93;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: 0.2s;
-        }
-        .tab.active {
-            background: #2c2c2e;
-            color: #ffffff;
-        }
-        .section { display: none; }
-        .section.active { display: block; }
 
-        /* بطاقات التطبيقات */
+        /* أقسام العرض */
+        .section-title { font-size: 17px; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        
+        /* بطاقات التطبيقات (Pro وغيرها) */
         .app-card {
             background: #1c1c1e;
             border: 1px solid #2c2c2e;
@@ -75,8 +58,16 @@
             align-items: center;
             justify-content: space-between;
         }
-        .app-info h3 { margin: 0 0 4px 0; font-size: 16px; color: #fff; }
+        .app-info h3 { margin: 0 0 4px 0; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 6px; }
         .app-info p { margin: 0; font-size: 13px; color: #8e8e93; }
+        .pro-badge {
+            background: linear-gradient(135deg, #ff9500, #ffcc00);
+            color: #000;
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
         .install-btn {
             background: #0a84ff;
             color: #fff;
@@ -85,46 +76,60 @@
             text-decoration: none;
             font-size: 13px;
             font-weight: 700;
+            border: none;
+            cursor: pointer;
         }
 
-        /* نماذج الدخول والحساب */
-        .auth-card {
-            background: #1c1c1e;
+        /* النافذة المنبثقة (Modal) للحساب */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1c1c1e;
             border: 1px solid #2c2c2e;
             border-radius: 20px;
             padding: 24px;
-        }
-        .auth-card input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 14px;
-            background: #2c2c2e;
-            border: 1px solid #3a3a3c;
-            border-radius: 10px;
-            color: #fff;
-            box-sizing: border-box;
-            font-family: 'Cairo', sans-serif;
-        }
-        .btn-main {
-            width: 100%;
-            padding: 12px;
-            background: #0a84ff;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: bold;
-            font-size: 15px;
-            cursor: pointer;
-            font-family: 'Cairo', sans-serif;
-        }
-        .toggle-link {
+            width: 85%;
+            max-width: 340px;
             text-align: center;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #8e8e93;
-            cursor: pointer;
+            box-sizing: border-box;
         }
-        .toggle-link span { color: #0a84ff; font-weight: bold; }
+        .google-btn {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
+            margin-top: 15px;
+        }
+        .close-modal {
+            background: #2c2c2e;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+        }
     </style>
 
     <!-- مكتبات Firebase Compat -->
@@ -137,79 +142,67 @@
     <!-- الهيدر العلوي -->
     <div class="header">
         <h1>iStore IPA</h1>
-        <div id="userHeaderArea">
-            <button class="user-btn" onclick="switchTab('account')">حسابي</button>
+        <!-- أيقونة الحساب الدائرية -->
+        <div class="user-avatar-btn" id="userAvatarBtn" onclick="openAccountModal()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         </div>
     </div>
 
     <div class="container">
-        <!-- شريط التنقل بين الصفحات -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('apps')" id="tabApps">التطبيقات</div>
-            <div class="tab" onclick="switchTab('account')" id="tabAccount">حسابي وتسجيل الدخول</div>
+        <!-- قسم تطبيقات الـ Pro والمميزة -->
+        <div class="section-title">
+            <span>تطبيقات الـ Pro المميزة</span>
         </div>
 
-        <!-- قسم التطبيقات (وهمية وحقيقية للاختبار) -->
-        <div id="sectionApps" class="section active">
-            <h2 style="font-size: 17px; margin-bottom: 15px;">أبرز التطبيقات المتاحة</h2>
-            <div class="app-card">
-                <div class="app-info">
-                    <h3>🎬 يوتيوب بلس (YouTube Plus)</h3>
-                    <p>نسخة معدلة بدون إعلانات مع ميزات خرافية</p>
-                </div>
-                <a href="#" class="install-btn" onclick="alert('جارٍ بدء التثبيت الوهمي...')">تثبيت</a>
+        <div class="app-card">
+            <div class="app-info">
+                <h3>يوتيوب بلس <span class="pro-badge">PRO</span></h3>
+                <p>بدون إعلانات - تشغيل بالخلفية</p>
             </div>
-            <div class="app-card">
-                <div class="app-info">
-                    <h3>📥 سناب شات بلس (SnapMaster)</h3>
-                    <p>حفظ الحالات والستوري بكل سهولة</p>
-                </div>
-                <a href="#" class="install-btn" onclick="alert('جارٍ بدء التثبيت الوهمي...')">تثبيت</a>
-            </div>
-            <div class="app-card">
-                <div class="app-info">
-                    <h3>🎮 ماين كرافت (Minecraft PE)</h3>
-                    <p>النسخة الكاملة مهكرة وجاهزة</p>
-                </div>
-                <a href="#" class="install-btn" onclick="alert('جارٍ بدء التثبيت الوهمي...')">تثبيت</a>
-            </div>
+            <a href="#" class="install-btn" onclick="alert('جارٍ التثبيت...')">تثبيت</a>
         </div>
 
-        <!-- قسم الحساب وتسجيل الدخول -->
-        <div id="sectionAccount" class="section">
-            <div class="auth-card" id="authBox">
-                <h2 id="authFormTitle" style="margin-top:0; font-size:18px; text-align:center;">تسجيل الدخول</h2>
-                
-                <form id="mainAuthForm" onsubmit="handleFormSubmit(event)">
-                    <!-- حقول الاسم واللقب تظهر فقط عند إنشاء حساب جديد -->
-                    <div id="signupFields" style="display:none;">
-                        <input type="text" id="firstName" placeholder="الاسم الشخصي">
-                        <input type="text" id="lastName" placeholder="اللقب">
-                    </div>
-                    
-                    <input type="email" id="userEmail" placeholder="البريد الإلكتروني" required>
-                    <input type="password" id="userPassword" placeholder="كلمة المرور" required>
-                    
-                    <button type="submit" class="btn-main" id="authSubmitBtn">تسجيل الدخول</button>
-                </form>
-
-                <div class="toggle-link" id="toggleAuthModeText" onclick="toggleMode()">
-                    ليس لديك حساب؟ <span>انشئ حساب جديد</span>
-                </div>
+        <div class="app-card">
+            <div class="app-info">
+                <h3>إنستا ايرو <span class="pro-badge">PRO</span></h3>
+                <p>حفظ الوسائط وميزات الخصوصية</p>
             </div>
+            <a href="#" class="install-btn" onclick="alert('جارٍ التثبيت...')">تثبيت</a>
+        </div>
 
-            <!-- لوحة تحكم المستخدم بعد تسجيل الدخول -->
-            <div class="auth-card" id="profileBox" style="display:none; text-align:center;">
-                <h2 style="margin-top:0; color:#0a84ff;">مرحباً بك، <span id="displayNameView">مستخدم</span></h2>
-                <p id="displayEmailView" style="color:#8e8e93; font-size:14px; margin-bottom:20px;"></p>
-                <button class="btn-main" onclick="logoutUser()" style="background:#ff453a;">تسجيل الخروج</button>
+        <div class="app-card">
+            <div class="app-info">
+                <h3>سبوتيفاي بلس <span class="pro-badge">PRO</span></h3>
+                <p>تخطيط غير محدود - جود عالية</p>
             </div>
+            <a href="#" class="install-btn" onclick="alert('جارٍ التثبيت...')">تثبيت</a>
         </div>
     </div>
 
-    <!-- كود البرمجة والربط الحقيقي مع Firebase -->
+    <!-- نافذة الحساب المنبثقة -->
+    <div id="accountModal" class="modal">
+        <div class="modal-content">
+            <div id="loggedOutView">
+                <h3 style="margin-top:0; color:#fff;">تسجيل الدخول</h3>
+                <p style="color:#8e8e93; font-size:13px;">سجل بحسابك الحقيقي على جوجل للمتابعة</p>
+                <button class="google-btn" onclick="loginWithGoogle()">
+                    <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.15v3.14C3.11 21.36 7.22 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.15C.42 8.1 0 9.77 0 11.5s.42 3.4 1.15 4.88l4.12-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.22 0 3.11 2.64 1.15 6.62l4.12 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                    التسجيل بواسطة Google
+                </button>
+            </div>
+
+            <div id="loggedInView" style="display:none;">
+                <h3 style="margin-top:0; color:#0a84ff;" id="userNameText">حسابي</h3>
+                <p style="color:#8e8e93; font-size:13px;" id="userEmailText"></p>
+                <button class="install-btn" onclick="logoutUser()" style="background:#ff453a; width:100%; margin-top:10px;">تسجيل الخروج</button>
+            </div>
+
+            <button class="close-modal" onclick="closeAccountModal()">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- البرمجة والربط -->
     <script>
-        // إعدادات Firebase الرسمية الخاصة بك
         const firebaseConfig = {
           apiKey: "AIzaSyC3r9wr8tgjRNwWFY01mxrVy640sQFs2bg",
           authDomain: "istore-ipa.firebaseapp.com",
@@ -224,113 +217,51 @@
             firebase.initializeApp(firebaseConfig);
         }
         const auth = firebase.auth();
-        const db = firebase.firestore();
 
-        // نظام التبويبات البسيط
-        function switchTab(tabName) {
-            document.getElementById('sectionApps').classList.remove('active');
-            document.getElementById('sectionAccount').classList.remove('active');
-            document.getElementById('tabApps').classList.remove('active');
-            document.getElementById('tabAccount').classList.remove('active');
-
-            if (tabName === 'apps') {
-                document.getElementById('sectionApps').classList.add('active');
-                document.getElementById('tabApps').classList.add('active');
-            } else {
-                document.getElementById('sectionAccount').classList.add('active');
-                document.getElementById('tabAccount').classList.add('active');
-            }
+        function openAccountModal() {
+            document.getElementById('accountModal').style.display = 'flex';
         }
 
-        // التحكم بين وضع تسجيل الدخول أو إنشاء حساب
-        let isSignup = false;
-        function toggleMode() {
-            isSignup = !isSignup;
-            const title = document.getElementById('authFormTitle');
-            const btn = document.getElementById('authSubmitBtn');
-            const signupFields = document.getElementById('signupFields');
-            const toggleText = document.getElementById('toggleAuthModeText');
-
-            if (isSignup) {
-                title.innerText = "إنشاء حساب جديد";
-                btn.innerText = "إنشاء الحساب";
-                signupFields.style.display = "block";
-                toggleText.innerHTML = 'لديك حساب بالفعل؟ <span>تسجيل الدخول</span>';
-            } else {
-                title.innerText = "تسجيل الدخول";
-                btn.innerText = "تسجيل الدخول";
-                signupFields.style.display = "none";
-                toggleText.innerHTML = 'ليس لديك حساب؟ <span>انشئ حساب جديد</span>';
-            }
+        function closeAccountModal() {
+            document.getElementById('accountModal').style.display = 'none';
         }
 
-        // معالجة إرسال النموذج (تسجيل أو دخول) ومزامنتها مع Firebase
-        function handleFormSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('userEmail').value;
-            const password = document.getElementById('userPassword').value;
-
-            if (isSignup) {
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-
-                auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        // حفظ الاسم واللقب في قاعدة البيانات Firestore برقم الـ UID الخاص بالمستخدم
-                        return db.collection("users").doc(user.uid).set({
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email,
-                            createdAt: new Date()
-                        });
-                    })
-                    .then(() => {
-                        alert("تم إنشاء الحساب وحفظه بنجاح!");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        alert("خطأ في الإنشاء: " + error.message);
-                    });
-            } else {
-                auth.signInWithEmailAndPassword(email, password)
-                    .then(() => {
-                        alert("تم تسجيل الدخول بنجاح!");
-                        location.reload();
-                    })
-                    .catch((error) => {
-                        alert("خطأ في الدخول: " + error.message);
-                    });
-            }
+        // تسجيل الدخول الحقيقي عبر Google
+        function loginWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then(() => {
+                    alert("تم تسجيل الدخول بنجاح!");
+                    closeAccountModal();
+                })
+                .catch((error) => {
+                    alert("فشل تسجيل الدخول: " + error.message);
+                });
         }
 
-        // مراقبة حالة الجلسة (Session) وحفظ تسجيل الدخول أوتوماتيكياً
+        // مراقبة حالة الجلسة وتحديث الأيقونة والدائرة
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // المستخدم مسجل الدخول، جلب بياناته وعرضها
-                document.getElementById('authBox').style.display = 'none';
-                document.getElementById('profileBox').style.display = 'block';
-                document.getElementById('displayEmailView').innerText = user.email;
-
-                db.collection("users").doc(user.uid).get().then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        document.getElementById('displayNameView').innerText = data.firstName + " " + data.lastName;
-                    } else {
-                        document.getElementById('displayNameView').innerText = "مستخدم";
-                    }
-                });
+                document.getElementById('loggedOutView').style.display = 'none';
+                document.getElementById('loggedInView').style.display = 'block';
+                document.getElementById('userNameText').innerText = user.displayName || 'مستخدم مميز';
+                document.getElementById('userEmailText').innerText = user.email;
+                
+                // وضع الحرف الأول من اسم المستخدم داخل الأيقونة الدائرية
+                if(user.displayName) {
+                    document.getElementById('userAvatarBtn').innerText = user.displayName.charAt(0).toUpperCase();
+                }
             } else {
-                document.getElementById('authBox').style.display = 'block';
-                document.getElementById('profileBox').style.display = 'none';
+                document.getElementById('loggedOutView').style.display = 'block';
+                document.getElementById('loggedInView').style.display = 'none';
+                document.getElementById('userAvatarBtn').innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>';
             }
         });
 
-        // تسجيل الخروج
         function logoutUser() {
             auth.signOut().then(() => {
-                alert("تم تسجيل الخروج بنجاح.");
-                location.reload();
+                alert("تم تسجيل الخروج.");
+                closeAccountModal();
             });
         }
     </script>
