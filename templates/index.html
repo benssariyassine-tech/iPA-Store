@@ -258,9 +258,18 @@
             document.getElementById('accountModal').style.display = 'none';
         }
 
+        // دالة تسجيل الدخول بجوجل
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithRedirect(provider);
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    closeAccountModal();
+                    updateUserUI(result.user);
+                })
+                .catch((error) => {
+                    console.log("Popup blocked/failed, using redirect:", error);
+                    auth.signInWithRedirect(provider);
+                });
         }
 
         let isSignupMode = false;
@@ -331,9 +340,9 @@
             }
         }
 
-        // التعامل التلقائي مع نتيجة إعادة التوجيه وتثبيت الجلسة فور العودة
         auth.getRedirectResult().then((result) => {
             if (result.user) {
+                closeAccountModal();
                 updateUserUI(result.user);
             }
         }).catch((error) => {
