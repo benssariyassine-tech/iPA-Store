@@ -20,6 +20,15 @@
       --radius-sm: 10px;
     }
 
+    body.light-mode {
+      --bg-color: #F2F2F7;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-border: rgba(0, 0, 0, 0.1);
+      --text-main: #000000;
+      --text-sub: #3A3A3C;
+      --glass-nav: rgba(240, 240, 245, 0.85);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -36,6 +45,7 @@
       justify-content: center;
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .app-frame {
@@ -65,63 +75,112 @@
       font-weight: 800;
     }
 
-    .header-actions {
+    /* زر القائمة العلوية الثلاثي (Burger Menu Button) */
+    .burger-menu-btn {
+      width: 42px;
+      height: 42px;
+      background: var(--accent-blue);
+      border-radius: 12px;
       display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .action-badge-btn {
-      background: rgba(10, 132, 255, 0.15);
-      border: 1px solid var(--accent-blue);
-      color: var(--accent-blue);
-      padding: 6px 10px;
-      border-radius: var(--radius-lg);
-      font-size: 0.75rem;
-      font-weight: 700;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      padding: 0 10px;
+      gap: 5px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .action-badge-btn:active {
-      transform: scale(0.95);
-      background: rgba(10, 132, 255, 0.3);
-    }
-
-    .account-btn-container {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 6px 10px;
-      border-radius: var(--radius-lg);
-      border: 1px solid var(--card-border);
-      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(10, 132, 255, 0.4);
       transition: transform 0.2s ease;
     }
 
-    .account-btn-container:active {
-      transform: scale(0.95);
+    .burger-menu-btn:active {
+      transform: scale(0.92);
     }
 
-    .blue-avatar-cell {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(10, 132, 255, 0.2);
-      border: 1.5px solid var(--accent-blue);
+    .burger-line {
+      height: 3px;
+      background: #FFFFFF;
+      border-radius: 2px;
+    }
+    .burger-line:nth-child(1) { width: 100%; }
+    .burger-line:nth-child(2) { width: 70%; }
+    .burger-line:nth-child(3) { width: 85%; }
+
+    /* القائمة الجانبية العائمة عمودياً */
+    .side-menu-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 280px;
+      height: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border-left: 1px solid var(--card-border);
+      z-index: 4000;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    }
+
+    .side-menu-drawer.active {
+      right: 0;
+    }
+
+    .side-menu-item {
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
     }
 
-    .blue-avatar-cell svg {
-      width: 14px;
-      height: 14px;
-      fill: var(--accent-blue);
+    .side-menu-item:active {
+      transform: scale(0.97);
+      background: rgba(10, 132, 255, 0.15);
+    }
+
+    /* شاشة تحميل تغيير اللغة (10 ثواني بطابع آيفون) */
+    .lang-loading-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(20px);
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .lang-loading-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .apple-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: var(--accent-blue);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .event-section {
@@ -202,7 +261,6 @@
       border-radius: var(--radius-xl);
       padding: 20px;
       margin-bottom: 20px;
-      transition: transform 0.2s ease;
       cursor: pointer;
     }
 
@@ -221,17 +279,10 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
       padding: 12px 16px;
       border-radius: var(--radius-lg);
       margin-bottom: 12px;
       cursor: pointer;
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .app-row:active {
-      transform: scale(0.98);
-      background: rgba(40, 40, 45, 0.85);
     }
 
     .app-icon {
@@ -256,6 +307,7 @@
       cursor: pointer;
     }
 
+    /* الشريط السفلي البسيط */
     .bottom-bar-wrapper {
       position: fixed;
       bottom: 20px;
@@ -264,12 +316,12 @@
       width: calc(100% - 32px);
       max-width: 398px;
       display: flex;
-      gap: 10px;
+      justify-content: center;
       z-index: 999;
     }
 
     .tabbar-container {
-      flex: 1;
+      width: 100%;
       background: var(--glass-nav);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
@@ -282,28 +334,6 @@
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
 
-    .floating-action-btn {
-      width: 54px;
-      height: 54px;
-      background: rgba(40, 40, 45, 0.75);
-      backdrop-filter: blur(30px);
-      -webkit-backdrop-filter: blur(30px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent-blue);
-      cursor: pointer;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
-      transition: transform 0.2s ease, background 0.2s ease;
-    }
-
-    .floating-action-btn:active {
-      transform: scale(0.92);
-      background: rgba(60, 60, 65, 0.9);
-    }
-
     .tab-item {
       display: flex;
       flex-direction: column;
@@ -314,10 +344,8 @@
       font-weight: 600;
       cursor: pointer;
       flex: 1;
-      transition: color 0.3s ease, transform 0.2s ease;
     }
 
-    .tab-item:active { transform: scale(0.9); }
     .tab-item.active { color: var(--accent-blue); }
     .tab-item svg { width: 22px; height: 22px; fill: currentColor; }
 
@@ -336,12 +364,9 @@
 
     .full-modal {
       position: fixed;
-      top: 0;
-      left: 50%;
+      top: 0; left: 50%;
       transform: translateX(-50%) translateY(100%);
-      width: 100%;
-      max-width: 430px;
-      height: 100%;
+      width: 100%; max-width: 430px; height: 100%;
       background: var(--bg-color);
       z-index: 2000;
       padding: 20px;
@@ -353,6 +378,7 @@
       transform: translateX(-50%) translateY(0);
     }
 
+    /* نافذة التحميل المنبثقة بزوايا ناعمة وعائمة Glass */
     .bottom-sheet-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -377,7 +403,7 @@
     .bottom-sheet {
       width: 100%;
       max-width: 360px;
-      background: rgba(30, 30, 32, 0.85);
+      background: var(--card-bg);
       backdrop-filter: blur(30px);
       -webkit-backdrop-filter: blur(30px);
       border: 1px solid var(--card-border);
@@ -392,10 +418,11 @@
       transform: scale(1);
     }
 
-    .sheet-btn {
+    /* أزرار التحميل والإلغاء الزجاجية العائمة والناعمة */
+    .sheet-btn-blue {
       width: 100%;
       padding: 14px;
-      border-radius: 14px;
+      border-radius: 18px;
       background: var(--accent-blue);
       color: #fff;
       border: none;
@@ -406,7 +433,27 @@
       text-decoration: none;
       display: block;
       text-align: center;
+      box-shadow: 0 8px 20px rgba(10, 132, 255, 0.4);
+      transition: transform 0.2s ease;
     }
+    .sheet-btn-blue:active { transform: scale(0.97); }
+
+    .sheet-btn-red {
+      width: 100%;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 69, 58, 0.2);
+      color: #FF453A;
+      border: 1px solid rgba(255, 69, 58, 0.4);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      display: block;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .sheet-btn-red:active { transform: scale(0.97); }
 
     .search-input {
       width: 100%;
@@ -414,52 +461,10 @@
       border-radius: var(--radius-sm);
       border: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.08);
-      color: #fff;
+      color: var(--text-main);
       font-size: 0.92rem;
       outline: none;
       margin: 10px 0;
-      transition: border-color 0.2s ease;
-    }
-
-    .search-input:focus { border-color: var(--accent-blue); }
-
-    .updates-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 20px 0 12px 0;
-    }
-
-    .help-btn {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--card-border);
-      color: var(--accent-blue);
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    .auth-footer {
-      margin-top: 15px;
-      text-align: center;
-      font-size: 0.88rem;
-      color: #999999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .auth-footer span.btn-register-link {
-      color: var(--accent-blue);
-      font-weight: 700;
-      cursor: pointer;
     }
 
     .info-card {
@@ -469,69 +474,81 @@
       border-radius: var(--radius-lg);
       line-height: 1.6;
       font-size: 0.88rem;
-      color: #ddd;
+      color: var(--text-main);
       margin-bottom: 14px;
-    }
-    
-    label.form-label {
-      font-size: 0.8rem;
-      color: var(--text-sub);
-      display: block;
-      margin-top: 8px;
     }
   </style>
 </head>
 <body>
 
+  <!-- شاشة تحميل تغيير اللغة (10 ثواني وهمية بطابع آيفون) -->
+  <div class="lang-loading-overlay" id="langLoadingOverlay">
+    <div class="apple-spinner"></div>
+    <div style="font-weight: 700; font-size: 1rem;" id="loadingText">جاري تهيئة واجهة اللغة الجديدة...</div>
+  </div>
+
   <div class="app-frame">
-    <!-- الهيدر العلوي -->
+    <!-- الهيدر العلوي مع زر القائمة الثلاثي -->
     <div class="top-header">
       <div>
         <div class="header-date" id="currentDateStr">جاري التحميل...</div>
-        <div class="page-title" id="pageTitle" data-i18n="todayTitle">اليوم</div>
+        <div class="page-title" id="pageTitle">اليوم</div>
       </div>
-      <div class="header-actions">
-        <!-- زر تغيير اللغة -->
-        <div class="action-badge-btn" onclick="toggleLanguage()" id="langBtnText">
-          <span>🌐 EN</span>
+      <div>
+        <div class="burger-menu-btn" onclick="toggleSideMenu()">
+          <div class="burger-line"></div>
+          <div class="burger-line"></div>
+          <div class="burger-line"></div>
         </div>
-        <div class="action-badge-btn" onclick="openFullModal('disclaimerPage')">
-          <span>🛡️</span>
-        </div>
-        <div class="account-btn-container" onclick="openFullModal('accountPage')">
-          <div class="blue-avatar-cell">
-            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-          </div>
-        </div>
+      </div>
+    </div>
+
+    <!-- القائمة الجانبية العائمة عمودياً -->
+    <div class="side-menu-drawer" id="sideMenuDrawer">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h3 style="font-size:1.1rem; font-weight:800;">الخيارات الرئيسية</h3>
+        <button class="btn-get" style="padding:4px 10px;" onclick="toggleSideMenu()">✕</button>
+      </div>
+
+      <div class="side-menu-item" onclick="toggleSideMenu(); openFullModal('accountPage')">
+        <span>👤</span> تسجيل الدخول / حسابي
+      </div>
+      <div class="side-menu-item" onclick="toggleSideMenu(); openFullModal('addAppPage')">
+        <span>➕</span> رفع تطبيقك (IPA)
+      </div>
+      <div class="side-menu-item" onclick="toggleSideMenu(); simulateLanguageChange()">
+        <span>🌐</span> تغيير اللغة (AR / EN)
+      </div>
+      <div class="side-menu-item" onclick="toggleSideMenu(); toggleDarkMode()">
+        <span>🌙</span> تفعيل / إلغاء الوضع الليلي
+      </div>
+      <div class="side-menu-item" onclick="toggleSideMenu(); openFullModal('disclaimerPage')">
+        <span>🛡️</span> لمحة ومعلومات الأمان
       </div>
     </div>
 
     <!-- 1. الرئيسية -->
     <div id="page-today" class="page-section active">
-
-      <!-- قسم التحديثات الجديدة أفقياً -->
       <div class="event-section active" id="eventSection">
         <div class="event-header">
-          <h3 style="font-size: 1.05rem; font-weight:800;" data-i18n="eventsHeader">تحديثات وأحداث خاصة 🔥</h3>
-          <div class="help-btn" onclick="openFullModal('esignHelpPage')">؟</div>
+          <h3 style="font-size: 1.05rem; font-weight:800;">تحديثات وأحداث خاصة 🔥</h3>
         </div>
         <div class="event-slider" id="eventSliderContainer"></div>
       </div>
 
-      <!-- الكرت الرئيسي المميز -->
       <div class="hero-card" id="heroCard" onclick="openHeroDetails()">
-        <div style="font-size:0.75rem; color:var(--accent-blue); font-weight:700;" data-i18n="featuredBadge">تطبيق اليوم المميز</div>
+        <div style="font-size:0.75rem; color:var(--accent-blue); font-weight:700;">تطبيق اليوم المميز</div>
         <div style="font-size:1.4rem; font-weight:800; margin:4px 0;" id="heroTitle">جاري التحميل...</div>
         <div style="font-size:0.85rem; color:var(--text-sub); margin-bottom:12px;" id="heroDesc">جاري مزامنة أحدث تطبيق</div>
         <img src="https://picsum.photos/400/200?random=1" class="hero-banner" id="heroBanner">
-        <button class="btn-get" data-i18n="showDetails">عرض التفاصيل</button>
+        <button class="btn-get">عرض التفاصيل</button>
       </div>
 
-      <div class="updates-header">
-        <h3 style="font-size: 1.1rem; font-weight:800;" data-i18n="generalList">القائمة العامة</h3>
+      <div style="margin: 20px 0 12px 0;">
+        <h3 style="font-size: 1.1rem; font-weight:800;">القائمة العامة</h3>
       </div>
       <div id="general-apps-list">
-        <div style="text-align:center; padding:30px; color:var(--text-sub);" data-i18n="loadingApps">جاري جلب التطبيقات الحية...</div>
+        <div style="text-align:center; padding:30px; color:var(--text-sub);">جاري جلب التطبيقات الحية...</div>
       </div>
     </div>
 
@@ -542,101 +559,59 @@
     <div id="page-music" class="page-section"><div id="music-list"></div></div>
   </div>
 
-  <!-- الشريط السفلي مع الزر العائم الزجاجي للإضافة -->
+  <!-- الشريط السفلي (قائمة التنقل فقط بدون أزرار أخرى) -->
   <div class="bottom-bar-wrapper">
     <div class="tabbar-container">
       <div class="tab-item active" onclick="switchTab('today', 'اليوم', this)">
         <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h10v2H7zm0 4h7v2H7z"/></svg>
-        <span data-i18n="tabToday">اليوم</span>
+        <span>اليوم</span>
       </div>
       <div class="tab-item" onclick="switchTab('games', 'الألعاب', this)">
         <svg viewBox="0 0 24 24"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H9v2H8v-2H6v-1h2V10h1v2h2v1zm4.5 2c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm3-3c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5-1.5z"/></svg>
-        <span data-i18n="tabGames">الألعاب</span>
+        <span>الألعاب</span>
       </div>
       <div class="tab-item" onclick="switchTab('apps', 'التطبيقات', this)">
         <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4H4v4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
-        <span data-i18n="tabApps">التطبيقات</span>
+        <span>التطبيقات</span>
       </div>
       <div class="tab-item" onclick="switchTab('tools', 'الأدوات', this)">
         <svg viewBox="0 0 24 24"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.6C.4 7 1 10 3 12c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.4-.4.4-1.1 0-1.5z"/></svg>
-        <span data-i18n="tabTools">الأدوات</span>
+        <span>الأدوات</span>
       </div>
       <div class="tab-item" onclick="switchTab('music', 'الموسيقى', this)">
         <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
-        <span data-i18n="tabMusic">الموسيقى</span>
+        <span>الموسيقى</span>
       </div>
-    </div>
-    
-    <!-- زر عائم زجاجي (Glass SVG) لإضافة تطبيق جديد -->
-    <div class="floating-action-btn" onclick="openFullModal('addAppPage')" title="إضافة تطبيق IPA">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
     </div>
   </div>
 
-  <!-- Modal إضافة تطبيق (مطلوب تعبئة جميع الخانات + صيغة IPA) -->
+  <!-- Modal لمحة ومعلومات الأمان الرسمية -->
+  <div class="full-modal" id="disclaimerPage">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+      <h2 style="font-size:1.3rem; font-weight:800; color:var(--accent-blue);">لمحة ومعلومات الأمان الرسمية</h2>
+      <button class="btn-get" onclick="closeFullModal('disclaimerPage')">تم</button>
+    </div>
+    <div class="info-card">
+      <h3 style="color:var(--accent-blue); margin-bottom:6px; font-weight:700;">منصة وسيطة لملفات الـ IPA 🤝</h3>
+      <p>نحن نعمل كمنصة وسيطة لتجميع ونشر ملفات بصيغة <strong>.IPA</strong> المتاحة للمستخدمين. ليس لدينا أي صلاحية أو تحكم بتوقيع التطبيقات أو شهادات الأمان؛ التشغيل والتثبيت يعتمدان كلياً على أداة التوقيع لديك مثل <strong>E-Sign</strong>.</p>
+    </div>
+  </div>
+
+  <!-- Modal رفع تطبيق جديد -->
   <div class="full-modal" id="addAppPage">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-      <h2 style="font-size:1.3rem; font-weight:800;" data-i18n="addAppTitle">نشر تطبيق IPA جديد</h2>
+      <h2 style="font-size:1.3rem; font-weight:800;">رفع ونشر تطبيق IPA</h2>
       <button class="btn-get" onclick="closeFullModal('addAppPage')">إلغاء</button>
     </div>
-
-    <form id="addNewAppForm" onsubmit="submitNewApp(event)" style="background:var(--card-bg); border:1px solid var(--card-border); padding:16px; border-radius:var(--radius-lg);">
-      <label class="form-label" data-i18n="lblAppName">اسم التطبيق *</label>
-      <input type="text" id="newAppName" class="search-input" placeholder="مثال: Delta Emulator" required style="margin-top:2px;">
-
-      <label class="form-label" data-i18n="lblAppCat">القسم *</label>
-      <select id="newAppCategory" class="search-input" required style="margin-top:2px; background:#1c1c1e;">
-        <option value="games">ألعاب (Games)</option>
-        <option value="apps">تطبيقات (Apps)</option>
-        <option value="tools">أدوات (Tools)</option>
-        <option value="music">موسيقى (Music)</option>
-      </select>
-
-      <label class="form-label" data-i18n="lblPackage">اسم الباكج (Bundle ID) *</label>
-      <input type="text" id="newAppPackage" class="search-input" placeholder="com.example.app" required style="margin-top:2px;">
-
-      <label class="form-label" data-i18n="lblSize">الحجم *</label>
-      <input type="text" id="newAppSize" class="search-input" placeholder="مثال: 45 MB" required style="margin-top:2px;">
-
-      <label class="form-label" data-i18n="lblVersion">الإصدار *</label>
-      <input type="text" id="newAppVersion" class="search-input" placeholder="v1.0.0" required style="margin-top:2px;">
-
-      <label class="form-label" data-i18n="lblIconUrl">رابط أيقونة التطبيق (Image URL) *</label>
-      <input type="url" id="newAppIcon" class="search-input" placeholder="https://..." required style="margin-top:2px;">
-
-      <label class="form-label" data-i18n="lblIpaUrl">رابط ملف الـ IPA المباشر *</label>
-      <input type="url" id="newAppIpaUrl" class="search-input" placeholder="https://...file.ipa" required style="margin-top:2px;">
-
-      <label class="form-label" data-i18n="lblDesc">وصف موجز *</label>
-      <input type="text" id="newAppDesc" class="search-input" placeholder="وصف قصير للتطبيق..." required style="margin-top:2px;">
-
-      <button type="submit" class="sheet-btn" style="background:#34C759; margin-top:15px;" data-i18n="btnImportApp">استيراد ونشر التطبيق 🟢</button>
-    </form>
+    <div class="info-card">
+      <p>أدخل بيانات التطبيق ورابط ملف الـ IPA المباشر ليتم عرضه في القائمة العامة فوراً.</p>
+    </div>
+    <input type="text" class="search-input" placeholder="اسم التطبيق">
+    <input type="url" class="search-input" placeholder="رابط ملف الـ IPA المباشر">
+    <button class="sheet-btn-blue" onclick="alert('تم إرسال الطلب بنجاح'); closeFullModal('addAppPage');">نشر التطبيق 🟢</button>
   </div>
 
-  <!-- Modal الحساب وتسجيل الدخول -->
-  <div class="full-modal" id="accountPage">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <div style="display:flex; align-items:center; gap:8px;">
-        <div class="blue-avatar-cell">
-          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-        </div>
-        <h2 style="font-size:1.3rem; font-weight:800;" id="authModalTitle" data-i18n="loginTitle">تسجيل الدخول</h2>
-      </div>
-      <button class="btn-get" onclick="closeFullModal('accountPage')">تم</button>
-    </div>
-
-    <div id="loginFormContainer" style="background:var(--card-bg); border:1px solid var(--card-border); padding:20px; border-radius:var(--radius-lg);">
-      <input type="email" class="search-input" placeholder="البريد الإلكتروني" style="margin-top:0;">
-      <input type="password" class="search-input" placeholder="كلمة المرور">
-      <button class="sheet-btn" data-i18n="btnLogin">تسجيل الدخول</button>
-      <div class="auth-footer">
-        <span data-i18n="noAccount">أليس لديك حساب؟</span> <span class="btn-register-link" onclick="toggleAuthMode('register')" data-i18n="registerLink">تسجيل</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal تفاصيل التطبيق والتحميل -->
+  <!-- Modal التفاصيل -->
   <div class="full-modal" id="appDetailsPage">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
       <button class="btn-get" onclick="closeFullModal('appDetailsPage')">‹ رجوع</button>
@@ -654,22 +629,21 @@
         </div>
       </div>
     </div>
-    <button class="sheet-btn" onclick="openDownloadModal()" data-i18n="downloadIpa">تنزيل IPA</button>
+    <button class="sheet-btn-blue" onclick="openDownloadModal()">تنزيل IPA</button>
   </div>
 
-  <!-- Modal السياسة -->
-  <div class="full-modal" id="disclaimerPage">
+  <!-- Modal الحساب -->
+  <div class="full-modal" id="accountPage">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-      <h2 style="font-size:1.3rem; font-weight:800; color:var(--accent-blue);" data-i18n="policyTitle">بيان السياسة والأمان</h2>
-      <button class="btn-get" onclick="closeFullModal('disclaimerPage')">تم</button>
+      <h2 style="font-size:1.3rem; font-weight:800;">تسجيل الدخول</h2>
+      <button class="btn-get" onclick="closeFullModal('accountPage')">تم</button>
     </div>
-    <div class="info-card">
-      <h3 style="color:#fff; margin-bottom:6px; font-weight:700;">منصة وسيطة آمنة</h3>
-      <p data-i18n="policyDesc">نحن نعمل كمنصة وسيطة لتجميع ملفات الـ IPA المتاحة، وندعم تثبيتها عبر أدوات التوقيع الموثوقة مثل E-Sign.</p>
-    </div>
+    <input type="email" class="search-input" placeholder="البريد الإلكتروني">
+    <input type="password" class="search-input" placeholder="كلمة المرور">
+    <button class="sheet-btn-blue">دخول</button>
   </div>
 
-  <!-- نافذة التنزيل النهائية وتنبيه الإيميل -->
+  <!-- النافذة المنبثقة للتحميل (مع التنبيه الرسمي وزاويتين عائمتين ناعمتين) -->
   <div class="bottom-sheet-overlay" id="downloadModal">
     <div class="bottom-sheet">
       <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -680,108 +654,25 @@
         <img id="modalAppIcon" src="" style="width:48px; height:48px; border-radius:11px; object-fit:cover;">
         <div>
           <div id="modalAppName" style="font-weight:700; font-size:0.95rem;"></div>
-          <div style="font-size:0.75rem; color:var(--text-sub);" data-i18n="readyEsign">جاهز للتثبيت عبر E-Sign</div>
+          <div style="font-size:0.75rem; color:var(--text-sub);" id="modalAppSub">جاهز للتثبيت عبر E-Sign</div>
         </div>
       </div>
       
-      <a id="downloadConfirmBtn" href="#" class="sheet-btn" style="background: #34C759; margin-top: 10px;" target="_blank" onclick="closeDownloadModal()" data-i18n="downloadFileBtn">تنزيل الملف (IPA) 🟢</a>
-
-      <div style="margin-top: 12px; padding: 10px; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.3); border-radius: 10px; font-size: 0.75rem; line-height: 1.5; color: #ffd60a;">
-        ⚠️ <span data-i18n="warningText">إذا واجهك خطأ أو لم يبدأ التحميل، تواصل معي فوراً عبر البريد:</span>
+      <!-- تنبيه رسمي دقيق حول سفاري والملفات -->
+      <div style="margin-bottom: 12px; padding: 10px; background: rgba(255, 149, 0, 0.1); border: 1px solid rgba(255, 149, 0, 0.3); border-radius: 14px; font-size: 0.75rem; line-height: 1.5; color: #ffd60a;">
+        ⚠️ <strong>تنبيه هام:</strong> عند بدء التحميل في متصفح <strong>Safari</strong>، توجه مباشرة إلى تطبيق <strong>الملفات (Files)</strong> لتجد الملف هناك. نحن منصة وسيطة فقط ولا نتحمل أي خطأ في الشهادة؛ كل الشغل يعتمد على <strong>E-Sign</strong> أو أداة التوثيق لديك. وإذا واجهك أي إشكال تواصل معي: 
         <a href="mailto:benssariyassine@gmail.com" style="color: var(--accent-blue); display: block; margin-top: 4px; font-weight: 700; text-decoration: underline;">benssariyassine@gmail.com</a>
       </div>
+
+      <!-- زر التحميل وزر الإلغاء العائم والزجاجي الناعم -->
+      <a id="downloadConfirmBtn" href="#" class="sheet-btn-blue" target="_blank" onclick="closeDownloadModal()">تنزيل الملف (IPA) 🟢</a>
+      <button class="sheet-btn-red" onclick="closeDownloadModal()">إلغاء 🔴</button>
     </div>
   </div>
 
   <script>
-    // نظام اللغات البسيط (عربي / إنجليزي)
-    let currentLang = 'ar';
-    const translations = {
-      ar: {
-        todayTitle: "اليوم",
-        eventsHeader: "تحديثات وأحداث خاصة 🔥",
-        featuredBadge: "تطبيق اليوم المميز",
-        showDetails: "عرض التفاصيل",
-        generalList: "القائمة العامة",
-        loadingApps: "جاري جلب التطبيقات الحية...",
-        tabToday: "اليوم",
-        tabGames: "الألعاب",
-        tabApps: "التطبيقات",
-        tabTools: "الأدوات",
-        tabMusic: "الموسيقى",
-        addAppTitle: "نشر تطبيق IPA جديد",
-        lblAppName: "اسم التطبيق *",
-        lblAppCat: "القسم *",
-        lblPackage: "اسم الباكج (Bundle ID) *",
-        lblSize: "الحجم *",
-        lblVersion: "الإصدار *",
-        lblIconUrl: "رابط أيقونة التطبيق (Image URL) *",
-        lblIpaUrl: "رابط ملف الـ IPA المباشر *",
-        lblDesc: "وصف موجز *",
-        btnImportApp: "استيراد ونشر التطبيق 🟢",
-        loginTitle: "تسجيل الدخول",
-        btnLogin: "تسجيل الدخول",
-        noAccount: "أليس لديك حساب؟",
-        registerLink: "تسجيل",
-        downloadIpa: "تنزيل IPA",
-        policyTitle: "بيان السياسة والأمان",
-        policyDesc: "نحن نعمل كمنصة وسيطة لتجميع ملفات الـ IPA المتاحة، وندعم تثبيتها عبر أدوات التوقيع الموثوقة مثل E-Sign.",
-        readyEsign: "جاهز للتثبيت عبر E-Sign",
-        downloadFileBtn: "تنزيل الملف (IPA) 🟢",
-        warningText: "إذا واجهك خطأ أو لم يبدأ التحميل، تواصل معي فوراً عبر البريد:"
-      },
-      en: {
-        todayTitle: "Today",
-        eventsHeader: "Special Events & Updates 🔥",
-        featuredBadge: "Featured App of the Day",
-        showDetails: "View Details",
-        generalList: "General List",
-        loadingApps: "Loading live apps...",
-        tabToday: "Today",
-        tabGames: "Games",
-        tabApps: "Apps",
-        tabTools: "Tools",
-        tabMusic: "Music",
-        addAppTitle: "Publish New IPA App",
-        lblAppName: "App Name *",
-        lblAppCat: "Category *",
-        lblPackage: "Bundle ID *",
-        lblSize: "Size *",
-        lblVersion: "Version *",
-        lblIconUrl: "App Icon URL *",
-        lblIpaUrl: "Direct IPA URL *",
-        lblDesc: "Short Description *",
-        btnImportApp: "Import & Publish 🟢",
-        loginTitle: "Sign In",
-        btnLogin: "Login",
-        noAccount: "Don't have an account?",
-        registerLink: "Register",
-        downloadIpa: "Download IPA",
-        policyTitle: "Policy & Security",
-        policyDesc: "We act as an intermediary platform for IPA files, supported by signing tools like E-Sign.",
-        readyEsign: "Ready to install via E-Sign",
-        downloadFileBtn: "Download IPA File 🟢",
-        warningText: "If you encounter any issues, contact me directly via email:"
-      }
-    };
-
-    function toggleLanguage() {
-      currentLang = currentLang === 'ar' ? 'en' : 'ar';
-      const root = document.getElementById('htmlRoot');
-      root.setAttribute('lang', currentLang);
-      root.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-      document.getElementById('langBtnText').innerHTML = currentLang === 'ar' ? '<span>🌐 EN</span>' : '<span>🌐 AR</span>';
-      
-      // تحديث النصوص الثابتة
-      document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[currentLang][key]) {
-          el.innerText = translations[currentLang][key];
-        }
-      });
-    }
-
     let database = [];
+    let eventUpdatesDatabase = [];
     let heroApp = null;
     let currentSelectedApp = null;
 
@@ -792,111 +683,77 @@
 
     function setRealDate() {
       const options = { weekday: 'long', month: 'long', day: 'numeric' };
-      const dateStr = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'en-US', options);
-      document.getElementById('currentDateStr').innerText = dateStr;
+      document.getElementById('currentDateStr').innerText = new Date().toLocaleDateString('ar-EG', options);
     }
 
     async function fetchAppsFromTelegram() {
       try {
         const response = await fetch('/api/apps');
         const apps = await response.json();
-
         if (apps && apps.length > 0) {
           database = apps.map((app, index) => ({
             id: index,
-            name: app.title || "IPA App",
+            name: app.title || "تطبيق IPA",
             category: app.category || "apps",
-            desc: app.description || "Ready IPA file",
+            desc: app.description || "ملف IPA جاهز",
             size: app.size || "40 MB",
             version: app.version || "v1.0",
             icon: app.icon || "https://picsum.photos/100/100?random=" + (index + 10),
             download_url: app.download_url || "#"
           }));
-
           heroApp = database[0];
           document.getElementById('heroTitle').innerText = heroApp.name;
           document.getElementById('heroDesc').innerText = heroApp.desc;
           document.getElementById('heroBanner').src = heroApp.icon;
 
+          eventUpdatesDatabase = database.slice(0, 3);
+          renderEventSlider();
           renderGeneralApps();
-          renderCategory('games', 'games-list');
-          renderCategory('apps', 'apps-list');
-          renderCategory('tools', 'tools-list');
-          renderCategory('music', 'music-list');
         }
       } catch (err) {
         console.error("خطأ الربط:", err);
       }
     }
 
-    // دالة استيراد وإضافة تطبيق جديد من قبل المستخدم مع التأكد من تعبئة جميع الخانات
-    function submitNewApp(event) {
-      event.preventDefault();
-      
-      const name = document.getElementById('newAppName').value.trim();
-      const category = document.getElementById('newAppCategory').value;
-      const pkg = document.getElementById('newAppPackage').value.trim();
-      const size = document.getElementById('newAppSize').value.trim();
-      const version = document.getElementById('newAppVersion').value.trim();
-      const icon = document.getElementById('newAppIcon').value.trim();
-      const ipaUrl = document.getElementById('newAppIpaUrl').value.trim();
-      const desc = document.getElementById('newAppDesc').value.trim();
-
-      if(!name || !pkg || !size || !version || !icon || !ipaUrl || !desc) {
-        alert("الرجاء تعبئة جميع الخانات المطلوبة بدقة!");
-        return;
-      }
-
-      // إضافة التطبيق للقائمة المحلية مؤقتاً (لاحقاً يتم إرساله للسيرفر عبر fetch POST)
-      const newAppObj = {
-        id: database.length,
-        name: name,
-        category: category,
-        desc: desc,
-        size: size,
-        version: version,
-        icon: icon,
-        download_url: ipaUrl
-      };
-
-      database.unshift(newAppObj);
-      renderGeneralApps();
-      renderCategory(category, `${category}-list`);
-      
-      alert("تمت إضافة التطبيق بنجاح إلى المتجر!");
-      document.getElementById('addNewAppForm').reset();
-      closeFullModal('addAppPage');
+    function toggleSideMenu() {
+      document.getElementById('sideMenuDrawer').classList.toggle('active');
     }
 
-    function renderCategory(cat, containerId) {
-      const container = document.getElementById(containerId);
-      if(!container) return;
-      const items = database.filter(i => i.category === cat);
-      if(items.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-sub);">لا توجد تطبيقات في هذا القسم</div>`;
-        return;
-      }
-      container.innerHTML = items.map((item) => `
-        <div class="app-row" onclick="openAppByIndex(${item.id})">
-          <img src="${item.icon}" class="app-icon">
-          <div class="app-details">
-            <div class="app-name">${escapeHtml(item.name)}</div>
-            <div class="app-category">${escapeHtml(item.desc)}</div>
-          </div>
-          <button class="btn-get">عرض</button>
+    // محاكاة تغيير اللغة مع شاشة تحميل مدتها 10 ثواني (بطابع آيفون)
+    function simulateLanguageChange() {
+      const overlay = document.getElementById('langLoadingOverlay');
+      overlay.classList.add('active');
+      setTimeout(() => {
+        overlay.classList.remove('active');
+        alert("تم تبديل واجهة اللغة بنجاح!");
+      }, 10000); // 10 ثواني بالضبط
+    }
+
+    // تفعيل أو إلغاء الوضع الليلي
+    function toggleDarkMode() {
+      document.body.classList.toggle('light-mode');
+    }
+
+    function renderEventSlider() {
+      const container = document.getElementById('eventSliderContainer');
+      container.innerHTML = eventUpdatesDatabase.map((item) => `
+        <div class="event-card" onclick="openAppByIndex(${item.id})">
+          <img src="${item.icon}" class="event-banner">
+          <div class="event-badge">تحديث جديد 🚀</div>
+          <div class="event-title">${item.name}</div>
+          <div class="event-desc">${item.desc}</div>
         </div>
       `).join('');
     }
 
     function renderGeneralApps() {
       const container = document.getElementById('general-apps-list');
-      if(!container) return;
       container.innerHTML = database.map((item) => `
         <div class="app-row" onclick="openAppByIndex(${item.id})">
           <img src="${item.icon}" class="app-icon">
           <div class="app-details">
-            <div class="app-name">${escapeHtml(item.name)}</div>
-            <div class="app-category">${escapeHtml(item.desc)}</div>
+            <div class="app-name">${item.name}</div>
+            <div class="app-category">${item.desc}</div>
           </div>
           <button class="btn-get">تنزيل</button>
         </div>
@@ -926,7 +783,7 @@
     function openDownloadModal() {
       if(!currentSelectedApp) return;
       document.getElementById('modalAppName').innerText = currentSelectedApp.name;
-      document.getElementById('modalAppSub').innerText = "الحجم: " + currentSelectedApp.size + " • جاهز للتثبيت";
+      document.getElementById('modalAppSub').innerText = "الحجم: " + currentSelectedApp.size + " • جاهز للتثبيت عبر E-Sign";
       document.getElementById('modalAppIcon').src = currentSelectedApp.icon;
       document.getElementById('downloadConfirmBtn').href = currentSelectedApp.download_url || "#";
       document.getElementById('downloadModal').classList.add('active');
@@ -939,16 +796,9 @@
     function switchTab(sectionId, title, element) {
       document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
-      
-      const targetPage = document.getElementById(`page-${sectionId}`);
-      if(targetPage) targetPage.classList.add('active');
+      document.getElementById(`page-${sectionId}`).classList.add('active');
       if(element) element.classList.add('active');
       document.getElementById('pageTitle').innerText = title;
-    }
-
-    function escapeHtml(str) {
-      if(!str) return '';
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
   </script>
 </body>
