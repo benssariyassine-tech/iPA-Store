@@ -1,4 +1,4 @@
-// تهيئة خدمات Firebase
+// 1. تهيئة خدمات Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyC3r9wr8tgjRNwWFY01mxrVy640sQFs2bg",
   authDomain: "istore-ipa.firebaseapp.com",
@@ -15,9 +15,35 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// 2. القائمة الجانبية للنظام
+function toggleSideMenu() {
+    const sideMenu = document.getElementById('sideMenu');
+    const overlay = document.getElementById('sideMenuOverlay');
+    if (sideMenu) {
+        sideMenu.classList.toggle('active');
+    }
+    if (overlay) {
+        overlay.classList.toggle('active');
+    }
+}
+
+// 3. النوافذ المنبثقة للـ Auth
 let isSignUpMode = false;
 
-// التبديل بين نماذج الدخول وإنشاء الحساب
+function openAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
+
+function closeAuthModal() {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
 function toggleAuthMode(e) {
     if (e) e.preventDefault();
     isSignUpMode = !isSignUpMode;
@@ -42,7 +68,6 @@ function toggleAuthMode(e) {
     }
 }
 
-// إدارة طلبات المصادقة
 function handleAuthSubmit(e) {
     e.preventDefault();
     const email = document.getElementById('authEmail').value;
@@ -50,8 +75,9 @@ function handleAuthSubmit(e) {
 
     if (isSignUpMode) {
         auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
+            .then(() => {
                 alert("تم إنشاء الحساب بنجاح.");
+                closeAuthModal();
                 location.reload();
             })
             .catch((error) => {
@@ -59,8 +85,9 @@ function handleAuthSubmit(e) {
             });
     } else {
         auth.signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
+            .then(() => {
                 alert("تم تسجيل الدخول بنجاح.");
+                closeAuthModal();
                 location.reload();
             })
             .catch((error) => {
@@ -69,22 +96,38 @@ function handleAuthSubmit(e) {
     }
 }
 
-// حفظ بيانات التطبيقات في قاعدة البيانات
-function addNewApp(appData) {
-    db.collection("apps").add({
-        title: appData.title,
-        category: appData.category,
-        description: appData.description,
-        size: appData.size,
-        version: appData.version,
-        download_url: appData.download_url,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    })
-    .then(() => {
-        alert("تمت إضافة التطبيق بنجاح.");
-        location.reload();
-    })
-    .catch((error) => {
-        alert("حدث خطأ أثناء حفظ البيانات: " + error.message);
+// 4. جلب وعرض التطبيقات الحقيقية من Firestore
+function loadApps() {
+    db.collection("apps").get().then((snapshot) => {
+        const appsContainer = document.getElementById('appsContainer');
+        if (!appsContainer) return;
+
+        if (snapshot.empty) {
+            appsContainer.innerHTML = '<p style="text-align:center; color:#8e8e93; padding: 20px;">لا توجد تطبيقات متاحة حالياً.</p>';
+            return;
+        }
+
+        let html = '';
+        snapshot.forEach((doc) => {
+            const app = doc.data();
+            html += `
+                <div class="app-card">
+                    <img src="${app.icon || '/static/default-icon.png'}" alt="${app.title}" class="app-icon">
+                    <div class="app-info">
+                        <h3>${app.title}</h3>
+                        <p>${app.category || 'تطبيق IPA'}</p>
+                    </div>
+                    <a href="${app.download_url || '#'}" class="btn-download">تثبيت</a>
+                </div>
+            `;
+        });
+        appsContainer.innerHTML = html;
+    }).catch((error) => {
+        console.error("خطأ في تحميل التطبيقات: ", error);
     });
 }
+
+// تشغيل جلب التطبيقات عند فتح الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+    loadApps();
+});
