@@ -227,136 +227,8 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .btn-approve{background:var(--success);color:#fff}
 .btn-reject{background:var(--danger);color:#fff}
 .avatar-preview{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin:0 auto 12px auto;display:block;background:var(--input-bg)}
-.avatar-upload-label{display:block;text-align:center;padding:12px;border:2px dashed var(--border-color);border-radius:12px;cursor:pointer;color:var(--subtext-color);font-size:12px;font-weight:700;margin-bottom:12px;transition:border-color 0.3s;display:flex;align-items:center;justify-content:center;gap:8px}
+.avatar-upload-label{display:block;text-align:center;padding:12px;border:2px dashed var(--border-color);border-radius:12px;cursor:pointer;color:var(--subtext-color);font-size:12px;font-weight:700;margin-bottom:12px;transition:border-color 0.3s}
 .avatar-upload-label:hover{border-color:var(--accent);color:var(--accent)}
-
-/* ===== NEW UPDATES FOR APP DETAILS MODAL ===== */
-.bottom-sheet-content {
-  background: #121212 !important;
-  border-radius: 28px 28px 0 0 !important;
-}
-.detail-header {
-  position: relative;
-  z-index: 1;
-}
-.detail-header::before {
-  content: '';
-  position: absolute;
-  top: -30px;
-  left: -30px;
-  width: 130px;
-  height: 130px;
-  background: radial-gradient(circle, rgba(10,132,255,0.4) 0%, transparent 70%);
-  filter: blur(25px);
-  z-index: -1;
-  pointer-events: none;
-}
-.detail-icon {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-  border: 2px solid rgba(255,255,255,0.1);
-}
-#appDetailBody > div:nth-child(3) {
-  background: #1c1c1e !important;
-  border-radius: 16px !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-  padding: 16px !important;
-}
-#appDetailBody > div:nth-child(4) {
-  background: #1c1c1e !important;
-  border-radius: 16px !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-  padding: 16px !important;
-}
-#appDetailBody > div:nth-child(4) strong {
-  color: #0a84ff !important;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn-download-hero {
-  border-radius: 16px !important;
-  box-shadow: 0 8px 25px rgba(10,132,255,0.4) !important;
-  margin-top: 5px;
-}
-.screenshot-item {
-  border-radius: 14px !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-}
-.similar-apps-container {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 10px !important;
-  overflow-x: hidden !important;
-  padding: 5px 0 !important;
-}
-.similar-app-card {
-  display: grid !important;
-  grid-template-columns: 50px 1fr !important;
-  grid-template-rows: auto auto !important;
-  align-items: center !important;
-  column-gap: 12px !important;
-  min-width: 100% !important;
-  max-width: 100% !important;
-  background: #1c1c1e !important;
-  border-radius: 14px !important;
-  padding: 12px !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-  text-align: left !important;
-  box-sizing: border-box !important;
-}
-.similar-app-card img {
-  width: 50px !important;
-  height: 50px !important;
-  margin-bottom: 0 !important;
-  grid-row: 1 / 3 !important;
-  border-radius: 12px !important;
-  background: #2c2c2e !important;
-}
-.similar-app-card h5 {
-  margin: 0 !important;
-  font-size: 14px !important;
-  font-weight: 700 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  align-self: flex-end !important;
-  color: #fff !important;
-}
-.similar-app-card p {
-  margin: 0 !important;
-  font-size: 11px !important;
-  color: #8e8e93 !important;
-  align-self: flex-start !important;
-}
-.comment-box {
-  background: #1c1c1e !important;
-  border-radius: 12px !important;
-  padding: 12px !important;
-  border: 1px solid rgba(255,255,255,0.05) !important;
-}
-.comment-user {
-  color: #0a84ff !important;
-  font-weight: 700 !important;
-}
-#appDetailBody > button:last-child {
-  background: #2c2c2e !important;
-  color: #fff !important;
-  border-radius: 14px !important;
-  font-size: 14px !important;
-  padding: 12px !important;
-  margin-top: 20px !important;
-  font-weight: 700 !important;
-}
-.star-rating {
-  display: flex !important;
-  gap: 12px !important;
-  justify-content: center !important;
-  margin: 10px 0 5px 0 !important;
-}
-.star-btn svg {
-  width: 32px !important;
-  height: 32px !important;
-}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -393,50 +265,50 @@ i<span>Store</span>
 </div>
 <div class="header-icons">
 <div class="icon-btn" id="favHeaderBtn" onclick="switchTab('favorites')" style="display:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
-<div class="icon-btn" onclick>
-="toggleDarkMode()"><svg id="</themeIcon" width="18" height="div18" viewBox="0 0 24 24" fill=">
-none" stroke="currentColor" stroke-width="2.2"><path d<div="M21 12.79A9 9 0 id 1 1 11.21 3=" 7 7 0 0 0 21 logged12.79z"/></svg></divIn>
-<div class="icon-btn" onclickView="openAccountModal()"><svg width="18"" height="18" viewBox="0 0 24 style 24" fill="none" stroke="="currentColor" stroke-width="2.2"><path ddisplay="M20 21v-2a4 4 :n0 0 0-4one-4H8a4 4 0 0 0;">
--4 4v2"/><circle cx="12"<div cy="7" r="4"/></svg></div class>
+<div class="icon-btn" onclick="toggleDarkMode()"><svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
+<div class="icon-btn" onclick="openAccountModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
 </div>
 </div>
 
-<div class="="container">
+<div class="container">
 <div class="search-box">
-<svg class="profilesearch-icon" viewBox="0 0 24- 24" fill="none" stroke="currentColor" strokeavatar-width="2.2"><circle cx="11" cy-wrap="11" r="8"/><line">
- x1="21" y1="21" x2<img="16.65" y2="16.65"/></svg>
-<input type id="text" id="searchInput" class="search-input" placeholder="="Search any app, game or tool..."user oninput="onSearchInput()">
-<button class="searchAvatar-clear" id="searchClear" onclick=""clearSearch()"><svg width="11" class height="11" viewBox="0=" 0 24 24" fill="none" stroke="profilecurrentColor" stroke-width="3"><line x1-="18" y1="6" x2avatar="6" y2="18"/><line x1="6"" y1="6" x2 src="18" y2="18"/></=""svg></button>
+<svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input type="text" id="searchInput" class="search-input" placeholder="Search any app, game or tool..." oninput="onSearchInput()">
+<button class="search-clear" id="searchClear" onclick="clearSearch()"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 </div>
-<div alt id="dynamicContent"></div>
-="</div>
+<div id="dynamicContent"></div>
+</div>
 
-<button class="admin-add-float" id="AvataradminAddFloatBtn" onclick="openAddApp">
-Modal()">
-<svg width="14" height="14" view<divBox="0 0 24  class24" fill="none" stroke="currentColor"=" stroke-width="3"><line x1="profile12" y1="5" x2-="12" y2="19"/><line x1="5avatar" y1="12" x2="19" y2="-12"/></svg>
+<button class="admin-add-float" id="adminAddFloatBtn" onclick="openAddAppModal()">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 Add New App
 </button>
 
-<divedit class="floating-nav">
-<button class="nav-item active"" data-tab="today" onclick="switchTab('today onclick', this)"><svg viewBox="0 0 24=" 24"><rect x="3"open y="4" width="18" height="Edit18" rx="2" ry="2"/><line xProfile1="16" y1="2" x()2="16" y2="6"/><line x1"="8" y1="2" x title2="8" y2="6"/><line x="1="3" y1="10" x2="Edit21" y2="10"/></svg>Today</button>
-<button class Profile="nav-item" data-tab="trending" onclick="switch">
-Tab('trending', this)"><svg viewBox="<0 0 24 24"><path d="M12svg 2l3.09 6.26L22  view9.27l-5Box 4.87 1.18 6.="88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Trending</button>
+<div class="floating-nav">
+<button class="nav-item active" data-tab="today" onclick="switchTab('today', this)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Today</button>
+<button class="nav-item" data-tab="trending" onclick="switchTab('trending', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Trending</button>
 <button class="nav-item" data-tab="games" onclick="switchTab('games', this)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1.2" fill="currentColor"/><circle cx="18" cy="13" r="1.2" fill="currentColor"/></svg>Games</button>
-<button class="nav-item" data-tab="apps" onclick="switchTab('apps',0 this)"><svg viewBox="0  0 24 24"><rect x0="2" y="7" width="20 " height="14" rx="2" ry="224"/><path d="M16 21V5a2  2 0 0 0-2-242h-4a2 2 0 0 0"><-2 2v16"/></svg>Apps</buttonpath>
-<button class="nav-item" data-tab d="tools" onclick="switchTab('tools', this=")"><svg viewBox="0 0 24 24"><path d="MM14.7 6.3a1 111 0 0 0 0 1.4l1.6 1.6 a1 1 0 0 0 1.44 0l3.77-3.77a6 H6 0 0 1-47.94 7.94l-6.a91 6.91a2.12 2.122 0 0 1-3-3 l6.91-6.91a6 26 0 0 1 7.94 -7.94l-3.760 3.76z"/></svg>Tools</button>
- <button class="nav-item" id="adminNavTab"0 style="display:none;color:#ff 453a;" data-tab="admin_panel"0 onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d-="M12 2l3.09 62.26L22 9.27l-5 4 .87 1.18 6.88L12 217.77l-6.18 3.25Lv7 14.14 2 9.2714l6.91-1.01L12 a2z"/></svg>Admin</button2>
+<button class="nav-item" data-tab="apps" onclick="switchTab('apps', this)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Apps</button>
+<button class="nav-item" data-tab="tools" onclick="switchTab('tools', this)"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</button>
+<button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Admin</button>
 </div>
 
-<div id="accountModal" class="modal ">
-<div class="modal-box" style="text-align2:center;">
-<button class="modal-close-x" onclick ="closeModal('accountModal')"><svg0 width="12" height="12" viewBox="0  0 24 24" fill="none" stroke0="currentColor" stroke-width="3"><line x1 ="18" y1="6" x2="60" y2="18"/><line x1="6"  y1="6" x2="18"2 y2="18"/></svg></button>
-<div  id="loggedOutView">
-<h3 style="margin-top:20;color:var(--text-color);font-size:16hpx;">Welcome to iStore</h3>
-<p14 style="color:var(--subtext-color);font-size:a12px;margin-bottom:15px;">Sign in2 to like apps, post comments, and apply as a publisher.</ p>
-<button onclick="loginWithGoogle()"2 style="background:#fff;color:#000;border:none ;width:100%;padding:11px;border-radius:012px;font-weight:bold;cursor:pointer ;font-family:'Inter',sans-serif;0display:flex;align-items:center;justify-content :center;gap:8px;">
-<svg width="018" height="18" viewBox="0  0 24 24"><path fill="#4285F24" d="M23.745 -12.27c0-.7-.06-1.42-.19-2.07H12v4.51h6.6c-.v29 1.52-1.14 2.82--2.4 3.68v3.05h73.88c2.27-2.09"/ 3.66-5.17 3.66-><9.17z"/><path fill="#34A853"path d="M12 24c3.24 0  d5.95-1.08 7.93-2=".91l-3.88-3.05Mc-1.08.72-2.4518 1.16-4.05 1.16-.3.13 0-5.78-2.115-6.73-4.96H1.18v 3.14C3.16 21.392 7.23 24 12 24.z"/><path fill="#FBBC05" d5="M5.27 14.24c-.a25-.72-.38-1.49-.38-22.24s.13-1.52.38-.2.24V6.62H1.18121C.43 8.12 0 9.81  0 12s.43 3.88 1.182 5.38l4.09-3..14z"/><path fill="#EA4335121" d="M12 4.75c1.77  0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+<div id="accountModal" class="modal">
+<div class="modal-box" style="text-align:center;">
+<button class="modal-close-x" onclick="closeModal('accountModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<div id="loggedOutView">
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Welcome to iStore</h3>
+<p style="color:var(--subtext-color);font-size:12px;margin-bottom:15px;">Sign in to like apps, post comments, and apply as a publisher.</p>
+<button onclick="loginWithGoogle()" style="background:#fff;color:#000;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
+<svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
 Sign in with Google
-</button0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+</button>
+</div>
+<div id="loggedInView" style="display:none;">
+<div class="profile-avatar-wrap">
+<img id="userAvatar" class="profile-avatar" src="" alt="Avatar">
+<div class="profile-avatar-edit" onclick="openEditProfile()" title="Edit Profile">
+<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
 </div>
 </div>
 <h3 id="userNameText" class="profile-name">User</h3>
@@ -473,8 +345,7 @@ Sign Out
 <h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Edit Profile</h3>
 <img id="editAvatarPreview" class="avatar-preview" src="" alt="Preview">
 <label class="avatar-upload-label" for="avatarFileInput">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-Tap to change photo
+📷 Tap to change photo
 </label>
 <input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="previewAvatar(event)">
 <div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Display Name:</div>
@@ -548,26 +419,8 @@ Tap to change photo
 <div id="partnerRequestModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('partnerRequestModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-<h3 style="margin-top:0;color:var(--text-color);font-size:16px;display:flex;align-items:center;gap:8px;">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-Publisher Program
-</h3>
-<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin-bottom:15px;">
-As a <strong style="color:var(--accent);">Verified Publisher</strong>, you will be able to:<br><br>
-<span style="display:inline-flex;align-items:center;gap:6px;">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-Upload new apps to the store
-</span><br>
-<span style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-Manage your own published apps
-</span><br>
-<span style="display:inline-flex;align-items:center;gap:6px;margin-top:4px;">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-Delete or update your uploads
-</span><br><br>
-<strong style="color:var(--warning);">Note:</strong> Your application will be carefully reviewed by the store administration. Approval is not guaranteed.
-</p>
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">📤 Publisher Program</h3>
+<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin-bottom:15px;">As a <strong style="color:var(--accent);">Verified Publisher</strong>, you will be able to:<br><br>✚ &nbsp;Upload new apps to the store<br>✎ &nbsp;Manage your own published apps<br>🗑️ &nbsp;Delete or update your uploads<br><br><strong style="color:var(--warning);">Note:</strong> Your application will be carefully reviewed by the store administration. Approval is not guaranteed.</p>
 <div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Why would you like to become a publisher?</div>
 <textarea id="partnerReason" class="input-field" placeholder="Tell us briefly about yourself and what apps you plan to share..." style="height:90px;resize:none;"></textarea>
 <button onclick="submitPartnerRequest()" style="background:linear-gradient(135deg,var(--accent),#0062d2);color:#fff;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(10,132,255,0.35);">Submit Application</button>
@@ -636,7 +489,7 @@ Delete or update your uploads
 </div>
 </div>
 <script>
-  const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyC3r9wr8tgjRNwWFY01mxrVy640sQFs2bg",
   authDomain: "istore-ipa.firebaseapp.com",
   projectId: "istore-ipa",
@@ -647,6 +500,7 @@ Delete or update your uploads
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
+// 🆘 FAILSAFE: Hide splash immediately — no matter what happens later
 setTimeout(function(){
   var s = document.getElementById('splashScreen');
   if(s){ s.classList.add('hide'); setTimeout(function(){ if(s && s.parentNode) s.parentNode.removeChild(s); }, 900); }
@@ -693,13 +547,7 @@ const ICONS = {
   bolt:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
   trophy:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg>',
   dlBig:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
-  dlDone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>',
-  camera:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>',
-  upload:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>',
-  plus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
-  edit:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>',
-  trash:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>',
-  clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'
+  dlDone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>'
 };
 
 function showToast(msg, type='info', duration=3000){
@@ -758,6 +606,7 @@ function switchTab(tabName, btnElement){
   renderUI();
 }
 
+// ===== iTunes API — Fetch App Info (JSONP) =====
 function fetchFromItunes(){
   const urlInput = document.getElementById('itunesUrlInput');
   const status = document.getElementById('fetchStatus');
@@ -768,7 +617,7 @@ function fetchFromItunes(){
   if(!match){ showToast('Invalid App Store URL', 'error'); return; }
   const appId = match[1];
   status.style.display = 'block';
-  status.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;">' + ICONS.clock + ' Fetching app info from Apple...</span>';
+  status.innerText = 'Fetching app info from Apple...';
   status.style.color = 'var(--accent)';
   btn.disabled = true;
   btn.style.opacity = '0.6';
@@ -776,7 +625,7 @@ function fetchFromItunes(){
   window[callbackName] = function(data){
     try{
       if(!data.results || data.results.length === 0){
-        status.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;">' + ICONS.close + ' App not found</span>';
+        status.innerText = '❌ App not found';
         status.style.color = 'var(--danger)';
         btn.disabled = false; btn.style.opacity = '1';
         return;
@@ -800,11 +649,11 @@ function fetchFromItunes(){
         else if(genre.includes('utilities') || genre.includes('productivity')) cat = 'tools';
         document.getElementById('appCategory').value = cat;
       }
-      status.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;">' + ICONS.check + ' App info loaded! Icon & screenshots will be added on save.</span>';
+      status.innerText = '✅ App info loaded! Icon & screenshots will be added on save.';
       status.style.color = 'var(--success)';
       showToast('App info loaded from iTunes', 'success', 2500);
     } catch(e){
-      status.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;">' + ICONS.close + ' Error: ' + e.message + '</span>';
+      status.innerText = '❌ Error: ' + e.message;
       status.style.color = 'var(--danger)';
     } finally {
       btn.disabled = false; btn.style.opacity = '1';
@@ -816,14 +665,14 @@ function fetchFromItunes(){
   script.src = 'https://itunes.apple.com/lookup?id=' + appId + '&callback=' + callbackName;
   script.setAttribute('data-itunes', '1');
   script.onerror = function(){
-    status.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;">' + ICONS.close + ' Failed to connect to iTunes</span>';
+    status.innerText = '❌ Failed to connect to iTunes';
     status.style.color = 'var(--danger)';
     btn.disabled = false; btn.style.opacity = '1';
   };
   document.body.appendChild(script);
   setTimeout(function(){
     if(btn.disabled){
-      status.innerHTML = '<span style="display:inline-flex;align-items:center;gap:4px;">' + ICONS.clock + ' Timeout — try again</span>';
+      status.innerText = '⏱️ Timeout — try again';
       status.style.color = 'var(--warning)';
       btn.disabled = false; btn.style.opacity = '1';
     }
@@ -944,7 +793,7 @@ function renderUI(){
       });
     }
 
-    container.innerHTML = '<div class="today-header"><div class="today-title">Admin Dashboard</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore Control Center</div></div><div style="margin-bottom:15px;"><button onclick="toggleUserPreview()" style="background:var(--accent);color:#fff;border:none;padding:9px 15px;border-radius:12px;font-weight:bold;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Inter,sans-serif;">'+ICONS.eye+' Switch to User Preview</button></div><div class="admin-dashboard-wrapper"><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;">Platform Stats</h4><div class="admin-stats-grid"><div class="stat-box"><h5>Total Apps</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>Reports</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>Downloads</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>Likes</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span style="display:flex;align-items:center;gap:6px;">'+ICONS.upload+' Publisher Applications</span><span style="background:rgba(10,132,255,0.15);color:var(--accent);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+pendingPublishers+' pending</span></h4><div style="max-height:400px;overflow-y:auto;">'+publisherHTML+'</div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>User Reports</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
+    container.innerHTML = '<div class="today-header"><div class="today-title">Admin Dashboard</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore Control Center</div></div><div style="margin-bottom:15px;"><button onclick="toggleUserPreview()" style="background:var(--accent);color:#fff;border:none;padding:9px 15px;border-radius:12px;font-weight:bold;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Inter,sans-serif;">'+ICONS.eye+' Switch to User Preview</button></div><div class="admin-dashboard-wrapper"><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;">Platform Stats</h4><div class="admin-stats-grid"><div class="stat-box"><h5>Total Apps</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>Reports</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>Downloads</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>Likes</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>📤 Publisher Applications</span><span style="background:rgba(10,132,255,0.15);color:var(--accent);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+pendingPublishers+' pending</span></h4><div style="max-height:400px;overflow-y:auto;">'+publisherHTML+'</div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>User Reports</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
     return;
   }
 
@@ -976,7 +825,7 @@ function renderUI(){
   }
 
   if(currentTab === 'tools'){
-    container.innerHTML = '<div class="today-header"><div class="today-title">Installation Tools</div><div class="today-subtitle">Signing guides & essential tools</div></div><div style="margin-top:15px;"><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:4px 12px;border-bottom-left-radius:12px;font-size:9px;font-weight:900;letter-spacing:0.5px;">iOS 16+</div><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><img src="https://cdn.phototourl.com/free/2026-09-12-10a94b0e-2cec-4fc3-ac72-1e67f6ebd44b.png" onerror="this.style.display=\'none\'" style="width:60px;height:60px;border-radius:14px;border:1px solid var(--border-color);background:var(--input-bg);object-fit:cover;" alt="ESign"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:16px;color:var(--text-color);font-weight:900;">ESign</h3><div style="font-size:11px;color:var(--subtext-color);font-weight:600;">IPA Signer & Installer</div><div style="font-size:10px;color:var(--accent);font-weight:700;margin-top:3px;">✓ All iPhone devices</div></div></div><p style="color:var(--subtext-color);font-size:12px;line-height:1.55;margin:0 0 14px 0;"><strong style="color:var(--text-color);">ESign</strong> is a professional-grade iOS application that allows you toa sign, install2, and manage IPA files directly on your iPhone — <strong style=" color:var(--accent);">no computer required</strong>.</p><div style="display:flex;flex-direction:column;gap:8px;"><a href="https://esign-ios.app/dl/esign_v5.0.2.ipa/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;font-family:Inter,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v42 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download ESign v5.0.2 IPA</a><a href="https://esign-ios.app/dl/signed_khoindvn_fullchain+new.mobileconfig" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(10,132,255,0.1);border:1px solid rgba(10,132,255,0.35);color:var(--accent);padding:11px;border-radius:12px;text-decoration:none;font-weight:800;font-size:12px;font-family:Inter,sans-serif;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Install DNS Profile</a></div></div><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#ff453a,#d70015);color:#fff;padding:4px 12px;border-bottom-left-radius:12px;font-size:9px;font-weight:900;letter-spacing:0.5px;">BETA</div><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><img src="https://cdn.phototourl.com/free/2026-09-12-028609ce-19d1-430c-b03a-60716efa54a7.jpg" onerror="this.style.display=\'none\'" style="width:60px;height:60px;border-radius:14px;border:1px solid var(--border-color);background:var(--input-bg);object-fit:cover;" alt="Easy Sign+"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:16px;color:var(--text-color);font-weight:900;">Easy Sign+</h3><div style="font-size:11px;color:var(--subtext-color);font-weight:600;">Alternative IPA Signer</div><div style="font-size:10px;color:var(--warning);font-weight:700;margin-top:3px;display:flex;align-items:center;gap:4px;">'+ICONS.warning+' iOS 15 – 15.4.1 only</div></div></div><p style="color:var(--subtext-color);font-size:12px;line-height:1.55;margin:0 0 14px 0;">A specialized signing tool <strong style="color:var(--text-color);">exclusively designed for iOS 15 devices</strong>. If your iPhone is running iOS 15.x, this is the ideal solution for you.</p><a href="https://esign-ios.app/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;font-family:Inter,sans-serif;box-shadow:0 4px 15px rgba(255,159,10,0.35);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Easy Sign+ (iOS 15)</a></div><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;"><h3 style="margin:0 0 14px 0;font-size:14px;color:var(--text-color);font-weight:900;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Installation Guide</h3><ol style="margin:0;padding-left:22px;color:var(--subtext-color);font-size:12px;line-height:1.75;"><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Download the DNS Profile</strong> — Tap the "Install DNS Profile" button above.</li><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Enable the DNS</strong> — Open <em>Settings → General → VPN & Device Management</em>, then activate the profile.</li><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Download ESign</strong> — Tap the ESign download button. Confirm installation and wait for the icon to appear.</li><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Trust the Certificate</strong> — Open <em>Settings → General → VPN & Device Management</em>, find the provider, and tap <strong style="color:var(--success);">Trust</strong>.</li><li><strong style="color:var(--text-color);">You are Ready!</strong> — Sign and install any IPA file with a single tap.</li></ol></div><div style="background:rgba(255,159,10,0.08);border:1px solid rgba(255,159,10,0.25);border-radius:16px;padding:14px;"><h4 style="margin:0 0 8px 0;font-size:12px;color:var(--warning);font-weight:900;display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important Notes</h4><ul style="margin:0;padding-left:18px;color:var(--subtext-color);font-size:11px;line-height:1.65;"><li>Certificates may expire — simply re-sign with a fresh one.</li><li>Always download IPAs from trusted sources.</li><li>Never share your Apple ID credentials with anyone.</li><li>Compatible with iOS 14 and above.</li></ul></div></div>';
+    container.innerHTML = '<div class="today-header"><div class="today-title">Installation Tools</div><div class="today-subtitle">Signing guides & essential tools</div></div><div style="margin-top:15px;"><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:4px 12px;border-bottom-left-radius:12px;font-size:9px;font-weight:900;letter-spacing:0.5px;">iOS 16+</div><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><img src="https://cdn.phototourl.com/free/2026-09-12-10a94b0e-2cec-4fc3-ac72-1e67f6ebd44b.png" onerror="this.style.display=\'none\'" style="width:60px;height:60px;border-radius:14px;border:1px solid var(--border-color);background:var(--input-bg);object-fit:cover;" alt="ESign"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:16px;color:var(--text-color);font-weight:900;">ESign</h3><div style="font-size:11px;color:var(--subtext-color);font-weight:600;">IPA Signer & Installer</div><div style="font-size:10px;color:var(--accent);font-weight:700;margin-top:3px;">✓ All iPhone devices</div></div></div><p style="color:var(--subtext-color);font-size:12px;line-height:1.55;margin:0 0 14px 0;"><strong style="color:var(--text-color);">ESign</strong> is a professional-grade iOS application that allows you to sign, install, and manage IPA files directly on your iPhone — <strong style="color:var(--accent);">no computer required</strong>.</p><div style="display:flex;flex-direction:column;gap:8px;"><a href="https://esign-ios.app/dl/esign_v5.0.2.ipa/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;font-family:Inter,sans-serif;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download ESign v5.0.2 IPA</a><a href="https://esign-ios.app/dl/signed_khoindvn_fullchain+new.mobileconfig" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(10,132,255,0.1);border:1px solid rgba(10,132,255,0.35);color:var(--accent);padding:11px;border-radius:12px;text-decoration:none;font-weight:800;font-size:12px;font-family:Inter,sans-serif;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>Install DNS Profile</a></div></div><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#ff453a,#d70015);color:#fff;padding:4px 12px;border-bottom-left-radius:12px;font-size:9px;font-weight:900;letter-spacing:0.5px;">BETA</div><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><img src="https://cdn.phototourl.com/free/2026-09-12-028609ce-19d1-430c-b03a-60716efa54a7.jpg" onerror="this.style.display=\'none\'" style="width:60px;height:60px;border-radius:14px;border:1px solid var(--border-color);background:var(--input-bg);object-fit:cover;" alt="Easy Sign+"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:16px;color:var(--text-color);font-weight:900;">Easy Sign+</h3><div style="font-size:11px;color:var(--subtext-color);font-weight:600;">Alternative IPA Signer</div><div style="font-size:10px;color:var(--warning);font-weight:700;margin-top:3px;">⚠ iOS 15 – 15.4.1 only</div></div></div><p style="color:var(--subtext-color);font-size:12px;line-height:1.55;margin:0 0 14px 0;">A specialized signing tool <strong style="color:var(--text-color);">exclusively designed for iOS 15 devices</strong>. If your iPhone is running iOS 15.x, this is the ideal solution for you.</p><a href="https://esign-ios.app/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;font-family:Inter,sans-serif;box-shadow:0 4px 15px rgba(255,159,10,0.35);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download Easy Sign+ (iOS 15)</a></div><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;"><h3 style="margin:0 0 14px 0;font-size:14px;color:var(--text-color);font-weight:900;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Installation Guide</h3><ol style="margin:0;padding-left:22px;color:var(--subtext-color);font-size:12px;line-height:1.75;"><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Download the DNS Profile</strong> — Tap the "Install DNS Profile" button above.</li><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Enable the DNS</strong> — Open <em>Settings → General → VPN & Device Management</em>, then activate the profile.</li><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Download ESign</strong> — Tap the ESign download button. Confirm installation and wait for the icon to appear.</li><li style="margin-bottom:8px;"><strong style="color:var(--text-color);">Trust the Certificate</strong> — Open <em>Settings → General → VPN & Device Management</em>, find the provider, and tap <strong style="color:var(--success);">Trust</strong>.</li><li><strong style="color:var(--text-color);">You are Ready!</strong> — Sign and install any IPA file with a single tap.</li></ol></div><div style="background:rgba(255,159,10,0.08);border:1px solid rgba(255,159,10,0.25);border-radius:16px;padding:14px;"><h4 style="margin:0 0 8px 0;font-size:12px;color:var(--warning);font-weight:900;display:flex;align-items:center;gap:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Important Notes</h4><ul style="margin:0;padding-left:18px;color:var(--subtext-color);font-size:11px;line-height:1.65;"><li>Certificates may expire — simply re-sign with a fresh one.</li><li>Always download IPAs from trusted sources.</li><li>Never share your Apple ID credentials with anyone.</li><li>Compatible with iOS 14 and above.</li></ul></div></div>';
     return;
   }
 
@@ -990,7 +839,9 @@ function renderUI(){
   if(list.length===0) fc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">No apps in this category yet.</p>';
   else list.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; fc.innerHTML += createAppCardHTML(app,badge); });
 }
-  function createFeaturedCardHTML(app, index){
+
+// === FEATURED CARD - تصميم احترافي جديد ===
+function createFeaturedCardHTML(app, index){
   let isTopOne = index===0 ? '<span style="background:var(--danger);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;">#1 Trending</span>' : '';
   let platformType = app.platform || 'IPA';
   let pubText = app.publisher ? '<div style="color:var(--accent);font-size:11px;font-weight:700;margin-top:2px;">By '+app.publisher+'</div>' : '';
@@ -1018,7 +869,7 @@ function renderUI(){
       '<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">'+
         '<span class="app-size-tag-red">Size: '+(app.size||'N/A')+'</span>'+
         '<span class="download-badge-green">'+ICONS.download+' '+(app.downloads||0)+'</span>'+
-        '<span style="background:var(--input-bg);color:var(--subtext-color);font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid var(--border-color);display:inline-flex;align-items:center;gap:4px;">'+getCategoryNameEn(app.category)+(ratingAvg>0?' • '+ICONS.starFill+' '+ratingAvg.toFixed(1):'')+'</span>'+
+        '<span style="background:var(--input-bg);color:var(--subtext-color);font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid var(--border-color);">'+getCategoryNameEn(app.category)+(ratingAvg>0?' • ⭐ '+ratingAvg.toFixed(1):'')+'</span>'+
       '</div>'+
       (app.info ? '<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin:0 0 12px 0;">'+app.info+'</p>' : '')+
       '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">'+
@@ -1037,6 +888,7 @@ function renderUI(){
   '</div>';
 }
 
+// === APP CARD - تصميم احترافي جديد ===
 function createAppCardHTML(app, rankBadge){
   rankBadge = rankBadge || '';
   let platformIcon = (app.platform==='APK') ? ICONS.android : ICONS.apple;
@@ -1050,7 +902,7 @@ function createAppCardHTML(app, rankBadge){
   let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
   let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
   let ratingAvg = getAverageRating(app);
-  let ratingBadge = ratingAvg>0 ? '<span style="background:var(--input-bg);color:var(--warning);font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;border:1px solid var(--border-color);display:inline-flex;align-items:center;gap:4px;">'+ICONS.starFill+' '+ratingAvg.toFixed(1)+'</span>' : '';
+  let ratingBadge = ratingAvg>0 ? '<span style="background:var(--input-bg);color:var(--warning);font-size:10px;font-weight:800;padding:3px 8px;border-radius:5px;border:1px solid var(--border-color);">⭐ '+ratingAvg.toFixed(1)+'</span>' : '';
   return '<div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:18px;padding:14px;margin-bottom:10px;position:relative;">'+
     '<div style="display:flex;gap:12px;align-items:flex-start;">'+
       '<div style="position:relative;width:56px;height:56px;flex-shrink:0;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+
@@ -1086,8 +938,7 @@ function createAppCardHTML(app, rankBadge){
     '<div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing download...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div>'+
   '</div>';
 }
-
-function toggleExtraMenu(appId, event){
+  function toggleExtraMenu(appId, event){
   event.stopPropagation();
   const menu = document.getElementById('extraMenu_'+appId);
   const isOpen = menu.style.display === 'block';
@@ -1695,8 +1546,6 @@ async function saveNewApp(){
       });
       showToast('App published', 'success');
     }
-
-    document.getElementById('editingAppId').value = '';
     document.getElementById('appPublisher').value = '';
     document.getElementById('appName').value = '';
     document.getElementById('appSize').value = '';
