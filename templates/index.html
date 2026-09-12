@@ -181,12 +181,25 @@
             color: var(--text-color); 
             white-space: nowrap; 
             overflow: hidden; 
-            text-overflow: ellipsis; 
             display: flex;
             align-items: center;
             gap: 4px;
             line-height: 1.2;
         }
+
+        .app-title-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marqueeScroll 8s ease-in-out infinite alternate;
+        }
+        .app-title-marquee:hover {
+            animation-play-state: paused;
+        }
+        @keyframes marqueeScroll {
+            0%, 20% { transform: translateX(0); }
+            80%, 100% { transform: translateX(-35%); }
+        }
+
         .app-details p { margin: 0; font-size: 10px; color: var(--subtext-color); display: flex; align-items: center; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
         
         .app-publisher-tag {
@@ -512,8 +525,8 @@
 <body>
 
     <div id="previewBar" class="preview-bar" style="display:none;">
-        <span>👁️ وضع معاينة المستخدم (مُفعل)</span>
-        <button onclick="toggleUserPreview()" style="background:#000; color:#fff; border:none; padding:2px 8px; border-radius:6px; font-size:10px; cursor:pointer; font-weight:bold;">الخروج من المعاينة</button>
+        <span>👁️ User Preview Mode (Active)</span>
+        <button onclick="toggleUserPreview()" style="background:#000; color:#fff; border:none; padding:2px 8px; border-radius:6px; font-size:10px; cursor:pointer; font-weight:bold;">Exit Preview</button>
     </div>
 
     <div class="header">
@@ -597,8 +610,8 @@
             <h3 id="modalTitleText" style="margin-top:0; color:var(--text-color); font-size:16px;">Add App to Cloud</h3>
             <input type="hidden" id="editingAppId">
             
-            <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">اسم المستعار للمسؤول:</div>
-            <input type="text" id="appPublisher" class="input-field" placeholder="من طرف @example (مثال: @example)">
+            <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Publisher Alias:</div>
+            <input type="text" id="appPublisher" class="input-field" placeholder="By @example (e.g. @example)">
 
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Select Category:</div>
             <select id="appCategory" class="input-field">
@@ -622,7 +635,7 @@
 
             <input type="text" id="appName" class="input-field" placeholder="App Name (e.g. Example Pro)">
             <input type="text" id="appSize" class="input-field" placeholder="App Size (e.g. 2.1 GB)">
-            <input type="text" id="appInfo" class="input-field" placeholder="معلومات أدق عن التطبيق">
+            <input type="text" id="appInfo" class="input-field" placeholder="Detailed app information">
             <input type="text" id="appUrl" class="input-field" placeholder="Direct Download Link (.ipa / .apk)">
 
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Additional Files (e.g. sit files / config):</div>
@@ -672,7 +685,7 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        const ADMIN_EMAILS = ["example@gmail.com", "suohaib1415@gmail.com"];
+        const ADMIN_EMAILS = ["example@gmail.com", "suohaib1415@gmail.com", "benssariyassine@gmail.com"];
         let currentUser = null;
         let isAdmin = false;
         let isUserPreview = false;
@@ -804,7 +817,7 @@
                     </div>
                     
                     <div style="margin-bottom:15px;">
-                        <button onclick="toggleUserPreview()" style="background:#0a84ff; color:#fff; border:none; padding:9px 15px; border-radius:12px; font-weight:bold; font-size:12px; cursor:pointer; width:100%;">👁️ معاينة كـ مستخدم (User Preview Mode)</button>
+                        <button onclick="toggleUserPreview()" style="background:#0a84ff; color:#fff; border:none; padding:9px 15px; border-radius:12px; font-weight:bold; font-size:12px; cursor:pointer; width:100%;">👁️ Switch to User Preview Mode</button>
                     </div>
 
                     <div class="admin-dashboard-wrapper">
@@ -859,7 +872,7 @@
                     todayList.forEach((app, index) => {
                         let isTopOne = (index === 0) ? '<span style="background:#ff453a; color:#fff; font-size:9px; font-weight:900; padding:2px 6px; border-radius:5px; margin-left:6px;">#1 Trending</span>' : '';
                         let platformType = app.platform || 'IPA';
-                        let pubText = app.publisher ? `<span class="app-publisher-tag">من طرف ${app.publisher}</span>` : '';
+                        let pubText = app.publisher ? `<span class="app-publisher-tag">By ${app.publisher}</span>` : '';
                         let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
                         let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
 
@@ -880,7 +893,7 @@
                                             ${pubText}
                                         </div>
                                         
-                                        <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="معلومات أدق عن التطبيق">
+                                        <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="Detailed App Info">
                                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                                         </button>
                                     </div>
@@ -905,7 +918,7 @@
                                         </div>
 
                                         <div style="display:flex; gap:6px; align-items:center;">
-                                            <button class="btn-report-text" onclick="openReportModal('${app.id}')">بلاغ</button>
+                                            <button class="btn-report-text" onclick="openReportModal('${app.id}')">Report</button>
                                             ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">Edit</button><button class="btn-del" onclick="deleteApp('${app.id}')">Delete</button></div>` : ''}
                                         </div>
                                     </div>
@@ -934,7 +947,7 @@
                 container.innerHTML = `
                     <div class="today-header">
                         <div class="today-title">🔥 Trending Apps</div>
-                        <div class="today-subtitle">التطبيقات والألعاب الأكثر رواجاً وتفاعلاً</div>
+                        <div class="today-subtitle">Most popular & engaged apps and games</div>
                     </div>
                     <div style="margin-top:15px;" id="trendingContainer"></div>
                 `;
@@ -1019,7 +1032,7 @@
                 `;
             }
 
-            let pubText = app.publisher ? `<span class="app-publisher-tag">من طرف ${app.publisher}</span>` : '';
+            let pubText = app.publisher ? `<span class="app-publisher-tag">By ${app.publisher}</span>` : '';
             let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
             let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
 
@@ -1033,7 +1046,7 @@
                                 <img src="${app.icon || 'https://via.placeholder.com/54'}" class="app-icon-img">
                             </div>
                             <div class="app-details">
-                                <h4>${rankBadge}${platformIcon} ${app.name}</h4>
+                                <h4>${rankBadge}${platformIcon} <span class="app-title-marquee">${app.name}</span></h4>
                                 ${pubText}
                                 <div class="app-category-sub">${getCategoryNameEn(app.category)}</div>
                                 <p>
@@ -1052,13 +1065,13 @@
                                 <span>${likesCount}</span>
                             </button>
 
-                            <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="معلومات أدق عن التطبيق">
+                            <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="Detailed App Info">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                             </button>
 
                             <button class="btn-install" onclick="startRealDownload('${app.id}', '${app.url}', '${app.name}')">Get</button>
                             ${extraFilesDropdown}
-                            <button class="btn-report-text" onclick="openReportModal('${app.id}')">بلاغ</button>
+                            <button class="btn-report-text" onclick="openReportModal('${app.id}')">Report</button>
                             ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">Edit</button><button class="btn-del" onclick="deleteApp('${app.id}')">Delete</button></div>` : ''}
                         </div>
                     </div>
@@ -1096,7 +1109,7 @@
             if (progressBox) progressBox.style.display = 'block';
 
             if (!fileUrl || fileUrl === '#' || fileUrl.trim() === '') {
-                if (progressText) progressText.innerText = "رابط التنزيل غير متوفر";
+                if (progressText) progressText.innerText = "Download link not available";
                 setTimeout(() => { if (progressBox) progressBox.style.display = 'none'; }, 2500);
                 return;
             }
@@ -1146,7 +1159,7 @@
         function toggleStarLike(appId, event) {
             if (event) event.stopPropagation();
             if (!currentUser) {
-                alert('الرجاء تسجيل الدخول أولاً لتسجيل إعجابك');
+                alert('Please sign in first to like this app.');
                 openAccountModal();
                 return;
             }
@@ -1198,13 +1211,13 @@
                                     <div class="comment-user">${c.userName}</div>
                                     <div>${c.text}</div>
                                 </div>
-                                ${isAdmin ? `<button onclick="deleteComment('${app.id}', '${c.id}')" style="background:#ff453a; color:#fff; border:none; padding:3px 7px; border-radius:6px; font-size:10px; cursor:pointer; font-weight:bold;">حذف التعليق</button>` : ''}
+                                ${isAdmin ? `<button onclick="deleteComment('${app.id}', '${c.id}')" style="background:#ff453a; color:#fff; border:none; padding:3px 7px; border-radius:6px; font-size:10px; cursor:pointer; font-weight:bold;">Delete Comment</button>` : ''}
                             </div>
                         `;
                     });
                 }
 
-                let pubText = app.publisher ? `<div style="color:#0a84ff; font-size:12px; font-weight:bold; margin-bottom:4px;">من طرف ${app.publisher}</div>` : '';
+                let pubText = app.publisher ? `<div style="color:#0a84ff; font-size:12px; font-weight:bold; margin-bottom:4px;">By ${app.publisher}</div>` : '';
 
                 document.getElementById('appDetailBody').innerHTML = `
                     <div style="width:40px; height:4px; background:var(--border-color); border-radius:10px; margin:0 auto 16px auto;"></div>
@@ -1219,8 +1232,8 @@
                     </div>
 
                     <div style="background:var(--input-bg); padding:12px; border-radius:12px; margin-bottom:12px; font-size:12px; color:var(--text-color);">
-                        <strong style="color:#0a84ff; display:block; margin-bottom:4px;">ℹ️ معلومات أدق عن التطبيق:</strong>
-                        ${app.info || app.desc || 'لم يتم تسجيل معلومات تفصيلية إضافية.'}
+                        <strong style="color:#0a84ff; display:block; margin-bottom:4px;">ℹ️ Detailed App Information:</strong>
+                        ${app.info || app.desc || 'No additional detailed information available.'}
                     </div>
 
                     <button class="btn-install" style="display:block; width:100%; text-align:center; padding:11px; margin-bottom:12px; font-size:13px;" onclick="startRealDownload('${app.id}', '${app.url}', '${app.name}')">Direct Download (${app.platform || 'IPA'})</button>
@@ -1251,7 +1264,7 @@
 
         function deleteComment(appId, commentId) {
             if (!isAdmin) return;
-            if (confirm('هل أنت تأكد من حذف هذا التعليق؟')) {
+            if (confirm('Are you sure you want to delete this comment?')) {
                 db.collection("apps").doc(appId).collection("comments").doc(commentId).delete().then(() => {
                     db.collection("apps").doc(appId).update({
                         commentsCount: firebase.firestore.FieldValue.increment(-1)
