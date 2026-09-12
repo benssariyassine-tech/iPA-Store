@@ -143,18 +143,18 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .stat-box{background:var(--input-bg);border:1px solid var(--border-color);padding:14px;border-radius:14px;text-align:center}
 .stat-box h5{margin:0 0 6px 0;color:var(--subtext-color);font-size:11px;font-weight:700}
 .stat-box p{margin:0;color:var(--danger);font-size:20px;font-weight:900}
-.report-admin-item{background:var(--input-bg);border:1px solid rgba(255,69,58,0.3);padding:12px;border-radius:12px;margin-bottom:10px;font-size:12px}
-.detail-header{display:flex;align-items:center;gap:15px;margin-bottom:12px}
-.detail-icon{width:70px;height:70px;border-radius:16px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg)}
-.comment-box{background:var(--input-bg);border:1px solid var(--border-color);padding:8px 10px;border-radius:10px;margin-bottom:6px;font-size:12px}
-.comment-user{color:var(--accent);font-weight:700;margin-bottom:2px}
-.star-rating{display:flex;gap:6px;margin:8px 0;align-items:center}
-.star-btn{background:none;border:none;cursor:pointer;padding:2px;line-height:1;color:var(--border-color);display:flex;align-items:center;justify-content:center}
-.star-btn svg{width:26px;height:26px;fill:currentColor}
-.star-btn.active{color:var(--warning)}
-.star-btn:hover{transform:scale(1.15)}
-#toastContainer{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:90%}
-.toast{background:var(--card-bg);border:1px solid var(--border-color);border-radius:14px;padding:12px 18px;font-size:13px;font-weight:700;color:var(--text-color);box-shadow:0 10px 30px rgba(0,0,0,0.3);display:flex;align-items:center;gap:10px;animation:toastIn 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;min-width:220px}
+.report-admin-item{background:var(--input-bg);border:1px solid rgba(255,69,58,0.3display);padding:12px;border-radius:12:px;margin-bottom:10px;font-size:flex12px}
+.detail-header{display:flex;;align-items:center;gap:15px;margin-bottom:12align-itemspx}
+:.detail-icon{width:70px;height:70centerpx;border-radius:16px;object-fit:;cover;border:1px solid var(--border-colorgap);background:var(--input-bg)}
+.comment-box:{background:var(--input-bg);border10:1px solid var(--border-color);padding:px8px 10px;border-radius:10px;animation;margin-bottom::6px;font-size:12px}
+.comtoment-user{color:var(--accent);astfont-weight:700;margin-bottom:2px}
+In.star-rating{display:flex;gap:6 px;margin:8px 0;align-items:center}
+.st0ar-btn{background:none;border:none;cursor.:pointer;padding:2px;line-height:1;4color:var(--border-color);display:flex;salign-items:center;justify-content:center}
+.st cubicar-btn svg{width:26px;height:-b26px;fill:currentColor}
+.star-btn.activeez{color:var(--warning)}
+.star-btn:hover{transform:ierscale(1.15)}
+#toastContainer({position:fixed;top:80px;left:050%;transform:translateX(-50%);z-index.:10000;display:flex;flex16-direction:column;gap:8px;pointer-e,vents:none;max-width:90%}
+.toast1{background:var(--card-bg);border:1px, solid var(--border-color);border-radius:14px0;padding:12px 18px;font-size.:13px;font-weight:700;color:3var(--text-color);box-shadow:0 ,10px 30px rgba(0,0,0,10.3););pointer-events:auto;min-width:220px}
 .toast.success{border-color:rgba(50,215,75,0.4)}.toast.success .toast-icon{color:var(--success)}
 .toast.error{border-color:rgba(255,69,58,0.4)}.toast.error .toast-icon{color:var(--danger)}
 .toast.info .toast-icon{color:var(--accent)}
@@ -432,12 +432,26 @@ Sign Out
 </div>
 </div>
 
-<!-- === ADD/EDIT APP MODAL === -->
+<!-- === ADD/EDIT APP MODAL (مع iTunes Fetch) === -->
 <div id="addAppModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('addAppModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 <h3 id="modalTitleText" style="margin-top:0;color:var(--text-color);font-size:16px;">Add App to Cloud</h3>
 <input type="hidden" id="editingAppId">
+
+<div style="background:rgba(10,132,255,0.08);border:1px solid rgba(10,132,255,0.25);border-radius:14px;padding:14px;margin-bottom:14px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <span style="font-size:12px;font-weight:800;color:var(--accent);">Auto-Fill from App Store</span>
+  </div>
+  <input type="text" id="itunesUrlInput" class="input-field" placeholder="Paste App Store URL (e.g. https://apps.apple.com/us/app/instagram/id389801252)" style="margin-bottom:8px;">
+  <button type="button" onclick="fetchFromItunes()" id="fetchItunesBtn" style="width:100%;padding:10px;background:linear-gradient(135deg,var(--accent),#0062d2);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:12px;cursor:pointer;font-family:Inter,sans-serif;display:flex;align-items:center;justify-content:center;gap:6px;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    Fetch App Info
+  </button>
+  <div id="fetchStatus" style="font-size:11px;color:var(--subtext-color);text-align:center;margin-top:8px;display:none;"></div>
+</div>
+
 <div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Publisher Alias:</div>
 <input type="text" id="appPublisher" class="input-field" placeholder="By @example">
 <div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Select Category:</div>
@@ -451,7 +465,7 @@ Sign Out
 <input type="text" id="appName" class="input-field" placeholder="App Name">
 <input type="text" id="appSize" class="input-field" placeholder="App Size (e.g. 2.1 GB)">
 <input type="text" id="appInfo" class="input-field" placeholder="Detailed app information">
-<input type="text" id="appUrl" class="input-field" placeholder="Direct Download Link (.ipa / .apk)">
+<input type="text" id="appUrl" class="input-field" placeholder="Your Download Link (.ipa / .apk)">
 <div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Additional Files:</div>
 <input type="file" id="appExtraFiles" class="input-field" multiple>
 <button onclick="saveNewApp()" style="background:var(--danger);color:#fff;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;">Save & Publish</button>
@@ -589,6 +603,114 @@ function switchTab(tabName, btnElement){
   window.scrollTo({top:0,behavior:'smooth'});
   savePrefs();
   renderUI();
+}
+
+// ===== iTunes API — Fetch App Info =====
+function fetchFromItunes(){
+  const urlInput = document.getElementById('itunesUrlInput');
+  const status = document.getElementById('fetchStatus');
+  const btn = document.getElementById('fetchItunesBtn');
+  const url = urlInput.value.trim();
+  if(!url){ showToast('Please paste an App Store URL', 'warning'); return; }
+  
+  // Extract numeric ID from URL (e.g. id389801252)
+  const match = url.match(/id(\d+)/);
+  if(!match){
+    showToast('Invalid App Store URL. Must contain /id...', 'error');
+    return;
+  }
+  const appId = match[1];
+  
+  status.style.display = 'block';
+  status.innerText = 'Fetching app info from Apple...';
+  status.style.color = 'var(--accent)';
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+  
+  // Use JSONP to bypass CORS
+  const callbackName = 'itunes_cb_' + Date.now();
+  window[callbackName] = function(data){
+    try{
+      if(!data.results || data.results.length === 0){
+        status.innerText = '❌ App not found';
+        status.style.color = 'var(--danger)';
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        return;
+      }
+      const app = data.results[0];
+      
+      // Fill fields
+      document.getElementById('appName').value = app.trackName || '';
+      document.getElementById('appPublisher').value = app.artistName || '';
+      document.getElementById('appInfo').value = (app.description || '').substring(0, 500);
+      
+      // Size in MB / GB
+      if(app.fileSizeBytes){
+        const bytes = parseInt(app.fileSizeBytes);
+        const mb = bytes / (1024 * 1024);
+        if(mb > 1024){
+          document.getElementById('appSize').value = (mb / 1024).toFixed(2) + ' GB';
+        } else {
+          document.getElementById('appSize').value = Math.round(mb) + ' MB';
+        }
+      }
+      
+      // Icon — show preview
+      if(app.artworkUrl512 || app.artworkUrl100){
+        const iconUrl = app.artworkUrl512 || app.artworkUrl100;
+        // Store as icon directly (external URL)
+        window.__itunesIcon = iconUrl;
+      }
+      
+      // Screenshots
+      if(app.screenshotUrls && app.screenshotUrls.length > 0){
+        window.__itunesScreenshots = app.screenshotUrls;
+      }
+      
+      // Category
+      if(app.primaryGenreName){
+        const genre = app.primaryGenreName.toLowerCase();
+        let cat = 'apps';
+        if(genre.includes('game')) cat = 'games';
+        else if(genre.includes('utilities') || genre.includes('productivity')) cat = 'tools';
+        document.getElementById('appCategory').value = cat;
+      }
+      
+      status.innerText = '✅ App info fetched! Icon & screenshots will be added on save.';
+      status.style.color = 'var(--success)';
+      showToast('App info loaded from iTunes', 'success', 2500);
+    } catch(e){
+      status.innerText = '❌ Error: ' + e.message;
+      status.style.color = 'var(--danger)';
+    } finally {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      delete window[callbackName];
+      document.querySelectorAll('script[data-itunes]').forEach(s=>s.remove());
+    }
+  };
+  
+  const script = document.createElement('script');
+  script.src = 'https://itunes.apple.com/lookup?id=' + appId + '&callback=' + callbackName;
+  script.setAttribute('data-itunes', '1');
+  script.onerror = function(){
+    status.innerText = '❌ Failed to connect to iTunes';
+    status.style.color = 'var(--danger)';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  };
+  document.body.appendChild(script);
+  
+  // Timeout safety
+  setTimeout(function(){
+    if(btn.disabled){
+      status.innerText = '⏱️ Timeout — try again';
+      status.style.color = 'var(--warning)';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+    }
+  }, 12000);
 }
 
 db.collection("apps").orderBy("createdAt","desc").onSnapshot(snapshot=>{
@@ -752,7 +874,7 @@ function renderUI(){
   else list.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; fc.innerHTML += createAppCardHTML(app,badge); });
 }
 
-// === FEATURED CARD - تصميم احترافي جديد ===
+// === FEATURED CARD ===
 function createFeaturedCardHTML(app, index){
   let isTopOne = index===0 ? '<span style="background:var(--danger);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;">#1 Trending</span>' : '';
   let platformType = app.platform || 'IPA';
@@ -800,7 +922,7 @@ function createFeaturedCardHTML(app, index){
   '</div>';
 }
 
-// === APP CARD - تصميم احترافي جديد ===
+// === APP CARD ===
 function createAppCardHTML(app, rankBadge){
   rankBadge = rankBadge || '';
   let platformIcon = (app.platform==='APK') ? ICONS.android : ICONS.apple;
@@ -818,13 +940,13 @@ function createAppCardHTML(app, rankBadge){
   return '<div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:18px;padding:14px;margin-bottom:10px;position:relative;">'+
     '<div style="display:flex;gap:12px;align-items:flex-start;">'+
       '<div style="position:relative;width:56px;height:56px;flex-shrink:0;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+
-        '<img src="'+(app.icon||FALLBACK_ICON)+'" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg);" loading="lazy" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
-        '<div style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:6px;background:var(--card-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;">'+platformIcon+'</div>'+
+        '<img src="'+(app.icon||FALLBACK_ICON)+'" style="width:56px;height:flow56px;border-radius:14px;object-fit:cover:;border:1px solid var(--border-color);ellbackground:var(--input-bg);" loading="ipslazy" onerror="this.src=\''+isFALLBACK_ICON+'\'">'+
+       ; '<div style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:6px;background:var(--card-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;">'+platformIcon+'</div>'+
       '</div>'+
       '<div style="flex:1;min-width:0;">'+
         '<div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">'+
           (rankBadge ? rankBadge : '')+
-          '<h4 style="margin:0;font-size:14px;font-weight:800;color:var(--text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;flex:1;" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
+          '<h4 style="margin:0;font-size:14px;font-weight:800;color:var(--text-color);white-space:nowrap;overflow:hidden;text-overcursor:pointer;flex:1;" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
         '</div>'+
         pubText+
         '<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:8px;">'+
@@ -849,8 +971,7 @@ function createAppCardHTML(app, rankBadge){
     '</div>'+
     '<div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing download...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div>'+
   '</div>';
-}
-  function toggleExtraMenu(appId, event){
+}function toggleExtraMenu(appId, event){
   event.stopPropagation();
   const menu = document.getElementById('extraMenu_'+appId);
   const isOpen = menu.style.display === 'block';
@@ -1365,6 +1486,10 @@ function openAddAppModal(){
   document.getElementById('appImgFile').value = "";
   document.getElementById('appScreenshotsFile').value = "";
   document.getElementById('appExtraFiles').value = "";
+  document.getElementById('itunesUrlInput').value = "";
+  document.getElementById('fetchStatus').style.display = 'none';
+  window.__itunesIcon = null;
+  window.__itunesScreenshots = null;
   openModal('addAppModal');
 }
 
@@ -1381,6 +1506,10 @@ function openEditAppModal(id){
   document.getElementById('appSize').value = app.size || '';
   document.getElementById('appInfo').value = app.info || '';
   document.getElementById('appUrl').value = app.url || '';
+  document.getElementById('itunesUrlInput').value = "";
+  document.getElementById('fetchStatus').style.display = 'none';
+  window.__itunesIcon = null;
+  window.__itunesScreenshots = null;
   openModal('addAppModal');
 }
 
@@ -1420,11 +1549,22 @@ async function saveNewApp(){
   }
 
   try {
-    if(fileInput.files && fileInput.files[0]) iconResult = await fileToDataURL(fileInput.files[0]);
+    // Icon: upload file takes priority, else iTunes icon
+    if(fileInput.files && fileInput.files[0]){
+      iconResult = await fileToDataURL(fileInput.files[0]);
+    } else if(window.__itunesIcon){
+      iconResult = window.__itunesIcon;
+    }
+
+    // Screenshots
     let screenshotsList = [...existingScreenshots];
     if(screenshotsInput.files && screenshotsInput.files.length>0){
       for(const file of Array.from(screenshotsInput.files)) screenshotsList.push(await fileToDataURL(file));
+    } else if(window.__itunesScreenshots && window.__itunesScreenshots.length > 0 && screenshotsList.length === 0){
+      screenshotsList = [...window.__itunesScreenshots];
     }
+
+    // Extra files
     let extraFilesList = [...existingExtraFiles];
     if(extraFilesInput.files && extraFilesInput.files.length>0){
       for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
@@ -1450,6 +1590,9 @@ async function saveNewApp(){
     document.getElementById('appImgFile').value = '';
     document.getElementById('appScreenshotsFile').value = '';
     document.getElementById('appExtraFiles').value = '';
+    document.getElementById('itunesUrlInput').value = '';
+    window.__itunesIcon = null;
+    window.__itunesScreenshots = null;
     closeModal('addAppModal');
   } catch(err){ showToast('Error: '+err.message, 'error'); }
 }
