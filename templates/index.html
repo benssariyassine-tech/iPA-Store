@@ -11,35 +11,28 @@ body.light-mode{--bg-color:#f2f2f7;--text-color:#000;--card-bg:#fff;--border-col
 *{-webkit-tap-highlight-color:transparent;box-sizing:border-box;transition:transform 0.2s cubic-bezier(0.2,0.8,0.2,1),opacity 0.2s ease,background-color 0.25s ease}
 body{background:var(--bg-color);color:var(--text-color);font-family:'Inter',sans-serif;margin:0;padding:0 0 110px 0;direction:ltr;transition:background 0.3s,color 0.3s}
 svg{display:inline-block;vertical-align:middle}
-
 .header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;background:var(--header-bg);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border-color)}
 .logo-area{display:flex;align-items:center;gap:8px;font-weight:900;font-size:20px;letter-spacing:0.5px}
 .logo-area span{color:var(--accent)}
 .header-icons{display:flex;gap:10px;align-items:center}
 .icon-btn{background:var(--card-bg);border:1px solid var(--border-color);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text-color);cursor:pointer}
 .icon-btn:active{transform:scale(0.9)}
-
 .container{padding:16px 20px;max-width:600px;margin:auto;animation:fadeInUp 0.4s cubic-bezier(0.16,1,0.3,1)}
 @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
 .search-box{position:relative;margin-bottom:12px}
 .search-input{width:100%;background:var(--input-bg);border:1px solid var(--border-color);padding:12px 45px 12px 45px;border-radius:16px;color:var(--text-color);font-family:'Inter',sans-serif;font-size:14px;box-sizing:border-box;outline:none}
 .search-input:focus{border-color:var(--accent);box-shadow:0 0 12px rgba(10,132,255,0.25)}
 .search-icon{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:var(--subtext-color);width:18px;height:18px;pointer-events:none}
 .search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--border-color);color:var(--text-color);border:none;width:22px;height:22px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer}
 .search-clear.show{display:flex}
-
 .filter-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:5px;scrollbar-width:none}
 .filter-chips::-webkit-scrollbar{display:none}
 .chip{background:var(--card-bg);border:1px solid var(--border-color);color:var(--subtext-color);padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;cursor:pointer;font-family:'Inter',sans-serif}
 .chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
-
 .today-header{margin-bottom:15px;animation:fadeInUp 0.4s ease}
 .today-date{color:var(--subtext-color);font-size:12px;font-weight:600}
 .today-title{font-size:28px;font-weight:900;margin:2px 0}
 .today-subtitle{font-size:13px;color:var(--danger);font-weight:700;display:flex;align-items:center;gap:5px}
-
-/* === SPLASH SCREEN === */
 #splashScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:#0b0b0f;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity 0.8s ease, visibility 0.8s ease}
 #splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none}
 .splash-logo-wrap{position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center}
@@ -57,8 +50,6 @@ svg{display:inline-block;vertical-align:middle}
 .splash-loader span:nth-child(2){animation-delay:0.15s;background:#ff453a;box-shadow:0 0 10px rgba(255,69,58,0.6)}
 .splash-loader span:nth-child(3){animation-delay:0.3s;background:#ff9f0a;box-shadow:0 0 10px rgba(255,159,10,0.6)}
 @keyframes splashDot{0%,80%,100%{transform:scale(0.5);opacity:0.4}40%{transform:scale(1.15);opacity:1}}
-
-/* === ANIMATED BACKGROUND FOR TRENDING SECTION === */
 .trending-stage{position:relative;border-radius:22px;padding:18px 14px 14px 14px;margin-top:10px;overflow:hidden;isolation:isolate;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.05)}
 .trending-stage::before{content:'';position:absolute;inset:-40%;background:radial-gradient(circle at 20% 30%, rgba(10,132,255,0.35), transparent 40%),radial-gradient(circle at 80% 25%, rgba(255,69,58,0.28), transparent 42%),radial-gradient(circle at 45% 85%, rgba(255,159,10,0.24), transparent 45%),radial-gradient(circle at 90% 80%, rgba(191,90,242,0.28), transparent 45%);filter:blur(50px);animation:trendingBgFloat 14s ease-in-out infinite alternate;z-index:-2;opacity:0.85}
 .trending-stage::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%, rgba(10,132,255,0.15), transparent 55%),radial-gradient(circle at 70% 60%, rgba(255,69,58,0.12), transparent 55%);filter:blur(30px);animation:trendingBgFloatReverse 18s ease-in-out infinite alternate;z-index:-1;opacity:0.9}
@@ -67,7 +58,6 @@ svg{display:inline-block;vertical-align:middle}
 body.light-mode .trending-stage{background:rgba(0,0,0,0.015);border-color:rgba(0,0,0,0.05)}
 body.light-mode .trending-stage::before{opacity:0.55}
 body.light-mode .trending-stage::after{opacity:0.6}
-
 .featured-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:22px;overflow:hidden;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);position:relative;animation:fadeInUp 0.4s ease}
 .featured-img-wrapper{position:relative;width:100%;height:190px;overflow:hidden;background:var(--input-bg)}
 .featured-img{width:100%;height:100%;object-fit:cover}
@@ -75,7 +65,6 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .featured-body{padding:16px}
 .badge-tag{background:rgba(255,69,58,0.15);color:var(--danger);font-size:11px;font-weight:800;padding:4px 10px;border-radius:8px;display:inline-flex;align-items:center;gap:4px;margin-bottom:8px}
 .section-heading{font-size:17px;font-weight:800;margin:20px 0 12px 0;display:flex;justify-content:space-between;align-items:center}
-
 .app-card-pro{background:var(--card-bg);border:1px solid var(--border-color);border-radius:18px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;animation:fadeInUp 0.3s ease;position:relative;overflow:visible}
 .app-card-pro:hover{border-color:rgba(10,132,255,0.3)}
 .app-meta{display:flex;align-items:center;gap:10px;overflow:hidden;flex:1;cursor:pointer}
@@ -93,31 +82,23 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .download-badge-green{background:rgba(50,215,75,0.15);color:var(--success);font-size:10px;font-weight:800;padding:2px 6px;border-radius:5px;display:inline-flex;align-items:center;gap:3px}
 .app-category-sub{font-size:10px;color:var(--subtext-color);font-weight:600;margin-top:1px}
 .app-actions{display:flex;gap:5px;align-items:center;position:relative;flex-shrink:0}
-
 .btn-install{background:linear-gradient(135deg,var(--accent),#0062d2);color:#fff;padding:6px 14px;border-radius:16px;font-size:12px;font-weight:800;border:none;box-shadow:0 3px 10px rgba(10,132,255,0.3);white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:4px;font-family:'Inter',sans-serif}
 .btn-install:active{transform:scale(0.94)}
-
 .btn-star-like{background:rgba(255,159,10,0.1);border:1px solid rgba(255,159,10,0.3);color:var(--warning);padding:4px 7px;border-radius:10px;display:flex;align-items:center;gap:3px;cursor:pointer;font-size:10px;font-weight:800;font-family:'Inter',sans-serif}
 .btn-star-like:active{transform:scale(0.9)}
 .btn-star-like.liked{background:rgba(255,159,10,0.25)}
-
 .btn-share{background:rgba(10,132,255,0.1);border:1px solid rgba(10,132,255,0.3);color:var(--accent);padding:4px 7px;border-radius:10px;display:flex;align-items:center;gap:3px;cursor:pointer;font-family:'Inter',sans-serif}
 .btn-share:active{transform:scale(0.9)}
-
 .btn-extra-dropdown{background:var(--input-bg);border:1px solid var(--border-color);color:var(--text-color);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer}
 .extra-files-menu{display:none;position:absolute;right:0;top:36px;background:var(--modal-bg);border:1px solid var(--border-color);border-radius:12px;padding:8px;width:170px;box-shadow:0 8px 20px rgba(0,0,0,0.3);z-index:50}
 .extra-file-item{display:block;padding:6px 8px;font-size:11px;color:var(--text-color);text-decoration:none;border-radius:6px;background:var(--input-bg);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .extra-file-item:hover{background:rgba(10,132,255,0.15);color:var(--accent)}
-
 .admin-btns{display:flex;gap:4px}
 .btn-edit{background:var(--accent);color:#fff;padding:4px 7px;border-radius:6px;font-size:10px;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif}
 .btn-del{background:var(--danger);color:#fff;padding:4px 7px;border-radius:6px;font-size:10px;font-weight:700;border:none;cursor:pointer;font-family:'Inter',sans-serif}
-
 .btn-info-blue{background:rgba(10,132,255,0.15);border:1px solid rgba(10,132,255,0.3);color:var(--accent);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .btn-info-blue:active{transform:scale(0.9)}
-
 .btn-report-text{background:transparent;border:none;color:var(--danger);font-size:10px;font-weight:700;cursor:pointer;padding:2px 4px;font-family:'Inter',sans-serif}
-
 .dl-progress-box{width:100%;margin-top:10px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg, rgba(255,69,58,0.18), rgba(255,69,58,0.06) 60%, rgba(10,132,255,0.05));border:1px solid rgba(255,69,58,0.28);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);box-shadow:0 8px 28px rgba(255,69,58,0.18), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);position:relative;overflow:hidden;box-sizing:border-box}
 .dl-progress-box::before{content:'';position:absolute;top:-50%;left:-20%;width:60%;height:200%;background:radial-gradient(circle, rgba(255,69,58,0.28), transparent 65%);pointer-events:none;animation:glowFloat 4s ease-in-out infinite}
 .dl-progress-box::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);pointer-events:none}
@@ -136,34 +117,26 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .dl-progress-box.done .dl-progress-icon{background:linear-gradient(135deg, rgba(50,215,75,0.5), rgba(50,215,75,0.2));animation:none}
 .dl-progress-box.done .dl-progress-percent{color:#32d74b;text-shadow:0 1px 4px rgba(50,215,75,0.5)}
 .dl-progress-box.done .dl-progress-bar-fill{background:linear-gradient(90deg,#32d74b,#57e075);box-shadow:0 0 14px rgba(50,215,75,0.7);animation:none}
-
 .skeleton-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:18px;padding:12px;margin-bottom:10px;display:flex;gap:10px;align-items:center}
 .skeleton-box{background:linear-gradient(90deg,var(--border-color) 25%,rgba(255,255,255,0.05) 50%,var(--border-color) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-
 .floating-nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);width:92%;max-width:480px;background:var(--nav-bg);backdrop-filter:blur(25px);-webkit-backdrop-filter:blur(25px);border:1px solid var(--border-color);border-radius:24px;display:flex;justify-content:space-around;padding:10px 6px;z-index:1000;box-shadow:0 15px 35px rgba(0,0,0,0.3)}
 .nav-item{background:none;border:none;color:var(--subtext-color);font-size:11px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:'Inter',sans-serif;transition:0.25s}
 .nav-item.active{color:var(--accent);transform:scale(1.08)}
 .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2}
-
 .modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
 .modal-box{background:var(--modal-bg);border:1px solid var(--border-color);border-radius:22px;padding:22px;width:88%;max-width:360px;max-height:85vh;overflow-y:auto;box-sizing:border-box;position:relative;animation:popIn 0.3s cubic-bezier(0.16,1,0.3,1)}
 @keyframes popIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
 .modal-close-x{position:absolute;top:16px;right:16px;background:var(--input-bg);border:none;color:var(--text-color);width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:'Inter',sans-serif}
-
 .bottom-sheet-modal{display:none;position:fixed;z-index:2500;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .bottom-sheet-content{background:var(--modal-bg);border:1px solid var(--border-color);border-top-left-radius:28px;border-top-right-radius:28px;padding:24px 20px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-sizing:border-box;animation:slideUpSheet 0.35s cubic-bezier(0.16,1,0.3,1)}
 @keyframes slideUpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
-
 .screenshots-container{display:flex;gap:10px;overflow-x:auto;padding:10px 0;margin:12px 0;scroll-snap-type:x mandatory;scrollbar-width:none}
 .screenshots-container::-webkit-scrollbar{display:none}
 .screenshot-item{width:130px;height:230px;border-radius:14px;object-fit:cover;flex-shrink:0;border:1px solid var(--border-color);scroll-snap-align:start;cursor:pointer;background:var(--input-bg)}
-
 .input-field{width:100%;padding:11px;margin-bottom:10px;background:var(--input-bg);border:1px solid var(--border-color);border-radius:12px;color:var(--text-color);box-sizing:border-box;font-family:'Inter',sans-serif;font-size:13px;outline:none}
 .input-field:focus{border-color:var(--accent)}
-
 .admin-add-float{position:fixed;bottom:84px;right:20px;background:var(--danger);color:#fff;padding:9px 16px;border-radius:25px;font-weight:800;font-size:12px;border:none;box-shadow:0 4px 15px rgba(255,69,58,0.4);cursor:pointer;z-index:999;display:none;align-items:center;gap:6px;font-family:'Inter',sans-serif}
-
 .admin-dashboard-wrapper{display:flex;flex-direction:column;gap:16px;animation:fadeInUp 0.4s ease}
 .admin-section-card{background:var(--card-bg);border:1px solid rgba(255,69,58,0.25);border-radius:20px;padding:18px}
 .admin-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:15px}
@@ -171,18 +144,15 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .stat-box h5{margin:0 0 6px 0;color:var(--subtext-color);font-size:11px;font-weight:700}
 .stat-box p{margin:0;color:var(--danger);font-size:20px;font-weight:900}
 .report-admin-item{background:var(--input-bg);border:1px solid rgba(255,69,58,0.3);padding:12px;border-radius:12px;margin-bottom:10px;font-size:12px}
-
 .detail-header{display:flex;align-items:center;gap:15px;margin-bottom:12px}
 .detail-icon{width:70px;height:70px;border-radius:16px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg)}
 .comment-box{background:var(--input-bg);border:1px solid var(--border-color);padding:8px 10px;border-radius:10px;margin-bottom:6px;font-size:12px}
-.comment-user{color:var(--accent);font-weight:700;margin-bottom:2px}
-
-.star-rating{display:flex;gap:6px;margin:8px 0;align-items:center}
+.comment-user{color:var(--accent);font-weight:700;margin-bottom0:2px}
+.star-rating{display:flex;gap;:6px;margin:8px align-items:center}
 .star-btn{background:none;border:none;cursor:pointer;padding:2px;line-height:1;color:var(--border-color);display:flex;align-items:center;justify-content:center}
 .star-btn svg{width:26px;height:26px;fill:currentColor}
 .star-btn.active{color:var(--warning)}
 .star-btn:hover{transform:scale(1.15)}
-
 #toastContainer{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:90%}
 .toast{background:var(--card-bg);border:1px solid var(--border-color);border-radius:14px;padding:12px 18px;font-size:13px;font-weight:700;color:var(--text-color);box-shadow:0 10px 30px rgba(0,0,0,0.3);display:flex;align-items:center;gap:10px;animation:toastIn 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;min-width:220px}
 .toast.success{border-color:rgba(50,215,75,0.4)}.toast.success .toast-icon{color:var(--success)}
@@ -191,10 +161,8 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .toast.warning .toast-icon{color:var(--warning)}
 @keyframes toastIn{from{opacity:0;transform:translateY(-20px) scale(0.9)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes toastOut{to{opacity:0;transform:translateY(-20px) scale(0.9)}}
-
 .fav-empty{text-align:center;padding:60px 20px;color:var(--subtext-color)}
 .fav-empty svg{width:60px;height:60px;stroke:var(--border-color);fill:none;stroke-width:1.5;margin-bottom:15px}
-
 .similar-apps-container{display:flex;gap:10px;overflow-x:auto;padding:8px 0;scrollbar-width:none}
 .similar-apps-container::-webkit-scrollbar{display:none}
 .similar-app-card{background:var(--input-bg);border:1px solid var(--border-color);border-radius:12px;padding:10px;min-width:110px;max-width:110px;text-align:center;cursor:pointer;flex-shrink:0}
@@ -202,14 +170,11 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .similar-app-card img{width:50px;height:50px;border-radius:12px;margin-bottom:6px;background:var(--card-bg)}
 .similar-app-card h5{font-size:11px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text-color);font-weight:700}
 .similar-app-card p{font-size:9px;margin:3px 0 0 0;color:var(--subtext-color)}
-
 .preview-bar{position:fixed;top:0;left:0;width:100%;background:var(--warning);color:#000;text-align:center;font-size:11px;font-weight:800;padding:5px 0;z-index:9999;display:flex;justify-content:center;align-items:center;gap:10px}
-
 #imgViewer{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:10001;align-items:center;justify-content:center;padding:20px}
 #imgViewer img{max-width:100%;max-height:100%;border-radius:12px;object-fit:contain}
 #imgViewer .close-viewer{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.15);border:none;color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .icon-inline-sm{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.6;flex-shrink:0}
-
 .btn-download-hero{display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;border-radius:18px;border:none;background:linear-gradient(135deg,#0a84ff 0%,#0062d2 50%,#0a84ff 100%);background-size:200% 100%;color:#fff;font-family:'Inter',sans-serif;font-weight:800;cursor:pointer;box-shadow:0 10px 30px rgba(10,132,255,0.35), inset 0 1px 0 rgba(255,255,255,0.25);position:relative;overflow:hidden;animation:heroShimmer 3s linear infinite;transition:transform 0.2s;margin-bottom:12px;text-align:left}
 .btn-download-hero:active{transform:scale(0.97)}
 @keyframes heroShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -222,6 +187,57 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .btn-download-hero .hero-sub{font-size:11px;font-weight:600;opacity:0.88;display:block;margin-top:3px;letter-spacing:0.2px;color:#fff}
 .btn-download-hero .hero-arrow{font-size:20px;font-weight:300;opacity:0.95;position:relative;z-index:1;animation:arrowSlide 1.6s ease-in-out infinite}
 @keyframes arrowSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+
+/* === NEW: PROFILE AVATAR === */
+.profile-avatar-wrap{position:relative;width:90px;height:90px;margin:0 auto 14px auto}
+.profile-avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);background:var(--input-bg);display:block;box-shadow:0 8px 24px rgba(10,132,255,0.3)}
+.profile-avatar-edit{position:absolute;bottom:0;right:0;width:28px;height:28px;border-radius:50%;background:var(--accent);border:2px solid var(--modal-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
+.profile-avatar-edit svg{width:12px;height:12px;stroke:#fff;fill:none;stroke-width:2.5}
+.profile-name{font-size:16px;font-weight:900;color:var(--text-color);margin:0}
+.profile-email{font-size:11px;color:var(--subtext-color);margin:4px 0 12px 0;word-break:break-all}
+.profile-badge{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:0.4px;text-transform:uppercase;margin-bottom:15px}
+.profile-badge svg{width:11px;height:11px}
+.profile-badge.user{background:rgba(50,215,75,0.15);color:var(--success);border:1px solid rgba(50,215,75,0.3)}
+.profile-badge.admin{background:rgba(255,69,58,0.15);color:var(--danger);border:1px solid rgba(255,69,58,0.3)}
+.profile-badge.pending{background:rgba(255,159,10,0.15);color:var(--warning);border:1px solid rgba(255,159,10,0.3)}
+
+/* === ACCOUNT ACTION BUTTONS === */
+.account-action-btn{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-color);font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:8px;text-align:left}
+.account-action-btn:active{transform:scale(0.98)}
+.account-action-btn.primary{background:linear-gradient(135deg,var(--accent),#0062d2);border-color:transparent;color:#fff}
+.account-action-btn.danger{background:rgba(255,69,58,0.1);border-color:rgba(255,69,58,0.3);color:var(--danger)}
+.account-action-btn.gold{background:linear-gradient(135deg,#ff9f0a,#ff6b00);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(255,159,10,0.35)}
+.account-action-btn.disabled{opacity:0.5;cursor:not-allowed;background:var(--input-bg)}
+.account-action-btn svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2.2}
+
+/* === SETTINGS === */
+.setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border-color)}
+.setting-item:last-child{border-bottom:none}
+.setting-label{font-size:13px;font-weight:700;color:var(--text-color)}
+.setting-sub{font-size:10px;color:var(--subtext-color);margin-top:3px;font-weight:500;line-height:1.4}
+.setting-toggle{position:relative;width:46px;height:26px;border-radius:15px;background:var(--border-color);cursor:pointer;transition:background 0.3s;flex-shrink:0;border:none}
+.setting-toggle.on{background:var(--accent)}
+.setting-toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.3)}
+.setting-toggle.on::after{transform:translateX(20px)}
+.setting-select{background:var(--input-bg);border:1px solid var(--border-color);color:var(--text-color);padding:8px 12px;border-radius:10px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;outline:none}
+
+/* === PARTNER REQUEST CARD (admin view) === */
+.partner-req{background:var(--input-bg);border:1px solid rgba(255,159,10,0.3);border-radius:14px;padding:14px;margin-bottom:10px}
+.partner-req-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.partner-req-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--warning),#ff6b00);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;overflow:hidden}
+.partner-req-avatar img{width:100%;height:100%;object-fit:cover}
+.partner-req-name{font-size:13px;font-weight:800;color:var(--text-color)}
+.partner-req-email{font-size:10px;color:var(--subtext-color);word-break:break-all}
+.partner-req-reason{font-size:12px;color:var(--text-color);background:var(--modal-bg);padding:8px 10px;border-radius:8px;margin-bottom:10px;line-height:1.4}
+.partner-req-actions{display:flex;gap:6px;justify-content:flex-end}
+.partner-req-actions button{padding:6px 14px;border-radius:8px;border:none;font-size:11px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif}
+.btn-approve{background:var(--success);color:#fff}
+.btn-reject{background:var(--danger);color:#fff}
+
+/* === EDIT PROFILE === */
+.avatar-preview{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin:0 auto 12px auto;display:block;background:var(--input-bg)}
+.avatar-upload-label{display:block;text-align:center;padding:12px;border:2px dashed var(--border-color);border-radius:12px;cursor:pointer;color:var(--subtext-color);font-size:12px;font-weight:700;margin-bottom:12px;transition:border-color 0.3s}
+.avatar-upload-label:hover{border-color:var(--accent);color:var(--accent)}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -286,26 +302,154 @@ Add New App
 <button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Admin</button>
 </div>
 
+<!-- === ACCOUNT MODAL (REBUILT with Profile) === -->
 <div id="accountModal" class="modal">
 <div class="modal-box" style="text-align:center;">
 <button class="modal-close-x" onclick="closeModal('accountModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 <div id="loggedOutView">
-<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">User Account</h3>
-<p style="color:var(--subtext-color);font-size:12px;margin-bottom:15px;">Sign in to review apps, like, and post comments.</p>
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Welcome to iStore</h3>
+<p style="color:var(--subtext-color);font-size:12px;margin-bottom:15px;">Sign in to like apps, post comments, and become a partner.</p>
 <button onclick="loginWithGoogle()" style="background:#fff;color:#000;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
 Sign in with Google
 </button>
 </div>
 <div id="loggedInView" style="display:none;">
-<h3 id="userEmailText" style="color:var(--success);font-size:12px;margin-bottom:8px;word-break:break-all;"></h3>
-<p id="adminBadge" style="color:var(--danger);font-size:12px;font-weight:bold;margin-bottom:15px;display:none;">Store Administrator</p>
-<button onclick="handleSignOut()" style="background:var(--danger);color:#fff;border:none;width:100%;padding:10px;border-radius:10px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;">Sign Out</button>
+<div class="profile-avatar-wrap">
+<img id="userAvatar" class="profile-avatar" src="" alt="Avatar">
+<div class="profile-avatar-edit" onclick="openEditProfile()" title="Edit Profile">
+<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
 </div>
-<button onclick="closeModal('accountModal')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:10px;border-radius:10px;margin-top:12px;cursor:pointer;font-family:'Inter',sans-serif;">Close</button>
+</div>
+<h3 id="userNameText" class="profile-name">User</h3>
+<p id="userEmailText" class="profile-email"></p>
+<span id="userRoleBadge" class="profile-badge user">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+User
+</span>
+<div style="display:flex;flex-direction:column;gap:0;margin-top:6px;">
+<button class="account-action-btn" onclick="openEditProfile()">
+<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+Edit Profile
+</button>
+<button class="account-action-btn" onclick="openSettings()">
+<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+Settings
+</button>
+<button class="account-action-btn gold" id="partnerBtn" onclick="openPartnerRequest()">
+<svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg>
+Become a Partner
+</button>
+<button class="account-action-btn danger" onclick="handleSignOut()">
+<svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+Sign Out
+</button>
+</div>
+</div>
 </div>
 </div>
 
+<!-- === EDIT PROFILE MODAL === -->
+<div id="editProfileModal" class="modal">
+<div class="modal-box">
+<button class="modal-close-x" onclick="closeModal('editProfileModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Edit Profile</h3>
+<img id="editAvatarPreview" class="avatar-preview" src="" alt="Preview">
+<label class="avatar-upload-label" for="avatarFileInput">
+📷 Tap to change photo
+</label>
+<input type="file" id="avatarFileInput" accept="image/*" style="display:none;" onchange="previewAvatar(event)">
+<div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Display Name:</div>
+<input type="text" id="editDisplayName" class="input-field" placeholder="Your name" maxlength="30">
+<button onclick="saveProfile()" style="background:var(--accent);color:#fff;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;">Save Changes</button>
+<button onclick="closeModal('editProfileModal')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:10px;border-radius:10px;margin-top:8px;cursor:pointer;font-family:'Inter',sans-serif;">Cancel</button>
+</div>
+</div>
+
+<!-- === SETTINGS MODAL === -->
+<div id="settingsModal" class="modal">
+<div class="modal-box">
+<button class="modal-close-x" onclick="closeModal('settingsModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Settings</h3>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">Dark Mode</div>
+<div class="setting-sub">Switch between light and dark theme</div>
+</div>
+<button id="settingDarkMode" class="setting-toggle" onclick="toggleSetting('darkMode')"></button>
+</div>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">Notifications</div>
+<div class="setting-sub">Receive app update alerts</div>
+</div>
+<button id="settingNotifications" class="setting-toggle" onclick="toggleSetting('notifications')"></button>
+</div>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">Auto-play Downloads</div>
+<div class="setting-sub">Start download instantly when tapped</div>
+</div>
+<button id="settingAutoDownload" class="setting-toggle" onclick="toggleSetting('autoDownload')"></button>
+</div>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">Show Comments</div>
+<div class="setting-sub">Display comments on app details</div>
+</div>
+<button id="settingShowComments" class="setting-toggle" onclick="toggleSetting('showComments')"></button>
+</div>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">Font Size</div>
+<div class="setting-sub">Adjust app text size</div>
+</div>
+<select id="settingFontSize" class="setting-select" onchange="changeFontSize(this.value)">
+<option value="small">Small</option>
+<option value="medium" selected>Medium</option>
+<option value="large">Large</option>
+</select>
+</div>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">Clear Cache</div>
+<div class="setting-sub">Reset app data and preferences</div>
+</div>
+<button onclick="clearAppCache()" style="background:var(--danger);color:#fff;border:none;padding:8px 14px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
+</div>
+
+<div class="setting-item">
+<div>
+<div class="setting-label">App Version</div>
+<div class="setting-sub">iStore IPA v2.0</div>
+</div>
+<span style="color:var(--subtext-color);font-size:11px;font-weight:700;">Latest</span>
+</div>
+
+<button onclick="closeModal('settingsModal')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:10px;border-radius:10px;margin-top:12px;cursor:pointer;font-family:'Inter',sans-serif;">Close</button>
+</div>
+</div>
+
+<!-- === PARTNER REQUEST MODAL === -->
+<div id="partnerRequestModal" class="modal">
+<div class="modal-box">
+<button class="modal-close-x" onclick="closeModal('partnerRequestModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">👑 Become a Partner</h3>
+<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin-bottom:15px;">By becoming a partner, you'll get admin access to:<br>• Add / Edit / Delete apps<br>• Manage reports and comments<br>• View platform statistics<br><br><strong style="color:var(--warning);">Note:</strong> Your request will be reviewed by the store owner.</p>
+<div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Why do you want to join?</div>
+<textarea id="partnerReason" class="input-field" placeholder="Tell us briefly why you want to become a partner..." style="height:90px;resize:none;"></textarea>
+<button onclick="submitPartnerRequest()" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(255,159,10,0.35);">Send Request to Admin</button>
+<button onclick="closeModal('partnerRequestModal')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:10px;border-radius:10px;margin-top:8px;cursor:pointer;font-family:'Inter',sans-serif;">Cancel</button>
+</div>
+</div>
+
+<!-- === ADD/EDIT APP MODAL (unchanged) === -->
 <div id="addAppModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('addAppModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -374,11 +518,16 @@ let isUserPreview = false;
 let currentTab = 'today';
 let allAppsCache = [];
 let allReportsCache = [];
+let allPartnerRequests = [];
 let isLightMode = false;
 let currentFilter = 'all';
 let userFavorites = [];
+let userProfile = { displayName: '', avatar: '' };
+let appSettings = { darkMode: false, notifications: true, autoDownload: true, showComments: true, fontSize: 'medium' };
 
 const FALLBACK_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYTg0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyZDIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSJ1cmwoI2cpIi8+PHBhdGggZD0iTTUwIDI1IEw2MCA0NSBMODIgNDggTDY2IDYzIEw3MCA4NSBMNTAgNzQgTDMwIDg1IEwzNCA2MyBMMTggNDggTDQwIDQ1IFoiIGZpbGw9IndoaXRlIi8+PC9zdmc+';
+
+const DEFAULT_AVATAR = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYTg0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyZDIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjUwIiBmaWxsPSJ1cmwoI2cpIi8+PGNpcmNsZSBjeD0iNTAiIGN5PSIzOCIgcj0iMTgiIGZpbGw9IndoaXRlIiBvcGFjaXR5PSIwLjkiLz48cGF0aCBkPSJNMjAgODAgUTIwIDU4IDUwIDU4IFE4MCA1OCA4MCA4MCBaIiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC45Ii8+PC9zdmc+';
 
 const ICONS = {
   check:'<svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
@@ -475,6 +624,13 @@ db.collection("reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
   if(currentTab === 'admin_panel') renderUI();
 }, err=>{ console.warn('Reports err:',err); });
 
+// === NEW: LISTEN TO PARTNER REQUESTS ===
+db.collection("partner_requests").orderBy("createdAt","desc").onSnapshot(snapshot=>{
+  allPartnerRequests = [];
+  snapshot.forEach(doc=>allPartnerRequests.push({id:doc.id, ...doc.data()}));
+  if(currentTab === 'admin_panel') renderUI();
+}, err=>{ console.warn('Partner requests err:',err); });
+
 function onSearchInput(){
   const val = document.getElementById('searchInput').value;
   document.getElementById('searchClear').classList.toggle('show', val.length>0);
@@ -546,6 +702,8 @@ function renderUI(){
     let totalReports = allReportsCache.length;
     let totalDownloads = allAppsCache.reduce((s,a)=>s+(a.downloads||0),0);
     let totalLikes = allAppsCache.reduce((s,a)=>s+((a.likedBy&&a.likedBy.length)||0),0);
+    let pendingPartners = allPartnerRequests.filter(r=>r.status === 'pending').length;
+
     let reportsHTML = "";
     if(totalReports===0) reportsHTML = '<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">All clear! No pending reports.</p></div>';
     else allReportsCache.forEach(rep=>{
@@ -553,7 +711,19 @@ function renderUI(){
       let appName = targetApp ? targetApp.name : "Unknown/Deleted App";
       reportsHTML += '<div class="report-admin-item"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="color:var(--danger);font-weight:900;font-size:12px;">'+appName+'</span><span style="color:var(--subtext-color);font-size:10px;">By: '+rep.user+'</span></div><div style="color:var(--text-color);font-size:12px;margin-bottom:8px;background:var(--modal-bg);padding:6px 8px;border-radius:6px;">"'+rep.reason+'"</div><div style="display:flex;justify-content:flex-end;"><button onclick="deleteReport(\''+rep.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:4px 10px;border-radius:6px;font-weight:bold;font-size:10px;cursor:pointer;font-family:Inter,sans-serif;">Resolve</button></div></div>';
     });
-    container.innerHTML = '<div class="today-header"><div class="today-title">Admin Dashboard</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore Control Center</div></div><div style="margin-bottom:15px;"><button onclick="toggleUserPreview()" style="background:var(--accent);color:#fff;border:none;padding:9px 15px;border-radius:12px;font-weight:bold;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Inter,sans-serif;">'+ICONS.eye+' Switch to User Preview</button></div><div class="admin-dashboard-wrapper"><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;">Platform Stats</h4><div class="admin-stats-grid"><div class="stat-box"><h5>Total Apps</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>Reports</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>Downloads</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>Likes</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>User Reports</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
+
+    // === NEW: PARTNER REQUESTS HTML ===
+    let partnerHTML = "";
+    if(pendingPartners === 0) partnerHTML = '<div style="text-align:center;padding:20px 0;"><p style="color:var(--subtext-color);font-weight:700;font-size:13px;margin:0;">No pending partner requests.</p></div>';
+    else {
+      allPartnerRequests.filter(r=>r.status === 'pending').forEach(req=>{
+        let initial = (req.displayName || req.email || '?').charAt(0).toUpperCase();
+        let avatarContent = req.avatar ? '<img src="'+req.avatar+'">' : initial;
+        partnerHTML += '<div class="partner-req"><div class="partner-req-head"><div class="partner-req-avatar">'+avatarContent+'</div><div style="flex:1;min-width:0;"><div class="partner-req-name">'+(req.displayName||'Unknown User')+'</div><div class="partner-req-email">'+req.email+'</div></div></div><div class="partner-req-reason">'+req.reason+'</div><div class="partner-req-actions"><button class="btn-reject" onclick="rejectPartner(\''+req.id+'\')">Reject</button><button class="btn-approve" onclick="approvePartner(\''+req.id+'\',\''+req.email+'\')">Approve</button></div></div>';
+      });
+    }
+
+    container.innerHTML = '<div class="today-header"><div class="today-title">Admin Dashboard</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore Control Center</div></div><div style="margin-bottom:15px;"><button onclick="toggleUserPreview()" style="background:var(--accent);color:#fff;border:none;padding:9px 15px;border-radius:12px;font-weight:bold;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Inter,sans-serif;">'+ICONS.eye+' Switch to User Preview</button></div><div class="admin-dashboard-wrapper"><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;">Platform Stats</h4><div class="admin-stats-grid"><div class="stat-box"><h5>Total Apps</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>Reports</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>Downloads</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>Likes</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>👑 Partner Requests</span><span style="background:rgba(255,159,10,0.15);color:var(--warning);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+pendingPartners+' pending</span></h4><div style="max-height:400px;overflow-y:auto;">'+partnerHTML+'</div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>User Reports</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
     return;
   }
 
@@ -770,7 +940,7 @@ function postComment(appId){
   if(!currentUser){ showToast('Sign in first', 'warning'); return; }
   const text = document.getElementById('newCommentText').value.trim();
   if(!text) return;
-  db.collection("apps").doc(appId).collection("comments").add({userName: currentUser.email.split('@')[0], text: text, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+  db.collection("apps").doc(appId).collection("comments").add({userName: (userProfile.displayName || currentUser.email.split('@')[0]), text: text, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
     db.collection("apps").doc(appId).update({commentsCount: firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
     showToast('Comment posted', 'success', 1500);
     document.getElementById('newCommentText').value = '';
@@ -803,35 +973,333 @@ function deleteReport(reportId){
   }
 }
 
+// ============ PROFILE FUNCTIONS (NEW) ============
+function loadUserProfile(){
+  if(!currentUser) return;
+  db.collection("users").doc(currentUser.uid).get().then(doc=>{
+    if(doc.exists){
+      let data = doc.data();
+      userProfile.displayName = data.displayName || currentUser.displayName || currentUser.email.split('@')[0];
+      userProfile.avatar = data.avatar || currentUser.photoURL || DEFAULT_AVATAR;
+    } else {
+      userProfile.displayName = currentUser.displayName || currentUser.email.split('@')[0];
+      userProfile.avatar = currentUser.photoURL || DEFAULT_AVATAR;
+      db.collection("users").doc(currentUser.uid).set({
+        email: currentUser.email,
+        displayName: userProfile.displayName,
+        avatar: userProfile.avatar,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).catch(()=>{});
+    }
+    updateAvatarUI();
+  }).catch(err=>{
+    console.warn('Profile load err:', err);
+    userProfile.displayName = currentUser.displayName || currentUser.email.split('@')[0];
+    userProfile.avatar = currentUser.photoURL || DEFAULT_AVATAR;
+    updateAvatarUI();
+  });
+}
+
+function updateAvatarUI(){
+  const avatarEl = document.getElementById('userAvatar');
+  const nameEl = document.getElementById('userNameText');
+  const emailEl = document.getElementById('userEmailText');
+  const badgeEl = document.getElementById('userRoleBadge');
+  const partnerBtn = document.getElementById('partnerBtn');
+  if(avatarEl) avatarEl.src = userProfile.avatar || DEFAULT_AVATAR;
+  if(nameEl) nameEl.innerText = userProfile.displayName || 'User';
+  if(emailEl) emailEl.innerText = currentUser ? currentUser.email : '';
+
+  // Role badge
+  if(badgeEl){
+    if(isAdmin){
+      badgeEl.className = 'profile-badge admin';
+      badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> Administrator';
+    } else {
+      // Check if user has pending request
+      let pending = allPartnerRequests.find(r => r.uid === (currentUser ? currentUser.uid : '') && r.status === 'pending');
+      if(pending){
+        badgeEl.className = 'profile-badge pending';
+        badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pending Partner';
+      } else {
+        badgeEl.className = 'profile-badge user';
+        badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> User';
+      }
+    }
+  }
+
+  // Partner button state
+  if(partnerBtn){
+    if(isAdmin){
+      partnerBtn.classList.add('disabled');
+      partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> You are a Partner ✓';
+      partnerBtn.onclick = null;
+    } else {
+      let pending = allPartnerRequests.find(r => r.uid === (currentUser ? currentUser.uid : '') && r.status === 'pending');
+      if(pending){
+        partnerBtn.classList.add('disabled');
+        partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Request Pending...';
+        partnerBtn.onclick = null;
+      } else {
+        partnerBtn.classList.remove('disabled');
+        partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> Become a Partner';
+        partnerBtn.onclick = openPartnerRequest;
+      }
+    }
+  }
+}
+
+function openEditProfile(){
+  if(!currentUser) return;
+  document.getElementById('editDisplayName').value = userProfile.displayName || '';
+  document.getElementById('editAvatarPreview').src = userProfile.avatar || DEFAULT_AVATAR;
+  document.getElementById('avatarFileInput').value = '';
+  openModal('editProfileModal');
+}
+
+let pendingAvatarData = '';
+function previewAvatar(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  if(file.size > 800 * 1024){
+    showToast('Image too large (max 800KB)', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    pendingAvatarData = e.target.result;
+    document.getElementById('editAvatarPreview').src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProfile(){
+  if(!currentUser) return;
+  const newName = document.getElementById('editDisplayName').value.trim();
+  if(!newName){ showToast('Please enter a name', 'warning'); return; }
+  if(newName.length > 30){ showToast('Name too long (max 30)', 'warning'); return; }
+
+  let updateData = { displayName: newName };
+  if(pendingAvatarData){
+    updateData.avatar = pendingAvatarData;
+  }
+
+  db.collection("users").doc(currentUser.uid).update(updateData).then(()=>{
+    userProfile.displayName = newName;
+    if(pendingAvatarData) userProfile.avatar = pendingAvatarData;
+    pendingAvatarData = '';
+    updateAvatarUI();
+    showToast('Profile updated!', 'success');
+    closeModal('editProfileModal');
+  }).catch(err=>{
+    db.collection("users").doc(currentUser.uid).set(updateData, {merge: true}).then(()=>{
+      userProfile.displayName = newName;
+      if(pendingAvatarData) userProfile.avatar = pendingAvatarData;
+      pendingAvatarData = '';
+      updateAvatarUI();
+      showToast('Profile updated!', 'success');
+      closeModal('editProfileModal');
+    }).catch(e2=>showToast('Error: '+e2.message, 'error'));
+  });
+}
+
+// ============ SETTINGS FUNCTIONS (NEW) ============
+function loadSettings(){
+  try{
+    const s = JSON.parse(localStorage.getItem('istore_app_settings')||'{}');
+    if(s.darkMode !== undefined) appSettings.darkMode = s.darkMode;
+    if(s.notifications !== undefined) appSettings.notifications = s.notifications;
+    if(s.autoDownload !== undefined) appSettings.autoDownload = s.autoDownload;
+    if(s.showComments !== undefined) appSettings.showComments = s.showComments;
+    if(s.fontSize) appSettings.fontSize = s.fontSize;
+    if(appSettings.darkMode && !isLightMode){
+      isLightMode = true;
+      document.body.classList.add('light-mode');
+      const icon = document.getElementById('themeIcon');
+      if(icon) icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+    }
+    applyFontSize(appSettings.fontSize);
+  }catch(e){}
+}
+
+function saveSettings(){
+  try{ localStorage.setItem('istore_app_settings', JSON.stringify(appSettings)); }catch(e){}
+}
+
+function openSettings(){
+  document.getElementById('settingDarkMode').classList.toggle('on', isLightMode);
+  document.getElementById('settingNotifications').classList.toggle('on', appSettings.notifications);
+  document.getElementById('settingAutoDownload').classList.toggle('on', appSettings.autoDownload);
+  document.getElementById('settingShowComments').classList.toggle('on', appSettings.showComments);
+  document.getElementById('settingFontSize').value = appSettings.fontSize || 'medium';
+  openModal('settingsModal');
+}
+
+function toggleSetting(name){
+  if(name === 'darkMode'){
+    toggleDarkMode();
+    appSettings.darkMode = isLightMode;
+    document.getElementById('settingDarkMode').classList.toggle('on', isLightMode);
+  } else {
+    appSettings[name] = !appSettings[name];
+    document.getElementById('setting' + name.charAt(0).toUpperCase() + name.slice(1)).classList.toggle('on', appSettings[name]);
+    showToast(name + ': ' + (appSettings[name] ? 'ON' : 'OFF'), 'info', 1500);
+  }
+  saveSettings();
+}
+
+function changeFontSize(size){
+  appSettings.fontSize = size;
+  saveSettings();
+  applyFontSize(size);
+  showToast('Font size: ' + size, 'info', 1500);
+}
+
+function applyFontSize(size){
+  const body = document.body;
+  if(size === 'small') body.style.fontSize = '13px';
+  else if(size === 'large') body.style.fontSize = '17px';
+  else body.style.fontSize = '15px';
+}
+
+function clearAppCache(){
+  if(!confirm('Clear all cached data? You will be signed out.')){
+    return;
+  }
+  try{
+    localStorage.removeItem('istore_prefs');
+    localStorage.removeItem('istore_app_settings');
+    showToast('Cache cleared. Reloading...', 'success');
+    setTimeout(()=>{ auth.signOut().then(()=>{ window.location.reload(); }); }, 1200);
+  }catch(e){
+    showToast('Error clearing cache', 'error');
+  }
+}
+
+// ============ PARTNER REQUEST FUNCTIONS (NEW) ============
+function openPartnerRequest(){
+  if(!currentUser){ showToast('Please sign in first', 'warning'); return; }
+  if(isAdmin){ showToast('You are already a partner!', 'info'); return; }
+  let pending = allPartnerRequests.find(r => r.uid === currentUser.uid && r.status === 'pending');
+  if(pending){ showToast('You already have a pending request', 'info'); return; }
+  document.getElementById('partnerReason').value = '';
+  openModal('partnerRequestModal');
+}
+
+function submitPartnerRequest(){
+  if(!currentUser) return;
+  const reason = document.getElementById('partnerReason').value.trim();
+  if(!reason || reason.length < 10){
+    showToast('Please write at least 10 characters', 'warning');
+    return;
+  }
+  db.collection("partner_requests").add({
+    uid: currentUser.uid,
+    email: currentUser.email,
+    displayName: userProfile.displayName || currentUser.email.split('@')[0],
+    avatar: userProfile.avatar || '',
+    reason: reason,
+    status: 'pending',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    showToast('Request sent! Admin will review soon.', 'success', 3000);
+    closeModal('partnerRequestModal');
+    closeModal('accountModal');
+    updateAvatarUI();
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
+}
+
+function approvePartner(requestId, email){
+  if(!isAdmin) return;
+  if(!confirm('Approve '+email+' as a Partner? They will become an admin.')) return;
+
+  // 1) Add to admins collection
+  db.collection("admins").doc(email.toLowerCase()).set({
+    email: email.toLowerCase(),
+    approvedBy: currentUser ? currentUser.email : 'unknown',
+    approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    // 2) Update request status
+    return db.collection("partner_requests").doc(requestId).update({ status: 'approved' });
+  }).then(()=>{
+    showToast('Partner approved! They need to refresh.', 'success', 3000);
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
+}
+
+function rejectPartner(requestId){
+  if(!isAdmin) return;
+  if(!confirm('Reject this request?')) return;
+  db.collection("partner_requests").doc(requestId).update({
+    status: 'rejected',
+    rejectedBy: currentUser ? currentUser.email : 'unknown',
+    rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    showToast('Request rejected', 'info');
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
+}
+
+// ============ AUTH STATE (UPDATED) ============
 auth.onAuthStateChanged(user=>{
   currentUser = user;
   const floatBtn = document.getElementById('adminAddFloatBtn');
   const adminBadge = document.getElementById('adminBadge');
   const adminNavTab = document.getElementById('adminNavTab');
+
   if(user){
     document.getElementById('loggedOutView').style.display = 'none';
     document.getElementById('loggedInView').style.display = 'block';
     document.getElementById('userEmailText').innerText = user.email;
-    if(user.email && ADMIN_EMAILS.map(e=>e.toLowerCase()).includes(user.email.toLowerCase())){
+
+    // Load profile
+    loadUserProfile();
+
+    // Check if user is admin (either in built-in list OR in admins collection)
+    const emailLower = user.email.toLowerCase();
+    const inBuiltInAdmins = ADMIN_EMAILS.map(e=>e.toLowerCase()).includes(emailLower);
+
+    if(inBuiltInAdmins){
       isAdmin = !isUserPreview;
-      floatBtn.style.display = isAdmin ? 'flex' : 'none';
-      adminBadge.style.display = isAdmin ? 'block' : 'none';
-      adminNavTab.style.display = isAdmin ? 'flex' : 'none';
+      applyAdminUI();
     } else {
-      isAdmin = false; floatBtn.style.display = 'none'; adminBadge.style.display = 'none'; adminNavTab.style.display = 'none';
+      // Check admins collection
+      db.collection("admins").doc(emailLower).get().then(doc=>{
+        if(doc.exists){
+          isAdmin = !isUserPreview;
+        } else {
+          isAdmin = false;
+        }
+        applyAdminUI();
+        updateAvatarUI();
+      }).catch(()=>{
+        isAdmin = false;
+        applyAdminUI();
+      });
     }
   } else {
-    isAdmin = false; floatBtn.style.display = 'none'; adminBadge.style.display = 'none'; adminNavTab.style.display = 'none';
+    isAdmin = false;
+    if(floatBtn) floatBtn.style.display = 'none';
+    if(adminBadge) adminBadge.style.display = 'none';
+    if(adminNavTab) adminNavTab.style.display = 'none';
     document.getElementById('loggedOutView').style.display = 'block';
     document.getElementById('loggedInView').style.display = 'none';
+    userProfile = { displayName: '', avatar: '' };
   }
   updateFavBtnVisibility();
   renderUI();
 });
 
+function applyAdminUI(){
+  const floatBtn = document.getElementById('adminAddFloatBtn');
+  const adminNavTab = document.getElementById('adminNavTab');
+  if(floatBtn) floatBtn.style.display = isAdmin ? 'flex' : 'none';
+  if(adminNavTab) adminNavTab.style.display = isAdmin ? 'flex' : 'none';
+  updateAvatarUI();
+}
+
 function handleSignOut(){
   auth.signOut().then(()=>{
     currentUser = null; isAdmin = false;
+    userProfile = { displayName: '', avatar: '' };
     closeModal('accountModal');
     renderUI();
     showToast('Signed out', 'info');
@@ -947,6 +1415,7 @@ function deleteApp(id){
 }
 
 loadPrefs();
+loadSettings();
 updateFavBtnVisibility();
 setTimeout(()=>{
   const activeBtn = document.querySelector('.nav-item[data-tab="'+currentTab+'"]');
