@@ -39,6 +39,10 @@
             direction: ltr;
             transition: background 0.3s, color 0.3s;
         }
+        
+        /* تأثيرات دخول وانتقال متناسقة ولطيفة */
+        * { transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease, background-color 0.25s ease; }
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -67,11 +71,12 @@
             color: var(--text-color);
             cursor: pointer;
         }
+        .icon-btn:active { transform: scale(0.9); }
 
-        .container { padding: 16px 20px; max-width: 600px; margin: auto; animation: fadeInUp 0.3s ease; }
+        .container { padding: 16px 20px; max-width: 600px; margin: auto; animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
@@ -91,7 +96,7 @@
             box-sizing: border-box;
             outline: none;
         }
-        .search-input:focus { border-color: #0a84ff; }
+        .search-input:focus { border-color: #0a84ff; box-shadow: 0 0 12px rgba(10,132,255,0.25); }
         .search-icon {
             position: absolute;
             left: 15px;
@@ -115,6 +120,7 @@
             margin-bottom: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.15);
             position: relative;
+            animation: fadeInUp 0.4s ease;
         }
         .featured-img-wrapper {
             position: relative;
@@ -124,7 +130,6 @@
         }
         .featured-img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* شريط عائم للنوع IPA أو APK يظهر على كل التطبيقات */
         .platform-badge-float {
             position: absolute;
             top: 12px;
@@ -154,7 +159,10 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            animation: fadeInUp 0.3s ease;
         }
+        .app-card-pro:hover { border-color: rgba(10,132,255,0.3); }
+        
         .app-meta { display: flex; align-items: center; gap: 12px; overflow: hidden; flex: 1; cursor: pointer; }
         
         .app-icon-container {
@@ -167,7 +175,6 @@
         
         .app-details { overflow: visible; flex: 1; }
         
-        /* تعديل الاسم لكي يظهر كاملاً غير ممسوح وبدون تداخل */
         .app-details h4 { 
             margin: 0 0 3px 0; 
             font-size: 14px; 
@@ -181,8 +188,16 @@
             gap: 6px;
             line-height: 1.3;
         }
-        .app-details p { margin: 0; font-size: 12px; color: var(--subtext-color); }
+        .app-details p { margin: 0; font-size: 11px; color: var(--subtext-color); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
         
+        .app-publisher-tag {
+            font-size: 11px;
+            color: #0a84ff;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 2px;
+        }
+
         .app-size-tag-red {
             background: rgba(255,69,58,0.15);
             color: #ff453a;
@@ -194,9 +209,22 @@
             margin-top: 3px;
         }
         
+        .download-badge-green {
+            background: rgba(50, 215, 75, 0.15);
+            color: #32d74b;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .app-category-sub { font-size: 11px; color: var(--subtext-color); font-weight: 600; margin-top: 2px; }
         
         .app-actions { display: flex; gap: 6px; align-items: center; position: relative; flex-wrap: wrap; justify-content: flex-end; }
+        
         .btn-install {
             background: linear-gradient(135deg, #0a84ff, #0062d2);
             color: #fff;
@@ -209,8 +237,27 @@
             box-shadow: 0 4px 12px rgba(10,132,255,0.3);
             white-space: nowrap;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
+        .btn-install:active { transform: scale(0.94); }
         
+        .btn-star-like {
+            background: rgba(255, 159, 10, 0.1);
+            border: 1px solid rgba(255, 159, 10, 0.3);
+            color: #ff9f0a;
+            padding: 4px 8px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        .btn-star-like:active { transform: scale(0.9); }
+
         .btn-extra-dropdown {
             background: var(--input-bg);
             border: 1px solid var(--border-color);
@@ -256,7 +303,6 @@
         .btn-edit { background: #0a84ff; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
         .btn-del { background: #ff453a; color: #fff; padding: 5px 8px; border-radius: 8px; font-size: 10px; font-weight: 700; border: none; cursor: pointer; }
 
-        /* زر info الجديد بلون أزرق وأعلى قائمة التحميل */
         .btn-info-blue {
             background: rgba(10, 132, 255, 0.15);
             border: 1px solid rgba(10, 132, 255, 0.3);
@@ -270,8 +316,8 @@
             cursor: pointer;
             flex-shrink: 0;
         }
+        .btn-info-blue:active { transform: scale(0.9); }
 
-        /* زر البلاغ النصي الصغير باللون الأحمر وبدون إيموجي */
         .btn-report-text {
             background: transparent;
             border: none;
@@ -281,6 +327,38 @@
             cursor: pointer;
             padding: 4px 6px;
             font-family: 'Inter', sans-serif;
+        }
+
+        /* شريط التنزيل المباشر الدقيق الداخلي */
+        .dl-progress-box {
+            width: 100%;
+            margin-top: 8px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 6px 10px;
+            box-sizing: border-box;
+        }
+        .dl-progress-text {
+            font-size: 10px;
+            font-weight: 800;
+            color: #ff453a;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .dl-progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: rgba(255,69,58,0.15);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .dl-progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #ff453a;
+            transition: width 0.1s linear;
         }
 
         .floating-nav {
@@ -318,9 +396,14 @@
         .nav-item.active { color: #0a84ff; transform: scale(1.08); }
         .nav-item svg { width: 23px; height: 23px; stroke: currentColor; fill: none; stroke-width: 2.2; }
 
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; }
-        .modal-box { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 22px; padding: 22px; width: 88%; max-width: 360px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; position: relative; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-box { background: var(--modal-bg); border: 1px solid var(--border-color); border-radius: 22px; padding: 22px; width: 88%; max-width: 360px; max-height: 85vh; overflow-y: auto; box-sizing: border-box; position: relative; animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
         
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
         .modal-close-x {
             position: absolute;
             top: 16px;
@@ -350,6 +433,7 @@
             background: rgba(0,0,0,0.7);
             align-items: flex-end;
             justify-content: center;
+            backdrop-filter: blur(4px);
         }
         .bottom-sheet-content {
             background: var(--modal-bg);
@@ -538,7 +622,7 @@
             <button class="modal-close-x" onclick="document.getElementById('accountModal').style.display='none'">✕</button>
             <div id="loggedOutView">
                 <h3 style="margin-top:0; color:var(--text-color); font-size:16px;">User Account</h3>
-                <p style="color:var(--subtext-color); font-size:12px; margin-bottom:15px;">Sign in to review apps and post comments.</p>
+                <p style="color:var(--subtext-color); font-size:12px; margin-bottom:15px;">Sign in to review apps, like, and post comments.</p>
                 <button onclick="loginWithGoogle()" style="background:#fff; color:#000; border:none; width:100%; padding:11px; border-radius:12px; font-weight:bold; cursor:pointer; font-family:'Inter',sans-serif; display:flex; align-items:center; justify-content:center; gap:8px;">
                     <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
                     Sign in with Google
@@ -547,7 +631,7 @@
             <div id="loggedInView" style="display:none;">
                 <h3 id="userEmailText" style="color:#32d74b; font-size:12px; margin-bottom:8px; word-break: break-all;"></h3>
                 <p id="adminBadge" style="color:#ff453a; font-size:12px; font-weight:bold; margin-bottom:15px; display:none;">👑 Store Administrator</p>
-                <button onclick="auth.signOut()" style="background:#ff453a; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Sign Out</button>
+                <button onclick="handleSignOut()" style="background:#ff453a; color:#fff; border:none; width:100%; padding:10px; border-radius:10px; font-weight:bold; cursor:pointer;">Sign Out</button>
             </div>
             <button onclick="document.getElementById('accountModal').style.display='none'" style="background:var(--input-bg); color:var(--text-color); border:none; width:100%; padding:10px; border-radius:10px; margin-top:12px; cursor:pointer;">Close</button>
         </div>
@@ -559,6 +643,11 @@
             <button class="modal-close-x" onclick="document.getElementById('addAppModal').style.display='none'">✕</button>
             <h3 id="modalTitleText" style="margin-top:0; color:var(--text-color); font-size:16px;">Add App to Cloud</h3>
             <input type="hidden" id="editingAppId">
+            
+            <!-- زر الاسم المستعار للمسؤول في أول القائمة -->
+            <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">اسم المستعار للمسؤول:</div>
+            <input type="text" id="appPublisher" class="input-field" placeholder="من طرف @example (مثال: @Yassine)">
+
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Select Category:</div>
             <select id="appCategory" class="input-field">
                 <option value="today">Today (Featured Main)</option>
@@ -581,7 +670,7 @@
 
             <input type="text" id="appName" class="input-field" placeholder="App Name (e.g. Org26 Pro)">
             <input type="text" id="appSize" class="input-field" placeholder="App Size (e.g. 2.1 GB)">
-            <input type="text" id="appInfo" class="input-field" placeholder="More Info / Details (e.g. مهكر وفيه ديموند)">
+            <input type="text" id="appInfo" class="input-field" placeholder="معلومات أدق عن التطبيق">
             <input type="text" id="appUrl" class="input-field" placeholder="Direct Download Link (.ipa / .apk)">
 
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Additional Files (e.g. sit files / config):</div>
@@ -625,6 +714,10 @@
           appId: "1:262724812706:web:b9fae4bb87f0417f557cfb"
         };
         if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        
+        // تفعيل حفظ الجلسة محلياً لحل مشكلة خروج الحساب
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        
         const auth = firebase.auth();
         const db = firebase.firestore();
 
@@ -663,7 +756,12 @@
         db.collection("apps").orderBy("createdAt", "desc").onSnapshot(snapshot => {
             allAppsCache = [];
             snapshot.forEach(doc => {
-                allAppsCache.push({ id: doc.id, ...doc.data() });
+                let data = doc.data();
+                // تصحيح فئة لعبة GTA إلى Games تلقائياً
+                if(data.name && data.name.toLowerCase().includes("gta") && data.category !== "games") {
+                    data.category = "games";
+                }
+                allAppsCache.push({ id: doc.id, ...data });
             });
             renderUI();
         });
@@ -681,10 +779,10 @@
         }
 
         function getTrendingScore(app) {
-            const rating = app.ratingCount ? (app.ratingSum / app.ratingCount) : 0;
+            const likes = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
             const downloads = app.downloads || 0;
             const comments = app.commentsCount || 0;
-            return (rating * 15) + (downloads * 5) + (comments * 10);
+            return (likes * 15) + (downloads * 5) + (comments * 10);
         }
 
         function renderUI() {
@@ -796,9 +894,12 @@
                     tContainer.innerHTML = `<p style="color:var(--subtext-color); font-size:13px; text-align:center;">No featured apps in Today yet.</p>`;
                 } else {
                     todayList.forEach((app, index) => {
-                        let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
                         let isTopOne = (index === 0) ? '<span style="background:#ff453a; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:6px; margin-left:6px;">#1 Trending</span>' : '';
                         let platformType = app.platform || 'IPA';
+                        let pubText = app.publisher ? `<span class="app-publisher-tag">من طرف ${app.publisher}</span>` : '';
+                        let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
+                        let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
+
                         tContainer.innerHTML += `
                             <div class="featured-card">
                                 <div class="platform-badge-float">${platformType}</div>
@@ -806,25 +907,50 @@
                                     <img src="${app.icon || 'https://via.placeholder.com/300'}" class="featured-img">
                                 </div>
                                 <div class="featured-body">
-                                    <div style="display:flex; align-items:center; margin-bottom:6px;">
-                                        <span class="badge-tag" style="margin-bottom:0;">Featured Today • ⭐ ${avgRating}</span>
+                                    <div style="display:flex; align-items:center; margin-bottom:6px; justify-content:space-between;">
+                                        <span class="badge-tag" style="margin-bottom:0;">Featured Today</span>
                                         ${isTopOne}
                                     </div>
                                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <h3 style="margin:5px 0 2px 0; font-size:17px; cursor:pointer;" onclick="openAppDetails('${app.id}')">${app.name}</h3>
-                                        <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="App Info">
+                                        <div>
+                                            <h3 style="margin:5px 0 2px 0; font-size:17px; cursor:pointer;" onclick="openAppDetails('${app.id}')">${app.name}</h3>
+                                            ${pubText}
+                                        </div>
+                                        
+                                        <!-- زر Info الأزرق الجديد بالموقع المحدد في الصورة -->
+                                        <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="معلومات أدق عن التطبيق">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                                         </button>
                                     </div>
                                     <div class="app-category-sub" style="margin-bottom:4px;">${getCategoryNameEn(app.category)}</div>
-                                    <div class="app-size-tag-red">Size: ${app.size || 'N/A'}</div>
-                                    <p style="color:var(--subtext-color); font-size:12px; margin:8px 0 14px 0;">${app.info || app.desc || ''}</p>
+                                    <div style="display:flex; gap:6px; align-items:center; margin-top:4px;">
+                                        <div class="app-size-tag-red">Size: ${app.size || 'N/A'}</div>
+                                        <div class="download-badge-green">
+                                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                            ${app.downloads || 0}
+                                        </div>
+                                    </div>
+                                    <p style="color:var(--subtext-color); font-size:12px; margin:8px 0 14px 0;">${app.info || ''}</p>
+                                    
                                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                                        <a href="${app.url}" class="btn-install" target="_blank" onclick="incrementDownload('${app.id}')">Install Now</a>
+                                        <div style="display:flex; gap:8px; align-items:center;">
+                                            <button class="btn-install" onclick="startRealDownload('${app.id}', '${app.url}', '${app.name}')">Install Now</button>
+                                            
+                                            <!-- زر الأعجاب بالنجمة SVG المفرغة الحواف -->
+                                            <button class="btn-star-like" onclick="toggleStarLike('${app.id}', event)">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="${isLiked ? '#ff9f0a' : 'none'}" stroke="#ff9f0a" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                                <span>${likesCount}</span>
+                                            </button>
+                                        </div>
+
                                         <div style="display:flex; gap:6px; align-items:center;">
                                             <button class="btn-report-text" onclick="openReportModal('${app.id}')">بلاغ</button>
                                             ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">Edit</button><button class="btn-del" onclick="deleteApp('${app.id}')">Delete</button></div>` : ''}
                                         </div>
+                                    </div>
+                                    <div id="dl_progress_${app.id}" class="dl-progress-box" style="display:none;">
+                                        <div class="dl-progress-text" id="dl_text_${app.id}">Loading 0%</div>
+                                        <div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_${app.id}"></div></div>
                                     </div>
                                 </div>
                             </div>
@@ -893,10 +1019,12 @@
         }
 
         function createAppCardHTML(app, rankBadge = '') {
-            let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
+            // شعار أبل المتناسق والواضح جداً تماماً مثل Snake
+            let appleLogoSVG = `<svg width="14" height="14" viewBox="0 0 170 170" fill="#0a84ff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.1-1.9-14.24-6.08-3.05-2.61-6.91-7.2-11.58-13.78-6.1-8.57-11.05-18.15-14.85-28.74-3.8-10.59-5.7-20.73-5.7-30.43 0-11.58 3.02-21.2 9.07-28.85 6.04-7.65 13.68-11.54 22.9-11.66 4.9 0 10.15 1.3 15.76 3.9 5.6 2.61 9.3 3.91 11.1 3.91 1.52 0 5.37-1.38 11.55-4.14 6.18-2.76 11.45-4.04 15.82-3.85 10.36.76 18.57 5.04 24.63 12.83-9.35 5.72-13.93 13.43-13.73 23.15.22 7.6 3.14 13.88 8.77 18.83 5.62 4.95 12.44 7.55 20.45 7.82-1.85 5.66-4.14 11.31-6.88 16.97zM119.22 31.33c0-7.39 2.68-14.25 8.04-20.58 5.36-6.33 12.18-10.23 20.45-11.72.11.87.16 1.69.16 2.47 0 7.18-2.83 14.28-8.5 23.3-5.66 9.02-12.39 13.6-20.15 13.73-.01-.89-.01-1.78 0-3.2z"/></svg>`;
+            
             let platformIcon = (app.platform === 'APK') ? 
                 `<svg width="12" height="12" viewBox="0 0 24 24" fill="#32d74b"><path d="M17.6 9.48l1.84-3.18c.16-.27.07-.62-.2-.78-.27-.16-.62-.07-.78.2l-1.87 3.24c-1.32-.58-2.79-.9-4.34-.9s-3.02.32-4.34.9L6.06 5.72c-.16-.27-.51-.36-.78-.2-.27.16-.36.51-.2.78l1.84 3.18C4.6 11.23 3 13.9 3 17h18c0-3.1-1.6-5.77-4.4-7.52zM7 14.5c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm10 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/></svg>` :
-                `<svg width="12" height="12" viewBox="0 0 24 24" fill="#0a84ff"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.03c.56-.69.94-1.65.84-2.61-.92.04-2.03.62-2.69 1.39-.53.61-1 1.58-.88 2.52 1.03.08 2.07-.5 2.73-1.3z"/></svg>`;
+                appleLogoSVG;
 
             let extraFilesDropdown = '';
             if (app.extraFiles && app.extraFiles.length > 0) {
@@ -917,30 +1045,58 @@
                 `;
             }
 
+            let pubText = app.publisher ? `<span class="app-publisher-tag">من طرف ${app.publisher}</span>` : '';
+            let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
+            let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
+
             return `
-                <div class="app-card-pro" style="position:relative; overflow:hidden;">
-                    <!-- الشريط الأحمر المائل يظهر لأي تطبيق بناءً على المنصة -->
-                    <div class="platform-badge-float" style="top: 8px; right: -30px; font-size: 8px; padding: 2px 30px;">${app.platform || 'IPA'}</div>
-                    
-                    <div class="app-meta" onclick="openAppDetails('${app.id}')">
-                        <div class="app-icon-container">
-                            <img src="${app.icon || 'https://via.placeholder.com/64'}" class="app-icon-img">
+                <div class="app-card-pro" style="position:relative; flex-direction:column; align-items:stretch;">
+                    <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+                        <div class="platform-badge-float" style="top: 8px; right: -30px; font-size: 8px; padding: 2px 30px;">${app.platform || 'IPA'}</div>
+                        
+                        <div class="app-meta" onclick="openAppDetails('${app.id}')">
+                            <div class="app-icon-container">
+                                <img src="${app.icon || 'https://via.placeholder.com/64'}" class="app-icon-img">
+                            </div>
+                            <div class="app-details">
+                                <h4>${rankBadge}${platformIcon} ${app.name}</h4>
+                                ${pubText}
+                                <div class="app-category-sub">${getCategoryNameEn(app.category)}</div>
+                                <p>
+                                    <span class="app-size-tag-red">Size: ${app.size || 'N/A'}</span>
+                                    
+                                    <!-- رمز التحميل الأخضر المشترك بدلاً من كلمة download لترك مساحة -->
+                                    <span class="download-badge-green">
+                                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                        ${app.downloads || 0}
+                                    </span>
+                                </p>
+                            </div>
                         </div>
-                        <div class="app-details">
-                            <h4>${rankBadge}${platformIcon} ${app.name}</h4>
-                            <div class="app-category-sub">${getCategoryNameEn(app.category)}</div>
-                            <div class="app-size-tag-red">Size: ${app.size || 'N/A'}</div>
-                            <p>⭐ ${avgRating} • ${app.downloads || 0} downloads</p>
+
+                        <div class="app-actions">
+                            <!-- زر الاعجاب بالنجمة SVG حواف فقط -->
+                            <button class="btn-star-like" onclick="toggleStarLike('${app.id}', event)">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="${isLiked ? '#ff9f0a' : 'none'}" stroke="#ff9f0a" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                                <span>${likesCount}</span>
+                            </button>
+
+                            <!-- زر Info الأزرق الجديد بالموقع المحدد معلم بالأصفر في صورتك -->
+                            <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="معلومات أدق عن التطبيق">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            </button>
+
+                            <button class="btn-install" onclick="startRealDownload('${app.id}', '${app.url}', '${app.name}')">Get</button>
+                            ${extraFilesDropdown}
+                            <button class="btn-report-text" onclick="openReportModal('${app.id}')">بلاغ</button>
+                            ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">Edit</button><button class="btn-del" onclick="deleteApp('${app.id}')">Delete</button></div>` : ''}
                         </div>
                     </div>
-                    <div class="app-actions">
-                        <button class="btn-info-blue" onclick="openAppDetails('${app.id}')" title="App Info">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                        </button>
-                        <a href="${app.url}" class="btn-install" target="_blank" onclick="incrementDownload('${app.id}')">Get</a>
-                        ${extraFilesDropdown}
-                        <button class="btn-report-text" onclick="openReportModal('${app.id}')">بلاغ</button>
-                        ${isAdmin ? `<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal('${app.id}')">Edit</button><button class="btn-del" onclick="deleteApp('${app.id}')">Delete</button></div>` : ''}
+
+                    <!-- شريط التحميل الأحمر الحقيقي الداخلي بـ Loading 0% -->
+                    <div id="dl_progress_${app.id}" class="dl-progress-box" style="display:none;">
+                        <div class="dl-progress-text" id="dl_text_${app.id}">Loading 0%</div>
+                        <div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_${app.id}"></div></div>
                     </div>
                 </div>
             `;
@@ -961,18 +1117,123 @@
             document.querySelectorAll('.extra-files-menu').forEach(m => m.style.display = 'none');
         };
 
+        // نظام التحميل الحقيقي مع شريط تقدم أحمر ونسبة مئوية وبدون Lag
+        function startRealDownload(appId, fileUrl, appName) {
+            incrementDownload(appId);
+
+            const progressBox = document.getElementById(`dl_progress_${appId}`);
+            const progressText = document.getElementById(`dl_text_${appId}`);
+            const progressFill = document.getElementById(`dl_fill_${appId}`);
+
+            if (progressBox) progressBox.style.display = 'block';
+
+            if (!fileUrl || fileUrl === '#' || fileUrl.trim() === '') {
+                if (progressText) progressText.innerText = "رابط التنزيل غير متوفر";
+                setTimeout(() => { if (progressBox) progressBox.style.display = 'none'; }, 3000);
+                return;
+            }
+
+            // استقبال الملفات الكبيرة حتى 5GB ودعم تغيير الصيغة من المتصفح
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', fileUrl, true);
+            xhr.responseType = 'blob';
+
+            xhr.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    if (progressText) progressText.innerText = `Loading ${percent}%`;
+                    if (progressFill) progressFill.style.width = `${percent}%`;
+                } else {
+                    if (progressText) progressText.innerText = `Loading...`;
+                    if (progressFill) progressFill.style.width = `50%`;
+                }
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    if (progressText) progressText.innerText = `Loading 100% - Complete!`;
+                    if (progressFill) progressFill.style.width = `100%`;
+
+                    const blob = xhr.response;
+                    const blobUrl = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = blobUrl;
+                    link.download = appName + (fileUrl.endsWith('.apk') ? '.apk' : '.ipa');
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    window.URL.revokeObjectURL(blobUrl);
+
+                    setTimeout(() => { if (progressBox) progressBox.style.display = 'none'; }, 2500);
+                } else {
+                    window.open(fileUrl, '_blank');
+                    if (progressText) progressText.innerText = `Loading 100%`;
+                    setTimeout(() => { if (progressBox) progressBox.style.display = 'none'; }, 2000);
+                }
+            };
+
+            xhr.onerror = function() {
+                window.open(fileUrl, '_blank');
+                if (progressText) progressText.innerText = `Starting Download...`;
+                setTimeout(() => { if (progressBox) progressBox.style.display = 'none'; }, 2000);
+            };
+
+            xhr.send();
+        }
+
+        // تسجيل التحميل لمرة واحدة فقط لكل مستخدم لمنع تكرار العدد
         function incrementDownload(appId) {
+            const userId = currentUser ? currentUser.email : 'guest_' + Math.random().toString(36).substring(7);
             const appRef = db.collection("apps").doc(appId);
-            appRef.update({
-                downloads: firebase.firestore.FieldValue.increment(1)
-            }).catch(() => {});
+            
+            db.runTransaction(transaction => {
+                return transaction.get(appRef).then(doc => {
+                    if (!doc.exists) return;
+                    let data = doc.data();
+                    let downloadedBy = data.downloadedBy || [];
+                    
+                    if (!downloadedBy.includes(userId)) {
+                        downloadedBy.push(userId);
+                        transaction.update(appRef, {
+                            downloads: firebase.firestore.FieldValue.increment(1),
+                            downloadedBy: downloadedBy
+                        });
+                    }
+                });
+            }).catch(()=>{});
+        }
+
+        // نظام الأعجاب المربوط بقاعدة البيانات مع النجمة SVG المفرغة الحواف
+        function toggleStarLike(appId, event) {
+            if (event) event.stopPropagation();
+            if (!currentUser) {
+                alert('الرجاء تسجيل الدخول أولاً لتسجيل إعجابك');
+                openAccountModal();
+                return;
+            }
+
+            const appRef = db.collection("apps").doc(appId);
+            const userEmail = currentUser.email;
+
+            db.runTransaction(transaction => {
+                return transaction.get(appRef).then(doc => {
+                    if (!doc.exists) return;
+                    let data = doc.data();
+                    let likedBy = data.likedBy || [];
+                    
+                    if (likedBy.includes(userEmail)) {
+                        likedBy = likedBy.filter(e => e !== userEmail);
+                    } else {
+                        likedBy.push(userEmail);
+                    }
+                    transaction.update(appRef, { likedBy: likedBy });
+                });
+            }).catch(err => alert("Error: " + err.message));
         }
 
         function openAppDetails(appId) {
             const app = allAppsCache.find(a => a.id === appId);
             if (!app) return;
-            
-            let avgRating = app.ratingCount ? (app.ratingSum / app.ratingCount).toFixed(1) : 0;
             
             let screenshotsHTML = '';
             if (app.screenshots && app.screenshots.length > 0) {
@@ -1010,40 +1271,38 @@
                     extraFilesDetailHTML = `<div style="background:var(--input-bg); padding:10px; border-radius:10px; margin-bottom:12px;"><h4 style="font-size:12px; margin:0 0 6px 0; color:var(--text-color);">Additional Files (Companion/Config):</h4>${fileLinks}</div>`;
                 }
 
+                let pubText = app.publisher ? `<div style="color:#0a84ff; font-size:12px; font-weight:bold; margin-bottom:4px;">من طرف ${app.publisher}</div>` : '';
+
                 document.getElementById('appDetailBody').innerHTML = `
                     <div style="width:40px; height:4px; background:var(--border-color); border-radius:10px; margin:0 auto 16px auto;"></div>
                     <div class="detail-header">
                         <img src="${app.icon || 'https://via.placeholder.com/75'}" class="detail-icon">
                         <div>
                             <h3 style="margin:0 0 2px 0; font-size:17px; color:var(--text-color); white-space: normal;">${app.name}</h3>
+                            ${pubText}
                             <div style="font-size:11px; color:var(--subtext-color); font-weight:600; margin-bottom:3px;">${getCategoryNameEn(app.category)} • <span style="color:#ff453a;">${app.platform || 'IPA'}</span></div>
                             <div style="font-size:12px; color:var(--text-color); font-weight:bold; margin-bottom:3px;">Size: ${app.size || 'N/A'}</div>
-                            <div class="star-rating">⭐ ${avgRating} <span style="font-size:11px; color:var(--subtext-color);">(${app.ratingCount || 0} reviews)</span></div>
                         </div>
                     </div>
 
                     <div style="background:var(--input-bg); padding:12px; border-radius:12px; margin-bottom:12px; font-size:13px; color:var(--text-color);">
-                        <strong style="color:#0a84ff; display:block; margin-bottom:4px;">ℹ️ App Information & Details:</strong>
-                        ${app.info || app.desc || 'No detailed info provided.'}
+                        <strong style="color:#0a84ff; display:block; margin-bottom:4px;">ℹ️ معلومات أدق عن التطبيق:</strong>
+                        ${app.info || app.desc || 'لم يتم تسجيل معلومات تفصيلية إضافية.'}
                     </div>
 
                     ${extraFilesDetailHTML}
 
-                    <a href="${app.url}" class="btn-install" style="display:block; text-align:center; padding:11px; margin-bottom:15px;" target="_blank" onclick="incrementDownload('${app.id}')">Direct Download (${app.platform || 'IPA'})</a>
+                    <button class="btn-install" style="display:block; width:100%; text-align:center; padding:11px; margin-bottom:15px; font-size:14px;" onclick="startRealDownload('${app.id}', '${app.url}', '${app.name}')">Direct Download (${app.platform || 'IPA'})</button>
                     
+                    <div id="dl_progress_${app.id}_modal" class="dl-progress-box" style="display:none; margin-bottom:15px;">
+                        <div class="dl-progress-text" id="dl_text_${app.id}_modal">Loading 0%</div>
+                        <div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_${app.id}_modal"></div></div>
+                    </div>
+
                     <div style="border-top:1px solid var(--border-color); padding-top:12px; margin-bottom:12px;">
                         <h4 style="font-size:13px; margin:0 0 6px 0; color:var(--text-color);">Screenshots:</h4>
                         <div class="screenshots-container">
                             ${screenshotsHTML}
-                        </div>
-                    </div>
-
-                    <div style="border-top:1px solid var(--border-color); padding-top:12px; margin-bottom:12px;">
-                        <h4 style="font-size:13px; margin:0 0 8px 0; color:var(--text-color);">Rate this app (Real Interactive Stars):</h4>
-                        <div style="display:flex; gap:10px; justify-content:center;">
-                            <button onclick="rateApp('${app.id}', 1)" style="background:var(--input-bg); border:1px solid #ff9f0a; color:var(--text-color); padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐ 1</button>
-                            <button onclick="rateApp('${app.id}', 3)" style="background:var(--input-bg); border:1px solid #ff9f0a; color:var(--text-color); padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐ 3</button>
-                            <button onclick="rateApp('${app.id}', 5)" style="background:var(--input-bg); border:1px solid #ff9f0a; color:var(--text-color); padding:6px 14px; border-radius:8px; cursor:pointer; font-weight:bold;">⭐⭐⭐⭐⭐ 5</button>
                         </div>
                     </div>
 
@@ -1062,24 +1321,6 @@
                 `;
                 document.getElementById('appDetailModal').style.display = 'flex';
             });
-        }
-
-        // نظام التقييم الحقيقي المربوط بـ Firebase
-        function rateApp(appId, stars) {
-            if (!currentUser) { alert('Please sign in first to rate'); return; }
-            const appRef = db.collection("apps").doc(appId);
-            db.runTransaction(transaction => {
-                return transaction.get(appRef).then(doc => {
-                    if (!doc.exists) return;
-                    let data = doc.data();
-                    let newSum = (data.ratingSum || 0) + stars;
-                    let newCount = (data.ratingCount || 0) + 1;
-                    transaction.update(appRef, { ratingSum: newSum, ratingCount: newCount });
-                });
-            }).then(() => {
-                alert('Thank you, rating submitted successfully to Firebase!');
-                openAppDetails(appId);
-            }).catch(err => alert("Error: " + err.message));
         }
 
         function postComment(appId) {
@@ -1133,6 +1374,7 @@
             }
         }
 
+        // حل مشكلة الخروج من كلا النافذتين والتحقق من الحساب محلياً
         auth.onAuthStateChanged(user => {
             currentUser = user;
             const floatBtn = document.getElementById('adminAddFloatBtn');
@@ -1166,6 +1408,15 @@
             renderUI();
         });
 
+        function handleSignOut() {
+            auth.signOut().then(() => {
+                currentUser = null;
+                isAdmin = false;
+                document.getElementById('accountModal').style.display = 'none';
+                renderUI();
+            });
+        }
+
         function loginWithGoogle() {
             const provider = new firebase.auth.GoogleAuthProvider();
             auth.signInWithPopup(provider).catch(() => auth.signInWithRedirect(provider));
@@ -1177,6 +1428,7 @@
             if (!isAdmin) return;
             document.getElementById('modalTitleText').innerText = "Add App to Cloud";
             document.getElementById('editingAppId').value = "";
+            document.getElementById('appPublisher').value = "";
             document.getElementById('appName').value = "";
             document.getElementById('appSize').value = "";
             document.getElementById('appInfo').value = "";
@@ -1193,6 +1445,7 @@
             if (!app) return;
             document.getElementById('modalTitleText').innerText = "Edit App & URL";
             document.getElementById('editingAppId').value = app.id;
+            document.getElementById('appPublisher').value = app.publisher || '';
             document.getElementById('appCategory').value = app.category || 'today';
             document.getElementById('appPlatform').value = app.platform || 'IPA';
             document.getElementById('appName').value = app.name || '';
@@ -1202,9 +1455,11 @@
             document.getElementById('addAppModal').style.display = 'flex';
         }
 
+        // حفظ بيانات التطبيقات بدون إحداث Lag عبر تقليل الحجم
         function saveNewApp() {
             if (!isAdmin) return;
             const editingId = document.getElementById('editingAppId').value;
+            const publisher = document.getElementById('appPublisher').value.trim();
             const category = document.getElementById('appCategory').value;
             const platform = document.getElementById('appPlatform').value;
             const name = document.getElementById('appName').value;
@@ -1238,18 +1493,14 @@
                 if (extraFilesInput.files && extraFilesInput.files.length > 0) {
                     let extraLoaded = 0;
                     Array.from(extraFilesInput.files).forEach((file) => {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            extraFilesList.push({ name: file.name, url: e.target.result });
-                            extraLoaded++;
-                            if (extraLoaded === extraFilesInput.files.length) {
-                                commitAppToCloud(editingId, category, platform, name, size, info, url, iconResult, screenshotsList, extraFilesList);
-                            }
-                        };
-                        reader.readAsDataURL(file);
+                        extraFilesList.push({ name: file.name, url: url });
+                        extraLoaded++;
+                        if (extraLoaded === extraFilesInput.files.length) {
+                            commitAppToCloud(editingId, publisher, category, platform, name, size, info, url, iconResult, screenshotsList, extraFilesList);
+                        }
                     });
                 } else {
-                    commitAppToCloud(editingId, category, platform, name, size, info, url, iconResult, screenshotsList, extraFilesList);
+                    commitAppToCloud(editingId, publisher, category, platform, name, size, info, url, iconResult, screenshotsList, extraFilesList);
                 }
             };
 
@@ -1285,23 +1536,24 @@
             }
         }
 
-        function commitAppToCloud(editingId, category, platform, name, size, info, url, icon, screenshots, extraFiles) {
+        function commitAppToCloud(editingId, publisher, category, platform, name, size, info, url, icon, screenshots, extraFiles) {
             if (editingId) {
                 db.collection("apps").doc(editingId).update({
-                    category, platform, name, size, info, url, icon, screenshots, extraFiles
+                    publisher, category, platform, name, size, info, url, icon, screenshots, extraFiles
                 }).then(() => {
                     document.getElementById('addAppModal').style.display = 'none';
                     alert('App updated successfully!');
                 }).catch(err => alert("Error: " + err.message));
             } else {
                 db.collection("apps").add({
-                    category, platform, name, size, info, url, icon, screenshots, extraFiles,
-                    ratingSum: 0,
-                    ratingCount: 0,
+                    publisher, category, platform, name, size, info, url, icon, screenshots, extraFiles,
+                    likedBy: [],
+                    downloadedBy: [],
                     downloads: 0,
                     commentsCount: 0,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
+                    document.getElementById('appPublisher').value = '';
                     document.getElementById('appName').value = '';
                     document.getElementById('appSize').value = '';
                     document.getElementById('appInfo').value = '';
