@@ -39,6 +39,58 @@ svg{display:inline-block;vertical-align:middle}
 .today-title{font-size:28px;font-weight:900;margin:2px 0}
 .today-subtitle{font-size:13px;color:var(--danger);font-weight:700;display:flex;align-items:center;gap:5px}
 
+/* === NEW: ANIMATED BACKGROUND FOR TRENDING SECTION === */
+.trending-stage{
+  position:relative;
+  border-radius:22px;
+  padding:18px 14px 14px 14px;
+  margin-top:10px;
+  overflow:hidden;
+  isolation:isolate;
+  background:rgba(255,255,255,0.015);
+  border:1px solid rgba(255,255,255,0.05);
+}
+.trending-stage::before{
+  content:'';
+  position:absolute;
+  inset:-40%;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(10,132,255,0.35), transparent 40%),
+    radial-gradient(circle at 80% 25%, rgba(255,69,58,0.28), transparent 42%),
+    radial-gradient(circle at 45% 85%, rgba(255,159,10,0.24), transparent 45%),
+    radial-gradient(circle at 90% 80%, rgba(191,90,242,0.28), transparent 45%);
+  filter:blur(50px);
+  animation:trendingBgFloat 14s ease-in-out infinite alternate;
+  z-index:-2;
+  opacity:0.85;
+}
+.trending-stage::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(10,132,255,0.15), transparent 55%),
+    radial-gradient(circle at 70% 60%, rgba(255,69,58,0.12), transparent 55%);
+  filter:blur(30px);
+  animation:trendingBgFloatReverse 18s ease-in-out infinite alternate;
+  z-index:-1;
+  opacity:0.9;
+}
+@keyframes trendingBgFloat{
+  0%{transform:translate(0,0) rotate(0deg) scale(1);}
+  33%{transform:translate(-6%, 4%) rotate(6deg) scale(1.08);}
+  66%{transform:translate(5%, -3%) rotate(-5deg) scale(1.04);}
+  100%{transform:translate(-3%, 6%) rotate(4deg) scale(1.1);}
+}
+@keyframes trendingBgFloatReverse{
+  0%{transform:translate(0,0) rotate(0deg) scale(1);}
+  50%{transform:translate(4%, -6%) rotate(-4deg) scale(1.06);}
+  100%{transform:translate(-4%, 5%) rotate(6deg) scale(1.02);}
+}
+body.light-mode .trending-stage{background:rgba(0,0,0,0.015);border-color:rgba(0,0,0,0.05);}
+body.light-mode .trending-stage::before{opacity:0.55;}
+body.light-mode .trending-stage::after{opacity:0.6;}
+
 .featured-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:22px;overflow:hidden;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);position:relative;animation:fadeInUp 0.4s ease}
 .featured-img-wrapper{position:relative;width:100%;height:190px;overflow:hidden;background:var(--input-bg)}
 .featured-img{width:100%;height:100%;object-fit:cover}
@@ -53,46 +105,12 @@ svg{display:inline-block;vertical-align:middle}
 .app-icon-container{position:relative;width:54px;height:54px;flex-shrink:0}
 .app-icon-img{width:54px;height:54px;border-radius:14px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg)}
 
-/* === MARQUEE FIX: wrapper with overflow:hidden prevents overlap === */
 .app-details{overflow:hidden;flex:1;max-width:170px}
-.app-details h4{
-  margin:0 0 2px 0;
-  font-size:13px;
-  font-weight:700;
-  color:var(--text-color);
-  display:flex;
-  align-items:center;
-  gap:4px;
-  line-height:1.2;
-  overflow:hidden;
-  width:100%;
-}
-.app-details h4 > .title-meta{
-  flex-shrink:0;
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-}
-.app-title-wrap{
-  overflow:hidden;
-  flex:1;
-  min-width:0;
-  position:relative;
-  display:block;
-  mask-image:linear-gradient(90deg, #000 82%, transparent 100%);
-  -webkit-mask-image:linear-gradient(90deg, #000 82%, transparent 100%);
-}
-.app-title-marquee{
-  display:inline-block;
-  white-space:nowrap;
-  animation:marqueeScroll 8s ease-in-out infinite alternate;
-  will-change:transform;
-  padding-right:6px;
-}
-@keyframes marqueeScroll{
-  0%,20%{transform:translateX(0);}
-  80%,100%{transform:translateX(-32%);}
-}
+.app-details h4{margin:0 0 2px 0;font-size:13px;font-weight:700;color:var(--text-color);display:flex;align-items:center;gap:4px;line-height:1.2;overflow:hidden;width:100%}
+.app-details h4 > .title-meta{flex-shrink:0;display:inline-flex;align-items:center;gap:4px}
+.app-title-wrap{overflow:hidden;flex:1;min-width:0;position:relative;display:block;mask-image:linear-gradient(90deg, #000 82%, transparent 100%);-webkit-mask-image:linear-gradient(90deg, #000 82%, transparent 100%)}
+.app-title-marquee{display:inline-block;white-space:nowrap;animation:marqueeScroll 8s ease-in-out infinite alternate;will-change:transform;padding-right:6px}
+@keyframes marqueeScroll{0%,20%{transform:translateX(0);}80%,100%{transform:translateX(-32%);}}
 
 .app-details p{margin:0;font-size:10px;color:var(--subtext-color);display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:2px}
 .app-publisher-tag{font-size:10px;color:var(--accent);font-weight:700;display:block;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -125,114 +143,21 @@ svg{display:inline-block;vertical-align:middle}
 
 .btn-report-text{background:transparent;border:none;color:var(--danger);font-size:10px;font-weight:700;cursor:pointer;padding:2px 4px;font-family:'Inter',sans-serif}
 
-/* === NEW GLASS DOWNLOAD INTERFACE === */
-.dl-progress-box{
-  width:100%;
-  margin-top:10px;
-  padding:12px 14px;
-  border-radius:16px;
-  background:linear-gradient(135deg, rgba(255,69,58,0.18), rgba(255,69,58,0.06) 60%, rgba(10,132,255,0.05));
-  border:1px solid rgba(255,69,58,0.28);
-  backdrop-filter:blur(22px) saturate(180%);
-  -webkit-backdrop-filter:blur(22px) saturate(180%);
-  box-shadow:0 8px 28px rgba(255,69,58,0.18), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);
-  position:relative;
-  overflow:hidden;
-  box-sizing:border-box;
-}
-.dl-progress-box::before{
-  content:'';
-  position:absolute;
-  top:-50%;left:-20%;
-  width:60%;height:200%;
-  background:radial-gradient(circle, rgba(255,69,58,0.28), transparent 65%);
-  pointer-events:none;
-  animation:glowFloat 4s ease-in-out infinite;
-}
-.dl-progress-box::after{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:1px;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
-  pointer-events:none;
-}
-@keyframes glowFloat{
-  0%,100%{transform:translate(0,0);opacity:0.7;}
-  50%{transform:translate(30%,-10%);opacity:1;}
-}
-.dl-progress-inner{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  position:relative;
-  z-index:1;
-}
-.dl-progress-icon{
-  width:38px;
-  height:38px;
-  border-radius:12px;
-  background:linear-gradient(135deg, rgba(255,69,58,0.45), rgba(255,107,94,0.2));
-  border:1px solid rgba(255,255,255,0.18);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  box-shadow:0 4px 12px rgba(255,69,58,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
-  animation:iconPulse 1.6s ease-in-out infinite;
-}
-@keyframes iconPulse{
-  0%,100%{transform:scale(1);box-shadow:0 4px 12px rgba(255,69,58,0.35), inset 0 1px 0 rgba(255,255,255,0.2);}
-  50%{transform:scale(1.06);box-shadow:0 6px 18px rgba(255,69,58,0.5), inset 0 1px 0 rgba(255,255,255,0.25);}
-}
+/* === GLASS DOWNLOAD INTERFACE (kept for detail view) === */
+.dl-progress-box{width:100%;margin-top:10px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg, rgba(255,69,58,0.18), rgba(255,69,58,0.06) 60%, rgba(10,132,255,0.05));border:1px solid rgba(255,69,58,0.28);backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);box-shadow:0 8px 28px rgba(255,69,58,0.18), inset 0 1px 0 rgba(255,255,255,0.12), inset 0 -1px 0 rgba(0,0,0,0.15);position:relative;overflow:hidden;box-sizing:border-box}
+.dl-progress-box::before{content:'';position:absolute;top:-50%;left:-20%;width:60%;height:200%;background:radial-gradient(circle, rgba(255,69,58,0.28), transparent 65%);pointer-events:none;animation:glowFloat 4s ease-in-out infinite}
+.dl-progress-box::after{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);pointer-events:none}
+@keyframes glowFloat{0%,100%{transform:translate(0,0);opacity:0.7;}50%{transform:translate(30%,-10%);opacity:1;}}
+.dl-progress-inner{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.dl-progress-icon{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg, rgba(255,69,58,0.45), rgba(255,107,94,0.2));border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(255,69,58,0.35), inset 0 1px 0 rgba(255,255,255,0.2);animation:iconPulse 1.6s ease-in-out infinite}
+@keyframes iconPulse{0%,100%{transform:scale(1);box-shadow:0 4px 12px rgba(255,69,58,0.35), inset 0 1px 0 rgba(255,255,255,0.2);}50%{transform:scale(1.06);box-shadow:0 6px 18px rgba(255,69,58,0.5), inset 0 1px 0 rgba(255,255,255,0.25);}}
 .dl-progress-icon svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.5;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.3));}
-.dl-progress-info{flex:1;min-width:0;}
-.dl-progress-title{
-  font-size:11px;
-  font-weight:800;
-  color:#fff;
-  margin-bottom:7px;
-  letter-spacing:0.3px;
-  text-shadow:0 1px 3px rgba(0,0,0,0.4);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.dl-progress-bar-bg{
-  width:100%;
-  height:7px;
-  background:rgba(0,0,0,0.35);
-  border-radius:4px;
-  overflow:hidden;
-  position:relative;
-  border:1px solid rgba(255,255,255,0.06);
-  box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);
-}
-.dl-progress-bar-fill{
-  height:100%;
-  width:0%;
-  background:linear-gradient(90deg, #ff453a, #ff6b5e, #ffb199, #ff6b5e, #ff453a);
-  background-size:200% 100%;
-  border-radius:3px;
-  transition:width 0.2s ease-out;
-  animation:shimmerBar 1.4s linear infinite;
-  box-shadow:0 0 14px rgba(255,69,58,0.7), inset 0 1px 0 rgba(255,255,255,0.35);
-}
-@keyframes shimmerBar{
-  0%{background-position:200% 0;}
-  100%{background-position:-200% 0;}
-}
-.dl-progress-percent{
-  font-size:13px;
-  font-weight:900;
-  color:#ff8579;
-  min-width:40px;
-  text-align:right;
-  flex-shrink:0;
-  font-variant-numeric:tabular-nums;
-  text-shadow:0 1px 4px rgba(255,69,58,0.5);
-  letter-spacing:0.3px;
-}
+.dl-progress-info{flex:1;min-width:0}
+.dl-progress-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;letter-spacing:0.3px;text-shadow:0 1px 3px rgba(0,0,0,0.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dl-progress-bar-bg{width:100%;height:7px;background:rgba(0,0,0,0.35);border-radius:4px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 1px 2px rgba(0,0,0,0.3)}
+.dl-progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, #ff453a, #ff6b5e, #ffb199, #ff6b5e, #ff453a);background-size:200% 100%;border-radius:3px;transition:width 0.2s ease-out;animation:shimmerBar 1.4s linear infinite;box-shadow:0 0 14px rgba(255,69,58,0.7), inset 0 1px 0 rgba(255,255,255,0.35)}
+@keyframes shimmerBar{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+.dl-progress-percent{font-size:13px;font-weight:900;color:#ff8579;min-width:40px;text-align:right;flex-shrink:0;font-variant-numeric:tabular-nums;text-shadow:0 1px 4px rgba(255,69,58,0.5);letter-spacing:0.3px}
 .dl-progress-box.done{border-color:rgba(50,215,75,0.45);background:linear-gradient(135deg, rgba(50,215,75,0.18), rgba(50,215,75,0.06));}
 .dl-progress-box.done .dl-progress-icon{background:linear-gradient(135deg, rgba(50,215,75,0.5), rgba(50,215,75,0.2));animation:none;}
 .dl-progress-box.done .dl-progress-percent{color:#32d74b;text-shadow:0 1px 4px rgba(50,215,75,0.5);}
@@ -458,10 +383,8 @@ let isLightMode = false;
 let currentFilter = 'all';
 let userFavorites = [];
 
-// FALLBACK_ICON now uses base64 (no parsing issues on iOS Safari)
 const FALLBACK_ICON = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMwYTg0ZmYiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiMwMDYyZDIiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgcng9IjIyIiBmaWxsPSJ1cmwoI2cpIi8+PHBhdGggZD0iTTUwIDI1IEw2MCA0NSBMODIgNDggTDY2IDYzIEw3MCA4NSBMNTAgNzQgTDMwIDg1IEwzNCA2MyBMMTggNDggTDQwIDQ1IFoiIGZpbGw9IndoaXRlIi8+PC9zdmc+';
 
-// === SIMPLER, MORE RELIABLE APPLE & ANDROID ICONS ===
 const ICONS = {
   check:'<svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>',
   close:'<svg class="toast-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
@@ -646,7 +569,6 @@ function renderUI(){
     const generalList = sortedByTrending;
     const tc = document.getElementById('todayAppsContainer');
     tc.innerHTML = '';
-    // Fallback: if no "today" apps, show top 2 trending as featured
     let displayList = todayList.length > 0 ? todayList : sortedByTrending.slice(0,2);
     if(displayList.length===0) tc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;">No featured apps yet.</p>';
     else displayList.forEach((app,index)=>tc.innerHTML += createFeaturedCardHTML(app,index));
@@ -660,7 +582,8 @@ function renderUI(){
     let sortedByTrending = [...allAppsCache].sort((a,b)=>getTrendingScore(b)-getTrendingScore(a));
     let list = sortedByTrending;
     if(currentFilter==='IPA'||currentFilter==='APK') list = list.filter(a=>(a.platform||'IPA')===currentFilter);
-    container.innerHTML = '<div class="today-header"><div class="today-title">Trending Apps</div><div class="today-subtitle" style="color:var(--warning);">'+ICONS.star+' Most popular apps</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button><button class="chip '+(currentFilter==='IPA'?'active':'')+'" onclick="setFilter(\'IPA\')">iOS</button><button class="chip '+(currentFilter==='APK'?'active':'')+'" onclick="setFilter(\'APK\')">Android</button></div><div id="trendingContainer" style="margin-top:10px;"></div>';
+    // === NEW: wrapper with animated background ===
+    container.innerHTML = '<div class="today-header"><div class="today-title">Trending Apps</div><div class="today-subtitle" style="color:var(--warning);">'+ICONS.star+' Most popular apps</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button><button class="chip '+(currentFilter==='IPA'?'active':'')+'" onclick="setFilter(\'IPA\')">iOS</button><button class="chip '+(currentFilter==='APK'?'active':'')+'" onclick="setFilter(\'APK\')">Android</button></div><div class="trending-stage"><div id="trendingContainer"></div></div>';
     const trc = document.getElementById('trendingContainer');
     if(list.length===0) trc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">No trending apps.</p>';
     else list.forEach((app,idx)=>{ let badge = '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#'+(idx+1)+'</span>'; trc.innerHTML += createAppCardHTML(app,badge); });
@@ -706,7 +629,6 @@ function createAppCardHTML(app, rankBadge){
   let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
   let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
   let ratingAvg = getAverageRating(app);
-  // NEW: title-meta (badge + icon) is separate from marquee to prevent overlap
   return '<div class="app-card-pro" style="flex-direction:column;align-items:stretch;"><div style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:6px;"><div class="app-meta" onclick="openAppDetails(\''+app.id+'\')"><div class="app-icon-container"><img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" loading="lazy" onerror="this.src=\''+FALLBACK_ICON+'\'"></div><div class="app-details"><h4><span class="title-meta">'+rankBadge+platformIcon+'</span><span class="app-title-wrap"><span class="app-title-marquee">'+app.name+'</span></span></h4>'+pubText+'<div class="app-category-sub">'+getCategoryNameEn(app.category)+(ratingAvg>0?' &bull; <span style="color:var(--warning);">'+ratingAvg.toFixed(1)+'</span>':'')+'</div><p><span class="app-size-tag-red">Size: '+(app.size||'N/A')+'</span><span class="download-badge-green">'+ICONS.download+' '+(app.downloads||0)+'</span></p></div></div><div class="app-actions"><button class="btn-star-like '+(isLiked?'liked':'')+'" onclick="toggleStarLike(\''+app.id+'\',event)">'+(isLiked?ICONS.starFill:ICONS.star)+' <span>'+likesCount+'</span></button><button class="btn-info-blue" onclick="openAppDetails(\''+app.id+'\')">'+ICONS.infoCircle+'</button><button class="btn-install" onclick="startRealDownload(\''+app.id+'\',\''+app.url+'\',\''+app.name+'\')">Get</button>'+extraFilesDropdown+(isAdmin?'<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal(\''+app.id+'\')">Edit</button><button class="btn-del" onclick="deleteApp(\''+app.id+'\')">Del</button></div>':'')+'</div></div><div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing download...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div></div>';
 }
 
@@ -719,58 +641,26 @@ function toggleExtraMenu(appId, event){
 }
 document.addEventListener('click', ()=>{ document.querySelectorAll('.extra-files-menu').forEach(m=>m.style.display='none'); });
 
-// === UPDATED DOWNLOAD FUNCTION with new glass progress UI ===
+// ===== MODIFIED: DIRECT DOWNLOAD - Opens URL immediately =====
 function startRealDownload(appId, fileUrl, appName){
   incrementDownload(appId);
-  const pb = document.getElementById('dl_progress_'+appId);
-  const pt = document.getElementById('dl_text_'+appId);
-  const pf = document.getElementById('dl_fill_'+appId);
-  const pp = document.getElementById('dl_percent_'+appId);
-  const pi = document.getElementById('dl_icon_'+appId);
-
-  if(pb){ pb.style.display='block'; pb.classList.remove('done'); }
-  if(pi) pi.innerHTML = ICONS.dlBig;
 
   if(!fileUrl || fileUrl === '#' || fileUrl.trim() === ''){
-    if(pt) pt.innerText = "Download link not available";
-    if(pp) pp.innerText = "!";
-    setTimeout(()=>{ if(pb) pb.style.display='none'; }, 2800);
+    showToast('Download link not available', 'warning');
     return;
   }
 
-  // Animated progress
-  let pct = 0;
-  if(pt) pt.innerText = "Connecting to server...";
-  if(pf) pf.style.width = "5%";
-  if(pp) pp.innerText = "5%";
+  // Open the URL directly in new tab (real download)
+  const a = document.createElement('a');
+  a.href = fileUrl;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.download = appName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 
-  const iv = setInterval(()=>{
-    pct += Math.random() * 18 + 8;
-    if(pct > 95) pct = 95;
-    if(pf) pf.style.width = pct + "%";
-    if(pp) pp.innerText = Math.round(pct) + "%";
-    if(pt){
-      if(pct < 35) pt.innerText = "Connecting to server...";
-      else if(pct < 65) pt.innerText = "Downloading " + appName + "...";
-      else pt.innerText = "Almost ready...";
-    }
-  }, 220);
-
-  setTimeout(()=>{
-    clearInterval(iv);
-    if(pf) pf.style.width = "100%";
-    if(pp) pp.innerText = "100%";
-    if(pt) pt.innerText = "Download started!";
-    if(pi) pi.innerHTML = ICONS.dlDone;
-    if(pb) pb.classList.add('done');
-
-    const a = document.createElement('a');
-    a.href = fileUrl; a.target = '_blank'; a.download = appName;
-    document.body.appendChild(a); a.click(); a.remove();
-    showToast('Download started: '+appName, 'success');
-
-    setTimeout(()=>{ if(pb) pb.style.display='none'; }, 2400);
-  }, 1400);
+  showToast('Download started: ' + appName, 'success', 2500);
 }
 
 function incrementDownload(appId){
@@ -872,7 +762,7 @@ function openAppDetails(appId){
     if(similarApps.length>0){
       similarHTML = '<div style="border-top:1px solid var(--border-color);padding-top:10px;margin-bottom:10px;"><h4 style="font-size:12px;margin:0 0 6px 0;color:var(--text-color);">You might also like:</h4><div class="similar-apps-container">'+similarApps.map(s=>'<div class="similar-app-card" onclick="closeModal(\'appDetailModal\');setTimeout(()=>openAppDetails(\''+s.id+'\'),300);"><img src="'+(s.icon||FALLBACK_ICON)+'" onerror="this.src=\''+FALLBACK_ICON+'\'"><h5>'+s.name+'</h5><p>'+(s.size||'N/A')+'</p></div>').join('')+'</div></div>';
     }
-    document.getElementById('appDetailBody').innerHTML = '<div style="width:40px;height:4px;background:var(--border-color);border-radius:10px;margin:0 auto 16px auto;"></div><div class="detail-header"><img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'"><div style="flex:1;"><h3 style="margin:0 0 2px 0;font-size:16px;color:var(--text-color);">'+app.name+'</h3>'+pubText+'<div style="font-size:11px;color:var(--subtext-color);font-weight:600;margin-bottom:3px;">'+getCategoryNameEn(app.category)+' &bull; <span style="color:var(--danger);">'+(app.platform||'IPA')+'</span></div><div style="font-size:12px;color:var(--text-color);font-weight:bold;margin-bottom:3px;">Size: '+(app.size||'N/A')+'</div></div><button onclick="toggleFavorite(\''+app.id+'\',event)" style="background:'+(isFav?'rgba(255,69,58,0.15)':'var(--input-bg)')+';border:1px solid '+(isFav?'var(--danger)':'var(--border-color)')+';width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:'+(isFav?'var(--danger)':'var(--subtext-color)')+';">'+(isFav?ICONS.heartFill:ICONS.heart)+'</button></div><div style="background:var(--input-bg);padding:12px;border-radius:12px;margin-bottom:12px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:11px;color:var(--subtext-color);font-weight:700;">RATING</span><span style="font-size:12px;font-weight:800;color:var(--warning);">'+(ratingAvg>0?ratingAvg.toFixed(1)+' / 5':'No ratings')+' '+(app.ratingCount?'('+app.ratingCount+')':'')+'</span></div><div class="star-rating">'+starsHTML+'</div>'+(userRating>0?'<p style="margin:6px 0 0 0;font-size:10px;color:var(--subtext-color);">You rated: '+userRating+' stars</p>':'')+'</div><div style="background:var(--input-bg);padding:12px;border-radius:12px;margin-bottom:12px;font-size:12px;color:var(--text-color);"><strong style="color:var(--accent);display:flex;align-items:center;gap:5px;margin-bottom:4px;">'+ICONS.infoCircle+' Detailed Info:</strong>'+(app.info||app.desc||'No additional info available.')+'</div><button class="btn-install" style="display:flex;width:100%;text-align:center;padding:11px;margin-bottom:12px;font-size:13px;justify-content:center;" onclick="startRealDownload(\''+app.id+'\',\''+app.url+'\',\''+app.name+'\')">'+ICONS.download+' Direct Download ('+(app.platform||'IPA')+')</button><div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing download...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div><div style="border-top:1px solid var(--border-color);padding-top:10px;margin-bottom:10px;margin-top:12px;"><h4 style="font-size:12px;margin:0 0 6px 0;color:var(--text-color);">Screenshots:</h4><div class="screenshots-container">'+screenshotsHTML+'</div></div>'+similarHTML+'<div style="border-top:1px solid var(--border-color);padding-top:10px;"><h4 style="font-size:12px;margin:0 0 8px 0;color:var(--text-color);">Comments ('+commentsList.length+'):</h4><div style="max-height:140px;overflow-y:auto;margin-bottom:8px;" id="commentsListArea">'+commentsHTML+'</div>'+(currentUser?'<input type="text" id="newCommentText" class="input-field" placeholder="Write a comment..." style="margin-bottom:6px;"><button onclick="postComment(\''+app.id+'\')" style="background:var(--accent);color:#fff;border:none;width:100%;padding:8px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:12px;font-family:Inter,sans-serif;">Post Comment</button>':'<p style="color:var(--danger);font-size:11px;text-align:center;">Sign in to comment.</p>')+'</div><button onclick="closeModal(\'appDetailModal\')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:9px;border-radius:10px;margin-top:12px;cursor:pointer;font-weight:bold;font-family:Inter,sans-serif;">Close</button>';
+    document.getElementById('appDetailBody').innerHTML = '<div style="width:40px;height:4px;background:var(--border-color);border-radius:10px;margin:0 auto 16px auto;"></div><div class="detail-header"><img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'"><div style="flex:1;"><h3 style="margin:0 0 2px 0;font-size:16px;color:var(--text-color);">'+app.name+'</h3>'+pubText+'<div style="font-size:11px;color:var(--subtext-color);font-weight:600;margin-bottom:3px;">'+getCategoryNameEn(app.category)+' &bull; <span style="color:var(--danger);">'+(app.platform||'IPA')+'</span></div><div style="font-size:12px;color:var(--text-color);font-weight:bold;margin-bottom:3px;">Size: '+(app.size||'N/A')+'</div></div><button onclick="toggleFavorite(\''+app.id+'\',event)" style="background:'+(isFav?'rgba(255,69,58,0.15)':'var(--input-bg)')+';border:1px solid '+(isFav?'var(--danger)':'var(--border-color)')+';width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:'+(isFav?'var(--danger)':'var(--subtext-color)')+';">'+(isFav?ICONS.heartFill:ICONS.heart)+'</button></div><div style="background:var(--input-bg);padding:12px;border-radius:12px;margin-bottom:12px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:11px;color:var(--subtext-color);font-weight:700;">RATING</span><span style="font-size:12px;font-weight:800;color:var(--warning);">'+(ratingAvg>0?ratingAvg.toFixed(1)+' / 5':'No ratings')+' '+(app.ratingCount?'('+app.ratingCount+')':'')+'</span></div><div class="star-rating">'+starsHTML+'</div>'+(userRating>0?'<p style="margin:6px 0 0 0;font-size:10px;color:var(--subtext-color);">You rated: '+userRating+' stars</p>':'')+'</div><div style="background:var(--input-bg);padding:12px;border-radius:12px;margin-bottom:12px;font-size:12px;color:var(--text-color);"><strong style="color:var(--accent);display:flex;align-items:center;gap:5px;margin-bottom:4px;">'+ICONS.infoCircle+' Detailed Info:</strong>'+(app.info||app.desc||'No additional info available.')+'</div><button class="btn-install" style="display:flex;width:100%;text-align:center;padding:11px;margin-bottom:12px;font-size:13px;justify-content:center;" onclick="startRealDownload(\''+app.id+'\',\''+app.url+'\',\''+app.name+'\')">'+ICONS.download+' Direct Download ('+(app.platform||'IPA')+')</button><div style="border-top:1px solid var(--border-color);padding-top:10px;margin-bottom:10px;margin-top:12px;"><h4 style="font-size:12px;margin:0 0 6px 0;color:var(--text-color);">Screenshots:</h4><div class="screenshots-container">'+screenshotsHTML+'</div></div>'+similarHTML+'<div style="border-top:1px solid var(--border-color);padding-top:10px;"><h4 style="font-size:12px;margin:0 0 8px 0;color:var(--text-color);">Comments ('+commentsList.length+'):</h4><div style="max-height:140px;overflow-y:auto;margin-bottom:8px;" id="commentsListArea">'+commentsHTML+'</div>'+(currentUser?'<input type="text" id="newCommentText" class="input-field" placeholder="Write a comment..." style="margin-bottom:6px;"><button onclick="postComment(\''+app.id+'\')" style="background:var(--accent);color:#fff;border:none;width:100%;padding:8px;border-radius:8px;font-weight:bold;cursor:pointer;font-size:12px;font-family:Inter,sans-serif;">Post Comment</button>':'<p style="color:var(--danger);font-size:11px;text-align:center;">Sign in to comment.</p>')+'</div><button onclick="closeModal(\'appDetailModal\')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:9px;border-radius:10px;margin-top:12px;cursor:pointer;font-weight:bold;font-family:Inter,sans-serif;">Close</button>';
     document.getElementById('appDetailModal').style.display = 'flex';
   }).catch(err=>{ console.warn('Comments err:',err); });
 }
