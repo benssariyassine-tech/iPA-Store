@@ -143,18 +143,18 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .stat-box{background:var(--input-bg);border:1px solid var(--border-color);padding:14px;border-radius:14px;text-align:center}
 .stat-box h5{margin:0 0 6px 0;color:var(--subtext-color);font-size:11px;font-weight:700}
 .stat-box p{margin:0;color:var(--danger);font-size:20px;font-weight:900}
-.report-admin-item{background:var(--input-bg);border:1px solid rgba(255,69,58,0.3display);padding:12px;border-radius:12:px;margin-bottom:10px;font-size:flex12px}
-.detail-header{display:flex;;align-items:center;gap:15px;margin-bottom:12align-itemspx}
-:.detail-icon{width:70px;height:70centerpx;border-radius:16px;object-fit:;cover;border:1px solid var(--border-colorgap);background:var(--input-bg)}
-.comment-box:{background:var(--input-bg);border10:1px solid var(--border-color);padding:px8px 10px;border-radius:10px;animation;margin-bottom::6px;font-size:12px}
-.comtoment-user{color:var(--accent);astfont-weight:700;margin-bottom:2px}
-In.star-rating{display:flex;gap:6 px;margin:8px 0;align-items:center}
-.st0ar-btn{background:none;border:none;cursor.:pointer;padding:2px;line-height:1;4color:var(--border-color);display:flex;salign-items:center;justify-content:center}
-.st cubicar-btn svg{width:26px;height:-b26px;fill:currentColor}
-.star-btn.activeez{color:var(--warning)}
-.star-btn:hover{transform:ierscale(1.15)}
-#toastContainer({position:fixed;top:80px;left:050%;transform:translateX(-50%);z-index.:10000;display:flex;flex16-direction:column;gap:8px;pointer-e,vents:none;max-width:90%}
-.toast1{background:var(--card-bg);border:1px, solid var(--border-color);border-radius:14px0;padding:12px 18px;font-size.:13px;font-weight:700;color:3var(--text-color);box-shadow:0 ,10px 30px rgba(0,0,0,10.3););pointer-events:auto;min-width:220px}
+.report-admin-item{background:var(--input-bg);border:1px solid rgba(255,69,58,0.3);padding:12px;border-radius:12px;margin-bottom:10px;font-size:12px}
+.detail-header{display:flex;align-items:center;gap:15px;margin-bottom:12px}
+.detail-icon{width:70px;height:70px;border-radius:16px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg)}
+.comment-box{background:var(--input-bg);border:1px solid var(--border-color);padding:8px 10px;border-radius:10px;margin-bottom:6px;font-size:12px}
+.comment-user{color:var(--accent);font-weight:700;margin-bottom:2px}
+.star-rating{display:flex;gap:6px;margin:8px 0;align-items:center}
+.star-btn{background:none;border:none;cursor:pointer;padding:2px;line-height:1;color:var(--border-color);display:flex;align-items:center;justify-content:center}
+.star-btn svg{width:26px;height:26px;fill:currentColor}
+.star-btn.active{color:var(--warning)}
+.star-btn:hover{transform:scale(1.15)}
+#toastContainer{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:90%}
+.toast{background:var(--card-bg);border:1px solid var(--border-color);border-radius:14px;padding:12px 18px;font-size:13px;font-weight:700;color:var(--text-color);box-shadow:0 10px 30px rgba(0,0,0,0.3);display:flex;align-items:center;gap:10px;animation:toastIn 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;min-width:220px}
 .toast.success{border-color:rgba(50,215,75,0.4)}.toast.success .toast-icon{color:var(--success)}
 .toast.error{border-color:rgba(255,69,58,0.4)}.toast.error .toast-icon{color:var(--danger)}
 .toast.info .toast-icon{color:var(--accent)}
@@ -293,7 +293,6 @@ Add New App
 <button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Admin</button>
 </div>
 
-<!-- === ACCOUNT MODAL === -->
 <div id="accountModal" class="modal">
 <div class="modal-box" style="text-align:center;">
 <button class="modal-close-x" onclick="closeModal('accountModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -340,7 +339,6 @@ Sign Out
 </div>
 </div>
 
-<!-- === EDIT PROFILE MODAL === -->
 <div id="editProfileModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('editProfileModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -357,7 +355,6 @@ Sign Out
 </div>
 </div>
 
-<!-- === SETTINGS MODAL === -->
 <div id="settingsModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('settingsModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -419,7 +416,6 @@ Sign Out
 </div>
 </div>
 
-<!-- === PUBLISHER REQUEST MODAL === -->
 <div id="partnerRequestModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('partnerRequestModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -432,7 +428,6 @@ Sign Out
 </div>
 </div>
 
-<!-- === ADD/EDIT APP MODAL (مع iTunes Fetch) === -->
 <div id="addAppModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('addAppModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -504,6 +499,12 @@ const firebaseConfig = {
 };
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+
+// 🆘 FAILSAFE: Hide splash immediately — no matter what happens later
+setTimeout(function(){
+  var s = document.getElementById('splashScreen');
+  if(s){ s.classList.add('hide'); setTimeout(function(){ if(s && s.parentNode) s.parentNode.removeChild(s); }, 900); }
+}, 3000);
 
 const auth = firebase.auth();
 const db = firebase.firestore();
@@ -605,70 +606,42 @@ function switchTab(tabName, btnElement){
   renderUI();
 }
 
-// ===== iTunes API — Fetch App Info =====
+// ===== iTunes API — Fetch App Info (JSONP) =====
 function fetchFromItunes(){
   const urlInput = document.getElementById('itunesUrlInput');
   const status = document.getElementById('fetchStatus');
   const btn = document.getElementById('fetchItunesBtn');
   const url = urlInput.value.trim();
   if(!url){ showToast('Please paste an App Store URL', 'warning'); return; }
-  
-  // Extract numeric ID from URL (e.g. id389801252)
   const match = url.match(/id(\d+)/);
-  if(!match){
-    showToast('Invalid App Store URL. Must contain /id...', 'error');
-    return;
-  }
+  if(!match){ showToast('Invalid App Store URL', 'error'); return; }
   const appId = match[1];
-  
   status.style.display = 'block';
   status.innerText = 'Fetching app info from Apple...';
   status.style.color = 'var(--accent)';
   btn.disabled = true;
   btn.style.opacity = '0.6';
-  
-  // Use JSONP to bypass CORS
   const callbackName = 'itunes_cb_' + Date.now();
   window[callbackName] = function(data){
     try{
       if(!data.results || data.results.length === 0){
         status.innerText = '❌ App not found';
         status.style.color = 'var(--danger)';
-        btn.disabled = false;
-        btn.style.opacity = '1';
+        btn.disabled = false; btn.style.opacity = '1';
         return;
       }
       const app = data.results[0];
-      
-      // Fill fields
       document.getElementById('appName').value = app.trackName || '';
       document.getElementById('appPublisher').value = app.artistName || '';
       document.getElementById('appInfo').value = (app.description || '').substring(0, 500);
-      
-      // Size in MB / GB
       if(app.fileSizeBytes){
         const bytes = parseInt(app.fileSizeBytes);
         const mb = bytes / (1024 * 1024);
-        if(mb > 1024){
-          document.getElementById('appSize').value = (mb / 1024).toFixed(2) + ' GB';
-        } else {
-          document.getElementById('appSize').value = Math.round(mb) + ' MB';
-        }
+        if(mb > 1024) document.getElementById('appSize').value = (mb / 1024).toFixed(2) + ' GB';
+        else document.getElementById('appSize').value = Math.round(mb) + ' MB';
       }
-      
-      // Icon — show preview
-      if(app.artworkUrl512 || app.artworkUrl100){
-        const iconUrl = app.artworkUrl512 || app.artworkUrl100;
-        // Store as icon directly (external URL)
-        window.__itunesIcon = iconUrl;
-      }
-      
-      // Screenshots
-      if(app.screenshotUrls && app.screenshotUrls.length > 0){
-        window.__itunesScreenshots = app.screenshotUrls;
-      }
-      
-      // Category
+      if(app.artworkUrl512 || app.artworkUrl100) window.__itunesIcon = app.artworkUrl512 || app.artworkUrl100;
+      if(app.screenshotUrls && app.screenshotUrls.length > 0) window.__itunesScreenshots = app.screenshotUrls;
       if(app.primaryGenreName){
         const genre = app.primaryGenreName.toLowerCase();
         let cat = 'apps';
@@ -676,39 +649,32 @@ function fetchFromItunes(){
         else if(genre.includes('utilities') || genre.includes('productivity')) cat = 'tools';
         document.getElementById('appCategory').value = cat;
       }
-      
-      status.innerText = '✅ App info fetched! Icon & screenshots will be added on save.';
+      status.innerText = '✅ App info loaded! Icon & screenshots will be added on save.';
       status.style.color = 'var(--success)';
       showToast('App info loaded from iTunes', 'success', 2500);
     } catch(e){
       status.innerText = '❌ Error: ' + e.message;
       status.style.color = 'var(--danger)';
     } finally {
-      btn.disabled = false;
-      btn.style.opacity = '1';
+      btn.disabled = false; btn.style.opacity = '1';
       delete window[callbackName];
       document.querySelectorAll('script[data-itunes]').forEach(s=>s.remove());
     }
   };
-  
   const script = document.createElement('script');
   script.src = 'https://itunes.apple.com/lookup?id=' + appId + '&callback=' + callbackName;
   script.setAttribute('data-itunes', '1');
   script.onerror = function(){
     status.innerText = '❌ Failed to connect to iTunes';
     status.style.color = 'var(--danger)';
-    btn.disabled = false;
-    btn.style.opacity = '1';
+    btn.disabled = false; btn.style.opacity = '1';
   };
   document.body.appendChild(script);
-  
-  // Timeout safety
   setTimeout(function(){
     if(btn.disabled){
       status.innerText = '⏱️ Timeout — try again';
       status.style.color = 'var(--warning)';
-      btn.disabled = false;
-      btn.style.opacity = '1';
+      btn.disabled = false; btn.style.opacity = '1';
     }
   }, 12000);
 }
@@ -874,7 +840,7 @@ function renderUI(){
   else list.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; fc.innerHTML += createAppCardHTML(app,badge); });
 }
 
-// === FEATURED CARD ===
+// === FEATURED CARD - تصميم احترافي جديد ===
 function createFeaturedCardHTML(app, index){
   let isTopOne = index===0 ? '<span style="background:var(--danger);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;">#1 Trending</span>' : '';
   let platformType = app.platform || 'IPA';
@@ -922,7 +888,7 @@ function createFeaturedCardHTML(app, index){
   '</div>';
 }
 
-// === APP CARD ===
+// === APP CARD - تصميم احترافي جديد ===
 function createAppCardHTML(app, rankBadge){
   rankBadge = rankBadge || '';
   let platformIcon = (app.platform==='APK') ? ICONS.android : ICONS.apple;
@@ -940,13 +906,13 @@ function createAppCardHTML(app, rankBadge){
   return '<div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:18px;padding:14px;margin-bottom:10px;position:relative;">'+
     '<div style="display:flex;gap:12px;align-items:flex-start;">'+
       '<div style="position:relative;width:56px;height:56px;flex-shrink:0;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+
-        '<img src="'+(app.icon||FALLBACK_ICON)+'" style="width:56px;height:flow56px;border-radius:14px;object-fit:cover:;border:1px solid var(--border-color);ellbackground:var(--input-bg);" loading="ipslazy" onerror="this.src=\''+isFALLBACK_ICON+'\'">'+
-       ; '<div style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:6px;background:var(--card-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;">'+platformIcon+'</div>'+
+        '<img src="'+(app.icon||FALLBACK_ICON)+'" style="width:56px;height:56px;border-radius:14px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg);" loading="lazy" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
+        '<div style="position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:6px;background:var(--card-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;">'+platformIcon+'</div>'+
       '</div>'+
       '<div style="flex:1;min-width:0;">'+
         '<div style="display:flex;align-items:center;gap:5px;margin-bottom:2px;">'+
           (rankBadge ? rankBadge : '')+
-          '<h4 style="margin:0;font-size:14px;font-weight:800;color:var(--text-color);white-space:nowrap;overflow:hidden;text-overcursor:pointer;flex:1;" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
+          '<h4 style="margin:0;font-size:14px;font-weight:800;color:var(--text-color);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;flex:1;" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
         '</div>'+
         pubText+
         '<div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-top:8px;">'+
@@ -971,7 +937,8 @@ function createAppCardHTML(app, rankBadge){
     '</div>'+
     '<div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing download...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div>'+
   '</div>';
-}function toggleExtraMenu(appId, event){
+}
+  function toggleExtraMenu(appId, event){
   event.stopPropagation();
   const menu = document.getElementById('extraMenu_'+appId);
   const isOpen = menu.style.display === 'block';
@@ -1549,14 +1516,12 @@ async function saveNewApp(){
   }
 
   try {
-    // Icon: upload file takes priority, else iTunes icon
     if(fileInput.files && fileInput.files[0]){
       iconResult = await fileToDataURL(fileInput.files[0]);
     } else if(window.__itunesIcon){
       iconResult = window.__itunesIcon;
     }
 
-    // Screenshots
     let screenshotsList = [...existingScreenshots];
     if(screenshotsInput.files && screenshotsInput.files.length>0){
       for(const file of Array.from(screenshotsInput.files)) screenshotsList.push(await fileToDataURL(file));
@@ -1564,7 +1529,6 @@ async function saveNewApp(){
       screenshotsList = [...window.__itunesScreenshots];
     }
 
-    // Extra files
     let extraFilesList = [...existingExtraFiles];
     if(extraFilesInput.files && extraFilesInput.files.length>0){
       for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
@@ -1611,16 +1575,6 @@ setTimeout(()=>{
   const activeBtn = document.querySelector('.nav-item[data-tab="'+currentTab+'"]');
   if(activeBtn) activeBtn.classList.add('active');
 }, 100);
-
-setTimeout(function(){
-  var s = document.getElementById('splashScreen');
-  if(s){
-    s.classList.add('hide');
-    setTimeout(function(){
-      if(s && s.parentNode) s.parentNode.removeChild(s);
-    }, 900);
-  }
-}, 3000);
 
 if(window.location.hash.startsWith('#app-')){
   const appId = window.location.hash.replace('#app-','');
