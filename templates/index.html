@@ -147,8 +147,8 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .detail-header{display:flex;align-items:center;gap:15px;margin-bottom:12px}
 .detail-icon{width:70px;height:70px;border-radius:16px;object-fit:cover;border:1px solid var(--border-color);background:var(--input-bg)}
 .comment-box{background:var(--input-bg);border:1px solid var(--border-color);padding:8px 10px;border-radius:10px;margin-bottom:6px;font-size:12px}
-.comment-user{color:var(--accent);font-weight:700;margin-bottom0:2px}
-.star-rating{display:flex;gap;:6px;margin:8px align-items:center}
+.comment-user{color:var(--accent);font-weight:700;margin-bottom:2px}
+.star-rating{display:flex;gap:6px;margin:8px 0;align-items:center}
 .star-btn{background:none;border:none;cursor:pointer;padding:2px;line-height:1;color:var(--border-color);display:flex;align-items:center;justify-content:center}
 .star-btn svg{width:26px;height:26px;fill:currentColor}
 .star-btn.active{color:var(--warning)}
@@ -187,8 +187,6 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .btn-download-hero .hero-sub{font-size:11px;font-weight:600;opacity:0.88;display:block;margin-top:3px;letter-spacing:0.2px;color:#fff}
 .btn-download-hero .hero-arrow{font-size:20px;font-weight:300;opacity:0.95;position:relative;z-index:1;animation:arrowSlide 1.6s ease-in-out infinite}
 @keyframes arrowSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
-
-/* === NEW: PROFILE AVATAR === */
 .profile-avatar-wrap{position:relative;width:90px;height:90px;margin:0 auto 14px auto}
 .profile-avatar{width:90px;height:90px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);background:var(--input-bg);display:block;box-shadow:0 8px 24px rgba(10,132,255,0.3)}
 .profile-avatar-edit{position:absolute;bottom:0;right:0;width:28px;height:28px;border-radius:50%;background:var(--accent);border:2px solid var(--modal-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
@@ -199,9 +197,8 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .profile-badge svg{width:11px;height:11px}
 .profile-badge.user{background:rgba(50,215,75,0.15);color:var(--success);border:1px solid rgba(50,215,75,0.3)}
 .profile-badge.admin{background:rgba(255,69,58,0.15);color:var(--danger);border:1px solid rgba(255,69,58,0.3)}
+.profile-badge.publisher{background:rgba(10,132,255,0.15);color:var(--accent);border:1px solid rgba(10,132,255,0.3)}
 .profile-badge.pending{background:rgba(255,159,10,0.15);color:var(--warning);border:1px solid rgba(255,159,10,0.3)}
-
-/* === ACCOUNT ACTION BUTTONS === */
 .account-action-btn{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-color);font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:8px;text-align:left}
 .account-action-btn:active{transform:scale(0.98)}
 .account-action-btn.primary{background:linear-gradient(135deg,var(--accent),#0062d2);border-color:transparent;color:#fff}
@@ -209,8 +206,6 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .account-action-btn.gold{background:linear-gradient(135deg,#ff9f0a,#ff6b00);border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(255,159,10,0.35)}
 .account-action-btn.disabled{opacity:0.5;cursor:not-allowed;background:var(--input-bg)}
 .account-action-btn svg{width:16px;height:16px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2.2}
-
-/* === SETTINGS === */
 .setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border-color)}
 .setting-item:last-child{border-bottom:none}
 .setting-label{font-size:13px;font-weight:700;color:var(--text-color)}
@@ -220,11 +215,9 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .setting-toggle::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.3)}
 .setting-toggle.on::after{transform:translateX(20px)}
 .setting-select{background:var(--input-bg);border:1px solid var(--border-color);color:var(--text-color);padding:8px 12px;border-radius:10px;font-family:'Inter',sans-serif;font-size:12px;font-weight:700;cursor:pointer;outline:none}
-
-/* === PARTNER REQUEST CARD (admin view) === */
-.partner-req{background:var(--input-bg);border:1px solid rgba(255,159,10,0.3);border-radius:14px;padding:14px;margin-bottom:10px}
+.partner-req{background:var(--input-bg);border:1px solid rgba(10,132,255,0.3);border-radius:14px;padding:14px;margin-bottom:10px}
 .partner-req-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.partner-req-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--warning),#ff6b00);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;overflow:hidden}
+.partner-req-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#0062d2);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;flex-shrink:0;overflow:hidden}
 .partner-req-avatar img{width:100%;height:100%;object-fit:cover}
 .partner-req-name{font-size:13px;font-weight:800;color:var(--text-color)}
 .partner-req-email{font-size:10px;color:var(--subtext-color);word-break:break-all}
@@ -233,8 +226,6 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .partner-req-actions button{padding:6px 14px;border-radius:8px;border:none;font-size:11px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif}
 .btn-approve{background:var(--success);color:#fff}
 .btn-reject{background:var(--danger);color:#fff}
-
-/* === EDIT PROFILE === */
 .avatar-preview{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin:0 auto 12px auto;display:block;background:var(--input-bg)}
 .avatar-upload-label{display:block;text-align:center;padding:12px;border:2px dashed var(--border-color);border-radius:12px;cursor:pointer;color:var(--subtext-color);font-size:12px;font-weight:700;margin-bottom:12px;transition:border-color 0.3s}
 .avatar-upload-label:hover{border-color:var(--accent);color:var(--accent)}
@@ -302,13 +293,13 @@ Add New App
 <button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Admin</button>
 </div>
 
-<!-- === ACCOUNT MODAL (REBUILT with Profile) === -->
+<!-- === ACCOUNT MODAL === -->
 <div id="accountModal" class="modal">
 <div class="modal-box" style="text-align:center;">
 <button class="modal-close-x" onclick="closeModal('accountModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 <div id="loggedOutView">
 <h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Welcome to iStore</h3>
-<p style="color:var(--subtext-color);font-size:12px;margin-bottom:15px;">Sign in to like apps, post comments, and become a partner.</p>
+<p style="color:var(--subtext-color);font-size:12px;margin-bottom:15px;">Sign in to like apps, post comments, and apply as a publisher.</p>
 <button onclick="loginWithGoogle()" style="background:#fff;color:#000;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
 Sign in with Google
@@ -337,8 +328,8 @@ Edit Profile
 Settings
 </button>
 <button class="account-action-btn gold" id="partnerBtn" onclick="openPartnerRequest()">
-<svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg>
-Become a Partner
+<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+Apply as Publisher
 </button>
 <button class="account-action-btn danger" onclick="handleSignOut()">
 <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -371,7 +362,6 @@ Sign Out
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('settingsModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 <h3 style="margin-top:0;color:var(--text-color);font-size:16px;">Settings</h3>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">Dark Mode</div>
@@ -379,7 +369,6 @@ Sign Out
 </div>
 <button id="settingDarkMode" class="setting-toggle" onclick="toggleSetting('darkMode')"></button>
 </div>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">Notifications</div>
@@ -387,7 +376,6 @@ Sign Out
 </div>
 <button id="settingNotifications" class="setting-toggle" onclick="toggleSetting('notifications')"></button>
 </div>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">Auto-play Downloads</div>
@@ -395,7 +383,6 @@ Sign Out
 </div>
 <button id="settingAutoDownload" class="setting-toggle" onclick="toggleSetting('autoDownload')"></button>
 </div>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">Show Comments</div>
@@ -403,7 +390,6 @@ Sign Out
 </div>
 <button id="settingShowComments" class="setting-toggle" onclick="toggleSetting('showComments')"></button>
 </div>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">Font Size</div>
@@ -415,7 +401,6 @@ Sign Out
 <option value="large">Large</option>
 </select>
 </div>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">Clear Cache</div>
@@ -423,7 +408,6 @@ Sign Out
 </div>
 <button onclick="clearAppCache()" style="background:var(--danger);color:#fff;border:none;padding:8px 14px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
 </div>
-
 <div class="setting-item">
 <div>
 <div class="setting-label">App Version</div>
@@ -431,25 +415,24 @@ Sign Out
 </div>
 <span style="color:var(--subtext-color);font-size:11px;font-weight:700;">Latest</span>
 </div>
-
 <button onclick="closeModal('settingsModal')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:10px;border-radius:10px;margin-top:12px;cursor:pointer;font-family:'Inter',sans-serif;">Close</button>
 </div>
 </div>
 
-<!-- === PARTNER REQUEST MODAL === -->
+<!-- === PUBLISHER REQUEST MODAL === -->
 <div id="partnerRequestModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('partnerRequestModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
-<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">👑 Become a Partner</h3>
-<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin-bottom:15px;">By becoming a partner, you'll get admin access to:<br>• Add / Edit / Delete apps<br>• Manage reports and comments<br>• View platform statistics<br><br><strong style="color:var(--warning);">Note:</strong> Your request will be reviewed by the store owner.</p>
-<div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Why do you want to join?</div>
-<textarea id="partnerReason" class="input-field" placeholder="Tell us briefly why you want to become a partner..." style="height:90px;resize:none;"></textarea>
-<button onclick="submitPartnerRequest()" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(255,159,10,0.35);">Send Request to Admin</button>
+<h3 style="margin-top:0;color:var(--text-color);font-size:16px;">📤 Publisher Program</h3>
+<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin-bottom:15px;">As a <strong style="color:var(--accent);">Verified Publisher</strong>, you will be able to:<br><br>✚ &nbsp;Upload new apps to the store<br>✎ &nbsp;Manage your own published apps<br>🗑️ &nbsp;Delete or update your uploads<br><br><strong style="color:var(--warning);">Note:</strong> Your application will be carefully reviewed by the store administration. Approval is not guaranteed.</p>
+<div style="font-size:11px;color:var(--subtext-color);margin-bottom:4px;">Why would you like to become a publisher?</div>
+<textarea id="partnerReason" class="input-field" placeholder="Tell us briefly about yourself and what apps you plan to share..." style="height:90px;resize:none;"></textarea>
+<button onclick="submitPartnerRequest()" style="background:linear-gradient(135deg,var(--accent),#0062d2);color:#fff;border:none;width:100%;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;box-shadow:0 4px 15px rgba(10,132,255,0.35);">Submit Application</button>
 <button onclick="closeModal('partnerRequestModal')" style="background:var(--input-bg);color:var(--text-color);border:none;width:100%;padding:10px;border-radius:10px;margin-top:8px;cursor:pointer;font-family:'Inter',sans-serif;">Cancel</button>
 </div>
 </div>
 
-<!-- === ADD/EDIT APP MODAL (unchanged) === -->
+<!-- === ADD/EDIT APP MODAL === -->
 <div id="addAppModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('addAppModal')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -511,14 +494,15 @@ firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-const ADMIN_EMAILS = ["example@gmail.com","suohaib1415@gmail.com","benssariyassine@gmail.com"];
+const ADMIN_EMAILS = ["benssariyassine@gmail.com"];
 let currentUser = null;
 let isAdmin = false;
+let isPublisher = false;
 let isUserPreview = false;
 let currentTab = 'today';
 let allAppsCache = [];
 let allReportsCache = [];
-let allPartnerRequests = [];
+let allPublisherRequests = [];
 let isLightMode = false;
 let currentFilter = 'all';
 let userFavorites = [];
@@ -581,8 +565,7 @@ function toggleUserPreview(){
   const user = auth.currentUser;
   if(user && ADMIN_EMAILS.map(e=>e.toLowerCase()).includes(user.email.toLowerCase())) isAdmin = !isUserPreview;
   document.getElementById('previewBar').style.display = isUserPreview ? 'flex' : 'none';
-  document.getElementById('adminAddFloatBtn').style.display = isAdmin ? 'flex' : 'none';
-  document.getElementById('adminNavTab').style.display = isAdmin ? 'flex' : 'none';
+  applyAdminUI();
   renderUI();
 }
 
@@ -624,12 +607,12 @@ db.collection("reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
   if(currentTab === 'admin_panel') renderUI();
 }, err=>{ console.warn('Reports err:',err); });
 
-// === NEW: LISTEN TO PARTNER REQUESTS ===
-db.collection("partner_requests").orderBy("createdAt","desc").onSnapshot(snapshot=>{
-  allPartnerRequests = [];
-  snapshot.forEach(doc=>allPartnerRequests.push({id:doc.id, ...doc.data()}));
+db.collection("publisher_requests").orderBy("createdAt","desc").onSnapshot(snapshot=>{
+  allPublisherRequests = [];
+  snapshot.forEach(doc=>allPublisherRequests.push({id:doc.id, ...doc.data()}));
   if(currentTab === 'admin_panel') renderUI();
-}, err=>{ console.warn('Partner requests err:',err); });
+  updateAvatarUI();
+}, err=>{ console.warn('Publisher requests err:',err); });
 
 function onSearchInput(){
   const val = document.getElementById('searchInput').value;
@@ -702,7 +685,7 @@ function renderUI(){
     let totalReports = allReportsCache.length;
     let totalDownloads = allAppsCache.reduce((s,a)=>s+(a.downloads||0),0);
     let totalLikes = allAppsCache.reduce((s,a)=>s+((a.likedBy&&a.likedBy.length)||0),0);
-    let pendingPartners = allPartnerRequests.filter(r=>r.status === 'pending').length;
+    let pendingPublishers = allPublisherRequests.filter(r=>r.status === 'pending').length;
 
     let reportsHTML = "";
     if(totalReports===0) reportsHTML = '<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">All clear! No pending reports.</p></div>';
@@ -712,18 +695,17 @@ function renderUI(){
       reportsHTML += '<div class="report-admin-item"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="color:var(--danger);font-weight:900;font-size:12px;">'+appName+'</span><span style="color:var(--subtext-color);font-size:10px;">By: '+rep.user+'</span></div><div style="color:var(--text-color);font-size:12px;margin-bottom:8px;background:var(--modal-bg);padding:6px 8px;border-radius:6px;">"'+rep.reason+'"</div><div style="display:flex;justify-content:flex-end;"><button onclick="deleteReport(\''+rep.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:4px 10px;border-radius:6px;font-weight:bold;font-size:10px;cursor:pointer;font-family:Inter,sans-serif;">Resolve</button></div></div>';
     });
 
-    // === NEW: PARTNER REQUESTS HTML ===
-    let partnerHTML = "";
-    if(pendingPartners === 0) partnerHTML = '<div style="text-align:center;padding:20px 0;"><p style="color:var(--subtext-color);font-weight:700;font-size:13px;margin:0;">No pending partner requests.</p></div>';
+    let publisherHTML = "";
+    if(pendingPublishers === 0) publisherHTML = '<div style="text-align:center;padding:20px 0;"><p style="color:var(--subtext-color);font-weight:700;font-size:13px;margin:0;">No pending publisher applications.</p></div>';
     else {
-      allPartnerRequests.filter(r=>r.status === 'pending').forEach(req=>{
+      allPublisherRequests.filter(r=>r.status === 'pending').forEach(req=>{
         let initial = (req.displayName || req.email || '?').charAt(0).toUpperCase();
         let avatarContent = req.avatar ? '<img src="'+req.avatar+'">' : initial;
-        partnerHTML += '<div class="partner-req"><div class="partner-req-head"><div class="partner-req-avatar">'+avatarContent+'</div><div style="flex:1;min-width:0;"><div class="partner-req-name">'+(req.displayName||'Unknown User')+'</div><div class="partner-req-email">'+req.email+'</div></div></div><div class="partner-req-reason">'+req.reason+'</div><div class="partner-req-actions"><button class="btn-reject" onclick="rejectPartner(\''+req.id+'\')">Reject</button><button class="btn-approve" onclick="approvePartner(\''+req.id+'\',\''+req.email+'\')">Approve</button></div></div>';
+        publisherHTML += '<div class="partner-req"><div class="partner-req-head"><div class="partner-req-avatar">'+avatarContent+'</div><div style="flex:1;min-width:0;"><div class="partner-req-name">'+(req.displayName||'Unknown User')+'</div><div class="partner-req-email">'+req.email+'</div></div></div><div class="partner-req-reason">'+req.reason+'</div><div class="partner-req-actions"><button class="btn-reject" onclick="rejectPublisher(\''+req.id+'\')">Reject</button><button class="btn-approve" onclick="approvePublisher(\''+req.id+'\',\''+req.email+'\')">Approve</button></div></div>';
       });
     }
 
-    container.innerHTML = '<div class="today-header"><div class="today-title">Admin Dashboard</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore Control Center</div></div><div style="margin-bottom:15px;"><button onclick="toggleUserPreview()" style="background:var(--accent);color:#fff;border:none;padding:9px 15px;border-radius:12px;font-weight:bold;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Inter,sans-serif;">'+ICONS.eye+' Switch to User Preview</button></div><div class="admin-dashboard-wrapper"><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;">Platform Stats</h4><div class="admin-stats-grid"><div class="stat-box"><h5>Total Apps</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>Reports</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>Downloads</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>Likes</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>👑 Partner Requests</span><span style="background:rgba(255,159,10,0.15);color:var(--warning);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+pendingPartners+' pending</span></h4><div style="max-height:400px;overflow-y:auto;">'+partnerHTML+'</div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>User Reports</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
+    container.innerHTML = '<div class="today-header"><div class="today-title">Admin Dashboard</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore Control Center</div></div><div style="margin-bottom:15px;"><button onclick="toggleUserPreview()" style="background:var(--accent);color:#fff;border:none;padding:9px 15px;border-radius:12px;font-weight:bold;font-size:12px;cursor:pointer;width:100%;display:flex;align-items:center;justify-content:center;gap:6px;font-family:Inter,sans-serif;">'+ICONS.eye+' Switch to User Preview</button></div><div class="admin-dashboard-wrapper"><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;">Platform Stats</h4><div class="admin-stats-grid"><div class="stat-box"><h5>Total Apps</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>Reports</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>Downloads</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>Likes</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>📤 Publisher Applications</span><span style="background:rgba(10,132,255,0.15);color:var(--accent);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+pendingPublishers+' pending</span></h4><div style="max-height:400px;overflow-y:auto;">'+publisherHTML+'</div></div><div class="admin-section-card"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:6px;display:flex;justify-content:space-between;align-items:center;"><span>User Reports</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:10px;padding:2px 8px;border-radius:6px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
     return;
   }
 
@@ -973,7 +955,7 @@ function deleteReport(reportId){
   }
 }
 
-// ============ PROFILE FUNCTIONS (NEW) ============
+// ============ PROFILE FUNCTIONS ============
 function loadUserProfile(){
   if(!currentUser) return;
   db.collection("users").doc(currentUser.uid).get().then(doc=>{
@@ -1010,17 +992,18 @@ function updateAvatarUI(){
   if(nameEl) nameEl.innerText = userProfile.displayName || 'User';
   if(emailEl) emailEl.innerText = currentUser ? currentUser.email : '';
 
-  // Role badge
   if(badgeEl){
     if(isAdmin){
       badgeEl.className = 'profile-badge admin';
       badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> Administrator';
+    } else if(isPublisher){
+      badgeEl.className = 'profile-badge publisher';
+      badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Verified Publisher';
     } else {
-      // Check if user has pending request
-      let pending = allPartnerRequests.find(r => r.uid === (currentUser ? currentUser.uid : '') && r.status === 'pending');
+      let pending = allPublisherRequests.find(r => r.uid === (currentUser ? currentUser.uid : '') && r.status === 'pending');
       if(pending){
         badgeEl.className = 'profile-badge pending';
-        badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pending Partner';
+        badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Pending Review';
       } else {
         badgeEl.className = 'profile-badge user';
         badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> User';
@@ -1028,21 +1011,24 @@ function updateAvatarUI(){
     }
   }
 
-  // Partner button state
   if(partnerBtn){
     if(isAdmin){
       partnerBtn.classList.add('disabled');
-      partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> You are a Partner ✓';
+      partnerBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> Administrator';
+      partnerBtn.onclick = null;
+    } else if(isPublisher){
+      partnerBtn.classList.add('disabled');
+      partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> You are a Publisher ✓';
       partnerBtn.onclick = null;
     } else {
-      let pending = allPartnerRequests.find(r => r.uid === (currentUser ? currentUser.uid : '') && r.status === 'pending');
+      let pending = allPublisherRequests.find(r => r.uid === (currentUser ? currentUser.uid : '') && r.status === 'pending');
       if(pending){
         partnerBtn.classList.add('disabled');
-        partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Request Pending...';
+        partnerBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Application Pending...';
         partnerBtn.onclick = null;
       } else {
         partnerBtn.classList.remove('disabled');
-        partnerBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> Become a Partner';
+        partnerBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Apply as Publisher';
         partnerBtn.onclick = openPartnerRequest;
       }
     }
@@ -1054,6 +1040,7 @@ function openEditProfile(){
   document.getElementById('editDisplayName').value = userProfile.displayName || '';
   document.getElementById('editAvatarPreview').src = userProfile.avatar || DEFAULT_AVATAR;
   document.getElementById('avatarFileInput').value = '';
+  pendingAvatarData = '';
   openModal('editProfileModal');
 }
 
@@ -1084,26 +1071,17 @@ function saveProfile(){
     updateData.avatar = pendingAvatarData;
   }
 
-  db.collection("users").doc(currentUser.uid).update(updateData).then(()=>{
+  db.collection("users").doc(currentUser.uid).set(updateData, {merge: true}).then(()=>{
     userProfile.displayName = newName;
     if(pendingAvatarData) userProfile.avatar = pendingAvatarData;
     pendingAvatarData = '';
     updateAvatarUI();
     showToast('Profile updated!', 'success');
     closeModal('editProfileModal');
-  }).catch(err=>{
-    db.collection("users").doc(currentUser.uid).set(updateData, {merge: true}).then(()=>{
-      userProfile.displayName = newName;
-      if(pendingAvatarData) userProfile.avatar = pendingAvatarData;
-      pendingAvatarData = '';
-      updateAvatarUI();
-      showToast('Profile updated!', 'success');
-      closeModal('editProfileModal');
-    }).catch(e2=>showToast('Error: '+e2.message, 'error'));
-  });
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
 }
 
-// ============ SETTINGS FUNCTIONS (NEW) ============
+// ============ SETTINGS FUNCTIONS ============
 function loadSettings(){
   try{
     const s = JSON.parse(localStorage.getItem('istore_app_settings')||'{}');
@@ -1163,9 +1141,7 @@ function applyFontSize(size){
 }
 
 function clearAppCache(){
-  if(!confirm('Clear all cached data? You will be signed out.')){
-    return;
-  }
+  if(!confirm('Clear all cached data? You will be signed out.')) return;
   try{
     localStorage.removeItem('istore_prefs');
     localStorage.removeItem('istore_app_settings');
@@ -1176,12 +1152,13 @@ function clearAppCache(){
   }
 }
 
-// ============ PARTNER REQUEST FUNCTIONS (NEW) ============
+// ============ PUBLISHER FUNCTIONS ============
 function openPartnerRequest(){
   if(!currentUser){ showToast('Please sign in first', 'warning'); return; }
-  if(isAdmin){ showToast('You are already a partner!', 'info'); return; }
-  let pending = allPartnerRequests.find(r => r.uid === currentUser.uid && r.status === 'pending');
-  if(pending){ showToast('You already have a pending request', 'info'); return; }
+  if(isAdmin){ showToast('Administrators cannot apply', 'info'); return; }
+  if(isPublisher){ showToast('You are already a publisher!', 'info'); return; }
+  let pending = allPublisherRequests.find(r => r.uid === currentUser.uid && r.status === 'pending');
+  if(pending){ showToast('You already have a pending application', 'info'); return; }
   document.getElementById('partnerReason').value = '';
   openModal('partnerRequestModal');
 }
@@ -1193,7 +1170,7 @@ function submitPartnerRequest(){
     showToast('Please write at least 10 characters', 'warning');
     return;
   }
-  db.collection("partner_requests").add({
+  db.collection("publisher_requests").add({
     uid: currentUser.uid,
     email: currentUser.email,
     displayName: userProfile.displayName || currentUser.email.split('@')[0],
@@ -1202,84 +1179,79 @@ function submitPartnerRequest(){
     status: 'pending',
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    showToast('Request sent! Admin will review soon.', 'success', 3000);
+    showToast('Application submitted! Admin will review soon.', 'success', 3500);
     closeModal('partnerRequestModal');
     closeModal('accountModal');
     updateAvatarUI();
   }).catch(err=>showToast('Error: '+err.message, 'error'));
 }
 
-function approvePartner(requestId, email){
+function approvePublisher(requestId, email){
   if(!isAdmin) return;
-  if(!confirm('Approve '+email+' as a Partner? They will become an admin.')) return;
+  if(!confirm('Approve '+email+' as a Verified Publisher?\n\nThey will be able to upload and manage their own apps.')) return;
 
-  // 1) Add to admins collection
-  db.collection("admins").doc(email.toLowerCase()).set({
+  db.collection("publishers").doc(email.toLowerCase()).set({
     email: email.toLowerCase(),
     approvedBy: currentUser ? currentUser.email : 'unknown',
     approvedAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    // 2) Update request status
-    return db.collection("partner_requests").doc(requestId).update({ status: 'approved' });
+    return db.collection("publisher_requests").doc(requestId).update({ status: 'approved' });
   }).then(()=>{
-    showToast('Partner approved! They need to refresh.', 'success', 3000);
+    showToast('Publisher approved! They can now upload apps.', 'success', 3000);
   }).catch(err=>showToast('Error: '+err.message, 'error'));
 }
 
-function rejectPartner(requestId){
+function rejectPublisher(requestId){
   if(!isAdmin) return;
-  if(!confirm('Reject this request?')) return;
-  db.collection("partner_requests").doc(requestId).update({
+  if(!confirm('Reject this application?')) return;
+  db.collection("publisher_requests").doc(requestId).update({
     status: 'rejected',
     rejectedBy: currentUser ? currentUser.email : 'unknown',
     rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
-    showToast('Request rejected', 'info');
+    showToast('Application rejected', 'info');
   }).catch(err=>showToast('Error: '+err.message, 'error'));
 }
 
-// ============ AUTH STATE (UPDATED) ============
+// ============ AUTH STATE (with publisher check) ============
 auth.onAuthStateChanged(user=>{
   currentUser = user;
-  const floatBtn = document.getElementById('adminAddFloatBtn');
-  const adminBadge = document.getElementById('adminBadge');
-  const adminNavTab = document.getElementById('adminNavTab');
-
   if(user){
     document.getElementById('loggedOutView').style.display = 'none';
     document.getElementById('loggedInView').style.display = 'block';
     document.getElementById('userEmailText').innerText = user.email;
 
-    // Load profile
     loadUserProfile();
 
-    // Check if user is admin (either in built-in list OR in admins collection)
     const emailLower = user.email.toLowerCase();
     const inBuiltInAdmins = ADMIN_EMAILS.map(e=>e.toLowerCase()).includes(emailLower);
 
     if(inBuiltInAdmins){
       isAdmin = !isUserPreview;
+      isPublisher = false;
       applyAdminUI();
     } else {
-      // Check admins collection
-      db.collection("admins").doc(emailLower).get().then(doc=>{
+      // Check publishers collection
+      db.collection("publishers").doc(emailLower).get().then(doc=>{
         if(doc.exists){
-          isAdmin = !isUserPreview;
+          isPublisher = true;
         } else {
-          isAdmin = false;
+          isPublisher = false;
         }
+        isAdmin = false;
         applyAdminUI();
         updateAvatarUI();
       }).catch(()=>{
         isAdmin = false;
+        isPublisher = false;
         applyAdminUI();
       });
     }
   } else {
     isAdmin = false;
-    if(floatBtn) floatBtn.style.display = 'none';
-    if(adminBadge) adminBadge.style.display = 'none';
-    if(adminNavTab) adminNavTab.style.display = 'none';
+    isPublisher = false;
+    document.getElementById('adminAddFloatBtn').style.display = 'none';
+    document.getElementById('adminNavTab').style.display = 'none';
     document.getElementById('loggedOutView').style.display = 'block';
     document.getElementById('loggedInView').style.display = 'none';
     userProfile = { displayName: '', avatar: '' };
@@ -1291,14 +1263,19 @@ auth.onAuthStateChanged(user=>{
 function applyAdminUI(){
   const floatBtn = document.getElementById('adminAddFloatBtn');
   const adminNavTab = document.getElementById('adminNavTab');
-  if(floatBtn) floatBtn.style.display = isAdmin ? 'flex' : 'none';
+
+  // Add New App button: للأدمن أو الناشر
+  if(floatBtn) floatBtn.style.display = (isAdmin || isPublisher) ? 'flex' : 'none';
+
+  // Admin tab: للأدمن فقط
   if(adminNavTab) adminNavTab.style.display = isAdmin ? 'flex' : 'none';
+
   updateAvatarUI();
 }
 
 function handleSignOut(){
   auth.signOut().then(()=>{
-    currentUser = null; isAdmin = false;
+    currentUser = null; isAdmin = false; isPublisher = false;
     userProfile = { displayName: '', avatar: '' };
     closeModal('accountModal');
     renderUI();
@@ -1312,7 +1289,7 @@ function loginWithGoogle(){
 function openAccountModal(){ openModal('accountModal'); }
 
 function openAddAppModal(){
-  if(!isAdmin) return;
+  if(!isAdmin && !isPublisher) return;
   document.getElementById('modalTitleText').innerText = "Add App to Cloud";
   document.getElementById('editingAppId').value = "";
   document.getElementById('appPublisher').value = "";
@@ -1351,7 +1328,7 @@ function fileToDataURL(file){
 }
 
 async function saveNewApp(){
-  if(!isAdmin) return;
+  if(!isAdmin && !isPublisher) return;
   const editingId = document.getElementById('editingAppId').value;
   const publisher = document.getElementById('appPublisher').value.trim();
   const category = document.getElementById('appCategory').value;
@@ -1392,7 +1369,12 @@ async function saveNewApp(){
       await db.collection("apps").doc(editingId).update({publisher, category, platform, name, size, info, url, icon: iconResult, screenshots: screenshotsList, extraFiles: extraFilesList});
       showToast('App updated', 'success');
     } else {
-      await db.collection("apps").add({publisher, category, platform, name, size, info, url, icon: iconResult, screenshots: screenshotsList, extraFiles: extraFilesList, likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {}, createdAt: firebase.firestore.FieldValue.serverTimestamp()});
+      await db.collection("apps").add({
+        publisherEmail: (currentUser ? currentUser.email.toLowerCase() : ''),
+        publisher, category, platform, name, size, info, url, icon: iconResult, screenshots: screenshotsList, extraFiles: extraFilesList,
+        likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {},
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       showToast('App published', 'success');
     }
     document.getElementById('appPublisher').value = '';
@@ -1422,7 +1404,6 @@ setTimeout(()=>{
   if(activeBtn) activeBtn.classList.add('active');
 }, 100);
 
-// === SPLASH SCREEN AUTO-HIDE AFTER 3 SECONDS ===
 setTimeout(function(){
   var s = document.getElementById('splashScreen');
   if(s){
