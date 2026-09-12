@@ -126,7 +126,6 @@
         }
         .featured-img { width: 100%; height: 100%; object-fit: cover; }
         
-        /* تصغير شريط الـ IPA علامة المصدر المائلة */
         .platform-badge-float {
             position: absolute;
             top: 8px;
@@ -175,7 +174,6 @@
         
         .app-details { overflow: hidden; flex: 1; max-width: 160px; }
         
-        /* ضبط اسم التطبيق لمنع التداخل والالتفاف المزعج */
         .app-details h4 { 
             margin: 0 0 2px 0; 
             font-size: 13px; 
@@ -504,6 +502,7 @@
         .detail-icon { width: 70px; height: 70px; border-radius: 16px; object-fit: cover; border: 1px solid var(--border-color); }
         .comment-box { background: var(--input-bg); border: 1px solid var(--border-color); padding: 8px 10px; border-radius: 10px; margin-bottom: 6px; font-size: 12px; }
         .comment-user { color: #0a84ff; font-weight: 700; margin-bottom: 2px; }
+        .preview-bar { position: fixed; top: 0; left: 0; width: 100%; background: #ff9f0a; color: #000; text-align: center; font-size: 11px; font-weight: 800; padding: 5px 0; z-index: 9999; display: flex; justify-content: center; align-items: center; gap: 10px; }
     </style>
 
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -511,6 +510,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
+
+    <div id="previewBar" class="preview-bar" style="display:none;">
+        <span>👁️ وضع معاينة المستخدم (مُفعل)</span>
+        <button onclick="toggleUserPreview()" style="background:#000; color:#fff; border:none; padding:2px 8px; border-radius:6px; font-size:10px; cursor:pointer; font-weight:bold;">الخروج من المعاينة</button>
+    </div>
 
     <div class="header">
         <div class="logo-area">
@@ -542,6 +546,10 @@
         <button class="nav-item active" onclick="switchTab('today', this)">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             Today
+        </button>
+        <button class="nav-item" onclick="switchTab('trending', this)">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg>
+            Trending
         </button>
         <button class="nav-item" onclick="switchTab('games', this)">
             <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"></rect><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><circle cx="15" cy="11" r="1.2" fill="currentColor"></circle><circle cx="18" cy="13" r="1.2" fill="currentColor"></circle></svg>
@@ -590,7 +598,7 @@
             <input type="hidden" id="editingAppId">
             
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">اسم المستعار للمسؤول:</div>
-            <input type="text" id="appPublisher" class="input-field" placeholder="من طرف @example (مثال: @Yassine)">
+            <input type="text" id="appPublisher" class="input-field" placeholder="من طرف @example (مثال: @example)">
 
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Select Category:</div>
             <select id="appCategory" class="input-field">
@@ -612,7 +620,7 @@
             <div style="font-size:11px; color:var(--subtext-color); margin-bottom:4px;">Screenshots:</div>
             <input type="file" id="appScreenshotsFile" class="input-field" accept="image/*" multiple>
 
-            <input type="text" id="appName" class="input-field" placeholder="App Name (e.g. Org26 Pro)">
+            <input type="text" id="appName" class="input-field" placeholder="App Name (e.g. Example Pro)">
             <input type="text" id="appSize" class="input-field" placeholder="App Size (e.g. 2.1 GB)">
             <input type="text" id="appInfo" class="input-field" placeholder="معلومات أدق عن التطبيق">
             <input type="text" id="appUrl" class="input-field" placeholder="Direct Download Link (.ipa / .apk)">
@@ -664,13 +672,26 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        const ADMIN_EMAILS = ["benssariyassine@gmail.com", "suohaib1415@gmail.com"];
+        const ADMIN_EMAILS = ["example@gmail.com", "suohaib1415@gmail.com"];
         let currentUser = null;
         let isAdmin = false;
+        let isUserPreview = false;
         let currentTab = 'today';
         let allAppsCache = [];
         let allReportsCache = [];
         let isLightMode = false;
+
+        function toggleUserPreview() {
+            isUserPreview = !isUserPreview;
+            const user = auth.currentUser;
+            if (user && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase())) {
+                isAdmin = !isUserPreview;
+            }
+            document.getElementById('previewBar').style.display = isUserPreview ? 'flex' : 'none';
+            document.getElementById('adminAddFloatBtn').style.display = isAdmin ? 'block' : 'none';
+            document.getElementById('adminNavTab').style.display = isAdmin ? 'flex' : 'none';
+            renderUI();
+        }
 
         function toggleDarkMode() {
             isLightMode = !isLightMode;
@@ -782,6 +803,10 @@
                         <div class="today-subtitle">👑 iStore Control Center</div>
                     </div>
                     
+                    <div style="margin-bottom:15px;">
+                        <button onclick="toggleUserPreview()" style="background:#0a84ff; color:#fff; border:none; padding:9px 15px; border-radius:12px; font-weight:bold; font-size:12px; cursor:pointer; width:100%;">👁️ معاينة كـ مستخدم (User Preview Mode)</button>
+                    </div>
+
                     <div class="admin-dashboard-wrapper">
                         <div class="admin-section-card">
                             <h4 style="font-size:13px; margin:0 0 10px 0; color:var(--text-color); border-bottom:1px solid var(--border-color); padding-bottom:6px;">📊 Platform Performance</h4>
@@ -901,6 +926,25 @@
                     generalList.forEach((app, idx) => {
                         let rankBadge = (idx === 0) ? '<span style="color:#ff453a; font-weight:900; margin-right:4px;">#1</span>' : '';
                         gContainer.innerHTML += createAppCardHTML(app, rankBadge);
+                    });
+                }
+
+            } else if (currentTab === 'trending') {
+                let sortedByTrending = [...allAppsCache].sort((a,b) => getTrendingScore(b) - getTrendingScore(a));
+                container.innerHTML = `
+                    <div class="today-header">
+                        <div class="today-title">🔥 Trending Apps</div>
+                        <div class="today-subtitle">التطبيقات والألعاب الأكثر رواجاً وتفاعلاً</div>
+                    </div>
+                    <div style="margin-top:15px;" id="trendingContainer"></div>
+                `;
+                const trContainer = document.getElementById('trendingContainer');
+                if (sortedByTrending.length === 0) {
+                    trContainer.innerHTML = `<p style="color:var(--subtext-color); font-size:13px; text-align:center; margin-top:40px;">No trending apps found.</p>`;
+                } else {
+                    sortedByTrending.forEach((app, idx) => {
+                        let rankBadge = `<span style="color:#ff453a; font-weight:900; margin-right:4px;">#${idx + 1}</span>`;
+                        trContainer.innerHTML += createAppCardHTML(app, rankBadge);
                     });
                 }
 
@@ -1042,7 +1086,6 @@
             document.querySelectorAll('.extra-files-menu').forEach(m => m.style.display = 'none');
         };
 
-        /* نظام التنزيل المباشر والسريع دون حظر المتصفح */
         function startRealDownload(appId, fileUrl, appName) {
             incrementDownload(appId);
 
@@ -1142,7 +1185,7 @@
 
             db.collection("apps").doc(appId).collection("comments").orderBy("createdAt", "desc").get().then(snapshot => {
                 let commentsList = [];
-                snapshot.forEach(doc => commentsList.push(doc.data()));
+                snapshot.forEach(doc => commentsList.push({ id: doc.id, ...doc.data() }));
                 
                 let commentsHTML = '';
                 if(commentsList.length === 0) {
@@ -1150,9 +1193,12 @@
                 } else {
                     commentsList.forEach(c => {
                         commentsHTML += `
-                            <div class="comment-box">
-                                <div class="comment-user">${c.userName}</div>
-                                <div>${c.text}</div>
+                            <div class="comment-box" style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <div class="comment-user">${c.userName}</div>
+                                    <div>${c.text}</div>
+                                </div>
+                                ${isAdmin ? `<button onclick="deleteComment('${app.id}', '${c.id}')" style="background:#ff453a; color:#fff; border:none; padding:3px 7px; border-radius:6px; font-size:10px; cursor:pointer; font-weight:bold;">حذف التعليق</button>` : ''}
                             </div>
                         `;
                     });
@@ -1201,6 +1247,18 @@
                 `;
                 document.getElementById('appDetailModal').style.display = 'flex';
             });
+        }
+
+        function deleteComment(appId, commentId) {
+            if (!isAdmin) return;
+            if (confirm('هل أنت تأكد من حذف هذا التعليق؟')) {
+                db.collection("apps").doc(appId).collection("comments").doc(commentId).delete().then(() => {
+                    db.collection("apps").doc(appId).update({
+                        commentsCount: firebase.firestore.FieldValue.increment(-1)
+                    }).catch(()=>{});
+                    openAppDetails(appId);
+                });
+            }
         }
 
         function postComment(appId) {
@@ -1266,10 +1324,10 @@
                 document.getElementById('userEmailText').innerText = user.email;
                 
                 if (user.email && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase())) {
-                    isAdmin = true;
-                    floatBtn.style.display = 'block';
+                    isAdmin = !isUserPreview;
+                    floatBtn.style.display = isAdmin ? 'block' : 'none';
                     adminBadge.style.display = 'block';
-                    adminNavTab.style.display = 'flex';
+                    adminNavTab.style.display = isAdmin ? 'flex' : 'none';
                 } else {
                     isAdmin = false;
                     floatBtn.style.display = 'none';
