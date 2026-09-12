@@ -488,7 +488,8 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        const ADMIN_EMAIL = "benssariyassine@gmail.com";
+        // تم إضافة إيمايل صهيب هنا بجانب إيمايلك الخاص
+        const ADMIN_EMAILS = ["benssariyassine@gmail.com", "suohaib1415@gmail.com"];
         let currentUser = null;
         let isAdmin = false;
         let currentTab = 'today';
@@ -929,7 +930,8 @@
                 document.getElementById('loggedInView').style.display = 'block';
                 document.getElementById('userEmailText').innerText = user.email;
                 
-                if (user.email.toLowerCase() === ADMIN_EMAIL) {
+                // التحقق مما إذا كان إيمايل المستخدم الحالي موجوداً ضمن مصفوفة الأدمنية ADMIN_EMAILS
+                if (user.email && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(user.email.toLowerCase())) {
                     isAdmin = true;
                     floatBtn.style.display = 'block';
                     adminBadge.style.display = 'block';
