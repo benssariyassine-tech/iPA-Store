@@ -448,6 +448,22 @@ Add New App
 <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
 Sign in with Google
 </button>
+
+<!-- ✅ بداية الإضافة: نموذج البريد الإلكتروني -->
+<div style="display:flex;align-items:center;gap:10px;margin:15px 0;">
+  <hr style="flex:1;border:none;border-top:1px solid var(--border-color);">
+  <span style="color:var(--subtext-color);font-size:11px;">OR</span>
+  <hr style="flex:1;border:none;border-top:1px solid var(--border-color);">
+</div>
+<input type="text" id="authName" class="input-field" placeholder="Full Name (for registration)" style="margin-bottom:8px;text-align:left;">
+<input type="email" id="authEmail" class="input-field" placeholder="Email" style="margin-bottom:8px;text-align:left;">
+<input type="password" id="authPassword" class="input-field" placeholder="Password" style="margin-bottom:12px;text-align:left;">
+<div style="display:flex;gap:8px;">
+  <button onclick="registerWithEmail()" style="flex:1;background:linear-gradient(135deg,var(--accent),#0062d2);color:#fff;border:none;padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;">Create Account</button>
+  <button onclick="loginWithEmail()" style="flex:1;background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:11px;border-radius:12px;font-weight:bold;cursor:pointer;font-family:'Inter',sans-serif;">Sign In</button>
+</div>
+<!-- ✅ نهاية الإضافة -->
+
 </div>
 <div id="loggedInView" style="display:none;">
 <div class="profile-avatar-wrap">
@@ -458,6 +474,14 @@ Sign in with Google
 </div>
 <h3 id="userNameText" class="profile-name">User</h3>
 <p id="userEmailText" class="profile-email"></p>
+
+<!-- ✅ بداية الإضافة: مربع تحذير التأكيد -->
+<div id="verifyEmailBox" style="display:none; background:rgba(255,159,10,0.1); border:1px solid var(--warning); padding:10px; border-radius:10px; margin-bottom:10px;">
+  <p style="color:var(--warning); font-size:11px; margin:0 0 8px 0; font-weight:bold;">⚠️ Account not verified. Please check your email (and Spam folder).</p>
+  <button onclick="reloadUserVerification()" style="background:var(--warning); color:#000; border:none; padding:6px 12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:11px; width:100%;">I have verified my email (Click here)</button>
+</div>
+<!-- ✅ نهاية الإضافة -->
+
 <span id="userRoleBadge" class="profile-badge user">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
 User
@@ -718,6 +742,59 @@ const ICONS = {
   trash:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>',
   clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>'
 };
+
+// ✅ بداية الإضافة: دوال التحقق والإيميل
+function requireVerifiedEmail() {
+  if (!currentUser) return false;
+  if (currentUser.providerData.some(p => p.providerId !== 'password')) return true; // Google/other auth is already verified
+  if (!currentUser.emailVerified) {
+    showToast("Please verify your email first! Check your inbox/Spam.", "warning", 4000);
+    return false;
+  }
+  return true;
+}
+
+function registerWithEmail() {
+  const name = document.getElementById('authName').value.trim();
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if(!name || !email || !password) { showToast('Please fill all fields', 'warning'); return; }
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(cred => {
+      return cred.user.sendEmailVerification().then(() => {
+        return db.collection("users").doc(cred.user.uid).set({
+          displayName: name, email: email, role: "user", createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }).then(() => {
+        showToast("Account created! Please verify your email (check Spam folder).", "success", 6000);
+        closeModal('accountModal');
+      });
+    }).catch(err => showToast("Error: " + err.message, "error"));
+}
+
+function loginWithEmail() {
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+  if(!email || !password) { showToast('Please enter email and password', 'warning'); return; }
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      showToast("Welcome back!", "success");
+      closeModal('accountModal');
+    }).catch(err => showToast("Error: " + err.message, "error"));
+}
+
+function reloadUserVerification() {
+  if (!auth.currentUser) return;
+  auth.currentUser.reload().then(() => {
+    if (auth.currentUser.emailVerified) {
+      showToast("Email verified successfully!", "success");
+      window.location.reload();
+    } else {
+      showToast("Email not verified yet. Please check your inbox.", "warning");
+    }
+  });
+}
+// ✅ نهاية الإضافة
 
 function showToast(msg, type='info', duration=3000){
   const c = document.getElementById('toastContainer');
@@ -1158,6 +1235,7 @@ function createAppCardHTML(app, rankBadge){
 document.addEventListener('click', ()=>{ document.querySelectorAll('.extra-files-menu').forEach(m=>m.style.display='none'); });
 
 function startRealDownload(appId, fileUrl, appName){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   incrementDownload(appId);
   if(!fileUrl || fileUrl === '#' || fileUrl.trim() === ''){
     showToast('Download link not available', 'warning');
@@ -1192,6 +1270,7 @@ function incrementDownload(appId){
 
 function toggleStarLike(appId, event){
   if(event) event.stopPropagation();
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   if(!currentUser){ showToast('Please sign in to like', 'warning'); openAccountModal(); return; }
   const appRef = db.collection("apps").doc(appId);
   const userEmail = currentUser.email;
@@ -1232,6 +1311,7 @@ function shareApp(appId, event){
 }
 
 function setRating(appId, value){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   if(!currentUser){ showToast('Sign in to rate', 'warning'); openAccountModal(); return; }
   const app = allAppsCache.find(a=>a.id===appId);
   if(!app) return;
@@ -1290,6 +1370,7 @@ function deleteComment(appId, commentId){
 }
 
 function postComment(appId){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   if(!currentUser){ showToast('Sign in first', 'warning'); return; }
   const text = document.getElementById('newCommentText').value.trim();
   if(!text) return;
@@ -1302,6 +1383,7 @@ function postComment(appId){
 }
 
 function openReportModal(appId){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   document.getElementById('reportAppId').value = appId;
   document.getElementById('reportReason').value = '';
   openModal('reportModal');
@@ -1309,6 +1391,7 @@ function openReportModal(appId){
 function setReportReasonText(t){ document.getElementById('reportReason').value = t; }
 
 function submitReport(){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   const appId = document.getElementById('reportAppId').value;
   const reason = document.getElementById('reportReason').value.trim();
   if(!reason){ showToast('Please select or type a reason', 'warning'); return; }
@@ -1522,6 +1605,7 @@ function clearAppCache(){
 }
 
 function openPartnerRequest(){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   if(!currentUser){ showToast('Please sign in first', 'warning'); return; }
   if(isAdmin){ showToast('Administrators cannot apply', 'info'); return; }
   if(isPublisher){ showToast('You are already a publisher!', 'info'); return; }
@@ -1532,6 +1616,7 @@ function openPartnerRequest(){
 }
 
 function submitPartnerRequest(){
+  if(!requireVerifiedEmail()) return; // ✅ تمت الإضافة فقط
   if(!currentUser) return;
   const reason = document.getElementById('partnerReason').value.trim();
   if(!reason || reason.length < 10){
@@ -1584,6 +1669,23 @@ function rejectPublisher(requestId){
 auth.onAuthStateChanged(user=>{
   currentUser = user;
   if(user){
+    // ✅ بداية الإضافة: فحص حالة تأكيد البريد
+    if (user.providerData.some(p => p.providerId === 'password') && !user.emailVerified) {
+      document.getElementById('loggedOutView').style.display = 'none';
+      document.getElementById('loggedInView').style.display = 'block';
+      document.getElementById('userEmailText').innerText = user.email;
+      document.getElementById('userNameText').innerText = "Unverified User";
+      document.getElementById('verifyEmailBox').style.display = 'block';
+      isAdmin = false; isPublisher = false;
+      document.getElementById('adminAddFloatBtn').style.display = 'none';
+      document.getElementById('adminNavTab').style.display = 'none';
+      updateFavBtnVisibility(); renderUI();
+      return; // إيقاف التنفيذ هنا
+    } else {
+      document.getElementById('verifyEmailBox').style.display = 'none';
+    }
+    // ✅ نهاية الإضافة
+
     document.getElementById('loggedOutView').style.display = 'none';
     document.getElementById('loggedInView').style.display = 'block';
     document.getElementById('userEmailText').innerText = user.email;
