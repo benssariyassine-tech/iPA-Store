@@ -231,13 +231,11 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .avatar-upload-label:hover{border-color:var(--accent);color:var(--accent)}
 
 /* ===== NEW UPDATES FOR APP DETAILS MODAL (Like PUBG Screenshot) ===== */
-/* Darker background for the bottom sheet */
 .bottom-sheet-content {
   background: var(--modal-bg) !important;
   border-radius: 28px 28px 0 0 !important;
 }
 
-/* Glowing background right behind the app icon */
 .detail-header {
   position: relative;
   z-index: 1;
@@ -258,13 +256,11 @@ body.light-mode .detail-header::before {
   background: radial-gradient(circle, rgba(10,132,255,0.2) 0%, transparent 70%);
 }
 
-/* App Icon styling */
 .detail-icon {
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
   border: 2px solid rgba(255,255,255,0.1);
 }
 
-/* Rating Box Override (Using nth-child since we can't add classes) */
 #appDetailBody > div:nth-child(3) {
   background: var(--card-bg) !important;
   border-radius: 16px !important;
@@ -272,7 +268,6 @@ body.light-mode .detail-header::before {
   padding: 16px !important;
 }
 
-/* Detailed Info Box Override */
 #appDetailBody > div:nth-child(4) {
   background: var(--card-bg) !important;
   border-radius: 16px !important;
@@ -286,20 +281,17 @@ body.light-mode .detail-header::before {
   gap: 6px;
 }
 
-/* Download Button styling (Old button, new look) */
 .btn-download-hero {
   border-radius: 16px !important;
   box-shadow: 0 8px 25px rgba(10,132,255,0.4) !important;
   margin-top: 5px;
 }
 
-/* Screenshots */
 .screenshot-item {
   border-radius: 14px !important;
   border: 1px solid var(--border-color) !important;
 }
 
-/* Similar Apps - Vertical List Style (Like Screenshot 1) */
 .similar-apps-container {
   display: flex !important;
   flex-direction: column !important;
@@ -351,7 +343,6 @@ body.light-mode .detail-header::before {
   align-self: flex-start !important;
 }
 
-/* Comments */
 .comment-box {
   background: var(--input-bg) !important;
   border-radius: 12px !important;
@@ -364,7 +355,6 @@ body.light-mode .detail-header::before {
   font-weight: 700 !important;
 }
 
-/* Close Button styling */
 #appDetailBody > button:last-child {
   background: var(--input-bg) !important;
   color: var(--text-color) !important;
@@ -375,7 +365,6 @@ body.light-mode .detail-header::before {
   font-weight: 700 !important;
 }
 
-/* Rating Stars styling (Bigger, like screenshot) */
 .star-rating {
   display: flex !important;
   gap: 12px !important;
@@ -676,7 +665,6 @@ const firebaseConfig = {
 if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
 
-// 🆘 FAILSAFE: Hide splash immediately — no matter what happens later
 setTimeout(function(){
   var s = document.getElementById('splashScreen');
   if(s){ s.classList.add('hide'); setTimeout(function(){ if(s && s.parentNode) s.parentNode.removeChild(s); }, 1200); }
@@ -923,15 +911,31 @@ function renderUI(){
   const searchInputEl = document.getElementById('searchInput');
   const searchQuery = searchInputEl ? searchInputEl.value.toLowerCase().trim() : '';
 
-  // Deduplicate apps by name so we don't show both iOS and Android versions at once
+  // === 50/50 Filtering System ===
+  // Group by name, then randomly pick either iOS or Android version (50/50)
   let uniqueApps = [];
-  let seenNames = new Set();
+  let groupedByName = {};
   allAppsCache.forEach(app => {
-    if(!seenNames.has(app.name)) {
-      seenNames.add(app.name);
-      uniqueApps.push(app);
+    if (!groupedByName[app.name]) groupedByName[app.name] = [];
+    groupedByName[app.name].push(app);
+  });
+  Object.keys(groupedByName).forEach(name => {
+    let versions = groupedByName[name];
+    if (versions.length === 1) {
+      uniqueApps.push(versions[0]);
+    } else {
+      // 50/50 Chance to pick either version (iOS or Android)
+      let randomIndex = Math.floor(Math.random() * versions.length);
+      uniqueApps.push(versions[randomIndex]);
     }
   });
+  // Sort filtered apps by creation time (newest first)
+  uniqueApps.sort((a,b) => {
+     let timeA = a.createdAt ? a.createdAt.seconds : 0;
+     let timeB = b.createdAt ? b.createdAt.seconds : 0;
+     return timeB - timeA;
+  });
+  // ==================================
 
   if(searchQuery !== ""){
     let filtered = uniqueApps.filter(app => (app.name&&app.name.toLowerCase().includes(searchQuery)) || (app.info&&app.info.toLowerCase().includes(searchQuery)) || (app.publisher&&app.publisher.toLowerCase().includes(searchQuery)));
@@ -991,12 +995,15 @@ function renderUI(){
 
   if(currentTab === 'today'){
     container.innerHTML = '<div class="today-header"><div class="today-date">'+getActualDateString()+'</div><div class="today-title">Today</div><div class="today-subtitle">'+ICONS.bolt+' Special Updates & Highlights</div></div><div id="todayAppsContainer">'+renderSkeleton()+'</div><div class="section-heading">Trending & More</div><div id="generalAppsContainer"></div>';
-    // Stable order: just use uniqueApps as it is (already ordered by createdAt desc)
-    const todayList = uniqueApps.filter(app=>app.category==='today'||!app.category);
-    const generalList = uniqueApps;
+    
+    // Sort Today's apps by Trending Score (Engagement) - High interaction first
+    let trendingList = [...uniqueApps].sort((a,b)=>getTrendingScore(b)-getTrendingScore(a));
+    const todayList = trendingList.filter(app=>app.category==='today'||!app.category);
+    const generalList = uniqueApps; // Regular list with 50/50 filter
+
     const tc = document.getElementById('todayAppsContainer');
     tc.innerHTML = '';
-    let displayList = todayList.length > 0 ? todayList : uniqueApps.slice(0,2);
+    let displayList = todayList.length > 0 ? todayList : trendingList.slice(0,2);
     if(displayList.length===0) tc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;">No featured apps yet.</p>';
     else displayList.forEach((app,index)=>tc.innerHTML += createFeaturedCardHTML(app,index));
     const gc = document.getElementById('generalAppsContainer');
@@ -1006,7 +1013,7 @@ function renderUI(){
   }
 
   if(currentTab === 'trending'){
-    // Stable order: just use uniqueApps instead of sorting by trending score
+    // Use 50/50 filtered list instead of sorting by trending (To avoid duplicates)
     let list = uniqueApps;
     if(currentFilter==='IPA'||currentFilter==='APK') list = list.filter(a=>(a.platform||'IPA')===currentFilter);
     container.innerHTML = '<div class="today-header"><div class="today-title">Trending Apps</div><div class="today-subtitle" style="color:var(--warning);">'+ICONS.star+' Most popular apps</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button><button class="chip '+(currentFilter==='IPA'?'active':'')+'" onclick="setFilter(\'IPA\')">iOS</button><button class="chip '+(currentFilter==='APK'?'active':'')+'" onclick="setFilter(\'APK\')">Android</button></div><div class="trending-stage"><div id="trendingContainer"></div></div>';
@@ -1708,7 +1715,7 @@ async function saveNewApp(){
 
   try {
     if(fileInput.files && fileInput.files[0]){
-      if(fileInput.files[0].size > 1024 * 1024) { showToast('Icon must be less than 1MB', 'warning'); return; }
+      // Removed 1MB limit check as requested
       iconResult = await fileToDataURL(fileInput.files[0]);
     } else if(window.__itunesIcon){
       iconResult = window.__itunesIcon;
@@ -1717,7 +1724,7 @@ async function saveNewApp(){
     let screenshotsList = [...existingScreenshots];
     if(screenshotsInput.files && screenshotsInput.files.length>0){
       for(const file of Array.from(screenshotsInput.files)) {
-        if(file.size > 1024 * 1024) { showToast('Screenshots must be less than 1MB', 'warning'); return; }
+        // Removed 1MB limit check as requested
         screenshotsList.push(await fileToDataURL(file));
       }
     } else if(window.__itunesScreenshots && window.__itunesScreenshots.length > 0 && screenshotsList.length === 0){
