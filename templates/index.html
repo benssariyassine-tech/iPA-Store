@@ -672,6 +672,16 @@ setTimeout(function(){
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+auth.getRedirectResult().then(function(result){
+  if (result && result.user) {
+    console.log('Redirect sign-in completed:', result.user.email);
+  }
+}).catch(function(error){
+  if (error && error.code && error.code !== 'auth/no-auth-event' && error.code !== 'auth/null-user') {
+    console.error('Redirect result error:', error);
+  }
+});
+
 const ADMIN_EMAILS = ["benssariyassine@gmail.com"];
 let currentUser = null;
 let isAdmin = false;
@@ -1647,7 +1657,31 @@ function handleSignOut(){
 }
 function loginWithGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider).catch(()=>auth.signInWithRedirect(provider));
+  provider.setCustomParameters({ prompt: 'select_account' });
+  const ua = navigator.userAgent;
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(ua);
+  if (isSafari && !isIOS) {
+    auth.signInWithRedirect(provider).catch(function(err){
+      console.error('Redirect err:', err);
+      showToast('Sign in failed: ' + err.message, 'error');
+    });
+  } else {
+    auth.signInWithPopup(provider).then(function(result){
+      console.log('Signed in:', result.user.email);
+    }).catch(function(error){
+      console.error('Popup error:', error.code, error.message);
+      if (error.code === 'auth/popup-blocked' ||
+          error.code === 'auth/popup-closed-by-user' ||
+          error.code === 'auth/cancelled-popup-request') {
+        auth.signInWithRedirect(provider);
+      } else if (error.code === 'auth/unauthorized-domain') {
+        showToast('Domain not authorized in Firebase Console', 'error');
+      } else {
+        showToast('Sign in failed: ' + error.message, 'error');
+      }
+    });
+  }
 }
 function openAccountModal(){ openModal('accountModal'); }
 
