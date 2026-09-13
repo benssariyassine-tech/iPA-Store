@@ -229,6 +229,160 @@ body.light-mode .trending-stage::after{opacity:0.6}
 .avatar-preview{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin:0 auto 12px auto;display:block;background:var(--input-bg)}
 .avatar-upload-label{display:block;text-align:center;padding:12px;border:2px dashed var(--border-color);border-radius:12px;cursor:pointer;color:var(--subtext-color);font-size:12px;font-weight:700;margin-bottom:12px;transition:border-color 0.3s}
 .avatar-upload-label:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ===== NEW UPDATES FOR APP DETAILS MODAL (Like PUBG Screenshot) ===== */
+/* Darker background for the bottom sheet */
+.bottom-sheet-content {
+  background: #121212 !important;
+  border-radius: 28px 28px 0 0 !important;
+}
+
+/* Glowing background right behind the app icon */
+.detail-header {
+  position: relative;
+  z-index: 1;
+}
+.detail-header::before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  width: 130px;
+  height: 130px;
+  background: radial-gradient(circle, rgba(10,132,255,0.4) 0%, transparent 70%);
+  filter: blur(25px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* App Icon styling */
+.detail-icon {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+  border: 2px solid rgba(255,255,255,0.1);
+}
+
+/* Rating Box Override (Using nth-child since we can't add classes) */
+#appDetailBody > div:nth-child(3) {
+  background: #1c1c1e !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  padding: 16px !important;
+}
+
+/* Detailed Info Box Override */
+#appDetailBody > div:nth-child(4) {
+  background: #1c1c1e !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  padding: 16px !important;
+}
+#appDetailBody > div:nth-child(4) strong {
+  color: #0a84ff !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Download Button styling (Old button, new look) */
+.btn-download-hero {
+  border-radius: 16px !important;
+  box-shadow: 0 8px 25px rgba(10,132,255,0.4) !important;
+  margin-top: 5px;
+}
+
+/* Screenshots */
+.screenshot-item {
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+/* Similar Apps - Vertical List Style (Like Screenshot 1) */
+.similar-apps-container {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  overflow-x: hidden !important;
+  padding: 5px 0 !important;
+}
+
+.similar-app-card {
+  display: grid !important;
+  grid-template-columns: 50px 1fr !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  column-gap: 12px !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  background: #1c1c1e !important;
+  border-radius: 14px !important;
+  padding: 12px !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+}
+
+.similar-app-card img {
+  width: 50px !important;
+  height: 50px !important;
+  margin-bottom: 0 !important;
+  grid-row: 1 / 3 !important;
+  border-radius: 12px !important;
+  background: #2c2c2e !important;
+}
+
+.similar-app-card h5 {
+  margin: 0 !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  align-self: flex-end !important;
+  color: #fff !important;
+}
+
+.similar-app-card p {
+  margin: 0 !important;
+  font-size: 11px !important;
+  color: #8e8e93 !important;
+  align-self: flex-start !important;
+}
+
+/* Comments */
+.comment-box {
+  background: #1c1c1e !important;
+  border-radius: 12px !important;
+  padding: 12px !important;
+  border: 1px solid rgba(255,255,255,0.05) !important;
+}
+
+.comment-user {
+  color: #0a84ff !important;
+  font-weight: 700 !important;
+}
+
+/* Close Button styling */
+#appDetailBody > button:last-child {
+  background: #2c2c2e !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+  font-size: 14px !important;
+  padding: 12px !important;
+  margin-top: 20px !important;
+  font-weight: 700 !important;
+}
+
+/* Rating Stars styling (Bigger, like screenshot) */
+.star-rating {
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: center !important;
+  margin: 10px 0 5px 0 !important;
+}
+.star-btn svg {
+  width: 32px !important;
+  height: 32px !important;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
