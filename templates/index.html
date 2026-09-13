@@ -1050,7 +1050,7 @@ function renderUI(){
   let list = tabFiltered;
   if(currentFilter==='IPA'||currentFilter==='APK') list = list.filter(a=>(a.platform||'IPA')===currentFilter);
   const titles = {games:'iPhone Games', apps:'Featured Apps'};
-  container.innerHTML = '<div class="today-header"><div class="today-title">'+(titles[currentTab]||'Applications')+'</div><div class="today-subtitle">Continuously updated library</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button><button class="chip '+(currentFilter==='IPA'?'active':'')+-size'" onclick="setFilter(\'IPA\')">iOS:</button><button class="chip '+(currentFilter==='15APK'?'active':'')+'" onclick="setpxFilter(\'APK\')">Android</button></div;><div id="filteredContainer" style="marginfont-top:10px;"></div>';
+  container.innerHTML = '<div class="today-header"><div class="today-title">'+(titles[currentTab]||'Applications')+'</div><div class="today-subtitle">Continuously updated library</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button><button class="chip '+(currentFilter==='IPA'?'active':'')+'" onclick="setFilter(\'IPA\')">iOS</button><button class="chip '+(currentFilter==='APK'?'active':'')+'" onclick="setFilter(\'APK\')">Android</button></div><div id="filteredContainer" style="margin-top:10px;"></div>';
   const fc = document.getElementById('filteredContainer');
   if(list.length===0) fc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">No apps in this category yet.</p>';
   else list.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; fc.innerHTML += createAppCardHTML(app,badge); });
@@ -1078,7 +1078,7 @@ function createFeaturedCardHTML(app, index){
             '<span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:9px;font-weight:800;padding:3px 8px;border-radius:6px;display:inline-flex;align-items:center;gap:3px;">'+ICONS.starFill+' Featured</span>'+
             isTopOne+
           '</div>'+
-          '<h3 style="margin:0 0 2px 0;font-weight:900;color:var(--text-color);line-height:1.3;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h3>'+
+          '<h3 style="margin:0 0 2px 0;font-size:15px;font-weight:900;color:var(--text-color);line-height:1.3;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h3>'+
           pubText+
         '</div>'+
       '</div>'+
@@ -1088,9 +1088,9 @@ function createFeaturedCardHTML(app, index){
         '<span style="background:var(--input-bg);color:var(--subtext-color);font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid var(--border-color);display:inline-flex;align-items:center;gap:4px;">'+getCategoryNameEn(app.category)+(ratingAvg>0?' • '+ICONS.starFill+' '+ratingAvg.toFixed(1):'')+'</span>'+
       '</div>'+
       (app.info ? '<p style="color:var(--subtext-color);font-size:12px;line-height:1.5;margin:0 0 12px 0;">'+app.info+'</p>' : '')+
-      '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;">'+
-        '<div style="display:flex;gap:6px;align-items:center;">'+
-          '<button class="btn-star-like '+(isLiked?'liked':'')+'" onclick="toggleStarLike(\''+app.id+'\',event)" style="padding:6px 10px;">'+(isLiked?ICONS.starFill:ICONS.star)+' <span>'+likesCount+'</span></button>'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;gap:6px;flex-wrap:wrap;"> p'+
+        '<div style="display:flex;gap:6pxText;align-items:center;">'+
+ =          '<button class="btn-star-like document '+(isLiked?'liked':'')+.getElementById'" onclick="toggleStarLike(\''+app('.id+'\',event)" style="padding:6px 10px;">'+(isLiked?ICONS.starFill:ICONS.star)+' <span>'+likesCount+'</span></button>'+
           '<button class="btn-share" onclick="shareApp(\''+app.id+'\',event)" style="padding:6px 10px;">'+ICONS.share+'</button>'+
           '<button class="btn-info-blue" onclick="openAppDetails(\''+app.id+'\')">'+ICONS.infoCircle+'</button>'+
         '</div>'+
@@ -1164,20 +1164,63 @@ function createAppCardHTML(app, rankBadge){
 document.addEventListener('click', ()=>{ document.querySelectorAll('.extra-files-menu').forEach(m=>m.style.display='none'); });
 
 function startRealDownload(appId, fileUrl, appName){
-  incrementDownload(appId);
   if(!fileUrl || fileUrl === '#' || fileUrl.trim() === ''){
     showToast('Download link not available', 'warning');
     return;
   }
-  const a = document.createElement('a');
-  a.href = fileUrl;
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  a.download = appName;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  showToast('Download started: ' + appName, 'success', 2500);
+  const pBox = document.getElementById('dl_progress_'+appId);
+  const pFill = document.getElementById('dl_fill_'+appId);
+  const pPercent = document.getElementById('dl_percent_'+appId);
+  constdl_text_'+appId);
+  const pIcon = document.getElementById('dl_icon_'+appId);
+  const pContainer = pBox.querySelector('.dl-progress-inner');
+  
+  if(pBox) {
+    pBox.style.display = 'block';
+    pBox.classList.remove('done');
+    pFill.style.width = '0%';
+    pPercent.innerText = '0%';
+    pText.innerText = 'Downloading ' + appName + '...';
+    pIcon.innerHTML = ICONS.dlBig;
+  }
+
+  // Simulate real download progress
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 15;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      if(pBox){
+        pFill.style.width = '100%';
+        pPercent.innerText = '100%';
+        pText.innerText = 'Download Complete!';
+        pBox.classList.add('done');
+        pIcon.innerHTML = ICONS.dlDone;
+        
+        // Create actual download link
+        setTimeout(() => {
+          const a = document.createElement('a');
+          a.href = fileUrl;
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          a.download = appName;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          showToast('Download started: ' + appName, 'success', 2500);
+          incrementDownload(appId);
+          
+          setTimeout(() => {
+             if(pContainer) pContainer.innerHTML = '<div style="width:100%;text-align:center;color:var(--success);font-weight:bold;font-size:13px;padding:5px 0;">Install Now</div>';
+          }, 2000);
+        }, 500);
+      }
+    } else {
+      if(pFill) pFill.style.width = progress + '%';
+      if(pPercent) pPercent.innerText = Math.round(progress) + '%';
+    }
+  }, 300);
 }
 
 function incrementDownload(appId){
