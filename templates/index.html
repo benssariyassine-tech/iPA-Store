@@ -12,11 +12,17 @@ body.light-mode{--bg-color:#f2f2f7;--text-color:#000;--card-bg:#fff;--border-col
 body{background:var(--bg-color);color:var(--text-color);font-family:'Inter','Cairo',sans-serif;margin:0;padding:0 0 110px 0;direction:ltr;transition:background 0.3s,color 0.3s;overflow-x:hidden}
 body[dir="rtl"]{direction:rtl;font-family:'Cairo','Inter',sans-serif}
 body[dir="rtl"] .search-icon{left:auto;right:15px}
-body[dir="rtl"] .search-input{padding:12px 45px 12px 45px}
 body[dir="rtl"] .search-clear{right:auto;left:12px}
 svg{display:inline-block;vertical-align:middle}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes popIn{from{opacity:0;transform:scale(0.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+@keyframes popSuccess{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ========== HEADER ========== */
+/* HEADER */
 .header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--header-bg);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border-color)}
 .logo-area{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;letter-spacing:0.5px}
 .logo-area span{background:linear-gradient(135deg,var(--accent),#5ac8fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -25,11 +31,10 @@ svg{display:inline-block;vertical-align:middle}
 .icon-btn:active{transform:scale(0.9)}
 .icon-btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 4px 15px rgba(10,132,255,0.4)}
 
-/* ========== CONTAINER ========== */
+/* CONTAINER */
 .container{padding:16px 20px;max-width:600px;margin:auto;animation:fadeInUp 0.4s cubic-bezier(0.16,1,0.3,1)}
-@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* ========== SEARCH ========== */
+/* SEARCH */
 .search-box{position:relative;margin-bottom:14px}
 .search-input{width:100%;background:var(--glass-bg);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border:1px solid var(--glass-border);padding:14px 45px 14px 45px;border-radius:18px;color:var(--text-color);font-family:inherit;font-size:14px;box-sizing:border-box;outline:none;transition:all 0.3s}
 .search-input:focus{border-color:var(--accent);box-shadow:0 0 0 4px rgba(10,132,255,0.15),0 0 20px rgba(10,132,255,0.2)}
@@ -37,19 +42,19 @@ svg{display:inline-block;vertical-align:middle}
 .search-clear{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:var(--border-color);color:var(--text-color);border:none;width:24px;height:24px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer}
 .search-clear.show{display:flex}
 
-/* ========== FILTER CHIPS ========== */
+/* FILTER CHIPS */
 .filter-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px;margin-bottom:5px;scrollbar-width:none}
 .filter-chips::-webkit-scrollbar{display:none}
 .chip{background:var(--glass-bg);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border:1px solid var(--glass-border);color:var(--subtext-color);padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;cursor:pointer;font-family:inherit;transition:all 0.25s}
 .chip.active{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:#fff;box-shadow:0 4px 12px rgba(10,132,255,0.4);transform:translateY(-1px)}
 
-/* ========== TODAY HEADER ========== */
+/* TODAY HEADER */
 .today-header{margin-bottom:18px;animation:fadeInUp 0.4s ease}
 .today-date{color:var(--subtext-color);font-size:12px;font-weight:600;letter-spacing:0.5px}
 .today-title{font-size:32px;font-weight:900;margin:4px 0;background:linear-gradient(135deg,var(--text-color),var(--subtext-color));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .today-subtitle{font-size:13px;color:var(--danger);font-weight:700;display:flex;align-items:center;gap:5px}
 
-/* ========== SPLASH ========== */
+/* SPLASH */
 #splashScreen{position:fixed;top:0;left:0;right:0;bottom:0;background:#0b0b0f;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;transition:opacity 1s ease, visibility 1s ease}
 #splashScreen.hide{opacity:0;visibility:hidden;pointer-events:none}
 .splash-logo-wrap{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
@@ -68,14 +73,13 @@ svg{display:inline-block;vertical-align:middle}
 .splash-loader span:nth-child(3){animation-delay:0.3s;background:#ff9f0a;box-shadow:0 0 10px rgba(255,159,10,0.6)}
 @keyframes splashDot{0%,80%,100%{transform:scale(0.5);opacity:0.4}40%{transform:scale(1.15);opacity:1}}
 
-/* ========== FEATURED CARD ========== */
+/* FEATURED CARD */
 .featured-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:24px;overflow:hidden;margin-bottom:20px;box-shadow:0 10px 30px rgba(0,0,0,0.15);position:relative;animation:fadeInUp 0.4s ease}
 .featured-img-wrapper{position:relative;width:100%;height:190px;overflow:hidden;background:var(--input-bg)}
 .featured-img{width:100%;height:100%;object-fit:cover}
-.platform-badge-float{position:absolute;top:8px;right:-28px;background:var(--danger);color:#fff;padding:2px 28px;font-size:8px;font-weight:900;transform:rotate(45deg);box-shadow:0 2px 6px rgba(0,0,0,0.3);letter-spacing:0.5px;z-index:10;pointer-events:none}
 .featured-body{padding:16px}
 
-/* ========== APP CARD ========== */
+/* APP CARD */
 .section-heading{font-size:18px;font-weight:800;margin:22px 0 14px 0;display:flex;justify-content:space-between;align-items:center}
 .app-card-pro{background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:14px;margin-bottom:12px;transition:all 0.3s cubic-bezier(0.16,1,0.3,1)}
 .app-card-pro:hover{border-color:rgba(10,132,255,0.3);transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,0.1)}
@@ -95,50 +99,42 @@ svg{display:inline-block;vertical-align:middle}
 .btn-info-blue{background:rgba(10,132,255,0.12);border:1px solid rgba(10,132,255,0.3);color:var(--accent);width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
 .btn-report-text{background:transparent;border:none;color:var(--danger);font-size:11px;font-weight:700;cursor:pointer;padding:4px 6px;font-family:inherit}
 
-/* ========== DOWNLOAD PROGRESS ========== */
+/* DOWNLOAD PROGRESS */
 .dl-progress-box{width:100%;margin-top:10px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg, rgba(255,69,58,0.18), rgba(10,132,255,0.05));border:1px solid rgba(255,69,58,0.28);backdrop-filter:blur(22px);position:relative;overflow:hidden}
 .dl-progress-inner{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
-.dl-progress-icon{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg, rgba(255,69,58,0.45), rgba(255,107,94,0.2));border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:iconPulse 1.6s ease-in-out infinite}
-@keyframes iconPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.dl-progress-icon{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg, rgba(255,69,58,0.45), rgba(255,107,94,0.2));border:1px solid rgba(255,255,255,0.18);display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:pulse 1.6s ease-in-out infinite}
 .dl-progress-icon svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2.5}
 .dl-progress-info{flex:1;min-width:0}
 .dl-progress-title{font-size:11px;font-weight:800;color:#fff;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dl-progress-bar-bg{width:100%;height:7px;background:rgba(0,0,0,0.35);border-radius:4px;overflow:hidden}
-.dl-progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, #ff453a, #ff6b5e);border-radius:3px;transition:width 0.2s;animation:shimmerBar 1.4s linear infinite;background-size:200% 100%}
-@keyframes shimmerBar{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.dl-progress-bar-fill{height:100%;width:0%;background:linear-gradient(90deg, #ff453a, #ff6b5e);border-radius:3px;transition:width 0.2s;background-size:200% 100%;animation:shimmer 1.4s linear infinite}
 .dl-progress-percent{font-size:13px;font-weight:900;color:#ff8579;min-width:40px;text-align:right}
-.dl-progress-box.done{border-color:rgba(50,215,75,0.45);background:linear-gradient(135deg, rgba(50,215,75,0.18), rgba(50,215,75,0.06))}
-.dl-progress-box.done .dl-progress-percent{color:#32d74b}
-.dl-progress-box.done .dl-progress-bar-fill{background:linear-gradient(90deg,#32d74b,#57e075);animation:none}
 
-/* ========== SKELETON ========== */
+/* SKELETON */
 .skeleton-card{background:var(--card-bg);border:1px solid var(--border-color);border-radius:18px;padding:12px;margin-bottom:10px;display:flex;gap:10px;align-items:center}
 .skeleton-box{background:linear-gradient(90deg,var(--border-color) 25%,rgba(255,255,255,0.05) 50%,var(--border-color) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* ========== FLOATING NAV ========== */
+/* FLOATING NAV */
 .floating-nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);width:92%;max-width:480px;background:var(--nav-bg);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);border:1px solid var(--glass-border);border-radius:26px;display:flex;justify-content:space-around;padding:10px 6px;z-index:1000;box-shadow:0 15px 40px rgba(0,0,0,0.35)}
 .nav-item{background:none;border:none;color:var(--subtext-color);font-size:10px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;font-family:inherit;padding:4px 8px;border-radius:12px;transition:0.25s}
 .nav-item.active{color:var(--accent);transform:scale(1.05)}
 .nav-item.active svg{filter:drop-shadow(0 0 8px rgba(10,132,255,0.6))}
 .nav-item svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2.2}
 
-/* ========== MODAL ========== */
+/* MODAL */
 .modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:center;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:fadeIn 0.2s ease}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
 .modal-box{background:var(--modal-bg);border:1px solid var(--border-color);border-radius:26px;padding:26px 22px;width:90%;max-width:380px;max-height:88vh;overflow-y:auto;box-sizing:border-box;position:relative;animation:popIn 0.35s cubic-bezier(0.16,1,0.3,1);box-shadow:0 25px 60px rgba(0,0,0,0.5)}
-@keyframes popIn{from{opacity:0;transform:scale(0.9) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
 .modal-close-x{position:absolute;top:16px;right:16px;background:var(--input-bg);border:none;color:var(--text-color);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;z-index:5}
 body[dir="rtl"] .modal-close-x{right:auto;left:16px}
 .modal-title{font-size:22px;font-weight:900;margin:0 0 8px 0;text-align:center;background:linear-gradient(135deg,var(--accent),#5ac8fa);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .modal-subtitle{color:var(--subtext-color);font-size:13px;text-align:center;margin:0 0 22px 0;line-height:1.5}
 
-/* ========== INPUT ========== */
+/* INPUT */
 .input-field{width:100%;padding:14px 16px;margin-bottom:12px;background:var(--input-bg);border:1.5px solid var(--border-color);border-radius:14px;color:var(--text-color);box-sizing:border-box;font-family:inherit;font-size:14px;outline:none;transition:all 0.25s}
 .input-field:focus{border-color:var(--accent);background:var(--card-bg);box-shadow:0 0 0 4px rgba(10,132,255,0.12)}
 .input-field::placeholder{color:var(--subtext-color);opacity:0.7}
 
-/* ========== AUTH BUTTONS ========== */
+/* AUTH BUTTONS */
 .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;width:100%;padding:14px;border-radius:14px;font-weight:800;cursor:pointer;font-family:inherit;font-size:14px;box-shadow:0 6px 20px rgba(10,132,255,0.4);transition:transform 0.2s}
 .btn-primary:active{transform:scale(0.97)}
 .btn-secondary{background:var(--input-bg);color:var(--text-color);border:1.5px solid var(--border-color);width:100%;padding:13px;border-radius:14px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;transition:transform 0.2s}
@@ -146,21 +142,20 @@ body[dir="rtl"] .modal-close-x{right:auto;left:16px}
 .btn-google{background:#fff;color:#000;border:1.5px solid #e5e5ea;width:100%;padding:13px;border-radius:14px;font-weight:700;cursor:pointer;font-family:inherit;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;transition:transform 0.2s;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .btn-google:active{transform:scale(0.97)}
 
-/* ========== DIVIDER ========== */
+/* DIVIDER */
 .divider{display:flex;align-items:center;gap:12px;margin:20px 0}
 .divider-line{flex:1;height:1px;background:var(--border-color)}
 .divider-text{color:var(--subtext-color);font-size:11px;font-weight:700;letter-spacing:1px}
 
-/* ========== AUTH SWITCH ========== */
+/* AUTH SWITCH */
 .auth-switch{text-align:center;margin-top:18px;font-size:13px;color:var(--subtext-color)}
 .auth-switch-btn{background:none;border:none;color:var(--accent);font-weight:800;cursor:pointer;font-family:inherit;font-size:13px;padding:0;margin:0;text-decoration:underline}
-.auth-switch-btn:hover{opacity:0.8}
 
-/* ========== VERIFICATION CODE INPUT ========== */
+/* CODE INPUT */
 .code-input{width:100%;padding:18px;margin-bottom:14px;background:var(--input-bg);border:2px dashed var(--accent);border-radius:16px;color:var(--accent);box-sizing:border-box;font-family:'Courier New',monospace;font-size:32px;font-weight:900;text-align:center;letter-spacing:12px;outline:none}
 .code-input::placeholder{color:var(--subtext-color);opacity:0.4}
 
-/* ========== PROFILE ========== */
+/* PROFILE */
 .profile-avatar-wrap{position:relative;width:96px;height:96px;margin:0 auto 16px auto}
 .profile-avatar{width:96px;height:96px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);background:var(--input-bg);display:block;box-shadow:0 10px 30px rgba(10,132,255,0.35)}
 .profile-avatar-edit{position:absolute;bottom:0;right:0;width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));border:3px solid var(--modal-bg);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
@@ -174,7 +169,7 @@ body[dir="rtl"] .modal-close-x{right:auto;left:16px}
 .profile-badge.pending{background:rgba(255,159,10,0.15);color:var(--warning);border:1px solid rgba(255,159,10,0.3)}
 .profile-badge svg{width:12px;height:12px}
 
-/* ========== ACCOUNT ACTION BUTTONS ========== */
+/* ACCOUNT BUTTONS */
 .account-action-btn{width:100%;padding:14px;border-radius:14px;border:1.5px solid var(--border-color);background:var(--input-bg);color:var(--text-color);font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;gap:12px;margin-bottom:8px;text-align:left;transition:all 0.2s}
 body[dir="rtl"] .account-action-btn{text-align:right}
 .account-action-btn:active{transform:scale(0.98)}
@@ -183,7 +178,7 @@ body[dir="rtl"] .account-action-btn{text-align:right}
 .account-action-btn.disabled{opacity:0.5;cursor:not-allowed}
 .account-action-btn svg{width:18px;height:18px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:2.2}
 
-/* ========== SETTINGS ITEMS ========== */
+/* SETTINGS */
 .setting-item{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--border-color)}
 .setting-item:last-child{border-bottom:none}
 .setting-label{font-size:14px;font-weight:700;color:var(--text-color)}
@@ -194,7 +189,7 @@ body[dir="rtl"] .account-action-btn{text-align:right}
 .setting-toggle.on::after{transform:translateX(22px)}
 .setting-select{background:var(--input-bg);border:1.5px solid var(--border-color);color:var(--text-color);padding:9px 14px;border-radius:11px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;outline:none}
 
-/* ========== PARTNER REQUEST ========== */
+/* PARTNER REQ */
 .partner-req{background:var(--input-bg);border:1px solid rgba(10,132,255,0.3);border-radius:16px;padding:16px;margin-bottom:12px}
 .partner-req-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .partner-req-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px;flex-shrink:0;overflow:hidden}
@@ -207,22 +202,20 @@ body[dir="rtl"] .account-action-btn{text-align:right}
 .btn-approve{background:var(--success);color:#fff}
 .btn-reject{background:var(--danger);color:#fff}
 
-/* ========== AVATAR UPLOAD ========== */
+/* AVATAR UPLOAD */
 .avatar-preview{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid var(--accent);margin:0 auto 16px auto;display:block;background:var(--input-bg)}
 .avatar-upload-label{display:flex;text-align:center;padding:14px;border:2px dashed var(--border-color);border-radius:14px;cursor:pointer;color:var(--subtext-color);font-size:13px;font-weight:700;margin-bottom:14px;transition:all 0.3s;align-items:center;justify-content:center;gap:8px}
 .avatar-upload-label:hover{border-color:var(--accent);color:var(--accent)}
 
-/* ========== TOAST ========== */
+/* TOAST */
 #toastContainer{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:90%}
-.toast{background:var(--modal-bg);border:1px solid var(--border-color);border-radius:16px;padding:14px 20px;font-size:13px;font-weight:700;color:var(--text-color);box-shadow:0 15px 40px rgba(0,0,0,0.4);display:flex;align-items:center;gap:12px;animation:toastIn 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;min-width:240px;backdrop-filter:blur(20px)}
+.toast{background:var(--modal-bg);border:1px solid var(--border-color);border-radius:16px;padding:14px 20px;font-size:13px;font-weight:700;color:var(--text-color);box-shadow:0 15px 40px rgba(0,0,0,0.4);display:flex;align-items:center;gap:12px;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1);pointer-events:auto;min-width:240px;backdrop-filter:blur(20px)}
 .toast.success{border-color:rgba(50,215,75,0.4)}.toast.success .toast-icon{color:var(--success)}
 .toast.error{border-color:rgba(255,69,58,0.4)}.toast.error .toast-icon{color:var(--danger)}
 .toast.info .toast-icon{color:var(--accent)}
 .toast.warning .toast-icon{color:var(--warning)}
-@keyframes toastIn{from{opacity:0;transform:translateY(-20px) scale(0.9)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes toastOut{to{opacity:0;transform:translateY(-20px) scale(0.9)}}
 
-/* ========== ADMIN PANEL ========== */
+/* ADMIN */
 .admin-section-card{background:var(--card-bg);border:1px solid rgba(255,69,58,0.25);border-radius:22px;padding:20px}
 .admin-stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
 .stat-box{background:var(--input-bg);border:1px solid var(--border-color);padding:16px;border-radius:16px;text-align:center}
@@ -230,10 +223,9 @@ body[dir="rtl"] .account-action-btn{text-align:right}
 .stat-box p{margin:0;color:var(--danger);font-size:22px;font-weight:900}
 .report-admin-item{background:var(--input-bg);border:1px solid rgba(255,69,58,0.3);padding:14px;border-radius:14px;margin-bottom:12px;font-size:13px}
 
-/* ========== DETAIL MODAL ========== */
+/* DETAIL MODAL */
 .bottom-sheet-modal{display:none;position:fixed;z-index:2500;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;backdrop-filter:blur(6px)}
-.bottom-sheet-content{background:var(--modal-bg);border:1px solid var(--border-color);border-top-left-radius:32px;border-top-right-radius:32px;padding:26px 22px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-sizing:border-box;animation:slideUpSheet 0.4s cubic-bezier(0.16,1,0.3,1)}
-@keyframes slideUpSheet{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.bottom-sheet-content{background:var(--modal-bg);border:1px solid var(--border-color);border-top-left-radius:32px;border-top-right-radius:32px;padding:26px 22px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;box-sizing:border-box;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1)}
 .screenshots-container{display:flex;gap:12px;overflow-x:auto;padding:10px 0;margin:14px 0;scroll-snap-type:x mandatory;scrollbar-width:none}
 .screenshots-container::-webkit-scrollbar{display:none}
 .screenshot-item{width:140px;height:240px;border-radius:16px;object-fit:cover;flex-shrink:0;border:1px solid var(--border-color);scroll-snap-align:start;cursor:pointer;background:var(--input-bg)}
@@ -245,8 +237,7 @@ body[dir="rtl"] .account-action-btn{text-align:right}
 .star-btn{background:none;border:none;cursor:pointer;padding:2px;color:var(--border-color);display:flex}
 .star-btn svg{width:30px;height:30px;fill:currentColor}
 .star-btn.active{color:var(--warning)}
-.btn-download-hero{display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;border-radius:18px;border:none;background:linear-gradient(135deg,#0a84ff,#0062d2,#0a84ff);background-size:200% 100%;color:#fff;font-family:inherit;font-weight:800;cursor:pointer;box-shadow:0 12px 32px rgba(10,132,255,0.4);animation:heroShimmer 3s linear infinite;margin-bottom:14px;text-align:left}
-@keyframes heroShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.btn-download-hero{display:flex;align-items:center;gap:14px;width:100%;padding:16px 18px;border-radius:18px;border:none;background:linear-gradient(135deg,#0a84ff,#0062d2,#0a84ff);background-size:200% 100%;color:#fff;font-family:inherit;font-weight:800;cursor:pointer;box-shadow:0 12px 32px rgba(10,132,255,0.4);animation:shimmer 3s linear infinite;margin-bottom:14px;text-align:left}
 .btn-download-hero:active{transform:scale(0.97)}
 .btn-download-hero .hero-icon{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .btn-download-hero .hero-icon svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:2.5}
@@ -256,7 +247,7 @@ body[dir="rtl"] .btn-download-hero .hero-text{text-align:right}
 .btn-download-hero .hero-sub{font-size:12px;font-weight:600;opacity:0.9;display:block;margin-top:3px}
 .btn-download-hero .hero-arrow{font-size:22px;opacity:0.95}
 
-/* ========== MISC ========== */
+/* MISC */
 .fav-empty{text-align:center;padding:60px 20px;color:var(--subtext-color)}
 .fav-empty svg{width:70px;height:70px;stroke:var(--border-color);fill:none;stroke-width:1.5;margin-bottom:18px}
 .similar-apps-container{display:flex;flex-direction:column;gap:10px;padding:6px 0}
@@ -272,13 +263,9 @@ body[dir="rtl"] .similar-app-card{text-align:right}
 .icon-inline-sm{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.6;flex-shrink:0}
 .admin-add-float{position:fixed;bottom:88px;right:20px;background:linear-gradient(135deg,var(--danger),#d70015);color:#fff;padding:11px 20px;border-radius:26px;font-weight:800;font-size:13px;border:none;box-shadow:0 8px 24px rgba(255,69,58,0.5);cursor:pointer;z-index:999;display:none;align-items:center;gap:8px;font-family:inherit}
 body[dir="rtl"] .admin-add-float{right:auto;left:20px}
-
-/* ========== VERIFY BOX ========== */
 .verify-box{background:rgba(255,159,10,0.1);border:1.5px solid var(--warning);padding:14px;border-radius:14px;margin-bottom:12px}
 .verify-box p{color:var(--warning);font-size:12px;margin:0 0 10px 0;font-weight:700;line-height:1.5}
 .verify-box button{background:var(--warning);color:#000;border:none;padding:9px 14px;border-radius:10px;font-weight:800;cursor:pointer;font-size:12px;width:100%;font-family:inherit}
-
-/* ========== LANG SWITCH ========== */
 .lang-switch{display:flex;gap:8px;background:var(--input-bg);border:1.5px solid var(--border-color);border-radius:12px;padding:4px}
 .lang-btn{background:transparent;border:none;color:var(--subtext-color);padding:8px 14px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.25s}
 .lang-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 3px 10px rgba(10,132,255,0.35)}
@@ -287,9 +274,22 @@ body[dir="rtl"] .admin-add-float{right:auto;left:20px}
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+<!-- ============================================ -->
+<!-- ✅ Adsterra - Popunder Ad Script             -->
+<!-- ============================================ -->
+<script src="https://pl31323824.profitableratecpmnetwork.com/dd/08/13/dd081335f0fd09906998284d150b921e.js"></script>
+
+<!-- ============================================ -->
+<!-- 📌 مكان محجوز لـ Monetag Rewarded Script     -->
+<!-- ============================================ -->
+<!-- ضع هنا سكربت Monetag عندما تجهزه بهذا الشكل: -->
+<!-- <script src="https://your-monetag-domain.com/vignette.min.js" data-zone="XXXXXX" data-sdk="show_XXXXXX"></script> -->
+<!-- ============================================ -->
+
 </head>
 <body>
-  <div id="splashScreen">
+<div id="splashScreen">
 <div class="splash-logo-wrap">
 <svg class="splash-logo" viewBox="0 0 170 170" fill="#0a84ff"><path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.1-1.9-14.24-6.08-3.05-2.61-6.91-7.2-11.58-13.78-6.1-8.57-11.05-18.15-14.85-28.74-3.8-10.59-5.7-20.73-5.7-30.43 0-11.58 3.02-21.2 9.07-28.85 6.04-7.65 13.68-11.54 22.9-11.66 4.9 0 10.15 1.3 15.76 3.9 5.6 2.61 9.3 3.91 11.1 3.91 1.52 0 5.37-1.38 11.55-4.14 6.18-2.76 11.45-4.04 15.82-3.85 10.36.76 18.57 5.04 24.63 12.83-9.35 5.72-13.93 13.43-13.73 23.15.22 7.6 3.14 13.88 8.77 18.83 5.62 4.95 12.44 7.55 20.45 7.82-1.85 5.66-4.14 11.31-6.88 16.97zM119.22 31.33c0-7.39 2.68-14.25 8.04-20.58 5.36-6.33 12.18-10.23 20.45-11.72.11.87.16 1.69.16 2.47 0 7.18-2.83 14.28-8.5 23.3-5.66 9.02-12.39 13.6-20.15 13.73-.01-.89-.01-1.78 0-3.2z"/></svg>
 </div>
@@ -317,9 +317,7 @@ body[dir="rtl"] .admin-add-float{right:auto;left:20px}
 i<span>Store</span>
 </div>
 <div class="header-icons">
-<div class="icon-btn" id="favHeaderBtn" onclick="switchTab('favorites')" style="display:none;">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-</div>
+<div class="icon-btn" id="favHeaderBtn" onclick="switchTab('favorites')" style="display:none;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
 <div class="icon-btn" onclick="toggleDarkMode()"><svg id="themeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></div>
 <div class="icon-btn primary" onclick="openAccountModal()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
 </div>
@@ -347,12 +345,10 @@ i<span>Store</span>
 <button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span data-i18n="navAdmin">Admin</span></button>
 </div>
 
-<!-- ========== ACCOUNT MODAL ========== -->
 <div id="accountModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('accountModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
 
-<!-- LOGIN VIEW -->
 <div id="loginView">
   <div style="text-align:center;margin-bottom:20px;">
     <div style="width:70px;height:70px;border-radius:22px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:inline-flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(10,132,255,0.4);margin-bottom:14px;">
@@ -361,25 +357,20 @@ i<span>Store</span>
     <h3 class="modal-title" data-i18n="welcomeTitle">Welcome to iStore</h3>
     <p class="modal-subtitle" data-i18n="welcomeSub">Sign in to like apps, post comments, and apply as a publisher.</p>
   </div>
-
   <button onclick="loginWithGoogle()" class="btn-google">
     <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.18v3.14C3.16 21.39 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.38-1.49-.38-2.24s.13-1.52.38-2.24V6.62H1.18C.43 8.12 0 9.81 0 12s.43 3.88 1.18 5.38l4.09-3.14z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.61 1.18 6.62l4.09 3.14c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
     <span data-i18n="signInGoogle">Sign in with Google</span>
   </button>
-
   <div class="divider"><div class="divider-line"></div><span class="divider-text">OR</span><div class="divider-line"></div></div>
-
   <input type="email" id="loginEmail" class="input-field" placeholder="Email" data-i18n-placeholder="emailPlaceholder">
   <input type="password" id="loginPassword" class="input-field" placeholder="Password" data-i18n-placeholder="passwordPlaceholder">
   <button onclick="loginWithEmail()" class="btn-primary" data-i18n="signIn">Sign In</button>
-
   <div class="auth-switch">
     <span data-i18n="noAccount">Don't have an account? </span>
     <button class="auth-switch-btn" onclick="showRegisterView()" data-i18n="createOne">Create one</button>
   </div>
 </div>
 
-<!-- REGISTER VIEW -->
 <div id="registerView" style="display:none;">
   <div style="text-align:center;margin-bottom:20px;">
     <h3 class="modal-title" data-i18n="createAccountTitle">Create Account</h3>
@@ -395,7 +386,6 @@ i<span>Store</span>
   </div>
 </div>
 
-<!-- VERIFY CODE VIEW -->
 <div id="verifyCodeView" style="display:none;">
   <div style="text-align:center;margin-bottom:20px;">
     <div style="width:70px;height:70px;border-radius:22px;background:linear-gradient(135deg,var(--warning),#ff6b00);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(255,159,10,0.4);margin-bottom:14px;">
@@ -412,7 +402,6 @@ i<span>Store</span>
   </div>
 </div>
 
-<!-- LOGGED IN VIEW -->
 <div id="loggedInView" style="display:none;">
 <div class="profile-avatar-wrap">
 <img id="userAvatar" class="profile-avatar" src="" alt="Avatar">
@@ -454,7 +443,6 @@ User
 </div>
 </div>
 
-<!-- ========== SETTINGS MODAL ========== -->
 <div id="settingsModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('settingsModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -516,7 +504,6 @@ User
 </div>
 </div>
 
-<!-- ========== EDIT PROFILE MODAL ========== -->
 <div id="editProfileModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('editProfileModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -534,7 +521,6 @@ User
 </div>
 </div>
 
-<!-- ========== PARTNER REQUEST MODAL ========== -->
 <div id="partnerRequestModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('partnerRequestModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -561,7 +547,6 @@ User
 </div>
 </div>
 
-<!-- ========== ADD APP MODAL ========== -->
 <div id="addAppModal" class="modal">
 <div class="modal-box" style="max-width:420px;">
 <button class="modal-close-x" onclick="closeModal('addAppModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -597,12 +582,10 @@ User
 </div>
 </div>
 
-<!-- ========== APP DETAIL MODAL ========== -->
 <div id="appDetailModal" class="bottom-sheet-modal">
 <div class="bottom-sheet-content" id="appDetailBody"></div>
 </div>
 
-<!-- ========== REPORT MODAL ========== -->
 <div id="reportModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('reportModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
@@ -619,6 +602,11 @@ User
 <button onclick="closeModal('reportModal')" class="btn-secondary" style="margin-top:8px;" data-i18n="close">Close</button>
 </div>
 </div>
+
+<!-- ============================================ -->
+<!-- ✅ Adsterra - Social Bar Script              -->
+<!-- ============================================ -->
+<script src="https://pl31323825.profitableratecpmnetwork.com/49/8e/1f/498e1f5f907002e69fd2118c075cf9aa.js"></script>
 
 <script>
   const firebaseConfig = {
@@ -735,7 +723,18 @@ const TRANSLATIONS = {
     expiredCert: "Expired Certificate",
     badContent: "Inappropriate Content",
     reportDetails: "Or type details...",
-    sendReport: "Send Report"
+    sendReport: "Send Report",
+    watchAdTitle: "Watch Ad to Download",
+    watchAdSub: "You must watch a short ad first to start downloading",
+    watchAdBtn: "▶ Watch Ad",
+    cancelAdBtn: "Cancel",
+    adPreparing: "Preparing your ad...",
+    adSuccess: "Ad verified ✓",
+    adStarting: "Starting download...",
+    adSkipped: "❌ You must complete the ad to start the download",
+    adNotReady: "Ad service not available. Please try again.",
+    downloadCancel: "Download cancelled",
+    downloadReady: "Ready! ✓"
   },
   ar: {
     welcomeTitle: "مرحباً بك في iStore",
@@ -810,12 +809,23 @@ const TRANSLATIONS = {
     expiredCert: "شهادة منتهية",
     badContent: "محتوى غير لائق",
     reportDetails: "أو اكتب التفاصيل...",
-    sendReport: "إرسال التقرير"
+    sendReport: "إرسال التقرير",
+    watchAdTitle: "مشاهدة إعلان للتحميل",
+    watchAdSub: "يجب مشاهدة إعلان قصير أولاً لبدء التحميل",
+    watchAdBtn: "▶ مشاهدة الإعلان",
+    cancelAdBtn: "إلغاء",
+    adPreparing: "جاري تحضير الإعلان...",
+    adSuccess: "تم التحقق من الإعلان ✓",
+    adStarting: "جاري بدء التحميل...",
+    adSkipped: "❌ يجب إكمال مشاهدة الإعلان لبدء التحميل",
+    adNotReady: "خدمة الإعلانات غير متاحة. حاول مرة أخرى.",
+    downloadCancel: "تم إلغاء التحميل",
+    downloadReady: "جاهز! ✓"
   }
 };
 
-// ====== i18n FUNCTIONS ======
 function t(key){ return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || key; }
+
 function applyTranslations(){
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -830,6 +840,7 @@ function applyTranslations(){
   document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
   document.documentElement.lang = currentLang;
 }
+
 function changeLanguage(lang){
   currentLang = lang;
   localStorage.setItem('istore_lang', lang);
@@ -933,7 +944,7 @@ function registerWithEmail(){
   const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
   if(!name || !email || !password){ showToast('Please fill all fields / يرجى ملء جميع الحقول', 'warning'); return; }
-  if(password.length < 6){ showToast('Password must be at least 6 characters / كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'warning'); return; }
+  if(password.length < 6){ showToast('Password must be at least 6 characters', 'warning'); return; }
 
   const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -957,7 +968,7 @@ function registerWithEmail(){
       });
     })
     .then(() => {
-      showToast("Account created! Check your email. / تم إنشاء الحساب! تفقد بريدك.", "success", 6000);
+      showToast("Account created! Check your email.", "success", 6000);
       userProfile.isVerified = false;
       userProfile.displayName = name;
       document.getElementById('loginView').style.display = 'none';
@@ -999,11 +1010,11 @@ function verifyCode(){
         isVerified: true,
         verificationCode: null
       }).then(() => {
-        showToast("Account verified successfully! / تم تفعيل الحساب بنجاح!", "success", 4000);
+        showToast("Account verified! / تم تفعيل الحساب!", "success", 4000);
         setTimeout(()=>window.location.reload(), 1200);
       });
     } else {
-      showToast('Invalid code. Please try again. / رمز غير صحيح.', 'error');
+      showToast('Invalid code. / رمز غير صحيح.', 'error');
     }
   }).catch(err => showToast('Error: ' + err.message, 'error'));
 }
@@ -1023,7 +1034,7 @@ function resendCode(){
         from_name: "iStore Team",
         verification_code: newCode
       }))
-      .then(() => showToast("New code sent! / تم إرسال رمز جديد!", "success"));
+      .then(() => showToast("New code sent!", "success"));
   }).catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
@@ -1246,6 +1257,305 @@ function updateAvatarUI(){
     }
   }
 }
+
+// ================================================================
+// ✅✅✅ نظام التحميل مع الإعلان الإجباري (Adsterra) ✅✅✅
+// ================================================================
+function startRealDownload(appId, fileUrl, appName) {
+  if (!requireVerifiedEmail()) return;
+
+  // إغلاق أي نافذة مفتوحة
+  const existingOverlay = document.getElementById('adConfirmOverlay');
+  if (existingOverlay) existingOverlay.remove();
+
+  // ========== 1) شاشة التأكيد ==========
+  const overlay = document.createElement('div');
+  overlay.id = 'adConfirmOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);';
+  overlay.innerHTML = `
+    <div style="background:linear-gradient(160deg,var(--modal-bg),#1a1a22);border:1px solid var(--border-color);border-radius:26px;padding:32px 24px;max-width:360px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.7);">
+      <div style="width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,#ff9f0a,#ff6b00);display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 12px 35px rgba(255,159,10,0.5);animation:pulse 2s ease-in-out infinite;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="#fff" stroke="#fff" stroke-width="1" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
+      <h3 style="color:var(--text-color);font-size:20px;font-weight:900;margin:0 0 12px 0;">
+        ${t('watchAdTitle')}
+      </h3>
+      <p style="color:var(--subtext-color);font-size:14px;line-height:1.7;margin:0 0 12px 0;">
+        ${currentLang === 'ar' 
+          ? 'لبدء تحميل <b style="color:var(--accent);">' + appName + '</b>، يجب مشاهدة إعلان قصير أولاً.'
+          : 'To start downloading <b style="color:var(--accent);">' + appName + '</b>, you must watch a short ad first.'}
+      </p>
+      <div style="background:rgba(10,132,255,0.08);border:1px solid rgba(10,132,255,0.2);border-radius:12px;padding:10px 14px;margin:16px 0;font-size:12px;color:var(--accent);font-weight:700;">
+        ${currentLang === 'ar' ? '⏱️ الإعلان يستغرق بضع ثوانٍ' : '⏱️ The ad takes a few seconds'}
+      </div>
+      <button id="adWatchBtn" style="width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:800;font-size:15px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(10,132,255,0.45);margin-bottom:10px;">
+        ${t('watchAdBtn')}
+      </button>
+      <button id="adCancelBtn" style="width:100%;padding:12px;border-radius:14px;border:1.5px solid var(--border-color);background:transparent;color:var(--subtext-color);font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;">
+        ${t('cancelAdBtn')}
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  // زر الإلغاء
+  document.getElementById('adCancelBtn').onclick = () => {
+    overlay.remove();
+    showToast(t('downloadCancel'), 'info', 2000);
+  };
+
+  // زر مشاهدة الإعلان
+  document.getElementById('adWatchBtn').onclick = () => {
+    overlay.remove();
+    
+    // ========== 2) شاشة الانتظار (10 ثوانٍ) ==========
+    const waitScreen = document.createElement('div');
+    waitScreen.id = 'adWaitScreen';
+    waitScreen.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.96);z-index:100000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;';
+    waitScreen.innerHTML = `
+      <div style="position:relative;width:130px;height:130px;margin-bottom:24px;">
+        <svg width="130" height="130" style="transform:rotate(-90deg);">
+          <circle cx="65" cy="65" r="56" stroke="rgba(255,255,255,0.1)" stroke-width="8" fill="none"/>
+          <circle id="countdownCircle" cx="65" cy="65" r="56" stroke="var(--accent)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="0" style="transition:stroke-dashoffset 1s linear;"/>
+        </svg>
+        <div id="countdownNumber" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:46px;font-weight:900;">10</div>
+      </div>
+      <h3 style="color:#fff;font-size:18px;font-weight:900;margin:0 0 10px 0;text-align:center;">
+        ${t('adPreparing')}
+      </h3>
+      <p style="color:#8e8e93;font-size:13px;text-align:center;max-width:300px;line-height:1.6;">
+        ${currentLang === 'ar' ? 'الرجاء الانتظار حتى انتهاء العداد.' : 'Please wait until the countdown finishes.'}
+      </p>
+      <div style="margin-top:24px;padding:10px 18px;background:rgba(10,132,255,0.1);border:1px solid rgba(10,132,255,0.25);border-radius:12px;color:var(--accent);font-size:12px;font-weight:700;">
+        ${currentLang === 'ar' ? '💡 الرجاء عدم إغلاق الصفحة' : '💡 Please do not close this page'}
+      </div>
+    `;
+    document.body.appendChild(waitScreen);
+
+    // محاولة فتح الإعلان في الخلفية يدوياً (تحفيز Popunder)
+    try {
+      // نقرة وهمية لتحفيز Popunder من Adsterra
+      const fakeBtn = document.createElement('a');
+      fakeBtn.href = '#';
+      fakeBtn.target = '_blank';
+      fakeBtn.rel = 'noopener';
+      // Popunder سيتم تفعيله من السكربت المدمج تلقائياً
+    } catch(e) {}
+
+    // العد التنازلي
+    let seconds = 10;
+    const totalDash = 352;
+    const circle = document.getElementById('countdownCircle');
+    const numberEl = document.getElementById('countdownNumber');
+
+    const interval = setInterval(() => {
+      seconds--;
+      if(numberEl) numberEl.innerText = seconds;
+      if(circle) circle.style.strokeDashoffset = totalDash * (1 - seconds / 10);
+
+      if (seconds <= 0) {
+        clearInterval(interval);
+        if(waitScreen) waitScreen.remove();
+        completeDownload(appId, fileUrl, appName);
+      }
+    }, 1000);
+  };
+}
+
+// ========== دالة إكمال التحميل بعد الانتظار ==========
+function completeDownload(appId, fileUrl, appName) {
+  // إغلاق أي شاشة سابقة
+  const existingSuccess = document.getElementById('successScreenAd');
+  if(existingSuccess) existingSuccess.remove();
+
+  const successScreen = document.createElement('div');
+  successScreen.id = 'successScreenAd';
+  successScreen.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:100001;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;';
+  successScreen.innerHTML = `
+    <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#32d74b,#1fa83a);display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 12px 35px rgba(50,215,75,0.5);animation:popSuccess 0.5s cubic-bezier(0.16,1,0.3,1);">
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h3 style="color:#fff;font-size:18px;font-weight:900;margin:0 0 8px 0;">${t('downloadReady')}</h3>
+    <p style="color:#8e8e93;font-size:13px;">${t('adStarting')}</p>
+  `;
+  document.body.appendChild(successScreen);
+
+  incrementDownload(appId);
+
+  if (!fileUrl || fileUrl === '#' || fileUrl.trim() === '') {
+    setTimeout(() => {
+      if(successScreen) successScreen.remove();
+      showToast('Download link not available', 'warning');
+    }, 1500);
+    return;
+  }
+
+  // إعادة التوجيه في نفس النافذة (آمن على iOS)
+  setTimeout(() => {
+    try {
+      window.location.href = fileUrl;
+    } catch(e) {
+      const a = document.createElement('a');
+      a.href = fileUrl;
+      a.target = '_self';
+      a.rel = 'noopener noreferrer';
+      a.download = appName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+    setTimeout(() => {
+      if(successScreen) successScreen.remove();
+      showToast('Download started: ' + appName, 'success', 2500);
+    }, 800);
+  }, 1200);
+}
+
+// ====== DOWNLOAD COUNTER ======
+function incrementDownload(appId){
+  const userId = currentUser ? currentUser.email : 'guest_'+Math.random().toString(36).substring(7);
+  const appRef = db.collection("apps").doc(appId);
+  db.runTransaction(transaction=>{
+    return transaction.get(appRef).then(doc=>{
+      if(!doc.exists) return;
+      let data = doc.data();
+      let downloadedBy = data.downloadedBy || [];
+      if(!downloadedBy.includes(userId)){
+        downloadedBy.push(userId);
+        transaction.update(appRef, {downloads: firebase.firestore.FieldValue.increment(1), downloadedBy: downloadedBy});
+      }
+    });
+  }).catch(()=>{});
+}
+
+// ====== LIKE ======
+function toggleStarLike(appId, event){
+  if(event) event.stopPropagation();
+  if(!requireVerifiedEmail()) return;
+  if(!currentUser){ showToast('Please sign in to like', 'warning'); openAccountModal(); return; }
+  const appRef = db.collection("apps").doc(appId);
+  const userEmail = currentUser.email;
+  db.runTransaction(transaction=>{
+    return transaction.get(appRef).then(doc=>{
+      if(!doc.exists) return;
+      let data = doc.data();
+      let likedBy = data.likedBy || [];
+      if(likedBy.includes(userEmail)){ likedBy = likedBy.filter(e=>e!==userEmail); showToast('Like removed', 'info', 1500); }
+      else { likedBy.push(userEmail); showToast('App liked!', 'success', 1500); }
+      transaction.update(appRef, {likedBy: likedBy});
+    });
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
+}
+
+// ====== SHARE ======
+function shareApp(appId, event){
+  if(event) event.stopPropagation();
+  const app = allAppsCache.find(a=>a.id===appId);
+  if(!app) return;
+  const shareData = {title: app.name, text: 'Check out '+app.name+' on iStore!', url: window.location.href.split('#')[0]+'#app-'+appId};
+  if(navigator.share) navigator.share(shareData).catch(()=>{});
+  else navigator.clipboard.writeText(shareData.url).then(()=>showToast('Link copied', 'success')).catch(()=>showToast('Could not share', 'error'));
+}
+
+// ====== RATING ======
+function setRating(appId, value){
+  if(!requireVerifiedEmail()) return;
+  if(!currentUser){ showToast('Sign in to rate', 'warning'); openAccountModal(); return; }
+  const app = allAppsCache.find(a=>a.id===appId);
+  if(!app) return;
+  const userRatings = app.userRatings || {};
+  const oldRating = userRatings[currentUser.email] || 0;
+  const appRef = db.collection("apps").doc(appId);
+  let newSum = (app.ratingSum||0) - oldRating + value;
+  let newCount = (app.ratingCount||0) - (oldRating>0?1:0) + 1;
+  userRatings[currentUser.email] = value;
+  appRef.update({ratingSum: newSum, ratingCount: newCount, ratingAvg: newSum/newCount, userRatings: userRatings}).then(()=>{
+    showToast('Thanks for rating!', 'success', 1500);
+    openAppDetails(appId);
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
+}
+  // ====== APP DETAILS MODAL ======
+function openAppDetails(appId){
+  const app = allAppsCache.find(a=>a.id===appId);
+  if(!app) return;
+  let screenshotsHTML = '';
+  if(app.screenshots && app.screenshots.length>0){
+    app.screenshots.forEach(imgUrl=>{ screenshotsHTML += '<img src="'+imgUrl+'" class="screenshot-item" loading="lazy" onclick="openImgViewer(\''+imgUrl+'\')">'; });
+  } else screenshotsHTML = '<p style="color:var(--subtext-color);font-size:12px;">'+(currentLang==='ar'?'لا توجد لقطات':'No screenshots available.')+'</p>';
+  db.collection("apps").doc(appId).collection("comments").orderBy("createdAt","desc").get().then(snapshot=>{
+    let commentsList = [];
+    snapshot.forEach(doc=>commentsList.push({id:doc.id, ...doc.data()}));
+    let commentsHTML = '';
+    if(commentsList.length===0) commentsHTML = '<p style="color:var(--subtext-color);font-size:12px;text-align:center;">'+(currentLang==='ar'?'لا توجد تعليقات بعد':'No comments yet.')+'</p>';
+    else commentsList.forEach(c=>{
+      commentsHTML += '<div class="comment-box" style="display:flex;justify-content:space-between;align-items:center;"><div><div class="comment-user">'+c.userName+'</div><div>'+c.text+'</div></div>'+(isAdmin?'<button onclick="deleteComment(\''+app.id+'\',\''+c.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:bold;font-family:inherit;">X</button>':'')+'</div>';
+    });
+    let pubText = app.publisher ? '<div style="color:var(--accent);font-size:13px;font-weight:bold;margin-bottom:5px;">By '+app.publisher+'</div>' : '';
+    let userRating = (app.userRatings && currentUser) ? (app.userRatings[currentUser.email]||0) : 0;
+    let ratingAvg = getAverageRating(app);
+    let isFav = userFavorites.includes(app.id);
+    let starsHTML = '';
+    for(let i=1;i<=5;i++) starsHTML += '<button class="star-btn '+(i<=userRating?'active':'')+'" onclick="setRating(\''+app.id+'\','+i+')"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>';
+    let similarApps = allAppsCache.filter(a=>a.category===app.category && a.id!==app.id).slice(0,6);
+    let similarHTML = '';
+    if(similarApps.length>0){
+      similarHTML = '<div style="border-top:1px solid var(--border-color);padding-top:12px;margin-bottom:12px;"><h4 style="font-size:13px;margin:0 0 8px 0;color:var(--text-color);">'+(currentLang==='ar'?'قد يعجبك أيضاً':'You might also like')+'</h4><div class="similar-apps-container">'+similarApps.map(s=>'<div class="similar-app-card" onclick="closeModal(\'appDetailModal\');setTimeout(()=>openAppDetails(\''+s.id+'\'),300);"><img src="'+(s.icon||FALLBACK_ICON)+'" onerror="this.src=\''+FALLBACK_ICON+'\'"><h5>'+s.name+'</h5><p>'+(s.size||'N/A')+'</p></div>').join('')+'</div></div>';
+    }
+    document.getElementById('appDetailBody').innerHTML = '<div style="width:50px;height:5px;background:var(--border-color);border-radius:10px;margin:0 auto 18px auto;"></div><div class="detail-header"><img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:18px;color:var(--text-color);font-weight:900;">'+app.name+'</h3>'+pubText+'<div style="font-size:12px;color:var(--subtext-color);font-weight:600;margin-bottom:4px;">'+getCategoryNameEn(app.category)+' • <span style="color:var(--danger);">'+(app.platform||'IPA')+'</span></div><div style="font-size:13px;color:var(--text-color);font-weight:bold;">'+(app.size||'N/A')+'</div></div><button onclick="toggleFavorite(\''+app.id+'\',event)" style="background:'+(isFav?'rgba(255,69,58,0.15)':'var(--input-bg)')+';border:1px solid '+(isFav?'var(--danger)':'var(--border-color)')+';width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:'+(isFav?'var(--danger)':'var(--subtext-color)')+';">'+(isFav?ICONS.heartFill:ICONS.heart)+'</button></div><div style="background:var(--input-bg);padding:14px;border-radius:14px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><span style="font-size:12px;color:var(--subtext-color);font-weight:700;">'+(currentLang==='ar'?'التقييم':'RATING')+'</span><span style="font-size:13px;font-weight:800;color:var(--warning);">'+(ratingAvg>0?ratingAvg.toFixed(1)+' / 5':'—')+' '+(app.ratingCount?'('+app.ratingCount+')':'')+'</span></div><div class="star-rating">'+starsHTML+'</div>'+(userRating>0?'<p style="margin:8px 0 0 0;font-size:11px;color:var(--subtext-color);text-align:center;">'+(currentLang==='ar'?'تقييمك: ':'You rated: ')+userRating+'</p>':'')+'</div><div style="background:var(--input-bg);padding:14px;border-radius:14px;margin-bottom:14px;font-size:13px;color:var(--text-color);line-height:1.6;"><strong style="color:var(--accent);display:flex;align-items:center;gap:6px;margin-bottom:6px;">'+ICONS.infoCircle+' '+(currentLang==='ar'?'معلومات تفصيلية':'Detailed Info')+':</strong>'+(app.info||app.desc||'—')+'</div><button class="btn-download-hero" onclick="startRealDownload(\''+app.id+'\',\''+app.url+'\',\''+app.name+'\')"><div class="hero-icon">'+ICONS.dlBig+'</div><div class="hero-text"><span class="hero-title">'+(currentLang==='ar'?'تحميل الآن':'Download Now')+'</span><span class="hero-sub">'+(app.size||'N/A')+' • '+(app.platform||'IPA')+'</span></div><div class="hero-arrow">→</div></button><div style="border-top:1px solid var(--border-color);padding-top:12px;margin-bottom:12px;margin-top:14px;"><h4 style="font-size:13px;margin:0 0 8px 0;color:var(--text-color);">'+(currentLang==='ar'?'لقطات الشاشة:':'Screenshots:')+'</h4><div class="screenshots-container">'+screenshotsHTML+'</div></div>'+similarHTML+'<div style="border-top:1px solid var(--border-color);padding-top:12px;"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);">'+(currentLang==='ar'?'التعليقات':'Comments')+' ('+commentsList.length+')</h4><div style="max-height:150px;overflow-y:auto;margin-bottom:10px;">'+commentsHTML+'</div>'+(currentUser?'<input type="text" id="newCommentText" class="input-field" placeholder="'+(currentLang==='ar'?'اكتب تعليقاً...':'Write a comment...')+'"><button onclick="postComment(\''+app.id+'\')" class="btn-primary" style="padding:10px;font-size:13px;">'+(currentLang==='ar'?'نشر التعليق':'Post Comment')+'</button>':'<p style="color:var(--danger);font-size:12px;text-align:center;">'+(currentLang==='ar'?'سجّل الدخول للتعليق':'Sign in to comment.')+'</p>')+'</div><button onclick="closeModal(\'appDetailModal\')" class="btn-secondary" style="margin-top:14px;">'+(currentLang==='ar'?'إغلاق':'Close')+'</button>';
+    document.getElementById('appDetailModal').style.display = 'flex';
+  }).catch(err=>{ console.warn('Comments err:',err); });
+}
+
+function deleteComment(appId, commentId){
+  if(!isAdmin) return;
+  if(confirm('Delete this comment?')){
+    db.collection("apps").doc(appId).collection("comments").doc(commentId).delete().then(()=>{
+      db.collection("apps").doc(appId).update({commentsCount: firebase.firestore.FieldValue.increment(-1)}).catch(()=>{});
+      showToast('Comment deleted', 'success');
+      openAppDetails(appId);
+    });
+  }
+}
+
+function postComment(appId){
+  if(!requireVerifiedEmail()) return;
+  if(!currentUser){ showToast('Sign in first', 'warning'); return; }
+  const text = document.getElementById('newCommentText').value.trim();
+  if(!text) return;
+  db.collection("apps").doc(appId).collection("comments").add({userName: (userProfile.displayName || currentUser.email.split('@')[0]), text: text, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+    db.collection("apps").doc(appId).update({commentsCount: firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
+    showToast('Comment posted', 'success', 1500);
+    document.getElementById('newCommentText').value = '';
+    openAppDetails(appId);
+  });
+}
+
+// ====== REPORT ======
+function openReportModal(appId){
+  if(!requireVerifiedEmail()) return;
+  document.getElementById('reportAppId').value = appId;
+  document.getElementById('reportReason').value = '';
+  openModal('reportModal');
+}
+function setReportReasonText(t){ document.getElementById('reportReason').value = t; }
+function submitReport(){
+  if(!requireVerifiedEmail()) return;
+  const appId = document.getElementById('reportAppId').value;
+  const reason = document.getElementById('reportReason').value.trim();
+  if(!reason){ showToast('Please select or type a reason', 'warning'); return; }
+  db.collection("reports").add({appId, reason, user: currentUser ? currentUser.email : 'Guest', createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+    showToast('Report sent', 'success');
+    closeModal('reportModal');
+  });
+}
+function deleteReport(reportId){
+  if(!isAdmin) return;
+  if(confirm('Delete this report?')){
+    db.collection("reports").doc(reportId).delete();
+    showToast('Report resolved', 'success');
+  }
+}
+
 // ====== SETTINGS ======
 function openSettings(){
   document.getElementById('settingDarkMode').classList.toggle('on', isLightMode);
@@ -1530,7 +1840,7 @@ function renderUI(){
   }
 
   if(currentTab === 'tools'){
-    container.innerHTML = '<div class="today-header"><div class="today-title">'+(currentLang==='ar'?'أدوات التثبيت':'Installation Tools')+'</div><div class="today-subtitle">'+(currentLang==='ar'?'أدوات وروابط مهمة':'Essential tools')+'</div></div><div style="margin-top:15px;"><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:4px 12px;border-bottom-left-radius:12px;font-size:9px;font-weight:900;letter-spacing:0.5px;">iOS 16+</div><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><img src="https://cdn.phototourl.com/free/2026-09-12-10a94b0e-2cec-4fc3-ac72-1e67f6ebd44b.png" onerror="this.style.display=\'none\'" style="width:60px;height:60px;border-radius:14px;border:1px solid var(--border-color);background:var(--input-bg);object-fit:cover;" alt="ESign"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:16px;color:var(--text-color);font-weight:900;">ESign</h3><div style="font-size:11px;color:var(--subtext-color);font-weight:600;">IPA Signer & Installer</div><div style="font-size:10px;color:var(--accent);font-weight:700;margin-top:3px;">✓ All iPhone devices</div></div></div><p style="color:var(--subtext-color);font-size:12px;line-height:1.55;margin:0 0 14px 0;"><strong style="color:var(--text-color);">ESign</strong> '+(currentLang==='ar'?'- أداة توقيع وتثبيت تطبيقات IPA مباشرة من الآيفون.':'- Sign & install IPA files on iPhone without a computer.')+'</p><div style="display:flex;flex-direction:column;gap:8px;"><a href="https://esign-ios.app/dl/esign_v5.0.2.ipa/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;font-family:inherit;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'+(currentLang==='ar'?'تحميل ESign IPA':'Download ESign IPA')+'</a></div></div></div>';
+    container.innerHTML = '<div class="today-header"><div class="today-title">'+(currentLang==='ar'?'أدوات التثبيت':'Installation Tools')+'</div><div class="today-subtitle">'+(currentLang==='ar'?'أدوات وروابط مهمة':'Essential tools')+'</div></div><div style="margin-top:15px;"><div style="background:var(--card-bg);border:1px solid var(--border-color);border-radius:20px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;"><div style="position:absolute;top:0;right:0;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:4px 12px;border-bottom-left-radius:12px;font-size:9px;font-weight:900;letter-spacing:0.5px;">iOS 16+</div><div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;"><img src="https://cdn.phototourl.com/free/2026-09-12-10a94b0e-2cec-4fc3-ac72-1e67f6ebd44b.png" onerror="this.style.display=\'none\'" style="width:60px;height:60px;border-radius:14px;border:1px solid var(--border-color);background:var(--input-bg);object-fit:cover;"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:16px;color:var(--text-color);font-weight:900;">ESign</h3><div style="font-size:11px;color:var(--subtext-color);font-weight:600;">IPA Signer & Installer</div><div style="font-size:10px;color:var(--accent);font-weight:700;margin-top:3px;">✓ All iPhone devices</div></div></div><p style="color:var(--subtext-color);font-size:12px;line-height:1.55;margin:0 0 14px 0;"><strong style="color:var(--text-color);">ESign</strong> '+(currentLang==='ar'?'- أداة توقيع وتثبيت تطبيقات IPA مباشرة من الآيفون.':'- Sign & install IPA files on iPhone without a computer.')+'</p><div style="display:flex;flex-direction:column;gap:8px;"><a href="https://esign-ios.app/dl/esign_v5.0.2.ipa/" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;padding:12px;border-radius:12px;text-decoration:none;font-weight:800;font-size:13px;font-family:inherit;">'+(currentLang==='ar'?'تحميل ESign IPA':'Download ESign IPA')+'</a></div></div></div>';
     return;
   }
 
@@ -1588,7 +1898,6 @@ function createFeaturedCardHTML(app, index){
           (isAdmin?'<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal(\''+app.id+'\')">'+(currentLang==='ar'?'تعديل':'Edit')+'</button><button class="btn-del" onclick="deleteApp(\''+app.id+'\')">'+(currentLang==='ar'?'حذف':'Delete')+'</button></div>':'')+
         '</div>'+
       '</div>'+
-      '<div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div>'+
     '</div>'+
   '</div>';
 }
@@ -1638,153 +1947,7 @@ function createAppCardHTML(app, rankBadge){
         (isAdmin?'<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal(\''+app.id+'\')">'+(currentLang==='ar'?'تعديل':'Edit')+'</button><button class="btn-del" onclick="deleteApp(\''+app.id+'\')">'+(currentLang==='ar'?'حذف':'Del')+'</button></div>':'')+
       '</div>'+
     '</div>'+
-    '<div id="dl_progress_'+app.id+'" class="dl-progress-box" style="display:none;"><div class="dl-progress-inner"><div class="dl-progress-icon" id="dl_icon_'+app.id+'">'+ICONS.dlBig+'</div><div class="dl-progress-info"><div class="dl-progress-title" id="dl_text_'+app.id+'">Preparing...</div><div class="dl-progress-bar-bg"><div class="dl-progress-bar-fill" id="dl_fill_'+app.id+'"></div></div></div><div class="dl-progress-percent" id="dl_percent_'+app.id+'">0%</div></div></div>'+
   '</div>';
-}
-
-// ====== DOWNLOAD & LIKE ======
-function startRealDownload(appId, fileUrl, appName){
-  if(!requireVerifiedEmail()) return;
-  incrementDownload(appId);
-  if(!fileUrl || fileUrl === '#' || fileUrl.trim() === ''){ showToast('Download link not available', 'warning'); return; }
-  const a = document.createElement('a');
-  a.href = fileUrl; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.download = appName;
-  document.body.appendChild(a); a.click(); a.remove();
-  showToast('Download started: ' + appName, 'success', 2500);
-}
-function incrementDownload(appId){
-  const userId = currentUser ? currentUser.email : 'guest_'+Math.random().toString(36).substring(7);
-  const appRef = db.collection("apps").doc(appId);
-  db.runTransaction(transaction=>{
-    return transaction.get(appRef).then(doc=>{
-      if(!doc.exists) return;
-      let data = doc.data();
-      let downloadedBy = data.downloadedBy || [];
-      if(!downloadedBy.includes(userId)){
-        downloadedBy.push(userId);
-        transaction.update(appRef, {downloads: firebase.firestore.FieldValue.increment(1), downloadedBy: downloadedBy});
-      }
-    });
-  }).catch(()=>{});
-}
-function toggleStarLike(appId, event){
-  if(event) event.stopPropagation();
-  if(!requireVerifiedEmail()) return;
-  if(!currentUser){ showToast('Please sign in to like', 'warning'); openAccountModal(); return; }
-  const appRef = db.collection("apps").doc(appId);
-  const userEmail = currentUser.email;
-  db.runTransaction(transaction=>{
-    return transaction.get(appRef).then(doc=>{
-      if(!doc.exists) return;
-      let data = doc.data();
-      let likedBy = data.likedBy || [];
-      if(likedBy.includes(userEmail)){ likedBy = likedBy.filter(e=>e!==userEmail); showToast('Like removed', 'info', 1500); }
-      else { likedBy.push(userEmail); showToast('App liked!', 'success', 1500); }
-      transaction.update(appRef, {likedBy: likedBy});
-    });
-  }).catch(err=>showToast('Error: '+err.message, 'error'));
-}
-function shareApp(appId, event){
-  if(event) event.stopPropagation();
-  const app = allAppsCache.find(a=>a.id===appId);
-  if(!app) return;
-  const shareData = {title: app.name, text: 'Check out '+app.name+' on iStore!', url: window.location.href.split('#')[0]+'#app-'+appId};
-  if(navigator.share) navigator.share(shareData).catch(()=>{});
-  else navigator.clipboard.writeText(shareData.url).then(()=>showToast('Link copied', 'success')).catch(()=>showToast('Could not share', 'error'));
-}
-function setRating(appId, value){
-  if(!requireVerifiedEmail()) return;
-  if(!currentUser){ showToast('Sign in to rate', 'warning'); openAccountModal(); return; }
-  const app = allAppsCache.find(a=>a.id===appId);
-  if(!app) return;
-  const userRatings = app.userRatings || {};
-  const oldRating = userRatings[currentUser.email] || 0;
-  const appRef = db.collection("apps").doc(appId);
-  let newSum = (app.ratingSum||0) - oldRating + value;
-  let newCount = (app.ratingCount||0) - (oldRating>0?1:0) + 1;
-  userRatings[currentUser.email] = value;
-  appRef.update({ratingSum: newSum, ratingCount: newCount, ratingAvg: newSum/newCount, userRatings: userRatings}).then(()=>{
-    showToast('Thanks for rating!', 'success', 1500);
-    openAppDetails(appId);
-  }).catch(err=>showToast('Error: '+err.message, 'error'));
-}
-
-// ====== APP DETAILS ======
-function openAppDetails(appId){
-  const app = allAppsCache.find(a=>a.id===appId);
-  if(!app) return;
-  let screenshotsHTML = '';
-  if(app.screenshots && app.screenshots.length>0){
-    app.screenshots.forEach(imgUrl=>{ screenshotsHTML += '<img src="'+imgUrl+'" class="screenshot-item" loading="lazy" onclick="openImgViewer(\''+imgUrl+'\')">'; });
-  } else screenshotsHTML = '<p style="color:var(--subtext-color);font-size:12px;">'+(currentLang==='ar'?'لا توجد لقطات':'No screenshots available.')+'</p>';
-  db.collection("apps").doc(appId).collection("comments").orderBy("createdAt","desc").get().then(snapshot=>{
-    let commentsList = [];
-    snapshot.forEach(doc=>commentsList.push({id:doc.id, ...doc.data()}));
-    let commentsHTML = '';
-    if(commentsList.length===0) commentsHTML = '<p style="color:var(--subtext-color);font-size:12px;text-align:center;">'+(currentLang==='ar'?'لا توجد تعليقات بعد':'No comments yet.')+'</p>';
-    else commentsList.forEach(c=>{
-      commentsHTML += '<div class="comment-box" style="display:flex;justify-content:space-between;align-items:center;"><div><div class="comment-user">'+c.userName+'</div><div>'+c.text+'</div></div>'+(isAdmin?'<button onclick="deleteComment(\''+app.id+'\',\''+c.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:4px 8px;border-radius:6px;font-size:11px;cursor:pointer;font-weight:bold;font-family:inherit;">X</button>':'')+'</div>';
-    });
-    let pubText = app.publisher ? '<div style="color:var(--accent);font-size:13px;font-weight:bold;margin-bottom:5px;">By '+app.publisher+'</div>' : '';
-    let userRating = (app.userRatings && currentUser) ? (app.userRatings[currentUser.email]||0) : 0;
-    let ratingAvg = getAverageRating(app);
-    let isFav = userFavorites.includes(app.id);
-    let starsHTML = '';
-    for(let i=1;i<=5;i++) starsHTML += '<button class="star-btn '+(i<=userRating?'active':'')+'" onclick="setRating(\''+app.id+'\','+i+')"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>';
-    let similarApps = allAppsCache.filter(a=>a.category===app.category && a.id!==app.id).slice(0,6);
-    let similarHTML = '';
-    if(similarApps.length>0){
-      similarHTML = '<div style="border-top:1px solid var(--border-color);padding-top:12px;margin-bottom:12px;"><h4 style="font-size:13px;margin:0 0 8px 0;color:var(--text-color);">'+(currentLang==='ar'?'قد يعجبك أيضاً':'You might also like')+'</h4><div class="similar-apps-container">'+similarApps.map(s=>'<div class="similar-app-card" onclick="closeModal(\'appDetailModal\');setTimeout(()=>openAppDetails(\''+s.id+'\'),300);"><img src="'+(s.icon||FALLBACK_ICON)+'" onerror="this.src=\''+FALLBACK_ICON+'\'"><h5>'+s.name+'</h5><p>'+(s.size||'N/A')+'</p></div>').join('')+'</div></div>';
-    }
-    document.getElementById('appDetailBody').innerHTML = '<div style="width:50px;height:5px;background:var(--border-color);border-radius:10px;margin:0 auto 18px auto;"></div><div class="detail-header"><img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'"><div style="flex:1;"><h3 style="margin:0 0 3px 0;font-size:18px;color:var(--text-color);font-weight:900;">'+app.name+'</h3>'+pubText+'<div style="font-size:12px;color:var(--subtext-color);font-weight:600;margin-bottom:4px;">'+getCategoryNameEn(app.category)+' • <span style="color:var(--danger);">'+(app.platform||'IPA')+'</span></div><div style="font-size:13px;color:var(--text-color);font-weight:bold;">'+(app.size||'N/A')+'</div></div><button onclick="toggleFavorite(\''+app.id+'\',event)" style="background:'+(isFav?'rgba(255,69,58,0.15)':'var(--input-bg)')+';border:1px solid '+(isFav?'var(--danger)':'var(--border-color)')+';width:42px;height:42px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:'+(isFav?'var(--danger)':'var(--subtext-color)')+';">'+(isFav?ICONS.heartFill:ICONS.heart)+'</button></div><div style="background:var(--input-bg);padding:14px;border-radius:14px;margin-bottom:14px;"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;"><span style="font-size:12px;color:var(--subtext-color);font-weight:700;">'+(currentLang==='ar'?'التقييم':'RATING')+'</span><span style="font-size:13px;font-weight:800;color:var(--warning);">'+(ratingAvg>0?ratingAvg.toFixed(1)+' / 5':'—')+' '+(app.ratingCount?'('+app.ratingCount+')':'')+'</span></div><div class="star-rating">'+starsHTML+'</div>'+(userRating>0?'<p style="margin:8px 0 0 0;font-size:11px;color:var(--subtext-color);text-align:center;">'+(currentLang==='ar'?'تقييمك: ':'You rated: ')+userRating+'</p>':'')+'</div><div style="background:var(--input-bg);padding:14px;border-radius:14px;margin-bottom:14px;font-size:13px;color:var(--text-color);line-height:1.6;"><strong style="color:var(--accent);display:flex;align-items:center;gap:6px;margin-bottom:6px;">'+ICONS.infoCircle+' '+(currentLang==='ar'?'معلومات تفصيلية':'Detailed Info')+':</strong>'+(app.info||app.desc||'—')+'</div><button class="btn-download-hero" onclick="startRealDownload(\''+app.id+'\',\''+app.url+'\',\''+app.name+'\')"><div class="hero-icon">'+ICONS.dlBig+'</div><div class="hero-text"><span class="hero-title">'+(currentLang==='ar'?'تحميل الآن':'Download Now')+'</span><span class="hero-sub">'+(app.size||'N/A')+' • '+(app.platform||'IPA')+'</span></div><div class="hero-arrow">→</div></button><div style="border-top:1px solid var(--border-color);padding-top:12px;margin-bottom:12px;margin-top:14px;"><h4 style="font-size:13px;margin:0 0 8px 0;color:var(--text-color);">'+(currentLang==='ar'?'لقطات الشاشة:':'Screenshots:')+'</h4><div class="screenshots-container">'+screenshotsHTML+'</div></div>'+similarHTML+'<div style="border-top:1px solid var(--border-color);padding-top:12px;"><h4 style="font-size:13px;margin:0 0 10px 0;color:var(--text-color);">'+(currentLang==='ar'?'التعليقات':'Comments')+' ('+commentsList.length+')</h4><div style="max-height:150px;overflow-y:auto;margin-bottom:10px;">'+commentsHTML+'</div>'+(currentUser?'<input type="text" id="newCommentText" class="input-field" placeholder="'+(currentLang==='ar'?'اكتب تعليقاً...':'Write a comment...')+'"><button onclick="postComment(\''+app.id+'\')" class="btn-primary" style="padding:10px;font-size:13px;">'+(currentLang==='ar'?'نشر التعليق':'Post Comment')+'</button>':'<p style="color:var(--danger);font-size:12px;text-align:center;">'+(currentLang==='ar'?'سجّل الدخول للتعليق':'Sign in to comment.')+'</p>')+'</div><button onclick="closeModal(\'appDetailModal\')" class="btn-secondary" style="margin-top:14px;">'+(currentLang==='ar'?'إغلاق':'Close')+'</button>';
-    document.getElementById('appDetailModal').style.display = 'flex';
-  }).catch(err=>{ console.warn('Comments err:',err); });
-}
-function deleteComment(appId, commentId){
-  if(!isAdmin) return;
-  if(confirm('Delete this comment?')){
-    db.collection("apps").doc(appId).collection("comments").doc(commentId).delete().then(()=>{
-      db.collection("apps").doc(appId).update({commentsCount: firebase.firestore.FieldValue.increment(-1)}).catch(()=>{});
-      showToast('Comment deleted', 'success');
-      openAppDetails(appId);
-    });
-  }
-}
-function postComment(appId){
-  if(!requireVerifiedEmail()) return;
-  if(!currentUser){ showToast('Sign in first', 'warning'); return; }
-  const text = document.getElementById('newCommentText').value.trim();
-  if(!text) return;
-  db.collection("apps").doc(appId).collection("comments").add({userName: (userProfile.displayName || currentUser.email.split('@')[0]), text: text, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-    db.collection("apps").doc(appId).update({commentsCount: firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
-    showToast('Comment posted', 'success', 1500);
-    document.getElementById('newCommentText').value = '';
-    openAppDetails(appId);
-  });
-}
-function openReportModal(appId){
-  if(!requireVerifiedEmail()) return;
-  document.getElementById('reportAppId').value = appId;
-  document.getElementById('reportReason').value = '';
-  openModal('reportModal');
-}
-function setReportReasonText(t){ document.getElementById('reportReason').value = t; }
-function submitReport(){
-  if(!requireVerifiedEmail()) return;
-  const appId = document.getElementById('reportAppId').value;
-  const reason = document.getElementById('reportReason').value.trim();
-  if(!reason){ showToast('Please select or type a reason', 'warning'); return; }
-  db.collection("reports").add({appId, reason, user: currentUser ? currentUser.email : 'Guest', createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-    showToast('Report sent', 'success');
-    closeModal('reportModal');
-  });
-}
-function deleteReport(reportId){
-  if(!isAdmin) return;
-  if(confirm('Delete this report?')){
-    db.collection("reports").doc(reportId).delete();
-    showToast('Report resolved', 'success');
-  }
 }
 
 // ====== ADMIN: ADD/EDIT APP ======
