@@ -432,7 +432,6 @@ Add New App
 
 <div class="floating-nav">
 <button class="nav-item active" data-tab="today" onclick="switchTab('today', this)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Today</button>
-<button class="nav-item" data-tab="trending" onclick="switchTab('trending', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Trending</button>
 <button class="nav-item" data-tab="games" onclick="switchTab('games', this)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1.2" fill="currentColor"/><circle cx="18" cy="13" r="1.2" fill="currentColor"/></svg>Games</button>
 <button class="nav-item" data-tab="apps" onclick="switchTab('apps', this)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>Apps</button>
 <button class="nav-item" data-tab="tools" onclick="switchTab('tools', this)"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Tools</button>
@@ -994,32 +993,45 @@ function renderUI(){
   }
 
   if(currentTab === 'today'){
-    container.innerHTML = '<div class="today-header"><div class="today-date">'+getActualDateString()+'</div><div class="today-title">Today</div><div class="today-subtitle">'+ICONS.bolt+' Special Updates & Highlights</div></div><div id="todayAppsContainer">'+renderSkeleton()+'</div><div class="section-heading">Trending & More</div><div id="generalAppsContainer"></div>';
-    
     // Sort Today's apps by Trending Score (Engagement) - High interaction first
     let trendingList = [...uniqueApps].sort((a,b)=>getTrendingScore(b)-getTrendingScore(a));
-    const todayList = trendingList.filter(app=>app.category==='today'||!app.category);
-    const generalList = uniqueApps; // Regular list with 50/50 filter
+    let todayList = trendingList.filter(app=>app.category==='today'||!app.category);
+    let generalList = uniqueApps; // Regular list with 50/50 filter
+    
+    // Apply filter to today's list
+    if(currentFilter === 'IPA') {
+      todayList = todayList.filter(a => (a.platform||'IPA') === 'IPA');
+      generalList = generalList.filter(a => (a.platform||'IPA') === 'IPA');
+    } else if (currentFilter === 'APK') {
+      todayList = todayList.filter(a => (a.platform||'IPA') === 'APK');
+      generalList = generalList.filter(a => (a.platform||'IPA') === 'APK');
+    }
 
+    container.innerHTML = `
+      <div class="filter-chips">
+        <button class="chip ${currentFilter==='all'?'active':''}" onclick="setFilter('all')">All</button>
+        <button class="chip ${currentFilter==='IPA'?'active':''}" onclick="setFilter('IPA')">iOS</button>
+        <button class="chip ${currentFilter==='APK'?'active':''}" onclick="setFilter('APK')">Android</button>
+      </div>
+      <div class="today-header">
+        <div class="today-date">${getActualDateString()}</div>
+        <div class="today-title">Today</div>
+        <div class="today-subtitle">${ICONS.bolt} Special Updates & Highlights</div>
+      </div>
+      <div id="todayAppsContainer">${renderSkeleton()}</div>
+      <div class="section-heading">Trending & More</div>
+      <div id="generalAppsContainer"></div>
+    `;
+    
     const tc = document.getElementById('todayAppsContainer');
     tc.innerHTML = '';
     let displayList = todayList.length > 0 ? todayList : trendingList.slice(0,2);
     if(displayList.length===0) tc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;">No featured apps yet.</p>';
     else displayList.forEach((app,index)=>tc.innerHTML += createFeaturedCardHTML(app,index));
+    
     const gc = document.getElementById('generalAppsContainer');
     if(generalList.length===0) gc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;">No apps yet.</p>';
     else generalList.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; gc.innerHTML += createAppCardHTML(app,badge); });
-    return;
-  }
-
-  if(currentTab === 'trending'){
-    // Use 50/50 filtered list instead of sorting by trending (To avoid duplicates)
-    let list = uniqueApps;
-    if(currentFilter==='IPA'||currentFilter==='APK') list = list.filter(a=>(a.platform||'IPA')===currentFilter);
-    container.innerHTML = '<div class="today-header"><div class="today-title">Trending Apps</div><div class="today-subtitle" style="color:var(--warning);">'+ICONS.star+' Most popular apps</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button><button class="chip '+(currentFilter==='IPA'?'active':'')+'" onclick="setFilter(\'IPA\')">iOS</button><button class="chip '+(currentFilter==='APK'?'active':'')+'" onclick="setFilter(\'APK\')">Android</button></div><div class="trending-stage"><div id="trendingContainer"></div></div>';
-    const trc = document.getElementById('trendingContainer');
-    if(list.length===0) trc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">No trending apps.</p>';
-    else list.forEach((app,idx)=>{ let badge = '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#'+(idx+1)+'</span>'; trc.innerHTML += createAppCardHTML(app,badge); });
     return;
   }
 
