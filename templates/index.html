@@ -1450,7 +1450,7 @@ if(badgeEl){
   // ✅ فحص الأدمن + الاشتراك + تجربة Premium (كتلة وحدة بلا تكرار)
   const isSiteAdmin = currentUser && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(currentUser.email.toLowerCase());
   const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
-  const isAdminTestPremium = localStorage.getItem('istore_admin_test_premium') === 'true';
+  const isAdminTestPremium = isSiteAdmin && localStorage.getItem('istore_admin_test_premium') === 'true';
 
   if (isSiteAdmin || isSubscribed || isAdminTestPremium) {
     incrementDownload(appId);
