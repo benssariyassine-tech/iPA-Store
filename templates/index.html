@@ -2056,7 +2056,12 @@ function createAppCardHTML(app, rankBadge){
   let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
   let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
   let ratingAvg = getAverageRating(app);
-  let ratingBadge = ratingAvg>0 ? '<span style="background:var(--input-bg);color:var(--warning);font-size:11px;font-weight:800;padding:5px 10px;border-radius:7px;border:1px solid var(--border-color);display:inline-flex;align-items:center;gap:4px;">'+ICONS.starFill+' '+ratingAvg.toFixed(1)+'</span>' : '';
+  let ratingBadge = ratingAvg>0 ? '<span style="background:var(--input-bg);color '';
+:var(--warning);font-size:11px;font-weight:800  
+;padding:5px 10px;border-radius :7px;border:1px solid var(-- //border-color);display:inline-flex;align-items:center;gap:4px;">'+ICONS.starFill+' '+ratingAvg.toFixed(1)+'</span>' : Thumb Up SVGs
+  const thumbUp = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  const thumbUpFill = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  
   return '<div class="app-card-pro">'+
     '<div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1;">'+
       '<div style="position:relative;width:62px;height:62px;flex-shrink:0;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+
@@ -2075,13 +2080,12 @@ function createAppCardHTML(app, rankBadge){
           ratingBadge+
         '</div>'+
       '</div>'+
-      '<div style="display:flex;flex-direction:column;gap:6px;align-items:flex-end;flex-shrink:0;">'+
-        '<button class="btn-star-like '+(isLiked?'liked':'')+'" onclick="toggleStarLike(\''+app.id+'\',event)">'+(isLiked?ICONS.starFill:ICONS.star)+' <span>'+likesCount+'</span></button>'+
-        '<button class="btn-info-blue" onclick="openAppDetails(\''+app.id+'\')">'+ICONS.infoCircle+'</button>'+
-      '</div>'+
     '</div>'+
     '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border-color);position:relative;z-index:1;">'+
-      '<div style="display:flex;gap:6px;align-items:center;">'+extraFilesDropdown+'</div>'+
+      '<div style="display:flex;gap:6px;align-items:center;">'+
+        extraFilesDropdown+
+        '<button class="btn-star-like '+(isLiked?'liked':'')+'" onclick="toggleStarLike(\''+app.id+'\',event)" style="padding:7px 12px;">'+(isLiked?thumbUpFill:thumbUp)+' <span>'+likesCount+'</span></button>'+
+      '</div>'+
       '<div style="display:flex;gap:6px;align-items:center;">'+
         '<button class="btn-report-text" onclick="openReportModal(\''+app.id+'\')">'+(currentLang==='ar'?'إبلاغ':'Report')+'</button>'+
         (isAdmin?'<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal(\''+app.id+'\')">'+(currentLang==='ar'?'تعديل':'Edit')+'</button><button class="btn-del" onclick="deleteApp(\''+app.id+'\')">'+(currentLang==='ar'?'حذف':'Del')+'</button></div>':'')+
@@ -2089,7 +2093,6 @@ function createAppCardHTML(app, rankBadge){
     '</div>'+
   '</div>';
 }
-
 // ====== ADMIN: ADD/EDIT APP ======
 function openAddAppModal(){
   if(!isAdmin && !isPublisher) return;
