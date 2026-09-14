@@ -1232,6 +1232,14 @@ function loadUserProfile(){
     updateAvatarUI();
   });
 }
+// ====== PREMIUM THEME ======
+function applyPremiumTheme(){
+  const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
+  const isAdminTestPremium = localStorage.getItem('istore_admin_test_premium') === 'true';
+  const isPremium = isSubscribed || (isAdmin && isAdminTestPremium);
+  
+  document.body.classList.toggle('premium-mode', isPremium);
+}
 
 function updateAvatarUI(){
   const avatarEl = document.getElementById('userAvatar');
