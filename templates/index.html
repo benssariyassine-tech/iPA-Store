@@ -1161,7 +1161,30 @@ function toggleUserPreview(){
   applyAdminUI();
   renderUI();
 }
-
+// ====== TOGGLE ADMIN PREMIUM TEST ======
+function toggleAdminPremiumTest(){
+  const isCurrentlyTest = localStorage.getItem('istore_admin_test_premium') === 'true';
+  const isAr = currentLang === 'ar';
+  
+  if(isCurrentlyTest){
+    localStorage.removeItem('istore_admin_test_premium');
+    showToast(
+      isAr ? 'تم إيقاف وضع المعاينة' : 'Preview mode disabled',
+      'info',
+      2000
+    );
+  } else {
+    localStorage.setItem('istore_admin_test_premium', 'true');
+    showToast(
+      isAr ? 'تم تفعيل وضع المعاينة كمشترك' : 'Premium preview mode enabled',
+      'success',
+      2500
+    );
+  }
+  
+  updateAvatarUI();
+  renderUI();
+}
 // ====== USER PROFILE ======
 function loadUserProfile(){
   if(!currentUser) return;
