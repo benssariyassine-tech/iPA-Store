@@ -1299,7 +1299,9 @@ if(badgeEl){
       }
     }
   }
-// ✅ إضافة شعار الهيدر للمشتركين
+  // ✅ تطبيق الثيم الذهبي + شعار الهيدر
+  applyPremiumTheme();
+  
   const headerPremiumBadge = document.getElementById('headerPremiumBadge');
   if (headerPremiumBadge) {
       const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
