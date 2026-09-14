@@ -1229,8 +1229,17 @@ function updateAvatarUI(){
   if(avatarEl) avatarEl.src = userProfile.avatar || DEFAULT_AVATAR;
   if(nameEl) nameEl.innerText = userProfile.displayName || 'User';
   if(emailEl) emailEl.innerText = currentUser ? currentUser.email : '';
-  if(badgeEl){
-    if(isAdmin){
+if(badgeEl){
+    const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
+    const isAdminTestPremium = localStorage.getItem('istore_admin_test_premium') === 'true';
+    
+    if(isAdmin && isAdminTestPremium){
+      badgeEl.className = 'profile-badge premium';
+      badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> ' + (currentLang==='ar'?'مشترك مميز (تجربة)':'Premium Subscriber (Test)');
+    } else if(isSubscribed){
+      badgeEl.className = 'profile-badge premium';
+      badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> ' + (currentLang==='ar'?'مشترك مميز':'Premium Subscriber');
+    } else if(isAdmin){
       badgeEl.className = 'profile-badge admin';
       badgeEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/></svg> ' + (currentLang==='ar'?'مدير':'Administrator');
     } else if(isPublisher){
