@@ -1298,9 +1298,12 @@ if(badgeEl){
     return;
   }
 
-  // ✅ فحص الأدمن (ما يظهرلوش الإعلان)
+ // ✅ فحص الأدمن + الاشتراك + تجربة Premium
   const isSiteAdmin = currentUser && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(currentUser.email.toLowerCase());
-  if (isSiteAdmin) {
+  const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
+  const isAdminTestPremium = localStorage.getItem('istore_admin_test_premium') === 'true';
+
+  if (isSiteAdmin || isSubscribed || isAdminTestPremium) {
     incrementDownload(appId);
     try { window.location.href = fileUrl; } catch (e) {}
     showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
