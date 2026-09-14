@@ -1168,32 +1168,17 @@ function applyAdminUI(){
   if(adminNavTab) adminNavTab.style.display = isAdmin ? 'flex' : 'none';
   updateAvatarUI();
 }
-
-// ====== TOGGLE USER ){
-   function toggleAdminPremiumTest(){
-  const isCurrentlyTest = localStorage.getItem('istore_admin_test_premium') === 'true';
-  const isAr = currentLang === 'ar';
   
-  if(isCurrentlyTest){
-    localStorage.removeItem('istore_admin_test_premium');
-    showToast(
-      isAr ? 'تم إيقاف وضع المعاينة' : 'Premium preview disabled',
-      'info',
-      2000
-    );
-  } else {
-    localStorage.setItem('istore_admin_test_premium', 'true');
-    showToast(
-      isAr ? 'تم تفعيل وضع المشترك المميز' : 'Premium preview enabled',
-      'success',
-      2500
-    );
-  }
-  
-  applyPremiumTheme();
-  updateAvatarUI();
+   // ====== TOGGLE USER PREVIEW ======
+function toggleUserPreview(){
+  isUserPreview = !isUserPreview;
+  const user = auth.currentUser;
+  if(user && ADMIN_EMAILS.map(e=>e.toLowerCase()).includes(user.email.toLowerCase())) isAdmin = !isUserPreview;
+  document.getElementById('previewBar').style.display = isUserPreview ? 'flex' : 'none';
+  applyAdminUI();
   renderUI();
 }
+
 // ====== TOGGLE ADMIN PREMIUM TEST ======
 function toggleAdminPremiumTest(){
   const isCurrentlyTest = localStorage.getItem('istore_admin_test_premium') === 'true';
