@@ -1238,6 +1238,9 @@ function updateAvatarUI(){
     showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
     return;
   }
+
+  // ✅ التحقق: إذا كنت أنت المدير (الإيميل تاعك)، ما يظهرش الإعلان
+  const isSiteAdmin = currentUser && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(currentUser.email.toLowerCase());
   
   // ✅ إنشاء نافذة الإعلان (Overlay)
   const adOverlay = document.createElement('div');
@@ -1247,14 +1250,20 @@ function updateAvatarUI(){
   adOverlay.innerHTML = `
     <div style="position:relative; width:100%; max-width:400px; height:500px; background:#fff; border-radius:20px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.5); display:flex; flex-direction:column;">
       
-      <!-- ✅ هنا البلاصة اللي راح يخدم فيها الإعلان تاعك (Monetag) -->
-      <div id="monetag-ad-container" style="flex:1; display:flex; align-items:center; justify-content:center; background:#fff; overflow:hidden;">
-        <!-- الإعلان راح يتحمّل هنا تلقائياً -->
+      <!-- ✅ هنا البلاصة اللي راح يخدم فيها إعلان Vignette Banner -->
+      <div id="monetag-ad-container" style="flex:1; display:flex; align-items:center; justify-content:center; background:#fff; overflow:hidden; position:relative;">
+        <div id="adLoadingText" style="position:absolute; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" style="animation: spin 1s linear infinite;">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
+                <path d="M12 2a10 10 0 0 1 10 10" />
+            </svg>
+            <span style="margin-top:10px; color:#666; font-weight:bold; font-size:14px;">${currentLang === 'ar' ? 'جاري تحميل الإعلان...' : 'Loading ad...'}</span>
+        </div>
       </div>
 
       <!-- زر الإغلاق (مخفي في البداية) -->
       <div id="adCloseContainer" style="position:absolute; top:10px; right:10px; display:none; z-index: 99999;">
-        <button id="closeAdBtn" style="background:#ff453a; color:#fff; border:none; width:44px; height:44px; border-radius:50%; font-weight:900; font-size:20px; cursor:pointer; box-shadow:0 4يكpx 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;">X</button>
+        <button id="closeAdBtn" style="background:#ff453a; color:#fff; border:none; width:44px; height:44px; border-radius:50%; font-weight:900; font-size:20px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,0.3); display:flex; align-items:center; justify-content:center;">X</button>
       </div>
 
       <!-- مؤقت العد التنازلي -->
@@ -1265,24 +1274,52 @@ function updateAvatarUI(){
   `;
   document.body.appendChild(adOverlay);
 
-  // ✅ حقن السكريبت تاعك دينامياً داخل النافذة
-  const adScript = document.createElement('script');
-  adScript.src = "https://quge5.com/88/tag.min.js";
-  adScript.setAttribute('data-zone', '280178');
-  adScript.async = true;
-  adScript.setAttribute('data-cfasync', 'false');
-  
   const adContainer = document.getElementById('monetag-ad-container');
-  if(adContainer) {
+  const closeContainer = document.getElementById('adCloseContainer');
+  const timerText = document.getElementById('adTimerText');
+  const countdownEl = document.getElementById('countdown');
+
+  // ✅ إذا كان المستخدم هو المدير: نخبيو الإعلان ونقصرو الوقت
+  if (isSiteAdmin) {
+      if (adContainer) {
+          adContainer.innerHTML = `
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#888;font-family:inherit;">
+                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                <p style="margin-top:15px;font-weight:bold;font-size:16px;">${currentLang === 'ar' ? 'أنت المدير: الإعلانات مخفية' : 'Admin Mode: Ads Hidden'}</p>
+            </div>`;
+      }
+      if (countdownEl) countdownEl.innerText = '0'; 
+      if (timerText) timerText.style.display = 'none';
+      if (closeContainer) closeContainer.style.display = 'block'; 
+      
+      document.getElementById('closeAdBtn').onclick = () => {
+          adOverlay.remove();
+          incrementDownload(appId);
+          try { window.location.href = fileUrl; } catch(e) { }
+          showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
+      };
+      return; 
+  }
+
+  // ✅ حقن كود Vignette Banner الجديد ديناميكياً
+  // حولنا الكود تاعك باش يخدم داخل النافذة
+  const adScript = document.createElement('script');
+  adScript.src = "https://n6wxm.com/vignette.min.js";
+  adScript.setAttribute('data-zone', '11799162');
+  adScript.async = true;
+  
+  if(adContainer) { 
       adContainer.appendChild(adScript); 
   }
 
+  // نخبيو نص "جاري التحميل" كي يظهر الإعلان
+  setTimeout(() => {
+      const loadingText = document.getElementById('adLoadingText');
+      if(loadingText) loadingText.style.display = 'none';
+  }, 1500);
+
   // ✅ تشغيل المؤقت (7 ثواني)
   let timeLeft = 7;
-  const countdownEl = document.getElementById('countdown');
-  const closeContainer = document.getElementById('adCloseContainer');
-  const timerText = document.getElementById('adTimerText');
-
   const timer = setInterval(() => {
     timeLeft--;
     if (countdownEl) countdownEl.innerText = timeLeft;
