@@ -1244,16 +1244,14 @@ function updateAvatarUI(){
   }
 }
   function startRealDownload(appId, fileUrl, appName) {
-  if (!requireVerifiedEmail()) return;
-
+  // ✅ نتأكد من الرابط فقط
   if (!fileUrl || fileUrl === '#' || fileUrl.trim() === '') {
     showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
     return;
   }
 
-  // ✅ إذا كنت أنت المدير، ما يظهرش الإعلان
+  // ✅ فحص الأدمن (ما يظهرلوش الإعلان)
   const isSiteAdmin = currentUser && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(currentUser.email.toLowerCase());
-
   if (isSiteAdmin) {
     incrementDownload(appId);
     try { window.location.href = fileUrl; } catch (e) {}
@@ -1261,29 +1259,25 @@ function updateAvatarUI(){
     return;
   }
 
-  // ✅ للزوار: نافذة انتظار (Bottom Sheet)
+  // ✅ نافذة الإعلان للكل (مسجل أو زائر)
   const adOverlay = document.createElement('div');
   adOverlay.id = 'adOverlay';
   adOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999999;display:flex;align-items:flex-end;justify-content:center;';
 
   adOverlay.innerHTML = `
     <div style="position:relative; width:100%; max-width:500px; background:#fff; border-top-left-radius:24px; border-top-right-radius:24px; padding:30px 20px; text-align:center; box-shadow:0 -10px 40px rgba(0,0,0,0.2);">
-
       <div style="width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#0a84ff,#0062d2); display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px;">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </div>
-
       <h3 style="margin:0 0 10px 0; font-size:20px; font-weight:900; color:#0b0b0f;">
           ${currentLang === 'ar' ? 'تحضير رابط التحميل...' : 'Preparing Download...'}
       </h3>
       <p style="margin:0 0 20px 0; font-size:14px; color:#8e8e93; line-height:1.6;">
           ${currentLang === 'ar' ? 'سيتم عرض إعلان قصير ثم يبدأ التحميل تلقائياً.' : 'A short ad will be shown, then the download starts automatically.'}
       </p>
-
       <button id="closeAdBtn" style="width:100%; padding:15px; border-radius:14px; border:none; background:linear-gradient(135deg,#0a84ff,#0062d2); color:#fff; font-weight:800; font-size:15px; cursor:pointer; font-family:inherit; box-shadow:0 8px 24px rgba(10,132,255,0.45);">
           ${currentLang === 'ar' ? 'متابعة التحميل' : 'Continue Download'}
       </button>
-
       <div style="margin-top:15px; font-size:12px; color:#8e8e93;">
           ${currentLang === 'ar' ? '💡 اضغط على زر متابعة' : '💡 Tap continue to proceed'}
       </div>
@@ -1291,37 +1285,55 @@ function updateAvatarUI(){
   `;
   document.body.appendChild(adOverlay);
 
-  // ✅ عند الضغط على متابعة
   document.getElementById('closeAdBtn').onclick = () => {
     adOverlay.remove();
-
     incrementDownload(appId);
 
-    // ✅ استدعاء إعلان Vignette
-if (typeof show_11799162 === 'function') {
-  try {
-    const result = show_11799162();
-    // ✅ إذا رجعت Promise (النسخ الجديدة)
-    if (result && typeof result.then === 'function') {
-      result
-        .then(() => goToDownload(fileUrl, appName))
-        .catch(() => goToDownload(fileUrl, appName));
+    // ✅ استدعاء الإعلان (للزوار والمسجلين)
+    if (typeof show_11799162 === 'function') {
+      try {
+        const result = show_11799162();
+        if (result && typeof result.then === 'function') {
+          result
+            .then(() => checkLoginThenDownload(fileUrl, appName))
+            .catch(() => checkLoginThenDownload(fileUrl, appName));
+        } else {
+          setTimeout(() => checkLoginThenDownload(fileUrl, appName), 5000);
+        }
+      } catch (e) {
+        checkLoginThenDownload(fileUrl, appName);
+      }
     } else {
-      // ✅ إذا ما رجعتش Promise، نعطيوها وقت كافي باش الإعلان يبان
-      setTimeout(() => goToDownload(fileUrl, appName), 5000);
+      checkLoginThenDownload(fileUrl, appName);
     }
-  } catch (e) {
-    console.warn('Vignette call failed:', e);
-    goToDownload(fileUrl, appName);
-  }
-} else {
-  console.warn('Vignette not loaded, skipping ad.');
-  goToDownload(fileUrl, appName);
-}
   };
 }
 
-// ✅ دالة مساعدة للتحويل للتحميل
+// ✅ دالة جديدة: بعد الإعلان نتحقق من تسجيل الدخول
+function checkLoginThenDownload(fileUrl, appName) {
+  // إذا كان الزائر ماشي مسجل → نمنع التحميل ونظهرلو رسالة
+  if (!currentUser) {
+    showToast(
+      currentLang === 'ar' 
+        ? 'يجب تسجيل الدخول لإكمال التحميل' 
+        : 'Please sign in to complete the download',
+      'warning',
+      4000
+    );
+    setTimeout(() => openAccountModal(), 800);
+    return;
+  }
+
+  // إذا كان مسجل لكن ماشي موثق
+  if (currentUser.providerData.some(p => p.providerId === 'password') && !userProfile.isVerified) {
+    showToast(t('verifyRequired'), "warning", 4000);
+    return;
+  }
+
+  // ✅ مسجل وموثق → يحمل
+  goToDownload(fileUrl, appName);
+}
+  // ✅ دالة مساعدة للتحويل للتحميل
 function goToDownload(fileUrl, appName) {
   try {
     window.location.href = fileUrl;
@@ -1335,7 +1347,11 @@ function goToDownload(fileUrl, appName) {
     a.click();
     a.remove();
   }
-  showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
+  showToast(
+    (currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 
+    'success', 
+    3000
+  );
 }
 // ====== DOWNLOAD COUNTER ======
 function incrementDownload(appId){
