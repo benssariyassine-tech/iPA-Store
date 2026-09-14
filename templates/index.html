@@ -970,7 +970,16 @@ function registerWithEmail(){
     })
     .catch(err => showToast("Error: " + err.message, "error"));
 }
-
+function forgotPassword(){
+  const email = document.getElementById('loginEmail').value.trim();
+  if(!email){
+    showToast(currentLang==='ar'?'الرجاء إدخال البريد الإلكتروني':'Please enter your email first', 'warning');
+    return;
+  }
+  auth.sendPasswordResetEmail(email)
+    .then(() => showToast(currentLang==='ar'?'تم إرسال رابط إعادة التعيين إلى بريدك':'Reset link sent! Check your email (and Spam folder).', 'success', 6000))
+    .catch(err => showToast('Error: ' + err.message, 'error', 5000));
+}
 // ====== AUTH: LOGIN ======
 function loginWithEmail(){
   const email = document.getElementById('loginEmail').value.trim();
