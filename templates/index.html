@@ -359,6 +359,49 @@ body.premium-mode .modal-title {
   0%,100% { box-shadow: 0 4px 15px rgba(212,160,23,0.5); }
   50% { box-shadow: 0 4px 25px rgba(255,215,0,0.8); }
 }
+  
+/* ===== PREMIUM ANIMATED BACKGROUND ===== */
+body.premium-mode {
+  background-color: #0b0b0f;
+  background-image: 
+    radial-gradient(ellipse 60% 50% at 15% 15%, rgba(212,160,23,0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 25%, rgba(255,215,0,0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 55% at 50% 95%, rgba(184,134,11,0.20) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 5% 75%, rgba(255,200,50,0.12) 0%, transparent 65%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  animation: goldFlow 18s ease-in-out infinite;
+}
+
+body.premium-mode.light-mode {
+  background-color: #faf6ea;
+  background-image: 
+    radial-gradient(ellipse 60% 50% at 15% 15%, rgba(212,160,23,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 25%, rgba(255,215,0,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 55% at 50% 95%, rgba(184,134,11,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 5% 75%, rgba(255,200,50,0.10) 0%, transparent 65%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  animation: goldFlow 18s ease-in-out infinite;
+}
+
+@keyframes goldFlow {
+  0% {
+    background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%;
+  }
+  25% {
+    background-position: 30% 20%, 70% 30%, 30% 80%, 50% 30%;
+  }
+  50% {
+    background-position: 100% 50%, 0% 50%, 0% 50%, 100% 100%;
+  }
+  75% {
+    background-position: 70% 30%, 30% 70%, 60% 20%, 30% 0%;
+  }
+  100% {
+    background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%;
+  }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
