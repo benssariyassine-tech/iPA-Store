@@ -903,7 +903,19 @@ function toggleDarkMode(){
 
 // ====== VERIFIED EMAIL CHECK ======
 function requireVerifiedEmail(){
-  if (!currentUser) return false;
+  if (!currentUser) {
+    showToast(
+      currentLang === 'ar' 
+        ? 'يجب تسجيل الدخول أولاً' 
+        : 'Please sign in first to download',
+      'warning',
+      3000
+    );
+    setTimeout(() => {
+      openAccountModal();
+    }, 600);
+    return false;
+  }
   if (currentUser.providerData.some(p => p.providerId !== 'password')) return true;
   if (!userProfile.isVerified){
     showToast(t('verifyRequired'), "warning", 4000);
