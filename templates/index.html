@@ -1286,26 +1286,26 @@ function updateAvatarUI(){
     incrementDownload(appId);
 
     // ✅ استدعاء إعلان Vignette
-    if (typeof show_11799162 === 'function') {
-      try {
-        show_11799162()
-          .then(() => {
-            // كيتنفذ من بعد ما يسد المستخدم الإعلان
-            goToDownload(fileUrl, appName);
-          })
-          .catch((err) => {
-            console.warn('Vignette ad error:', err);
-            goToDownload(fileUrl, appName);
-          });
-      } catch (e) {
-        console.warn('Vignette call failed:', e);
-        goToDownload(fileUrl, appName);
-      }
+if (typeof show_11799162 === 'function') {
+  try {
+    const result = show_11799162();
+    // ✅ إذا رجعت Promise (النسخ الجديدة)
+    if (result && typeof result.then === 'function') {
+      result
+        .then(() => goToDownload(fileUrl, appName))
+        .catch(() => goToDownload(fileUrl, appName));
     } else {
-      // الإعلان ما تحملش (ممكن ad blocker) -> نكمل للتحميل مباشرة
-      console.warn('Vignette not loaded, skipping ad.');
-      goToDownload(fileUrl, appName);
+      // ✅ إذا ما رجعتش Promise، نعطيوها وقت كافي باش الإعلان يبان
+      setTimeout(() => goToDownload(fileUrl, appName), 5000);
     }
+  } catch (e) {
+    console.warn('Vignette call failed:', e);
+    goToDownload(fileUrl, appName);
+  }
+} else {
+  console.warn('Vignette not loaded, skipping ad.');
+  goToDownload(fileUrl, appName);
+}
   };
 }
 
