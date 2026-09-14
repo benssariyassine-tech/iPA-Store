@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -76,6 +76,14 @@ def home():
 @app.route('/api/apps', methods=['GET'])
 def get_apps():
     return jsonify(APPS_DATABASE)
+
+@app.route('/sitemap.xml')
+def sitemap():
+    return send_from_directory('templates', 'sitemap.xml', mimetype='application/xml')
+
+@app.route('/robots.txt')
+def robots():
+    return send_from_directory('templates', 'robots.txt', mimetype='text/plain')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
