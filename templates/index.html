@@ -1239,141 +1239,67 @@ function updateAvatarUI(){
     return;
   }
 
-  // ✅ التحقق: إذا كنت أنت المدير، ما يظهرش الإعلان
+  // ✅ إذا كنت أنت المدير، ما يظهرش الإعلان
   const isSiteAdmin = currentUser && ADMIN_EMAILS.map(e => e.toLowerCase()).includes(currentUser.email.toLowerCase());
   
-  // ✅ إنشاء النافذة الخلفية (شفافة باش ما تغطيش الشاشة)
+  if (isSiteAdmin) {
+      // المدير: يوجه مباشرة للتحميل
+      incrementDownload(appId);
+      try { window.location.href = fileUrl; } catch(e) {}
+      showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
+      return;
+  }
+
+  // ✅ للزوار: نفتح نافذة تحميل بسيطة (Bottom Sheet)
   const adOverlay = document.createElement('div');
   adOverlay.id = 'adOverlay';
-  adOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999999;display:flex;align-items:flex-end;justify-content:center;';
+  adOverlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999999;display:flex;align-items:flex-end;justify-content:center;';
   
-  // ✅ تصميم البطاقة اللي راح تطلع من تحت
   adOverlay.innerHTML = `
-    <div id="adCard" style="position:relative; width:100%; max-width:500px; background:#fff; border-top-left-radius:24px; border-top-right-radius:24px; overflow:hidden; box-shadow:0 -10px 40px rgba(0,0,0,0.2); transform:translateY(100%); transition:transform 0.4s ease-out; display:flex; flex-direction:column;">
+    <div style="position:relative; width:100%; max-width:500px; background:#fff; border-top-left-radius:24px; border-top-right-radius:24px; padding:30px 20px; text-align:center; box-shadow:0 -10px 40px rgba(0,0,0,0.2);">
       
-      <!-- ✅ شريط علوي فيه زر السهم (^) وزر الإغلاق (X) -->
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px; background:#f8f8fa; border-bottom:1px solid #eee; z-index:10;">
-        <button id="adExpandBtn" style="background:#eaeaea; border:none; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
-        </button>
-        
-        <span style="font-size:12px; font-weight:700; color:#888;">Advertisement</span>
-
-        <div id="adCloseContainer" style="display:none;">
-            <button id="closeAdBtn" style="background:#ff453a; color:#fff; border:none; width:36px; height:36px; border-radius:50%; font-weight:900; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;">X</button>
-        </div>
+      <div style="width:70px; height:70px; border-radius:50%; background:linear-gradient(135deg,#0a84ff,#0062d2); display:inline-flex; align-items:center; justify-content:center; margin-bottom:20px;">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
       </div>
+      
+      <h3 style="margin:0 0 10px 0; font-size:20px; font-weight:900; color:#0b0b0f;">
+          ${currentLang === 'ar' ? 'تحضير رابط التحميل...' : 'Preparing Download...'}
+      </h3>
+      <p style="margin:0 0 20px 0; font-size:14px; color:#8e8e93; line-height:1.6;">
+          ${currentLang === 'ar' ? 'سيتم فتح الإعلان في نافذة جديدة. يرجى إغلاقه للعودة وبدء التحميل.' : 'A new tab will open for the ad. Please close it to return and start the download.'}
+      </p>
 
-      <!-- ✅ هنا البلاصة اللي راح يخدم فيها الإعلان -->
-      <div id="monetag-ad-container" style="width:100%; height:350px; background:#fff; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
-        <div id="adLoadingText" style="position:absolute; display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:1; color:#666;">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" style="animation: spin 1s linear infinite;">
-                <circle cx="12" cy="12" r="10" stroke-opacity="0.2"/>
-                <path d="M12 2a10 10 0 0 1 10 10" />
-            </svg>
-            <span style="margin-top:10px; font-weight:bold; font-size:13px;">${currentLang === 'ar' ? 'جاري تحميل الإعلان...' : 'Loading ad...'}</span>
-        </div>
-      </div>
-
-      <!-- ✅ مؤقت العد التنازلي في الأسفل -->
-      <div id="adTimerText" style="position:absolute; bottom:15px; right:20px; background:rgba(0,0,0,0.7); color:#fff; padding:8px 16px; border-radius:20px; font-weight:bold; font-size:13px; font-family:inherit; z-index: 10;">
-        ${currentLang === 'ar' ? 'يرجى الانتظار' : 'Please wait'} <span id="countdown" style="color:#0a84ff; font-size:16px;">7</span>s
+      <button id="closeAdBtn" style="width:100%; padding:15px; border-radius:14px; border:none; background:linear-gradient(135deg,#0a84ff,#0062d2); color:#fff; font-weight:800; font-size:15px; cursor:pointer; font-family:inherit; box-shadow:0 8px 24px rgba(10,132,255,0.45);">
+          ${currentLang === 'ar' ? 'متابعة التحميل' : 'Continue Download'}
+      </button>
+      
+      <div style="margin-top:15px; font-size:12px; color:#8e8e93;">
+          ${currentLang === 'ar' ? '💡 الإعلان يفتح في نافذة جديدة' : '💡 Ad opens in a new tab'}
       </div>
     </div>
   `;
   document.body.appendChild(adOverlay);
 
-  // ✅ أنيميشن طلوع البطاقة من تحت
-  setTimeout(() => {
-      const adCard = document.getElementById('adCard');
-      if(adCard) adCard.style.transform = 'translateY(0)';
-  }, 100);
-
-  const adContainer = document.getElementById('monetag-ad-container');
-  const closeContainer = document.getElementById('adCloseContainer');
-  const timerText = document.getElementById('adTimerText');
-  const countdownEl = document.getElementById('countdown');
-  const expandBtn = document.getElementById('adExpandBtn');
-
-  // ✅ إذا كان المستخدم هو المدير: نخبيو الإعلان
-  if (isSiteAdmin) {
-      if (adContainer) {
-          adContainer.innerHTML = `
-            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#888;font-family:inherit;">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
-                <p style="margin-top:15px;font-weight:bold;font-size:14px;">${currentLang === 'ar' ? 'أنت المدير: الإعلانات مخفية' : 'Admin Mode: Ads Hidden'}</p>
-            </div>`;
-      }
-      if (countdownEl) countdownEl.innerText = '0'; 
-      if (timerText) timerText.style.display = 'none';
-      if (closeContainer) closeContainer.style.display = 'block'; 
-      if (expandBtn) expandBtn.style.display = 'none';
-      
-      document.getElementById('closeAdBtn').onclick = () => {
-          adOverlay.remove();
-          incrementDownload(appId);
-          try { window.location.href = fileUrl; } catch(e) { }
-          showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
-      };
-      return; 
-  }
-
-  // ✅ حقن كود Vignette Banner ديناميكياً
-  const adScript = document.createElement('script');
-  adScript.src = "https://n6wxm.com/vignette.min.js";
-  adScript.setAttribute('data-zone', '11799162');
-  adScript.async = true;
-  
-  if(adContainer) { 
-      adContainer.appendChild(adScript); 
-  }
-
-  // نخبيو نص "جاري التحميل" كي يظهر الإعلان
-  setTimeout(() => {
-      const loadingText = document.getElementById('adLoadingText');
-      if(loadingText) loadingText.style.display = 'none';
-  }, 2000);
-
-  // ✅ سلوك زر السهم (^): يفتح الإعلان في نافذة جديدة (باش ما يختفيش من البطاقة)
-  if (expandBtn) {
-      expandBtn.onclick = () => {
-          window.open('https://n6wxm.com/vignette.min.js', '_blank'); // فتح رابط الإعلان
-          showToast(currentLang === 'ar' ? 'تم فتح الإعلان في نافذة جديدة' : 'Ad opened in new tab', 'info', 2000);
-      };
-  }
-
-  // ✅ تشغيل المؤقت (7 ثواني)
-  let timeLeft = 7;
-  const timer = setInterval(() => {
-    timeLeft--;
-    if (countdownEl) countdownEl.innerText = timeLeft;
-    
-    if (timeLeft <= 0) {
-      clearInterval(timer);
-      if (timerText) timerText.style.display = 'none';
-      if (closeContainer) closeContainer.style.display = 'block'; // إظهار زر X
-    }
-  }, 1000);
-
-  // ✅ عند الضغط على X
+  // ✅ عند الضغط على متابعة: نفتح الإعلان في تبويب جديد ونحول المستخدم للتحميل
   document.getElementById('closeAdBtn').onclick = () => {
-    adOverlay.remove(); // إغلاق الإعلان
-    incrementDownload(appId); // زيادة عداد التحميلات
+    adOverlay.remove(); // إغلاق النافذة
     
-    // توجيه المستخدم لرابط التحميل المباشر
-    try {
-      window.location.href = fileUrl;
-    } catch(e) {
-      const a = document.createElement('a');
-      a.href = fileUrl;
-      a.target = '_self';
-      a.rel = 'noopener noreferrer';
-      a.download = appName;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-    showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
+    // فتح رابط الإعلان في نافذة جديدة (Monetag Vignette)
+    window.open(https://quge5.com/88/tag.min.js); // هذا رابط المثال، بدلو بالرابط الأصلي تاع الإعلان
+    
+    incrementDownload(appId); // زيادة العداد
+    
+    // توجيه المستخدم لرابط التحميل المباشر بعد ثانية
+    setTimeout(() => {
+        try {
+            window.location.href = fileUrl;
+        } catch(e) {
+            const a = document.createElement('a');
+            a.href = fileUrl; a.target = '_self'; a.rel = 'noopener noreferrer'; a.download = appName;
+            document.body.appendChild(a); a.click(); a.remove();
+        }
+        showToast((currentLang === 'ar' ? 'جاري التحميل: ' : 'Download started: ') + appName, 'success', 3000);
+    }, 1000);
   };
 }
 // ====== DOWNLOAD COUNTER ======
