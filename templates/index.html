@@ -2076,7 +2076,7 @@ function createAppCardHTML(app, rankBadge){
   return '<div class="app-card-pro">'+
     '<div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1;">'+
       '<div style="position:relative;width:62px;height:62px;flex-shrink:0;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+
-         '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img"...
+         '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
         '<div style="position:absolute;top:-4px;right:-4px;width:22px;height:22px;border-radius:8px;background:var(--card-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.2);">'+platformIcon+'</div>'+
       '</div>'+
       '<div style="flex:1;min-width:0;">'+
