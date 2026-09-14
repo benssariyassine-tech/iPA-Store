@@ -1278,6 +1278,18 @@ if(badgeEl){
       }
     }
   }
+// ✅ إضافة شعار الهيدر للمشتركين
+  const headerPremiumBadge = document.getElementById('headerPremiumBadge');
+  if (headerPremiumBadge) {
+      const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
+      const isAdminTestPremium = localStorage.getItem('istore_admin_test_premium') === 'true';
+      
+      if (isSubscribed || (isAdmin && isAdminTestPremium)) {
+          headerPremiumBadge.style.display = 'flex';
+      } else {
+          headerPremiumBadge.style.display = 'none';
+      }
+  }
 }
   function startRealDownload(appId, fileUrl, appName) {
   // ✅ نتأكد من الرابط فقط
