@@ -1578,6 +1578,12 @@ function openSubscribeModal() {
 // ✅ دالة بدء الدفع (placeholder - خاصك تربطها بـ gateway)
 function startSubscriptionPayment() {
   const isAr = currentLang === 'ar';
+  
+  // ✅ سد نافذة الاشتراك أولاً
+  const overlay = document.getElementById('subscribeOverlay');
+  if (overlay) overlay.remove();
+  
+  // ثم عرض الإشعار
   showToast(
     isAr 
       ? 'قريباً: سيتم إضافة بوابة الدفع' 
@@ -1585,7 +1591,9 @@ function startSubscriptionPayment() {
     'info',
     4000
   );
-  // 🔧 هنا غادي تحط كود Chargily Pay أو Stripe أو // مثال: window.location.href = 'https://checkout.chargily.com/...';
+  
+  // 🔧 هنا غادي تحط كود Chargily Pay أو Stripe
+  // مثال: window.location.href = 'https://checkout.chargily.com/...';
 }
 
 // ✅ دالة: بعد الإعلان نتحقق من تسجيل الدخول
