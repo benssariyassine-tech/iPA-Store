@@ -280,6 +280,85 @@ body[dir="rtl"] .admin-add-float{right:auto;left:20px}
 .lang-switch{display:flex;gap:8px;background:var(--input-bg);border:1.5px solid var(--border-color);border-radius:12px;padding:4px}
 .lang-btn{background:transparent;border:none;color:var(--subtext-color);padding:8px 14px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.25s}
 .lang-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 3px 10px rgba(10,132,255,0.35)}
+
+/* ===== PREMIUM GOLD THEME ===== */
+body.premium-mode {
+  --accent: #d4a017;
+  --accent2: #b8860b;
+  --warning: #ffd700;
+}
+body.premium-mode.light-mode {
+  --accent: #b8860b;
+  --accent2: #8b6508;
+  --warning: #d4a017;
+}
+body.premium-mode .header {
+  background: linear-gradient(135deg, rgba(212,160,23,0.18), rgba(184,134,11,0.08));
+  border-bottom: 1px solid rgba(212,160,23,0.35);
+}
+body.premium-mode .logo-area span {
+  background: linear-gradient(135deg, #d4a017, #ffd700);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.premium-mode .floating-nav {
+  border-color: rgba(212,160,23,0.4);
+  box-shadow: 0 15px 40px rgba(212,160,23,0.2);
+}
+body.premium-mode .nav-item.active {
+  color: #d4a017;
+}
+body.premium-mode .nav-item.active svg {
+  filter: drop-shadow(0 0 8px rgba(212,160,23,0.7));
+}
+body.premium-mode .app-card-pro {
+  border-color: rgba(212,160,23,0.25);
+}
+body.premium-mode .app-card-pro:hover {
+  border-color: rgba(212,160,23,0.6);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(212,160,23,0.2);
+}
+body.premium-mode .app-card-pro::before {
+  background: radial-gradient(circle at 100% 0%, rgba(212,160,23,0.12), transparent 60%);
+}
+body.premium-mode .btn-download-hero {
+  background: linear-gradient(135deg, #d4a017, #b8860b, #d4a017);
+  box-shadow: 0 14px 36px rgba(212,160,23,0.5);
+}
+body.premium-mode .btn-primary {
+  background: linear-gradient(135deg, #d4a017, #b8860b);
+  box-shadow: 0 6px 20px rgba(212,160,23,0.4);
+}
+body.premium-mode .modal-title {
+  background: linear-gradient(135deg, #d4a017, #ffd700);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#headerPremiumBadge {
+  width: auto !important;
+  padding: 0 12px !important;
+  border-radius: 20px !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #d4a017, #b8860b) !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 15px rgba(212,160,23,0.5) !important;
+  animation: premiumGlow 2.5s ease-in-out infinite;
+}
+#headerPremiumBadge span {
+  font-size: 11px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+@keyframes premiumGlow {
+  0%,100% { box-shadow: 0 4px 15px rgba(212,160,23,0.5); }
+  50% { box-shadow: 0 4px 25px rgba(255,215,0,0.8); }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
