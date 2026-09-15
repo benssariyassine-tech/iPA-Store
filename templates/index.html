@@ -2587,16 +2587,19 @@ async function saveNewApp(){
   const info = document.getElementById('appInfo').value;
   const url = document.getElementById('appUrl').value || '#';
   const fileInput = document.getElementById('appImgFile');
+  const bannerInput = document.getElementById('appBannerFile');
   const screenshotsInput = document.getElementById('appScreenshotsFile');
   const extraFilesInput = document.getElementById('appExtraFiles');
   if(!name){ showToast('Please enter app name', 'warning'); return; }
   let iconResult = FALLBACK_ICON;
+  let bannerResult = null;
   let existingScreenshots = [];
   let existingExtraFiles = [];
   if(editingId){
     const found = allAppsCache.find(a=>a.id===editingId);
     if(found){
       iconResult = found.icon || FALLBACK_ICON;
+      bannerResult = found.banner || null;
       if(found.screenshots) existingScreenshots = found.screenshots;
       if(found.extraFiles) existingExtraFiles = found.extraFiles;
     }
@@ -2604,6 +2607,8 @@ async function saveNewApp(){
   try {
     if(fileInput.files && fileInput.files[0]) iconResult = await fileToDataURL(fileInput.files[0]);
     else if(window.__itunesIcon) iconResult = window.__itunesIcon;
+    if(bannerInput.files && bannerInput.files[0]) bannerResult = await fileToDataURL(bannerInput.files[0]);
+else if(window.__itunesBanner) bannerResult = window.__itunesBanner;
     let screenshotsList = [...existingScreenshots];
     if(screenshotsInput.files && screenshotsInput.files.length>0){
       for(const file of Array.from(screenshotsInput.files)) screenshotsList.push(await fileToDataURL(file));
@@ -2615,12 +2620,12 @@ async function saveNewApp(){
       for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
     }
     if(editingId){
-      await db.collection("apps").doc(editingId).update({publisher, category, platform, name, size, info, url, icon: iconResult, screenshots: screenshotsList, extraFiles: extraFilesList});
+     await db.collection("apps").doc(editingId).update({publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList});
       showToast('App updated', 'success');
     } else {
       await db.collection("apps").add({
         publisherEmail: (currentUser ? currentUser.email.toLowerCase() : ''),
-        publisher, category, platform, name, size, info, url, icon: iconResult, screenshots: screenshotsList, extraFiles: extraFilesList,
+        publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList,
         likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {},
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
