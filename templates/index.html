@@ -1135,7 +1135,11 @@ const TRANSLATIONS = {
     expiredCert: "Expired Certificate",
     badContent: "Inappropriate Content",
     reportDetails: "Or type details...",
-    sendReport: "Send Report"
+    sendReport: "Send Report",
+   seoBlockTitle: "Welcome to iStore",
+    seoBlockDesc: "iStore is your ultimate destination for downloading the latest premium and modified apps and games for iOS (IPA) and Android (APK) for free. Browse our massive library and download directly with fast, direct links, no jailbreak required.",
+    metaTitle: "iStore - Download Premium iOS (IPA) & Android (APK) Apps Free",
+    metaDesc: "iStore is your ultimate destination for downloading the latest premium and modified apps and games for iOS (IPA) and Android (APK) for free.",
   },
   ar: {
     welcomeTitle: "مرحباً بك في iStore",
@@ -1211,7 +1215,11 @@ const TRANSLATIONS = {
     expiredCert: "شهادة منتهية",
     badContent: "محتوى غير لائق",
     reportDetails: "أو اكتب التفاصيل...",
-    sendReport: "إرسال التقرير"
+    sendReport: "إرسال التقرير",
+   seoBlockTitle: "مرحباً بكم في iStore",
+    seoBlockDesc: "متجر iStore هو وجهتك الأولى لتحميل أحدث تطبيقات وألعاب الآيفون (IPA) والأندرويد (APK) المدفوعة والمعدلة مجاناً. نوفر لك مكتبة ضخمة وبدون الحاجة لجيلبريك. تصفح قسم الألعاب والأدوات والتطبيقات وحملها مباشرة بروابط سريعة.",
+    metaTitle: "iStore - تحميل تطبيقات وألعاب الآيفون (IPA) والأندرويد (APK) مجاناً",
+    metaDesc: "متجر iStore هو وجهتك الأولى لتحميل أحدث تطبيقات وألعاب الآيفون (IPA) والأندرويد (APK) المدفوعة والمعدلة مجاناً."
   }
 };
 
@@ -1230,6 +1238,23 @@ function applyTranslations(){
   document.getElementById('langAr').classList.toggle('active', currentLang === 'ar');
   document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
   document.documentElement.lang = currentLang;
+ // ✅ تحديث النص التعريفي (SEO Block) حسب اللغة
+  const seoTitle = document.getElementById('seoTitleText');
+  const seoDesc = document.getElementById('seoDescText');
+  if (seoTitle && TRANSLATIONS[currentLang].seoBlockTitle) seoTitle.innerText = TRANSLATIONS[currentLang].seoBlockTitle;
+  if (seoDesc && TRANSLATIONS[currentLang].seoBlockDesc) seoDesc.innerText = TRANSLATIONS[currentLang].seoBlockDesc;
+
+  // ✅ تحديث عنوان الصفحة والوصف (Google Title & Description) ديناميكياً
+  if (TRANSLATIONS[currentLang].metaTitle) document.title = TRANSLATIONS[currentLang].metaTitle;
+  
+  const metaDescEl = document.querySelector('meta[name="description"]');
+  if (metaDescEl && TRANSLATIONS[currentLang].metaDesc) metaDescEl.setAttribute('content', TRANSLATIONS[currentLang].metaDesc);
+  
+  const ogTitleEl = document.querySelector('meta[property="og:title"]');
+  if (ogTitleEl && TRANSLATIONS[currentLang].metaTitle) ogTitleEl.setAttribute('content', TRANSLATIONS[currentLang].metaTitle);
+  
+  const ogDescEl = document.querySelector('meta[property="og:description"]');
+  if (ogDescEl && TRANSLATIONS[currentLang].metaDesc) ogDescEl.setAttribute('content', TRANSLATIONS[currentLang].metaDesc);
 }
 
 function changeLanguage(lang){
@@ -1238,6 +1263,7 @@ function changeLanguage(lang){
   applyTranslations();
   renderUI();
   showToast(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language changed to English', 'success', 1500);
+ 
 }
 
 // ====== ICONS ======
