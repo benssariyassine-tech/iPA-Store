@@ -2569,7 +2569,7 @@ function createAppCardHTML(app, rankBadge){
     app.extraFiles.forEach(file=>{ items += '<a href="'+file.url+'" class="extra-file-item" download target="_blank">'+file.name+'</a>'; });
     extraFilesDropdown = '<div style="position:relative;"><button class="btn-extra-dropdown" onclick="toggleExtraMenu(\''+app.id+'\',event)">'+ICONS.chevronDown+'</button><div id="extraMenu_'+app.id+'" class="extra-files-menu"><div style="font-size:11px;color:var(--subtext-color);margin-bottom:6px;font-weight:bold;padding:0 4px;">'+(currentLang==='ar'?'ملفات:':'Files:')+'</div>'+items+'</div></div>';
   }
-  let pubText = app.publisher ? '<div style="font-size:11px;color:var(--accent);font-weight:700;margin-top:2px;">By '+app.publisher+'</div>' : '';
+  let pubText = getPublisherHTML(app.publisher, {fontSize:'11px', marginTop:'2px'});
   let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
   let isLiked = (currentUser && app.likedBy && app.likedBy.includes(currentUser.email));
   let ratingAvg = getAverageRating(app);
