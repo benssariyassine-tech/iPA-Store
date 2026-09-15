@@ -2668,7 +2668,13 @@ function fetchFromItunes(){
         else document.getElementById('appSize').value = Math.round(mb) + ' MB';
       }
       if(app.artworkUrl512 || app.artworkUrl100) window.__itunesIcon = app.artworkUrl512 || app.artworkUrl100;
-      if(app.screenshotUrls && app.screenshotUrls.length > 0) window.__itunesScreenshots = app.screenshotUrls;
+      if(app.screenshotUrls && app.screenshotUrls.length > 0) window.__itunesScreenshots = app.screenshotUrls;  
+      
+      let bannerUrl = null;
+      if(app.screenshotUrls && app.screenshotUrls.length > 0) bannerUrl = app.screenshotUrls[0];
+      else if(app.artworkUrl512) bannerUrl = app.artworkUrl512;
+      else if(app.artworkUrl100) bannerUrl = app.artworkUrl100;
+      if(bannerUrl) window.__itunesBanner = bannerUrl;
       if(app.primaryGenreName){
         const genre = app.primaryGenreName.toLowerCase();
         let cat = 'apps';
@@ -2756,7 +2762,6 @@ function handleFullLogin(user){
   renderUI();
 }
 
-// ====== INITIALIZE ======
 // ====== INITIALIZE ======
 loadPrefs();
 loadSettings();
