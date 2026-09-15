@@ -2016,6 +2016,11 @@ similarRaw.forEach(a => {
     similarApps.push(a);
   }
 });
+// ✅ خلط عشوائي
+for(let i = similarApps.length - 1; i > 0; i--){
+  const j = Math.floor(Math.random() * (i + 1));
+  [similarApps[i], similarApps[j]] = [similarApps[j], similarApps[i]];
+}
 similarApps = similarApps.slice(0, 6);
     let similarHTML = '';
     if(similarApps.length>0){
