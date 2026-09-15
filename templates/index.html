@@ -2077,7 +2077,7 @@ similarApps = similarApps.slice(0, 6);
     '<img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
     '<div class="detail-title-block">'+
       '<h3 class="detail-title">'+app.name+'</h3>'+
-      (app.publisher?'<div class="detail-publisher">'+ICONS.infoCircle+' '+app.publisher+'</div>':'')+
+      getPublisherHTML(app.publisher, {fontSize:'12px', marginTop:'0', iconSize:14})+
       '<div class="detail-meta">'+
         '<span class="detail-chip danger">'+(app.platform||'IPA')+'</span>'+
         '<span class="detail-chip">'+getCategoryNameEn(app.category)+'</span>'+
