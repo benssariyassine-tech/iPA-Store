@@ -2483,7 +2483,37 @@ function renderUI(){
   if(list.length===0) fc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">'+(currentLang==='ar'?'لا توجد تطبيقات في هذه الفئة':'No apps in this category yet.')+'</p>';
   else list.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; fc.innerHTML += createAppCardHTML(app,badge); });
 }
-
+// ====== PUBLISHER LINK (Instagram) ======
+function getPublisherHTML(publisher, options){
+  if(!publisher) return '';
+  const opts = options || {};
+  const fontSize = opts.fontSize || '11px';
+  const marginTop = opts.marginTop || '2px';
+  const iconSize = opts.iconSize || 11;
+  
+  // نحاول نستخرج اسم المستخدم من الانستغرام
+  let username = '';
+  const instaMatch = publisher.match(/^Instagram\s*:?\s*(.+)$/i);
+  if(instaMatch){
+    username = instaMatch[1].trim();
+  } else if(publisher.startsWith('@')) {
+    username = publisher.substring(1).trim();
+  } else if(/^[a-zA-Z0-9._]+$/.test(publisher.trim()) && publisher.trim().length <= 30) {
+    username = publisher.trim();
+  }
+  
+  // تنقية اسم المستخدم
+  username = username.replace(/^@/, '').replace(/[^a-zA-Z0-9._]/g, '');
+  
+  const instaIcon = '<svg width="'+iconSize+'" height="'+iconSize+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>';
+  
+  if(username && username.length > 0){
+    const instaUrl = 'https://instagram.com/' + username;
+    return '<a href="'+instaUrl+'" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();" style="font-size:'+fontSize+';color:var(--accent);font-weight:700;margin-top:'+marginTop+';text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:opacity 0.2s;" onmouseover="this.style.opacity=\'0.7\'" onmouseout="this.style.opacity=\'1\'">'+instaIcon+'By '+publisher+'</a>';
+  }
+  
+  return '<div style="font-size:'+fontSize+';color:var(--accent);font-weight:700;margin-top:'+marginTop+';">By '+publisher+'</div>';
+}
 // ====== FEATURED CARD ======
 function createFeaturedCardHTML(app, index){
   let isTopOne = index===0 ? '<span style="background:var(--danger);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;">#1 Trending</span>' : '';
