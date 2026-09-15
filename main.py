@@ -5,7 +5,7 @@ from flask_cors import CORS
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
-# قاعدة بيانات المتجر المنظمة بدقة حسب الأقسام (يمكنك تحديثها أو إضافة تطبيقات قناتك هنا بكل سهولة)
+# قاعدة بيانات المتجر المنظمة بدقة حسب الأقسام
 APPS_DATABASE = [
     {
         "id": 1,
@@ -45,7 +45,7 @@ APPS_DATABASE = [
         "size": "15 MB",
         "version": "v1.0.2",
         "icon": "https://usescarlet.com/assets/img/scarlet.png",
-        "download_url": "https://usescarlet.com/download/Scarlet.ipa"
+        "download_url":خ "https://usescarlet.com/download/Scarlet.ipa"
     },
     {
         "id": 5,
