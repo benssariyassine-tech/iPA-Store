@@ -1921,7 +1921,18 @@ function openAppDetails(appId){
     let isFav = userFavorites.includes(app.id);
     let starsHTML = '';
     for(let i=1;i<=5;i++) starsHTML += '<button class="star-btn '+(i<=userRating?'active':'')+'" onclick="setRating(\''+app.id+'\','+i+')"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></button>';
-    let similarApps = allAppsCache.filter(a=>a.category===app.category && a.id!==app.id).slice(0,6);
+    // ✅ حذف التكرار: تطبيق واحد لكل منصة (IPA + APK)
+let similarRaw = allAppsCache.filter(a => a.category === app.category && a.id !== app.id);
+let seen = {};
+let similarApps = [];
+similarRaw.forEach(a => {
+  let key = (a.name || '').toLowerCase() + '|' + (a.platform || 'IPA');
+  if (!seen[key]) {
+    seen[key] = true;
+    similarApps.push(a);
+  }
+});
+similarApps = similarApps.slice(0, 6);
     let similarHTML = '';
     if(similarApps.length>0){
       similarHTML = '<div class="detail-section"><h4 class="detail-section-title">'+ICONS.starFill+' '+(currentLang==='ar'?'قد يعجبك أيضاً':'You might also like')+'</h4><div class="similar-apps-container">'+similarApps.map(s=>'<div class="similar-app-card" onclick="closeModal(\'appDetailModal\');setTimeout(()=>openAppDetails(\''+s.id+'\'),300);"><img src="'+(s.icon||FALLBACK_ICON)+'" onerror="this.src=\''+FALLBACK_ICON+'\'"><h5>'+s.name+'</h5><p>'+(s.size||'N/A')+' • '+(s.platform||'IPA')+'</p></div>').join('')+'</div></div>';
