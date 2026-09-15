@@ -241,6 +241,32 @@ body[dir="rtl"] .account-action-btn{text-align:right}
   background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.4) 50%,var(--modal-bg) 100%);
   pointer-events:none;
 }
+  .detail-fav-btn{
+  position:absolute;
+  top:16px;
+  right:16px;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(15px);
+  -webkit-backdrop-filter:blur(15px);
+  border:1.5px solid rgba(255,255,255,0.3);
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform 0.2s;
+  z-index:10;
+  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
+.detail-fav-btn:active{
+  transform:scale(0.9);
+}
+body[dir="rtl"] .detail-fav-btn{
+  right:auto;
+  left:16px;
+}
 .detail-banner.no-image{
   background:linear-gradient(135deg,rgba(10,132,255,0.4),rgba(10,132,255,0.1));
 }
