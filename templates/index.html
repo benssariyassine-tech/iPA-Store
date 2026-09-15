@@ -221,7 +221,21 @@ body[dir="rtl"] .account-action-btn{text-align:right}
 
 /* ===== APP DETAILS MODAL (محسّن) ===== */
 .bottom-sheet-modal{display:none;position:fixed;z-index:2500;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-.bottom-sheet-content{background:var(--modal-bg);border:1px solid var(--border-color);border-top-left-radius:32px;border-top-right-radius:32px;padding:28px 22px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-sizing:border-box;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1)}
+.bottom-sheet-content{
+  background:var(--modal-bg);
+  border:none;
+  border-top-left-radius:28px;
+  border-top-right-radius:28px;
+  padding:24px 0 24px 0;
+  width:100%;
+  max-width:100%;
+  max-height:95vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  box-sizing:border-box;
+  animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1);
+  box-shadow:0 -20px 60px rgba(0,0,0,0.5);
+}
 .detail-banner{
   position:relative;
   width:100%;
