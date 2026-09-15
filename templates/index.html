@@ -2460,6 +2460,7 @@ function openAddAppModal(){
   document.getElementById('appExtraFiles').value = "";
   document.getElementById('itunesUrlInput').value = "";
   document.getElementById('fetchStatus').style.display = 'none';
+  window.__itunesBanner = null;
   window.__itunesIcon = null;
   window.__itunesScreenshots = null;
   openModal('addAppModal');
@@ -2477,7 +2478,8 @@ function openEditAppModal(id){
   document.getElementById('appSize').value = app.size || '';
   document.getElementById('appInfo').value = app.info || '';
   document.getElementById('appUrl').value = app.url || '';
-  document.getElementById('itunesUrlInput').value = "";
+  window.__editingBanner = app.banner || null;
+document.getElementById('itunesUrlInput').value = "";
   document.getElementById('fetchStatus').style.display = 'none';
   window.__itunesIcon = null;
   window.__itunesScreenshots = null;
