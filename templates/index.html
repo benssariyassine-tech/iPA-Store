@@ -1251,19 +1251,19 @@ function applyTranslations(){
     const key = el.getAttribute('data-i18n');
     if(TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) el.innerText = TRANSLATIONS[currentLang][key];
   });
-  
+
   // 2. النصوص داخل placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if] && TRANSLATIONS[currentLang][key]) el.placeholder = TRANSLATIONS[currentLang][key];
+    if(TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) el.placeholder = TRANSLATIONS[currentLang][key];
   });
-  
+
   // 3. تفعيل زر اللغة النشط
   const langEnEl = document.getElementById('langEn');
   const langArEl = document.getElementById('langAr');
   if (langEnEl) langEnEl.classList.toggle('active', currentLang === 'en');
   if (langArEl) langArEl.classList.toggle('active', currentLang === 'ar');
-  
+
   // 4. اتجاه الصفحة واللغة
   document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
   document.documentElement.lang = currentLang;
@@ -1274,15 +1274,12 @@ function applyTranslations(){
   if (seoTitle && TRANSLATIONS[currentLang].seoBlockTitle) seoTitle.innerText = TRANSLATIONS[currentLang].seoBlockTitle;
   if (seoDesc && TRANSLATIONS[currentLang].seoBlockDesc) seoDesc.innerText = TRANSLATIONS[currentLang].seoBlockDesc;
 
-  // 6. تحديث عنوان الصفحة والوصف لجوجل (Google Title & Description) ديناميكياً
+  // 6. تحديث عنوان الصفحة والوصف لجوجل (Google Title & Description)
   if (TRANSLATIONS[currentLang].metaTitle) document.title = TRANSLATIONS[currentLang].metaTitle;
-  
   const metaDescEl = document.querySelector('meta[name="description"]');
   if (metaDescEl && TRANSLATIONS[currentLang].metaDesc) metaDescEl.setAttribute('content', TRANSLATIONS[currentLang].metaDesc);
-  
   const ogTitleEl = document.querySelector('meta[property="og:title"]');
   if (ogTitleEl && TRANSLATIONS[currentLang].metaTitle) ogTitleEl.setAttribute('content', TRANSLATIONS[currentLang].metaTitle);
-  
   const ogDescEl = document.querySelector('meta[property="og:description"]');
   if (ogDescEl && TRANSLATIONS[currentLang].metaDesc) ogDescEl.setAttribute('content', TRANSLATIONS[currentLang].metaDesc);
 
@@ -1290,7 +1287,6 @@ function applyTranslations(){
   const copyrightEl = document.getElementById('footerCopyrightText');
   const disclaimerEl = document.getElementById('footerDisclaimerText');
   const contactEl = document.getElementById('footerContactText');
-  
   if (copyrightEl && TRANSLATIONS[currentLang].footerCopyright) copyrightEl.innerHTML = TRANSLATIONS[currentLang].footerCopyright;
   if (disclaimerEl && TRANSLATIONS[currentLang].footerDisclaimer) disclaimerEl.innerHTML = TRANSLATIONS[currentLang].footerDisclaimer;
   if (contactEl && TRANSLATIONS[currentLang].footerContact) contactEl.innerText = TRANSLATIONS[currentLang].footerContact;
