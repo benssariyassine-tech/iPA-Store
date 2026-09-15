@@ -2072,7 +2072,8 @@ similarApps = similarApps.slice(0, 6);
   (app.banner?' style="background-image:url(\''+app.banner+'\')"':'')+'>'+
   '<button onclick="toggleFavorite(\''+app.id+'\',event)" class="detail-fav-btn" style="color:'+(isFav?'#ff453a':'#fff')+';">'+(isFav?ICONS.heartFill:ICONS.heart)+'</button>'+
 '</div>'+
-'<div class="detail-hero">'+
+'<div class="detail-hero" style="padding:0 22px;">'+
+  '<div class="detail-header-row">'+
   '<div class="detail-header-row">'+
     '<img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
     '<div class="detail-title-block">'+
