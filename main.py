@@ -5,7 +5,7 @@ from flask_cors import CORS
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
-# قاعدة بيانات المتجر المنظمة بدقة حسب الأقسام
+# قاعدة بيانات المتجر
 APPS_DATABASE = [
     {
         "id": 1,
@@ -45,7 +45,7 @@ APPS_DATABASE = [
         "size": "15 MB",
         "version": "v1.0.2",
         "icon": "https://usescarlet.com/assets/img/scarlet.png",
-        "download_url":خ "https://usescarlet.com/download/Scarlet.ipa"
+        "download_url": "https://usescarlet.com/download/Scarlet.ipa"
     },
     {
         "id": 5,
@@ -72,6 +72,10 @@ APPS_DATABASE = [
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/static/icon.png')
+def serve_icon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'icon.png', mimetype='image/png')
 
 @app.route('/api/apps', methods=['GET'])
 def get_apps():
