@@ -1248,25 +1248,35 @@ const TRANSLATIONS = {
 function t(key){ return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || key; }
 
 function applyTranslations(){
+  // 1. النصوص العادية
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if(TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) el.innerText = TRANSLATIONS[currentLang][key];
   });
+  
+  // 2. النصوص داخل placeholders
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     const key = el.getAttribute('data-i18n-placeholder');
-    if(TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) el.placeholder = TRANSLATIONS[currentLang][key];
+    if] && TRANSLATIONS[currentLang][key]) el.placeholder = TRANSLATIONS[currentLang][key];
   });
-  document.getElementById('langEn').classList.toggle('active', currentLang === 'en');
-  document.getElementById('langAr').classList.toggle('active', currentLang === 'ar');
+  
+  // 3. تفعيل زر اللغة النشط
+  const langEnEl = document.getElementById('langEn');
+  const langArEl = document.getElementById('langAr');
+  if (langEnEl) langEnEl.classList.toggle('active', currentLang === 'en');
+  if (langArEl) langArEl.classList.toggle('active', currentLang === 'ar');
+  
+  // 4. اتجاه الصفحة واللغة
   document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
   document.documentElement.lang = currentLang;
- // ✅ تحديث النص التعريفي (SEO Block) حسب اللغة
+
+  // 5. تحديث النص التعريفي (SEO Block) حسب اللغة
   const seoTitle = document.getElementById('seoTitleText');
   const seoDesc = document.getElementById('seoDescText');
   if (seoTitle && TRANSLATIONS[currentLang].seoBlockTitle) seoTitle.innerText = TRANSLATIONS[currentLang].seoBlockTitle;
   if (seoDesc && TRANSLATIONS[currentLang].seoBlockDesc) seoDesc.innerText = TRANSLATIONS[currentLang].seoBlockDesc;
 
-  // ✅ تحديث عنوان الصفحة والوصف (Google Title & Description) ديناميكياً
+  // 6. تحديث عنوان الصفحة والوصف لجوجل (Google Title & Description) ديناميكياً
   if (TRANSLATIONS[currentLang].metaTitle) document.title = TRANSLATIONS[currentLang].metaTitle;
   
   const metaDescEl = document.querySelector('meta[name="description"]');
@@ -1277,6 +1287,15 @@ function applyTranslations(){
   
   const ogDescEl = document.querySelector('meta[property="og:description"]');
   if (ogDescEl && TRANSLATIONS[currentLang].metaDesc) ogDescEl.setAttribute('content', TRANSLATIONS[currentLang].metaDesc);
+
+  // 7. تحديث حقوق النشر والإخلاء في الأسفل (Footer)
+  const copyrightEl = document.getElementById('footerCopyrightText');
+  const disclaimerEl = document.getElementById('footerDisclaimerText');
+  const contactEl = document.getElementById('footerContactText');
+  
+  if (copyrightEl && TRANSLATIONS[currentLang].footerCopyright) copyrightEl.innerHTML = TRANSLATIONS[currentLang].footerCopyright;
+  if (disclaimerEl && TRANSLATIONS[currentLang].footerDisclaimer) disclaimerEl.innerHTML = TRANSLATIONS[currentLang].footerDisclaimer;
+  if (contactEl && TRANSLATIONS[currentLang].footerContact) contactEl.innerText = TRANSLATIONS[currentLang].footerContact;
 }
 
 function changeLanguage(lang){
