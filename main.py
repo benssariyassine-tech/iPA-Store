@@ -1,5 +1,6 @@
 import os
-from flask import Flask, jsonify, render_template, send_from_directory
+import requests
+from flask import Flask, jsonify, render_template, send_from_directory, request
 from flask_cors import CORS
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
@@ -80,6 +81,59 @@ def serve_icon():
 @app.route('/api/apps', methods=['GET'])
 def get_apps():
     return jsonify(APPS_DATABASE)
+
+# ====== VirusTotal API ======
+@app.route('/api/scan', methods=['POST'])
+def scan_file():
+    """يفحص ملف بالـ SHA256 hash عبر VirusTotal"""
+    data = request.get_json()
+    file_hash = data.get('hash') if data else None
+    
+    if not file_hash:
+        return jsonify({"error": "Hash required"}), 400
+    
+    api_key = os.environ.get("VIRUSTOTAL_API_KEY")
+    if not api_key:
+        return jsonify({"error": "API key not configured"}), 500
+    
+    headers = {"x-apikey": api_key}
+    url = f"https://www.virustotal.com/api/v3/files/{file_hash}"
+    
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            stats = data['data']['attributes']['last_analysis_stats']
+            malicious = stats['malicious']
+            suspicious = stats['suspicious']
+            harmless = stats['harmless']
+            undetected = stats['undetected']
+            total = malicious + suspicious + harmless + undetected
+            
+            return jsonify({
+                "safe": malicious == 0,
+                "malicious": malicious,
+                "suspicious": suspicious,
+                "harmless": harmless,
+                "undetected": undetected,
+                "total": total,
+                "result": f"{malicious}/{total}",
+                "hash": file_hash
+            })
+        elif response.status_code == 404:
+            return jsonify({"error": "File not found in VirusTotal"}), 404
+        elif response.status_code == 429:
+            return jsonify({"error": "Too many requests. Wait a minute."}), 429
+        elif response.status_code == 401:
+            return jsonify({"error": "Invalid API key"}), 401
+        else:
+            return jsonify({"error": f"API error: {response.status_code}"}), response.status_code
+            
+    except requests.exceptions.Timeout:
+        return jsonify({"error": "Timeout. Try again."}), 504
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/sitemap.xml')
 def sitemap():
