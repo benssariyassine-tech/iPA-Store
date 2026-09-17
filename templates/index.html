@@ -3524,18 +3524,18 @@ function getAppsContext() {
   ctx += '\n\n📱 قائمة التطبيقات:';
   ctx += '\n─────────────────────────────────';
 
-  allAppsCache.slice(0, 50).forEach((app,بيق i) => {
+  allAppsCache.slice(0, 50).forEach((app, i) => {
     const platform = app.platform || 'IPA';
- إ    const size = app.size || 'ضغير محدد';
-    const category = getافيCategoryNameEn(app.category);
-    const) rating = getAverageRating(app);
+    const size = app.size || 'غير محدد';
+    const category = getCategoryNameEn(app.category);
+    const rating = getAverageRating(app);
     const ratingText = rating > 0 ? rating.toFixed(1) + '⭐' : 'بدون تقييم';
     const downloads = app.downloads || 0;
-    ctx += `\n${i + 1}. "${app.name}" | ${platform} | ${category} | ${size} | تحميلات: ${downloads} | تقييم: ${ratingText}`;
+    ctx += '\n' + (i + 1) + '. "' + app.name + '" | ' + platform + ' | ' + category + ' | ' + size + ' | تحميلات: ' + downloads + ' | تقييم: ' + ratingText;
   });
 
   if (allAppsCache.length > 50) {
-    ctx += '\n(وهناك ' + (allAppsCache.length - 50) + ' تط';
+    ctx += '\n(وهناك ' + (allAppsCache.length - 50) + ' تطبيق إضافي غير معروض)';
   }
   ctx += '\n═══════════════════════════════════';
   ctx += '\n🎯 استعمل فقط المعلومات أعلاه. لا تخترع أي تطبيق أو رقم.';
@@ -3705,6 +3705,7 @@ async function sendAiMessage() {
     </button>
      </div>
   </div>
+</div>
 </div>
 </body>
 </html>
