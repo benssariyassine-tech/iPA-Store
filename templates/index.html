@@ -3129,7 +3129,9 @@ async function migrateFirebaseToSupabase() {
     });
     
     // 2. جلب التطبيقات من Firebase
-    const snapshot = await db.collection("apps").get();
+const snapshot = await db.collection("apps")
+  .select('name', 'urlcategory', 'platform', 'size', 'info', 'desc', 'downloads', 'likedBy', 'downloadedBy', 'ratingSum', 'ratingCount', 'userRatings', 'commentsCount')
+  .get();
     if(snapshot.empty){
       document.getElementById('migTitle').innerText = 'لا توجد تطبيقات';
       document.getElementById('migSubtitle').innerText = 'قاعدة Firebase فارغة';
