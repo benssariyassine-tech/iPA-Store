@@ -808,30 +808,84 @@ body[dir="rtl"] .aiMsg.user { border-bottom-right-radius: 18px; border-bottom-le
 .aiMsg.typing span:nth-child(2) { animation-delay: 0.2s; }
 .aiMsg.typing span:nth-child(3) { animation-delay: 0.4s; }
 
+/* ===== INPUT BAR - GEMINI STYLE ===== */
 .aiChatInputBar {
-  padding: 12px 14px;
+  padding: 12px 14px 14px 14px;
   background: var(--modal-bg);
-  border-top: 1px solid var(--border-color);
   display: flex;
-  gap: 10px;
+  justify-content: center;
   align-items: center;
 }
-.aiChatInput {
-  flex: 1;
+
+.aiChatInputWrap {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
   background: var(--input-bg);
   border: 1.5px solid var(--border-color);
-  border-radius: 22px;
-  padding: 12px 16px;
+  border-radius: 26px;
+  padding: 6px 8px 6px 12px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.aiChatInputWrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(10,132,255,0.1);
+}
+
+.aiChatPlus {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--subtext-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.aiChatPlus:hover { background: var(--border-color); }
+.aiChatPlus svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+.aiChatInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 8px 4px;
   color: var(--text-color);
   font-family: inherit;
-  font-size: 13.5px;
+  font-size: 14px;
   outline: none;
   resize: none;
-  max-height: 100px;
+  max-height: 120px;
+  line-height: 1.4;
 }
-.aiChatInput:focus { border-color: var(--accent); }
+.aiChatInput::placeholder { color: var(--subtext-color); }
+
+.aiChatMic {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  color: var(--subtext-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.aiChatMic:hover { background: var(--border-color); }
+.aiChatMic svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+
 .aiChatSend {
-  width: 44px; height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: linear-gradient(135deg, #0a84ff, #0062d2);
   border: none;
@@ -840,10 +894,12 @@ body[dir="rtl"] .aiMsg.user { border-bottom-right-radius: 18px; border-bottom-le
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(10,132,255,0.4);
+  box-shadow: 0 4px 12px rgba(10,132,255,0.4);
+  transition: transform 0.2s;
 }
-.aiChatSend:disabled { opacity: 0.5; cursor: not-allowed; }
-.aiChatSend svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2.5; }
+.aiChatSend:active { transform: scale(0.9); }
+.aiChatSend:disabled { opacity: 0.4; cursor: not-allowed; }
+.aiChatSend svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2.5; }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
