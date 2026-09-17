@@ -1682,14 +1682,15 @@ function toggleExtraMenu(appId, event){
 document.addEventListener('click', ()=>{ document.querySelectorAll('.extra-files-menu').forEach(m=>m.style.display='none'); });
 
 // ====== ADMIN UI ======
-function applyAdminUI(){
+  function applyAdminUI(){
   const floatBtn = document.getElementById('adminAddFloatBtn');
   const adminNavTab = document.getElementById('adminNavTab');
+  const migrateFloatBtn = document.getElementById('migrateFloatBtn');
   if(floatBtn) floatBtn.style.display = (isAdmin || isPublisher) ? 'flex' : 'none';
   if(adminNavTab) adminNavTab.style.display = isAdmin ? 'flex' : 'none';
+  if(migrateFloatBtn) migrateFloatBtn.style.display = isAdmin ? 'flex' : 'none';
   updateAvatarUI();
 }
-  
    // ====== TOGGLE USER PREVIEW ======
 function toggleUserPreview(){
   isUserPreview = !isUserPreview;
@@ -2979,6 +2980,79 @@ auth.onAuthStateChanged(user=>{
     updateFavBtnVisibility(); renderUI();
   }
 });
+ // ====== نقل البيانات من Firebase لـ Supabase ======
+async function migrateFirebaseToSupabase() {
+  if(!isAdmin){ showToast('Admins only', 'warning'); return; }
+  if(!confirm('نقل كل التطبيقات من Firebase لـ Supabase؟\n\nراح تاخذ دقيقة أو أكثر.')) return;
+  
+  showToast('جاري النقل... لا تغلق الصفحة', 'info', 10000);
+  
+  try {
+    const snapshot = await db.collection("apps").orderBy("createdAt", "desc").get();
+    
+    if(snapshot.empty){
+      showToast('لا توجد تطبيقات في Firebase', 'warning');
+      return;
+    }
+    
+    const totalApps = snapshot.size;
+    let successCount = 0;
+    let failCount = 0;
+    
+    showToast('وجدت ' + totalApps + ' تطبيق، جاري النقل...', 'info', 5000);
+    
+    for(const doc of snapshot.docs){
+      try {
+        const data = doc.data();
+        
+        let createdAtISO = new Date().toISOString();
+        if(data.createdAt && data.createdAt.toDate){
+          createdAtISO = data.createdAt.toDate().toISOString();
+        }
+        
+        const newApp = {
+          name: data.name || '',
+          icon: data.icon || '',
+          banner: data.banner || null,
+          publisher: data.publisher || '',
+          category: data.category || 'today',
+          platform: data.platform || 'IPA',
+          size: data.size || '',
+          info: data.info || data.desc || '',
+          url: data.url || '#',
+          screenshots: data.screenshots || [],
+          extra_files: data.extraFiles || [],
+          downloads: data.downloads || 0,
+          liked_by: data.likedBy || [],
+          downloaded_by: data.downloadedBy || [],
+          rating_sum: data.ratingSum || 0,
+          rating_count: data.ratingCount || 0,
+          user_ratings: data.userRatings || {},
+          comments_count: data.commentsCount || 0,
+          created_at: createdAtISO
+        };
+        
+        const { error } = await supabase.from('apps').insert([newApp]);
+        if(error){
+          console.error('خطأ:', data.name, error);
+          failCount++;
+        } else {
+          successCount++;
+        }
+      } catch(err){
+        console.error('خطأ:', err);
+        failCount++;
+      }
+    }
+    
+    showToast('تم نقل ' + successCount + ' تطبيق بنجاح!' + (failCount > 0 ? ' (فشل ' + failCount + ')' : ''), 'success', 8000);
+    await fetchAppsFromSupabase();
+    
+  } catch(err){
+    console.error('Migration error:', err);
+    showToast('خطأ في النقل: ' + err.message, 'error', 6000);
+  }
+}
 
 function handleFullLogin(user){
   document.getElementById('loginView').style.display = 'none';
