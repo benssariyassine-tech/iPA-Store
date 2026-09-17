@@ -3261,7 +3261,41 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+// 👀 تتبع عينين الروبوت لمؤشر الماوس
+document.addEventListener('mousemove', function(e) {
+  const pupils = document.querySelectorAll('.robot-pupil');
+  const btn = document.getElementById('aiChatBtn');
+  if (!pupils.length || !btn) return;
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const angle = Math.atan2(e.clientY - cy, e.clientX - cx);
+  const dist = Math.min(Math.hypot(e.clientX - cx, e.clientY - cy) / 25, 3.5);
+  const px = Math.cos(angle) * dist;
+  const py = Math.sin(angle) * dist;
+  pupils.forEach(p => {
+    p.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
+  });
+});
 
+// 👀 للشاشات اللمسية: تتبع اللمس
+document.addEventListener('touchmove', function(e) {
+  if (!e.touches || !e.touches[0]) return;
+  const t = e.touches[0];
+  const pupils = document.querySelectorAll('.robot-pupil');
+  const btn = document.getElementById('aiChatBtn');
+  if (!pupils.length || !btn) return;
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+  const angle = Math.atan2(t.clientY - cy, t.clientX - cx);
+  const dist = Math.min(Math.hypot(t.clientX - cx, t.clientY - cy) / 25, 3.5);
+  const px = Math.cos(angle) * dist;
+  const py = Math.sin(angle) * dist;
+  pupils.forEach(p => {
+    p.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
+  });
+}, { passive: true });
 async function sendAiMessage() {
   const input = document.getElementById('aiChatInput');
   const sendBtn = document.getElementById('aiChatSendBtn');
