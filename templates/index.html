@@ -3110,6 +3110,101 @@ if(window.location.hash.startsWith('#app-')){
   const appId = window.location.hash.replace('#app-','');
   setTimeout(()=>{ if(allAppsCache.find(a=>a.id===appId)) openAppDetails(appId); }, 1500);
 }
+ // ====== AI CHATBOT (Puter.js) ======
+const AI_SYSTEM_PROMPT = `أنت "مساعد iStore"، المساعد الذكي الرسمي لموقع iStore لتحميل تطبيقات وألعاب الآيفون (IPA) والأندرويد (APK).
+
+قواعد صارمة:
+1. أجب فقط على الأسئلة المتعلقة بموقع iStore والتطبيقات.
+2. إذا سُئلت "من صمم الموقع؟" أجب: "تم تصميم موقع iStore بواسطة iXred".
+3. إذا سُئلت عن الشهادات (Certificates)، اشرح أنها شهادات توقيع مجانية لتثبيت IPA بدون جيلبريك.
+4. أي سؤال خارج النطاق، أجب: "للإجابة على هذا الاستفسار، يرجى التواصل مع الدعم: support.istoreipa@gmail.com".
+5. تحدث بأسلوب رسمي ومحترم، بنفس لغة المستخدم.
+6. لا تذكر أنك GPT أو Claude، أنت فقط "مساعد iStore".
+
+معلومات: التصميم بواسطة iXred • الدعم: support.istoreipa@gmail.com`;
+
+let aiChatHistory = [];
+
+function openAiChat() {
+  document.getElementById('aiChatDrawer').classList.add('open');
+  setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
+}
+function closeAiChat() {
+  document.getElementById('aiChatDrawer').classList.remove('open');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const drawer = document.getElementById('aiChatDrawer');
+  if (drawer) {
+    drawer.addEventListener('click', function(e) {
+      if (e.target === this) closeAiChat();
+    });
+  }
+});
+
+async function sendAiMessage() {
+  const input = document.getElementById('aiChatInput');
+  const sendBtn = document.getElementById('aiChatSendBtn');
+  const messages = document.getElementById('aiChatMessages');
+  const text = input.value.trim();
+  if (!text) return;
+
+  const userMsg = document.createElement('div');
+  userMsg.className = 'aiMsg user';
+  userMsg.textContent = text;
+  messages.appendChild(userMsg);
+  input.value = '';
+  messages.scrollTop = messages.scrollHeight;
+  sendBtn.disabled = true;
+
+  const typing = document.createElement('div');
+  typing.className = 'aiMsg bot typing';
+  typing.id = 'aiTypingIndicator';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  messages.appendChild(typing);
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    const conversation = [
+      { role: 'system', content: AI_SYSTEM_PROMPT },
+      ...aiChatHistory,
+      { role: 'user', content: text }
+    ];
+
+    const response = await puter.ai.chat(conversation, { model: 'gpt-4o-mini' });
+
+    const typingEl = document.getElementById('aiTypingIndicator');
+    if (typingEl) typingEl.remove();
+
+    let botText = '';
+    if (typeof response === 'string') botText = response;
+    else if (response && response.message && response.message.content) {
+      botText = Array.isArray(response.message.content)
+        ? response.message.content.map(c => c.text || '').join('')
+        : response.message.content;
+    } else if (response && response.text) botText = response.text;
+    else botText = 'عذراً، حدث خطأ. حاول مرة أخرى.';
+
+    aiChatHistory.push({ role: 'user', content: text });
+    aiChatHistory.push({ role: 'assistant', content: botText });
+
+    const botMsg = document.createElement('div');
+    botMsg.className = 'aiMsg bot';
+    botMsg.textContent = botText;
+    messages.appendChild(botMsg);
+    messages.scrollTop = messages.scrollHeight;
+  } catch (err) {
+    console.error('AI error:', err);
+    const typingEl = document.getElementById('aiTypingIndicator');
+    if (typingEl) typingEl.remove();
+    const errMsg = document.createElement('div');
+    errMsg.className = 'aiMsg bot';
+    errMsg.textContent = 'عذراً، حدث خطأ في الاتصال. حاول مرة أخرى.';
+    messages.appendChild(errMsg);
+  } finally {
+    sendBtn.disabled = false;
+  }
+}
 </script>
 </body>
 </html>
