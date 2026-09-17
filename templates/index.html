@@ -680,6 +680,7 @@ body[dir="rtl"] .coming-soon-features {
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <meta name="google-site-verification" content="IH9QNXDpJWrhJc2w-RTABEcQSd6zpI3Pv1fy4kLYT2k" />
@@ -1060,6 +1061,58 @@ setTimeout(function(){
 
 const auth = firebase.auth();
 const db = firebase.firestore();
+ // ==== إعدادات Supabase ====
+const supabaseUrl = 'https://yzinimcuebklmgs.supabase.co';
+const supabaseKey = 'sb_publishable_1094MpO6nY2nTJPA63cjjg_Swe6ttyT';
+ window.supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+// دالة جلب التطبيقات من Supabase
+async function fetchAppsFromSupabase() {
+  try {
+    const { data, error } = await supabase
+      .from('apps')
+      .select('*')
+      .order('created_at', { ascending: false });
+      
+    if (error) throw error;
+    
+    // تحويل البيانات باش تتوافق مع الكود القديم
+    allAppsCache = data.map(app => ({
+      id: app.id,
+      name: app.name,
+      icon: app.icon,
+      banner: app.banner,
+      publisher: app.publisher,
+      category: app.category,
+      platform: app.platform,
+      size: app.size,
+      info: app.info,
+      url: app.url,
+      screenshots: app.screenshots || [],
+      extraFiles: app.extra_files || [],
+      downloads: app.downloads || 0,
+      likedBy: app.liked_by || [],
+      downloadedBy: app.downloaded_by || [],
+      ratingSum: app.rating_sum || 0,
+      ratingCount: app.rating_count || 0,
+      userRatings: app.user_ratings || {},
+      commentsCount: app.comments_count || 0,
+      createdAt: { seconds: new Date(app.created_at).getTime() / 1000 }
+    }));
+    
+    renderUI(); // تحديث الواجهة
+  } catch (err) {
+    console.error('Error fetching apps:', err);
+    showToast('Error loading apps from database', 'error');
+  }
+}
+
+// تشغيل التحديث التلقائي (باش أي تطبيق جديد يبان دغيا)
+supabase
+  .channel('custom-all-channel')
+  .on('postgres_changes', { event: '*', schema: 'public', table: 'apps' }, payload => {
+    fetchAppsFromSupabase();
+  })
+  .subscribe();
 
 // ====== STATE ======
 const ADMIN_EMAILS = ["benssariyassine@gmail.com"];
@@ -2070,22 +2123,41 @@ function incrementDownload(appId){
 }
 
 // ====== LIKE ======
-function toggleStarLike(appId, event){
+async function toggleStarLike(appId, event){
   if(event) event.stopPropagation();
   if(!requireVerifiedEmail()) return;
   if(!currentUser){ showToast('Please sign in to like', 'warning'); openAccountModal(); return; }
-  const appRef = db.collection("apps").doc(appId);
-  const userEmail = currentUser.email;
-  db.runTransaction(transaction=>{
-    return transaction.get(appRef).then(doc=>{
-      if(!doc.exists) return;
-      let data = doc.data();
-      let likedBy = data.likedBy || [];
-      if(likedBy.includes(userEmail)){ likedBy = likedBy.filter(e=>e!==userEmail); showToast('Like removed', 'info', 1500); }
-      else { likedBy.push(userEmail); showToast('App liked!', 'success', 1500); }
-      transaction.update(appRef, {likedBy: likedBy});
-    });
-  }).catch(err=>showToast('Error: '+err.message, 'error'));
+  
+  try {
+    const app = allAppsCache.find(a => a.id === appId);
+    if (!app) return;
+    
+    let likedBy = app.likedBy || [];
+    const userEmail = currentUser.email;
+    let isLiked = likedBy.includes(userEmail);
+    
+    if (isLiked) {
+      likedBy = likedBy.filter(e => e !== userEmail);
+      showToast('Like removed', 'info', 1500);
+    } else {
+      likedBy.push(userEmail);
+      showToast('App liked!', 'success', 1500);
+    }
+    
+    const { error } = await supabase
+      .from('apps')
+      .update({ liked_by: likedBy })
+      .eq('id', appId);
+      
+    if (error) throw error;
+    
+    app.likedBy = likedBy;
+    renderUI();
+    
+  } catch (err) {
+    console.error(err);
+    showToast('Error liking app', 'error');
+  }
 }
 
 // ====== SHARE ======
@@ -2426,15 +2498,8 @@ function rejectPublisher(requestId){
 }
 
 // ====== FIREBASE LISTENERS ======
-db.collection("apps").orderBy("createdAt","desc").onSnapshot(snapshot=>{
-  allAppsCache = [];
-  snapshot.forEach(doc=>{
-    let data = doc.data();
-    if(data.name && data.name.toLowerCase().includes("gta") && data.category !== "games") data.category = "games";
-    allAppsCache.push({id:doc.id, ...data});
-  });
-  renderUI();
-}, err=>{ console.warn('Apps err:',err); });
+// ✅ جلب التطبيقات من Supabase (بدل Firebase)
+fetchAppsFromSupabase();
 db.collection("reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
   allReportsCache = [];
   snapshot.forEach(doc=>allReportsCache.push({id:doc.id, ...doc.data()}));
