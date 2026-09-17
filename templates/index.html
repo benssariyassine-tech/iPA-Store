@@ -3304,47 +3304,6 @@ async function sendAiMessage() {
     sendBtn.disabled = false;
   }
 }
-
-    const response = await fetch(GEMINI_URL + GEMINI_API_KEY, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-
-    const data = await response.json();
-    console.log('Gemini Response:', data);
-
-    const typingEl = document.getElementById('aiTypingIndicator');
-    if (typingEl) typingEl.remove();
-
-    let botText = 'عذراً، حدث خطأ غير متوقع. يرجى التواصل مع الدعم: support.istoreipa@gmail.com';
-
-    if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0]. قcontent.parts[0]) {
-      botText = data.candidates[0].content.parts[0].text || botText;
-      aiChatHistory.push({ role: 'model', parts: [{ text: botText }] });
-    } else if (data.error) {
-      console.error('Gemini error:', data.error);
-      botText = 'عذراً، تعذر الاتصال بخدمة المساعد حالياً. يرجى التواصل مع الدعم: support.istoreipa@gmail.com';
-    }
-
-    const botMsg = document.createElement('div');
-    botMsg.className = 'aiMsg bot';
-    botMsg.textContent = botText;
-    messages.appendChild(botMsg);
-    messages.scrollTop = messages.scrollHeight;
-
-  } catch (err) {
-    console.error('AI fetch error:', err);
-    const typingEl = document.getElementById('aiTypingIndicator');
-    if (typingEl) typingEl.remove();
-    const errMsg = document.createElement('div');
-    errMsg.className = 'aiMsg bot';
-    errMsg.textContent = 'عذراً، تعذر الاتصال بالمساعد. يرجى التواصل مع الدعم: support.istoreipa@gmail.com';
-    messages.appendChild(errMsg);
-  } finally {
-    sendBtn.disabled = false;
-  }
-}
 </script>
  <!-- AI Chatbot -->
 <button id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
