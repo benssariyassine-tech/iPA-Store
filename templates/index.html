@@ -2981,15 +2981,15 @@ auth.onAuthStateChanged(user=>{
   }
 });
  // ====== نقل البيانات من Firebase لـ Supabase ======
+// ====== نقل البيانات من Firebase لـ Supabase (بدون صور) ======
 async function migrateFirebaseToSupabase() {
   if(!isAdmin){ showToast('Admins only', 'warning'); return; }
-  if(!confirm('نقل كل التطبيقات من Firebase لـ Supabase؟\n\nراح تاخذ دقيقة أو أكثر.')) return;
+  if(!confirm('نقل كل التطبيقات من Firebase؟\n\nالصور راح تتنقل لاحقاً.')) return;
   
-  showToast('جاري النقل... لا تغلق الصفحة', 'info', 10000);
+  showToast('جاري النقل... لا تغلق الصفحة', 'info', 30000);
   
   try {
-    const snapshot = await db.collection("apps").orderBy("createdAt", "desc").get();
-    
+    const snapshot = await db.collection("apps").get();
     if(snapshot.empty){
       showToast('لا توجد تطبيقات في Firebase', 'warning');
       return;
@@ -2998,6 +2998,7 @@ async function migrateFirebaseToSupabase() {
     const totalApps = snapshot.size;
     let successCount = 0;
     let failCount = 0;
+    let errorsList = [];
     
     showToast('وجدت ' + totalApps + ' تطبيق، جاري النقل...', 'info', 5000);
     
@@ -3010,18 +3011,19 @@ async function migrateFirebaseToSupabase() {
           createdAtISO = data.createdAt.toDate().toISOString();
         }
         
+        // نقل بدون صور (مؤقتاً) باش نتجنبوا مشكلة الحجم
         const newApp = {
-          name: data.name || '',
-          icon: data.icon || '',
-          banner: data.banner || null,
+          name: data.name || 'Unknown',
+          icon: '',
+          banner: null,
           publisher: data.publisher || '',
           category: data.category || 'today',
           platform: data.platform || 'IPA',
           size: data.size || '',
-          info: data.info || data.desc || '',
+          info: (data.info || data.desc || '').substring(0, 3000),
           url: data.url || '#',
-          screenshots: data.screenshots || [],
-          extra_files: data.extraFiles || [],
+          screenshots: [],
+          extra_files: [],
           downloads: data.downloads || 0,
           liked_by: data.likedBy || [],
           downloaded_by: data.downloadedBy || [],
@@ -3034,9 +3036,11 @@ async function migrateFirebaseToSupabase() {
         
         const { error } = await supabase.from('apps').insert([newApp]);
         if(error){
-          console.error('خطأ:', data.name, error);
+          console.error('خطأ في', data.name, ':', error.message);
+          errorsList.push(data.name + ': ' + error.message);
           failCount++;
         } else {
+          console.log('نجح:', data.name);
           successCount++;
         }
       } catch(err){
@@ -3045,12 +3049,18 @@ async function migrateFirebaseToSupabase() {
       }
     }
     
-    showToast('تم نقل ' + successCount + ' تطبيق بنجاح!' + (failCount > 0 ? ' (فشل ' + failCount + ')' : ''), 'success', 8000);
+    // طباعة ملخص في Console
+    console.log('========== ملخص النقل ==========');
+    console.log('نجح:', successCount);
+    console.log('فشل:', failCount);
+    console.log('الأخطاء:', errorsList);
+    
+    showToast('نقل: ' + successCount + ' ناجح / ' + failCount + ' فاشل (من ' + totalApps + ')', failCount > 0 ? 'warning' : 'success', 10000);
     await fetchAppsFromSupabase();
     
   } catch(err){
     console.error('Migration error:', err);
-    showToast('خطأ في النقل: ' + err.message, 'error', 6000);
+    showToast('خطأ: ' + err.message, 'error', 6000);
   }
 }
 
