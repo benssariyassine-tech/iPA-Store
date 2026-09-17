@@ -3697,12 +3697,13 @@ async function sendAiMessage() {
     <div class="aiChatMessages" id="aiChatMessages">
       <div class="aiMsg bot">مرحباً بك في iStore. أنا مساعدك الذكي، كيف يمكنني مساعدتك اليوم؟</div>
     </div>
-    <div class="aiChatInputBar">
-      <textarea id="aiChatInput" class="aiChatInput" placeholder="اكتب سؤالك..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMessage();}"></textarea>
-      <button class="aiChatSend" id="aiChatSendBtn" onclick="sendAiMessage()">
-        <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-      </button>
-    </div>
+  <div class="aiChatInputBar">
+  <div class="aiChatInputWrap">
+    <textarea id="aiChatInput" class="aiChatInput" placeholder="اكتب رسالتك..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMessage();}"></textarea>
+    <button class="aiChatSend" id="aiChatSendBtn" onclick="sendAiMessage()">
+      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+     </div>
   </div>
 </div>
 </body>
