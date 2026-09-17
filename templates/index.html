@@ -957,7 +957,6 @@ body[dir="rtl"] .aiMsg.user { border-bottom-right-radius: 18px; border-bottom-le
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script src="https://js.puter.com/v2/"></script>
 <meta name="google-site-verification" content="IH9QNXDpJWrhJc2w-RTABEcQSd6zpI3Pv1fy4kLYT2k" />
 <!-- ✅ Monetag Verification Meta Tag -->
 <meta name="monetag" content="1122d9d64ba07330ac40d46815fd1b0f">
@@ -3296,13 +3295,14 @@ document.addEventListener('touchmove', function(e) {
     p.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
   });
 }, { passive: true });
- async function sendAiMessage() {
+async function sendAiMessage() {
   const input = document.getElementById('aiChatInput');
   const sendBtn = document.getElementById('aiChatSendBtn');
   const messages = document.getElementById('aiChatMessages');
   const text = input.value.trim();
   if (!text) return;
 
+  // عرض رسالة المستخدم
   const userMsg = document.createElement('div');
   userMsg.className = 'aiMsg user';
   userMsg.textContent = text;
@@ -3311,6 +3311,7 @@ document.addEventListener('touchmove', function(e) {
   messages.scrollTop = messages.scrollHeight;
   sendBtn.disabled = true;
 
+  // مؤشر الكتابة
   const typing = document.createElement('div');
   typing.className = 'aiMsg bot typing';
   typing.id = 'aiTypingIndicator';
@@ -3318,147 +3319,85 @@ document.addEventListener('touchmove', function(e) {
   messages.appendChild(typing);
   messages.scrollTop = messages.scrollHeight;
 
-  const removeTyping = () => {
-    const t = document.getElementById('aiTypingIndicator');
-    if (t) t.remove();
-  };
-
   try {
-    // 1. تأكد أن المستخدم مسجل دخول في Puter
-    let isSignedIn = false;
-    try {
-      isSignedIn = puter.auth.isSignedIn();
-    } catch (e) {
-      isSignedIn = false;
-    }
-
-    if (!isSignedIn) {
-      removeTyping();
-      const notice = document.createElement('div');
-      notice.className = 'aiMsg bot';
-      notice.textContent = '👋 لتشغيل الذكاء الاصطناعي، يجب تسجيل الدخول في Puter (مجاني، مرة واحدة فقط).';
-      messages.appendChild(notice);
-
-      const loginBtn = document.createElement('button');
-      loginBtn.textContent = '🔓 تسجيل الدخول في Puter';
-      loginBtn.style.cssText = 'background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;padding:12px 20px;border-radius:14px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit;align-self:flex-start;font-size:14px;box-shadow:0 6px 16px rgba(10,132,255,0.4);';
-      loginBtn.onclick = async () => {
-        try {
-          await puter.auth.signIn();
-          notice.textContent = '✅ تم تسجيل الدخول بنجاح! اكتب رسالتك الآن.';
-          loginBtn.remove();
-          input.focus();
-        } catch (e) {
-          notice.textContent = '❌ فشل تسجيل الدخول. حاول مرة أخرى.';
-        }
-      };
-      messages.appendChild(loginBtn);
-      messages.scrollTop = messages.scrollHeight;
-      sendBtn.disabled = false;
-      return;
-    }
-
-    // 2. بناء نص المحادثة
-    let fullPrompt = AI_SYSTEM_PROMPT + '\n\n';
+    // بناء الرسائل مع السياق
+    const messages_payload = [
+      { role: 'system', content: AI_SYSTEM_PROMPT }
+    ];
+    
+    // آخر 6 رسائل فقط للسياق
     aiChatHistory.slice(-6).forEach(msg => {
-      fullPrompt += (msg.role === 'user' ? 'المستخدم: ' : 'المساعد: ') + msg.content + '\n';
+      messages_payload.push({ role: msg.role, content: msg.content });
     });
-    fullPrompt += 'المستخدم: ' + text + '\n\nالمساعد:';
+    messages_payload.push({ role: 'user', content: text });
 
-    // 3. استدعاء Puter
-    const response = await puter.ai.chat(fullPrompt);
+    // استدعاء Pollinations.AI (مجاني، بدون تسجيل)
+    const response = await fetch('https://text.pollinations.ai/openai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'openai',
+        messages: messages_payload,
+        temperature: 0.7,
+        max_tokens: 800
+      })
+    });
 
-    removeTyping();
+    const typingEl = document.getElementById('aiTypingIndicator');
+    if (typingEl) typingEl.remove();
 
-    // 4. استخراج النص بذكاء
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status);
+    }
+
+    const data = await response.json();
+
     let botText = '';
-    if (typeof response === 'string') {
-      botText = response;
-    } else if (response && typeof response === 'object') {
-      if (response.message && response.message.content) {
-        const c = response.message.content;
-        if (Array.isArray(c)) {
-          botText = c.map(item => (typeof item === 'string' ? item : (item.text || ''))).join('');
-        } else if (typeof c === 'string') {
-          botText = c;
-        }
-      } else if (response.text) {
-        botText = response.text;
-      } else if (response.content) {
-        botText = typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
-      } else if (response.error) {
-        throw new Error(typeof response.error === 'string' ? response.error : (response.error.message || JSON.stringify(response.error)));
-      } else {
-        botText = JSON.stringify(response).substring(0, 300);
-      }
+    if (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+      botText = data.choices[0].message.content;
+    } else if (data && data.content) {
+      botText = data.content;
+    } else if (typeof data === 'string') {
+      botText = data;
+    } else {
+      botText = 'عذراً، لم أستطع فهم الرد.';
     }
 
-    if (!botText || botText.trim() === '') {
-      botText = 'عذراً، لم أستطع الحصول على رد.';
-    }
-
+    // حفظ في التاريخ
     aiChatHistory.push({ role: 'user', content: text });
     aiChatHistory.push({ role: 'assistant', content: botText });
 
+    // عرض الرد
     const botMsg = document.createElement('div');
     botMsg.className = 'aiMsg bot';
-    botMsg.textContent = botText;
+    botMsg.textContent = botText.trim();
     messages.appendChild(botMsg);
     messages.scrollTop = messages.scrollHeight;
 
   } catch (err) {
     console.error('AI error:', err);
-    removeTyping();
+    const typingEl = document.getElementById('aiTypingIndicator');
+    if (typingEl) typingEl.remove();
 
-    // استخراج رسالة الخطأ من الكائن
-    let errText = 'عذراً، حدث خطأ.';
-    let errStr = '';
+    // محاولة بديلة: استخدام GET endpoint
     try {
-      if (typeof err === 'string') errStr = err;
-      else if (err && err.message) errStr = err.message;
-      else if (err && err.error && err.error.message) errStr = err.error.message;
-      else if (err && err.error) errStr = typeof err.error === 'string' ? err.error : JSON.stringify(err.error);
-      else errStr = JSON.stringify(err);
-    } catch (e) {
-      errStr = 'Unknown error';
+      const fallbackRes = await fetch('https://text.pollinations.ai/' + encodeURIComponent(AI_SYSTEM_PROMPT + '\n\nالمستخدم: ' + text + '\nالمساعد:'));
+      const fallbackText = await fallbackRes.text();
+      
+      aiChatHistory.push({ role: 'user', content: text });
+      aiChatHistory.push({ role: 'assistant', content: fallbackText });
+
+      const botMsg = document.createElement('div');
+      botMsg.className = 'aiMsg bot';
+      botMsg.textContent = fallbackText.trim();
+      messages.appendChild(botMsg);
+      messages.scrollTop = messages.scrollHeight;
+    } catch (e2) {
+      const errMsg = document.createElement('div');
+      errMsg.className = 'aiMsg bot';
+      errMsg.textContent = '⚠️ تعذر الاتصال بالذكاء الاصطناعي. حاول مرة أخرى بعد قليل.';
+      messages.appendChild(errMsg);
     }
-
-    const low = errStr.toLowerCase();
-    if (low.includes('auth') || low.includes('sign') || low.includes('login') || low.includes('unauthorized') || low.includes('permission')) {
-      errText = '⚠️ يجب تسجيل الدخول في Puter أولاً.';
-    } else if (low.includes('model') || low.includes('not found')) {
-      errText = '⚠️ الموديل غير متاح حالياً. حاول لاحقاً.';
-    } else if (low.includes('rate') || low.includes('limit') || low.includes('quota')) {
-      errText = '⚠️ تم تجاوز الحد المسموح. حاول بعد قليل.';
-    } else if (low.includes('network') || low.includes('fetch')) {
-      errText = '⚠️ مشكلة في الشبكة. تحقق من اتصالك.';
-    } else {
-      errText = 'خطأ: ' + errStr.substring(0, 150);
-    }
-
-    const errMsg = document.createElement('div');
-    errMsg.className = 'aiMsg bot';
-    errMsg.textContent = errText;
-    messages.appendChild(errMsg);
-    messages.scrollTop = messages.scrollHeight;
-
-    // لو مشكلة auth، أضف زر تسجيل
-    if (errText.includes('Puter')) {
-      const loginBtn = document.createElement('button');
-      loginBtn.textContent = '🔓 تسجيل الدخول في Puter';
-      loginBtn.style.cssText = 'background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;padding:12px 20px;border-radius:14px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit;align-self:flex-start;font-size:14px;';
-      loginBtn.onclick = async () => {
-        try {
-          await puter.auth.signIn();
-          errMsg.textContent = '✅ تم تسجيل الدخول! أعد إرسال رسالتك.';
-          loginBtn.remove();
-        } catch (e) {
-          errMsg.textContent = '❌ فشل تسجيل الدخول. حاول مرة أخرى.';
-        }
-      };
-      messages.appendChild(loginBtn);
-    }
-
   } finally {
     sendBtn.disabled = false;
   }
