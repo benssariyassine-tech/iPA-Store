@@ -3296,13 +3296,14 @@ document.addEventListener('touchmove', function(e) {
     p.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
   });
 }, { passive: true });
-async function sendAiMessage() {
+ async function sendAiMessage() {
   const input = document.getElementById('aiChatInput');
   const sendBtn = document.getElementById('aiChatSendBtn');
   const messages = document.getElementById('aiChatMessages');
   const text = input.value.trim();
   if (!text) return;
 
+  // رسالة المستخدم
   const userMsg = document.createElement('div');
   userMsg.className = 'aiMsg user';
   userMsg.textContent = text;
@@ -3311,6 +3312,7 @@ async function sendAiMessage() {
   messages.scrollTop = messages.scrollHeight;
   sendBtn.disabled = true;
 
+  // مؤشر الكتابة
   const typing = document.createElement('div');
   typing.className = 'aiMsg bot typing';
   typing.id = 'aiTypingIndicator';
@@ -3319,42 +3321,92 @@ async function sendAiMessage() {
   messages.scrollTop = messages.scrollHeight;
 
   try {
-    const conversation = [
-      { role: 'system', content: AI_SYSTEM_PROMPT },
-      ...aiChatHistory,
-      { role: 'user', content: text }
-    ];
+    // بناء نص واحد بسيط (بدل مصفوفة messages)
+    let fullPrompt = AI_SYSTEM_PROMPT + '\n\n';
+    aiChatHistory.forEach(msg => {
+      fullPrompt += (msg.role === 'user' ? 'المستخدم: ' : 'المساعد: ') + msg.content + '\n';
+    });
+    fullPrompt += 'المستخدم: ' + text + '\nالمساعد:';
 
-    const response = await puter.ai.chat(conversation, { model: 'gpt-4o-mini' });
+    // استدعاء Puter بنص بسيط
+    const response = await puter.ai.chat(fullPrompt, { model: 'gpt-4o-mini' });
 
     const typingEl = document.getElementById('aiTypingIndicator');
     if (typingEl) typingEl.remove();
 
+    // استخراج النص من الرد
     let botText = '';
-    if (typeof response === 'string') botText = response;
-    else if (response && response.message && response.message.content) {
-      botText = Array.isArray(response.message.content)
-        ? response.message.content.map(c => c.text || '').join('')
-        : response.message.content;
-    } else if (response && response.text) botText = response.text;
-    else botText = 'عذراً، حدث خطأ. حاول مرة أخرى.';
+    if (typeof response === 'string') {
+      botText = response;
+    } else if (response && response.message && response.message.content) {
+      if (Array.isArray(response.message.content)) {
+        botText = response.message.content.map(c => (typeof c === 'string' ? c : (c.text || ''))).join('');
+      } else {
+        botText = response.message.content;
+      }
+    } else if (response && response.text) {
+      botText = response.text;
+    } else if (response) {
+      botText = String(response);
+    }
 
+    if (!botText || botText.trim() === '') {
+      botText = 'عذراً، لم أستطع الحصول على رد.';
+    }
+
+    // حفظ في التاريخ
     aiChatHistory.push({ role: 'user', content: text });
     aiChatHistory.push({ role: 'assistant', content: botText });
 
+    // عرض الرد
     const botMsg = document.createElement('div');
     botMsg.className = 'aiMsg bot';
     botMsg.textContent = botText;
     messages.appendChild(botMsg);
     messages.scrollTop = messages.scrollHeight;
+
   } catch (err) {
     console.error('AI error:', err);
     const typingEl = document.getElementById('aiTypingIndicator');
     if (typingEl) typingEl.remove();
+
+    // إظهار الخطأ الحقيقي باش نعرفو السبب
+    let errText = 'عذراً، حدث خطأ. ';
+    const errStr = (err && err.message) ? err.message : String(err);
+
+    if (errStr.toLowerCase().includes('auth') ||
+        errStr.toLowerCase().includes('sign') ||
+        errStr.toLowerCase().includes('login') ||
+        errStr.toLowerCase().includes('permission')) {
+      errText = '⚠️ يجب تسجيل الدخول إلى Puter أولاً. انقر على الرابط أدناه:';
+    } else if (errStr.toLowerCase().includes('model') || errStr.toLowerCase().includes('not found')) {
+      errText = '⚠️ الموديل غير متاح حالياً. جاري التجربة بموديل آخر...';
+    } else {
+      errText = 'خطأ: ' + errStr;
+    }
+
     const errMsg = document.createElement('div');
     errMsg.className = 'aiMsg bot';
-    errMsg.textContent = 'عذراً، حدث خطأ في الاتصال. حاول مرة أخرى.';
+    errMsg.textContent = errText;
     messages.appendChild(errMsg);
+    messages.scrollTop = messages.scrollHeight;
+
+    // لو المشكلة auth، نضيف زر تسجيل الدخول
+    if (errText.includes('Puter')) {
+      const loginBtn = document.createElement('button');
+      loginBtn.textContent = '🔓 تسجيل الدخول إلى Puter';
+      loginBtn.style.cssText = 'background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit;align-self:flex-start;';
+      loginBtn.onclick = async () => {
+        try {
+          await puter.auth.signIn();
+          errMsg.textContent = '✅ تم تسجيل الدخول! أعد إرسال رسالتك.';
+        } catch (e) {
+          errMsg.textContent = '❌ فشل تسجيل الدخول: ' + (e.message || 'حاول مرة أخرى');
+        }
+      };
+      messages.appendChild(loginBtn);
+    }
+
   } finally {
     sendBtn.disabled = false;
   }
