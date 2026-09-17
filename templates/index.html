@@ -3303,7 +3303,6 @@ document.addEventListener('touchmove', function(e) {
   const text = input.value.trim();
   if (!text) return;
 
-  // رسالة المستخدم
   const userMsg = document.createElement('div');
   userMsg.className = 'aiMsg user';
   userMsg.textContent = text;
@@ -3312,7 +3311,6 @@ document.addEventListener('touchmove', function(e) {
   messages.scrollTop = messages.scrollHeight;
   sendBtn.disabled = true;
 
-  // مؤشر الكتابة
   const typing = document.createElement('div');
   typing.className = 'aiMsg bot typing';
   typing.id = 'aiTypingIndicator';
@@ -3320,45 +3318,88 @@ document.addEventListener('touchmove', function(e) {
   messages.appendChild(typing);
   messages.scrollTop = messages.scrollHeight;
 
+  const removeTyping = () => {
+    const t = document.getElementById('aiTypingIndicator');
+    if (t) t.remove();
+  };
+
   try {
-    // بناء نص واحد بسيط (بدل مصفوفة messages)
+    // 1. تأكد أن المستخدم مسجل دخول في Puter
+    let isSignedIn = false;
+    try {
+      isSignedIn = puter.auth.isSignedIn();
+    } catch (e) {
+      isSignedIn = false;
+    }
+
+    if (!isSignedIn) {
+      removeTyping();
+      const notice = document.createElement('div');
+      notice.className = 'aiMsg bot';
+      notice.textContent = '👋 لتشغيل الذكاء الاصطناعي، يجب تسجيل الدخول في Puter (مجاني، مرة واحدة فقط).';
+      messages.appendChild(notice);
+
+      const loginBtn = document.createElement('button');
+      loginBtn.textContent = '🔓 تسجيل الدخول في Puter';
+      loginBtn.style.cssText = 'background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;padding:12px 20px;border-radius:14px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit;align-self:flex-start;font-size:14px;box-shadow:0 6px 16px rgba(10,132,255,0.4);';
+      loginBtn.onclick = async () => {
+        try {
+          await puter.auth.signIn();
+          notice.textContent = '✅ تم تسجيل الدخول بنجاح! اكتب رسالتك الآن.';
+          loginBtn.remove();
+          input.focus();
+        } catch (e) {
+          notice.textContent = '❌ فشل تسجيل الدخول. حاول مرة أخرى.';
+        }
+      };
+      messages.appendChild(loginBtn);
+      messages.scrollTop = messages.scrollHeight;
+      sendBtn.disabled = false;
+      return;
+    }
+
+    // 2. بناء نص المحادثة
     let fullPrompt = AI_SYSTEM_PROMPT + '\n\n';
-    aiChatHistory.forEach(msg => {
+    aiChatHistory.slice(-6).forEach(msg => {
       fullPrompt += (msg.role === 'user' ? 'المستخدم: ' : 'المساعد: ') + msg.content + '\n';
     });
-    fullPrompt += 'المستخدم: ' + text + '\nالمساعد:';
+    fullPrompt += 'المستخدم: ' + text + '\n\nالمساعد:';
 
-    // استدعاء Puter بنص بسيط
-    const response = await puter.ai.chat(fullPrompt, { model: 'gpt-4o-mini' });
+    // 3. استدعاء Puter
+    const response = await puter.ai.chat(fullPrompt);
 
-    const typingEl = document.getElementById('aiTypingIndicator');
-    if (typingEl) typingEl.remove();
+    removeTyping();
 
-    // استخراج النص من الرد
+    // 4. استخراج النص بذكاء
     let botText = '';
     if (typeof response === 'string') {
       botText = response;
-    } else if (response && response.message && response.message.content) {
-      if (Array.isArray(response.message.content)) {
-        botText = response.message.content.map(c => (typeof c === 'string' ? c : (c.text || ''))).join('');
+    } else if (response && typeof response === 'object') {
+      if (response.message && response.message.content) {
+        const c = response.message.content;
+        if (Array.isArray(c)) {
+          botText = c.map(item => (typeof item === 'string' ? item : (item.text || ''))).join('');
+        } else if (typeof c === 'string') {
+          botText = c;
+        }
+      } else if (response.text) {
+        botText = response.text;
+      } else if (response.content) {
+        botText = typeof response.content === 'string' ? response.content : JSON.stringify(response.content);
+      } else if (response.error) {
+        throw new Error(typeof response.error === 'string' ? response.error : (response.error.message || JSON.stringify(response.error)));
       } else {
-        botText = response.message.content;
+        botText = JSON.stringify(response).substring(0, 300);
       }
-    } else if (response && response.text) {
-      botText = response.text;
-    } else if (response) {
-      botText = String(response);
     }
 
     if (!botText || botText.trim() === '') {
       botText = 'عذراً، لم أستطع الحصول على رد.';
     }
 
-    // حفظ في التاريخ
     aiChatHistory.push({ role: 'user', content: text });
     aiChatHistory.push({ role: 'assistant', content: botText });
 
-    // عرض الرد
     const botMsg = document.createElement('div');
     botMsg.className = 'aiMsg bot';
     botMsg.textContent = botText;
@@ -3367,22 +3408,32 @@ document.addEventListener('touchmove', function(e) {
 
   } catch (err) {
     console.error('AI error:', err);
-    const typingEl = document.getElementById('aiTypingIndicator');
-    if (typingEl) typingEl.remove();
+    removeTyping();
 
-    // إظهار الخطأ الحقيقي باش نعرفو السبب
-    let errText = 'عذراً، حدث خطأ. ';
-    const errStr = (err && err.message) ? err.message : String(err);
+    // استخراج رسالة الخطأ من الكائن
+    let errText = 'عذراً، حدث خطأ.';
+    let errStr = '';
+    try {
+      if (typeof err === 'string') errStr = err;
+      else if (err && err.message) errStr = err.message;
+      else if (err && err.error && err.error.message) errStr = err.error.message;
+      else if (err && err.error) errStr = typeof err.error === 'string' ? err.error : JSON.stringify(err.error);
+      else errStr = JSON.stringify(err);
+    } catch (e) {
+      errStr = 'Unknown error';
+    }
 
-    if (errStr.toLowerCase().includes('auth') ||
-        errStr.toLowerCase().includes('sign') ||
-        errStr.toLowerCase().includes('login') ||
-        errStr.toLowerCase().includes('permission')) {
-      errText = '⚠️ يجب تسجيل الدخول إلى Puter أولاً. انقر على الرابط أدناه:';
-    } else if (errStr.toLowerCase().includes('model') || errStr.toLowerCase().includes('not found')) {
-      errText = '⚠️ الموديل غير متاح حالياً. جاري التجربة بموديل آخر...';
+    const low = errStr.toLowerCase();
+    if (low.includes('auth') || low.includes('sign') || low.includes('login') || low.includes('unauthorized') || low.includes('permission')) {
+      errText = '⚠️ يجب تسجيل الدخول في Puter أولاً.';
+    } else if (low.includes('model') || low.includes('not found')) {
+      errText = '⚠️ الموديل غير متاح حالياً. حاول لاحقاً.';
+    } else if (low.includes('rate') || low.includes('limit') || low.includes('quota')) {
+      errText = '⚠️ تم تجاوز الحد المسموح. حاول بعد قليل.';
+    } else if (low.includes('network') || low.includes('fetch')) {
+      errText = '⚠️ مشكلة في الشبكة. تحقق من اتصالك.';
     } else {
-      errText = 'خطأ: ' + errStr;
+      errText = 'خطأ: ' + errStr.substring(0, 150);
     }
 
     const errMsg = document.createElement('div');
@@ -3391,17 +3442,18 @@ document.addEventListener('touchmove', function(e) {
     messages.appendChild(errMsg);
     messages.scrollTop = messages.scrollHeight;
 
-    // لو المشكلة auth، نضيف زر تسجيل الدخول
+    // لو مشكلة auth، أضف زر تسجيل
     if (errText.includes('Puter')) {
       const loginBtn = document.createElement('button');
-      loginBtn.textContent = '🔓 تسجيل الدخول إلى Puter';
-      loginBtn.style.cssText = 'background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit;align-self:flex-start;';
+      loginBtn.textContent = '🔓 تسجيل الدخول في Puter';
+      loginBtn.style.cssText = 'background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;padding:12px 20px;border-radius:14px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit;align-self:flex-start;font-size:14px;';
       loginBtn.onclick = async () => {
         try {
           await puter.auth.signIn();
           errMsg.textContent = '✅ تم تسجيل الدخول! أعد إرسال رسالتك.';
+          loginBtn.remove();
         } catch (e) {
-          errMsg.textContent = '❌ فشل تسجيل الدخول: ' + (e.message || 'حاول مرة أخرى');
+          errMsg.textContent = '❌ فشل تسجيل الدخول. حاول مرة أخرى.';
         }
       };
       messages.appendChild(loginBtn);
