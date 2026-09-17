@@ -3026,38 +3026,124 @@ auth.onAuthStateChanged(user=>{
     updateFavBtnVisibility(); renderUI();
   }
 });
- // ====== نقل البيانات من Firebase لـ Supabase ======
-// ====== نقل البيانات من Firebase لـ Supabase (بدون صور) ======
+// ====== نقل البيانات من Firebase لـ Supabase (مع شريط تقدم) ======
 async function migrateFirebaseToSupabase() {
   if(!isAdmin){ showToast('Admins only', 'warning'); return; }
-  if(!confirm('نقل كل التطبيقات من Firebase؟\n\nالصور راح تتنقل لاحقاً.')) return;
   
-  showToast('جاري النقل... لا تغلق الصفحة', 'info', 30000);
+  if(document.getElementById('migrationOverlay')) return;
+  
+  const overlay = document.createElement('div');
+  overlay.id = 'migrationOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);';
+  
+  overlay.innerHTML = `
+    <div style="background:var(--modal-bg);border:1px solid var(--border-color);border-radius:24px;padding:32px 24px;width:100%;max-width:420px;text-align:center;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1);">
+      <div id="migIcon" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#32d74b,#1a8f2e);display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 10px 30px rgba(50,215,75,0.4);animation:pulse 1.5s ease-in-out infinite;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </div>
+      
+      <h3 id="migTitle" style="margin:0 0 8px 0;font-size:20px;font-weight:900;color:var(--text-color);">
+        جاري نقل البيانات
+      </h3>
+      
+      <p id="migSubtitle" style="margin:0 0 24px 0;font-size:13px;color:var(--subtext-color);line-height:1.5;">
+        لا تغلق الصفحة ولا تدير تحديث
+      </p>
+      
+      <div style="background:var(--input-bg);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-size:12px;color:var(--subtext-color);font-weight:700;">التقدم</span>
+          <span id="migPercent" style="font-size:14px;color:var(--accent);font-weight:900;">0%</span>
+        </div>
+        <div style="width:100%;height:10px;background:var(--border-color);border-radius:6px;overflow:hidden;margin-bottom:16px;">
+          <div id="migBar" style="width:0%;height:100%;background:linear-gradient(90deg,#32d74b,#1a8f2e);border-radius:6px;transition:width 0.3s ease;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--subtext-color);font-weight:700;margin-bottom:6px;">
+          <span>الحالي:</span>
+          <span id="migCurrent" style="color:var(--text-color);font-weight:900;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">...</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--subtext-color);font-weight:700;">
+          <span>العدد:</span>
+          <span id="migCount" style="color:var(--text-color);font-weight:900;">0 / 0</span>
+        </div>
+      </div>
+      
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;background:rgba(50,215,75,0.12);border:1px solid rgba(50,215,75,0.3);border-radius:12px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:var(--success);font-weight:700;text-transform:uppercase;margin-bottom:4px;">ناجح</div>
+          <div id="migSuccess" style="font-size:20px;color:var(--success);font-weight:900;">0</div>
+        </div>
+        <div style="flex:1;background:rgba(255,69,58,0.12);border:1px solid rgba(255,69,58,0.3);border-radius:12px;padding:10px;text-align:center;">
+          <div style="font-size:10px;color:var(--danger);font-weight:700;text-transform:uppercase;margin-bottom:4px;">فاشل</div>
+          <div id="migFail" style="font-size:20px;color:var(--danger);font-weight:900;">0</div>
+        </div>
+      </div>
+      
+      <div id="migDoneBtn" style="display:none;margin-top:20px;">
+        <button onclick="closeMigrationOverlay()" style="width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#32d74b,#1a8f2e);color:#fff;font-weight:900;font-size:15px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(50,215,75,0.4);">
+          حسناً، إغلاق
+        </button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(overlay);
   
   try {
+    // 1. جلب التطبيقات الموجودة في Supabase (لتجنب التكرار)
+    const { data: existingApps } = await supabase.from('apps').select('name, platform');
+    const existingSet = new Set();
+    (existingApps || []).forEach(a => {
+      existingSet.add((a.name || '').toLowerCase() + '|' + (a.platform || 'IPA'));
+    });
+    
+    // 2. جلب التطبيقات من Firebase
     const snapshot = await db.collection("apps").get();
     if(snapshot.empty){
-      showToast('لا توجد تطبيقات في Firebase', 'warning');
+      document.getElementById('migTitle').innerText = 'لا توجد تطبيقات';
+      document.getElementById('migSubtitle').innerText = 'قاعدة Firebase فارغة';
+      document.getElementById('migDoneBtn').style.display = 'block';
+      document.getElementById('migIcon').style.animation = 'none';
       return;
     }
     
     const totalApps = snapshot.size;
     let successCount = 0;
     let failCount = 0;
+    let skipCount = 0;
+    let processedCount = 0;
     let errorsList = [];
     
-    showToast('وجدت ' + totalApps + ' تطبيق، جاري النقل...', 'info', 5000);
-    
+    // 3. المرور على كل تطبيق
     for(const doc of snapshot.docs){
+      const data = doc.data();
+      processedCount++;
+      
+      // تحديث شريط التقدم
+      const percent = Math.round((processedCount / totalApps) * 100);
+      document.getElementById('migBar').style.width = percent + '%';
+      document.getElementById('migPercent').innerText = percent + '%';
+      document.getElementById('migCount').innerText = processedCount + ' / ' + totalApps;
+      document.getElementById('migCurrent').innerText = data.name || 'بدون اسم';
+      document.getElementById('migSuccess').innerText = successCount;
+      document.getElementById('migFail').innerText = failCount;
+      
       try {
-        const data = doc.data();
+        const key = (data.name || '').toLowerCase() + '|' + (data.platform || 'IPA');
+        if(existingSet.has(key)){
+          skipCount++;
+          continue;
+        }
         
         let createdAtISO = new Date().toISOString();
         if(data.createdAt && data.createdAt.toDate){
           createdAtISO = data.createdAt.toDate().toISOString();
         }
         
-        // نقل بدون صور (مؤقتاً) باش نتجنبوا مشكلة الحجم
         const newApp = {
           name: data.name || 'Unknown',
           icon: '',
@@ -3086,8 +3172,8 @@ async function migrateFirebaseToSupabase() {
           errorsList.push(data.name + ': ' + error.message);
           failCount++;
         } else {
-          console.log('نجح:', data.name);
           successCount++;
+          existingSet.add(key);
         }
       } catch(err){
         console.error('خطأ:', err);
@@ -3095,21 +3181,41 @@ async function migrateFirebaseToSupabase() {
       }
     }
     
-    // طباعة ملخص في Console
+    // 4. النتيجة النهائية
     console.log('========== ملخص النقل ==========');
-    console.log('نجح:', successCount);
-    console.log('فشل:', failCount);
+    console.log('ناجح:', successCount);
+    console.log('فاشل:', failCount);
+    console.log('تم تخطيه (موجود مسبقاً):', skipCount);
     console.log('الأخطاء:', errorsList);
     
-    showToast('نقل: ' + successCount + ' ناجح / ' + failCount + ' فاشل (من ' + totalApps + ')', failCount > 0 ? 'warning' : 'success', 10000);
+    document.getElementById('migIcon').style.background = 'linear-gradient(135deg,#32d74b,#1a8f2e)';
+    document.getElementById('migIcon').style.animation = 'none';
+    document.getElementById('migTitle').innerText = 'انتهى النقل';
+    
+    let resultText = 'تم نقل ' + successCount + ' تطبيق بنجاح';
+    if(skipCount > 0) resultText += ' / تم تخطي ' + skipCount + ' موجود مسبقاً';
+    if(failCount > 0) resultText += ' / فشل ' + failCount;
+    document.getElementById('migSubtitle').innerText = resultText;
+    document.getElementById('migDoneBtn').style.display = 'block';
+    document.getElementById('migBar').style.width = '100%';
+    document.getElementById('migPercent').innerText = '100%';
+    
     await fetchAppsFromSupabase();
     
   } catch(err){
     console.error('Migration error:', err);
-    showToast('خطأ: ' + err.message, 'error', 6000);
+    document.getElementById('migTitle').innerText = 'خطأ في النقل';
+    document.getElementById('migSubtitle').innerText = err.message;
+    document.getElementById('migDoneBtn').style.display = 'block';
+    document.getElementById('migIcon').style.background = 'linear-gradient(135deg,#ff453a,#d70015)';
+    document.getElementById('migIcon').style.animation = 'none';
   }
 }
 
+function closeMigrationOverlay(){
+  const overlay = document.getElementById('migrationOverlay');
+  if(overlay) overlay.remove();
+}
 function handleFullLogin(user){
   document.getElementById('loginView').style.display = 'none';
   document.getElementById('registerView').style.display = 'none';
