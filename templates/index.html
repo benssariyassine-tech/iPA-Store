@@ -2818,7 +2818,7 @@ function fileToDataURL(file){
     reader.readAsDataURL(file);
   });
 }
-async function saveNewApp(){
+ async function saveNewApp(){
   if(!isAdmin && !isPublisher) return;
   const editingId = document.getElementById('editingAppId').value;
   const publisher = document.getElementById('appPublisher').value.trim();
@@ -2833,10 +2833,12 @@ async function saveNewApp(){
   const screenshotsInput = document.getElementById('appScreenshotsFile');
   const extraFilesInput = document.getElementById('appExtraFiles');
   if(!name){ showToast('Please enter app name', 'warning'); return; }
+  
   let iconResult = FALLBACK_ICON;
   let bannerResult = null;
   let existingScreenshots = [];
   let existingExtraFiles = [];
+  
   if(editingId){
     const found = allAppsCache.find(a=>a.id===editingId);
     if(found){
@@ -2846,40 +2848,84 @@ async function saveNewApp(){
       if(found.extraFiles) existingExtraFiles = found.extraFiles;
     }
   }
+  
   try {
+    // الصور مؤقتاً - ممكن تكون Base64 ولا روابط
     if(fileInput.files && fileInput.files[0]) iconResult = await fileToDataURL(fileInput.files[0]);
     else if(window.__itunesIcon) iconResult = window.__itunesIcon;
+    
     if(bannerInput.files && bannerInput.files[0]) bannerResult = await fileToDataURL(bannerInput.files[0]);
-else if(window.__itunesBanner) bannerResult = window.__itunesBanner;
+    else if(window.__itunesBanner) bannerResult = window.__itunesBanner;
+    
     let screenshotsList = [...existingScreenshots];
     if(screenshotsInput.files && screenshotsInput.files.length>0){
       for(const file of Array.from(screenshotsInput.files)) screenshotsList.push(await fileToDataURL(file));
     } else if(window.__itunesScreenshots && window.__itunesScreenshots.length > 0 && screenshotsList.length === 0){
       screenshotsList = [...window.__itunesScreenshots];
     }
+    
     let extraFilesList = [...existingExtraFiles];
     if(extraFilesInput.files && extraFilesInput.files.length>0){
       for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
     }
+    
+    // ✅ التبديل لـ Supabase
     if(editingId){
-     await db.collection("apps").doc(editingId).update({publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList});
+      const { error } = await supabase
+        .from('apps')
+        .update({
+          publisher, category, platform, name, size, info, url,
+          icon: iconResult, banner: bannerResult,
+          screenshots: screenshotsList, extra_files: extraFilesList
+        })
+        .eq('id', editingId);
+      if(error) throw error;
       showToast('App updated', 'success');
     } else {
-      await db.collection("apps").add({
-        publisherEmail: (currentUser ? currentUser.email.toLowerCase() : ''),
-        publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList,
-        likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {},
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      const { error } = await supabase
+        .from('apps')
+        .insert([{
+          name: name,
+          publisher: publisher,
+          category: category,
+          platform: platform,
+          size: size,
+          info: info,
+          url: url,
+          icon: iconResult,
+          banner: bannerResult,
+          screenshots: screenshotsList,
+          extra_files: extraFilesList,
+          downloads: 0,
+          liked_by: [],
+          downloaded_by: [],
+          rating_sum: 0,
+          rating_count: 0,
+          user_ratings: {},
+          comments_count: 0
+        }]);
+      if(error) throw error;
       showToast('App published', 'success');
     }
+    
     closeModal('addAppModal');
-  } catch(err){ showToast('Error: '+err.message, 'error'); }
+    await fetchAppsFromSupabase();
+    
+  } catch(err){
+    console.error('Save error:', err);
+    showToast('Error: ' + err.message, 'error');
+  }
 }
-function deleteApp(id){
+async function deleteApp(id){
   if(!isAdmin) return;
-  if(confirm('Delete this app permanently?')){
-    db.collection("apps").doc(id).delete().then(()=>showToast('App deleted', 'success'));
+  if(!confirm('Delete this app permanently?')) return;
+  try {
+    const { error } = await supabase.from('apps').delete().eq('id', id);
+    if(error) throw error;
+    showToast('App deleted', 'success');
+    await fetchAppsFromSupabase();
+  } catch(err){
+    showToast('Error: ' + err.message, 'error');
   }
 }
 function fetchFromItunes(){
