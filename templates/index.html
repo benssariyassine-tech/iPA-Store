@@ -676,6 +676,162 @@ body[dir="rtl"] .coming-soon-features {
   z-index: 1;
   line-height: 1.5;
 }
+ /* ===== AI CHATBOT ===== */
+#aiChatBtn {
+  position: fixed;
+  bottom: 160px;
+  left: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0a84ff, #0062d2);
+  border: none;
+  box-shadow: 0 8px 24px rgba(10,132,255,0.5);
+  cursor: pointer;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulse 3s ease-in-out infinite;
+}
+body[dir="rtl"] #aiChatBtn { left: auto; right: 20px; }
+#aiChatBtn svg { width: 26px; height: 26px; stroke: #fff; fill: none; stroke-width: 2; }
+#aiChatDrawer {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 3000;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+}
+#aiChatDrawer.open { display: flex; }
+.aiChatPanel {
+  width: 100%;
+  max-width: 480px;
+  height: 85vh;
+  max-height: 700px;
+  background: var(--modal-bg);
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.aiChatHeader {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #0a84ff, #0062d2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+}
+.aiChatHeader .aiAvatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aiChatHeader .aiAvatar svg { width: 22px; height: 22px; fill: #fff; }
+.aiChatHeader .aiInfo { flex: 1; }
+.aiChatHeader .aiName { font-size: 15px; font-weight: 900; }
+.aiChatHeader .aiStatus { font-size: 11px; opacity: 0.85; }
+.aiChatClose {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.aiChatClose svg { width: 16px; height: 16px; stroke: #fff; fill: none; stroke-width: 2.5; }
+.aiChatMessages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--bg-color);
+}
+.aiMsg {
+  max-width: 85%;
+  padding: 12px 15px;
+  border-radius: 18px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+.aiMsg.bot {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  align-self: flex-start;
+  border-bottom-left-radius: 6px;
+}
+body[dir="rtl"] .aiMsg.bot { border-bottom-left-radius: 18px; border-bottom-right-radius: 6px; }
+.aiMsg.user {
+  background: linear-gradient(135deg, #0a84ff, #0062d2);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 6px;
+}
+body[dir="rtl"] .aiMsg.user { border-bottom-right-radius: 18px; border-bottom-left-radius: 6px; }
+.aiMsg.typing { display: flex; gap: 5px; padding: 14px 18px; }
+.aiMsg.typing span {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--subtext-color);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.aiMsg.typing span:nth-child(2) { animation-delay: 0.2s; }
+.aiMsg.typing span:nth-child(3) { animation-delay: 0.4s; }
+.aiChatInputBar {
+  padding: 12px 14px 14px 14px;
+  background: var(--modal-bg);
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--border-color);
+}
+.aiChatInput {
+  flex: 1;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 22px;
+  padding: 11px 16px;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  resize: none;
+  max-height: 120px;
+}
+.aiChatInput:focus {
+  border-color: var(--accent);
+}
+.aiChatInput::placeholder { color: var(--subtext-color); }
+.aiChatSend {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0a84ff, #0062d2);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(10,132,255,0.4);
+}
+.aiChatSend:disabled { opacity: 0.4; }
+.aiChatSend svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2.5; }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
