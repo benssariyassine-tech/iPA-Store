@@ -2818,6 +2818,34 @@ function fileToDataURL(file){
     reader.readAsDataURL(file);
   });
 }
+ // ====== رفع صورة لـ Supabase Storage ======
+async function uploadImageToStorage(file, folder) {
+  if (!file) return null;
+  
+  try {
+    const ext = file.name.split('.').pop() || 'jpg';
+    const fileName = folder + '/' + Date.now() + '_' + Math.random().toString(36).substring(7) + '.' + ext;
+    
+    const { data, error } = await supabase.storage
+      .from('app-images')
+      .upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false
+      });
+    
+    if (error) throw error;
+    
+    const { data: urlData } = supabase.storage
+      .from('app-images')
+      .getPublicUrl(fileName);
+    
+    return urlData.publicUrl;
+    
+  } catch (err) {
+    console.error('Upload error:', err);
+    throw err;
+  }
+}
  async function saveNewApp(){
   if(!isAdmin && !isPublisher) return;
   const editingId = document.getElementById('editingAppId').value;
@@ -2831,13 +2859,14 @@ function fileToDataURL(file){
   const fileInput = document.getElementById('appImgFile');
   const bannerInput = document.getElementById('appBannerFile');
   const screenshotsInput = document.getElementById('appScreenshotsFile');
-  const extraFilesInput = document.getElementById('appExtraFiles');
+  
   if(!name){ showToast('Please enter app name', 'warning'); return; }
+  
+  showToast('Uploading... Please wait', 'info', 10000);
   
   let iconResult = FALLBACK_ICON;
   let bannerResult = null;
   let existingScreenshots = [];
-  let existingExtraFiles = [];
   
   if(editingId){
     const found = allAppsCache.find(a=>a.id===editingId);
@@ -2845,38 +2874,43 @@ function fileToDataURL(file){
       iconResult = found.icon || FALLBACK_ICON;
       bannerResult = found.banner || null;
       if(found.screenshots) existingScreenshots = found.screenshots;
-      if(found.extraFiles) existingExtraFiles = found.extraFiles;
     }
   }
   
   try {
-    // الصور مؤقتاً - ممكن تكون Base64 ولا روابط
-    if(fileInput.files && fileInput.files[0]) iconResult = await fileToDataURL(fileInput.files[0]);
-    else if(window.__itunesIcon) iconResult = window.__itunesIcon;
+    // رفع الأيقونة
+    if(fileInput.files && fileInput.files[0]) {
+      iconResult = await uploadImageToStorage(fileInput.files[0], 'icons');
+    } else if(window.__itunesIcon && !window.__itunesIcon.startsWith('data:')) {
+      iconResult = window.__itunesIcon;
+    }
     
-    if(bannerInput.files && bannerInput.files[0]) bannerResult = await fileToDataURL(bannerInput.files[0]);
-    else if(window.__itunesBanner) bannerResult = window.__itunesBanner;
+    // رفع البانر
+    if(bannerInput.files && bannerInput.files[0]) {
+      bannerResult = await uploadImageToStorage(bannerInput.files[0], 'banners');
+    } else if(window.__itunesBanner && !window.__itunesBanner.startsWith('data:')) {
+      bannerResult = window.__itunesBanner;
+    }
     
+    // رفع لقطات الشاشة
     let screenshotsList = [...existingScreenshots];
-    if(screenshotsInput.files && screenshotsInput.files.length>0){
-      for(const file of Array.from(screenshotsInput.files)) screenshotsList.push(await fileToDataURL(file));
+    if(screenshotsInput.files && screenshotsInput.files.length > 0){
+      for(const file of Array.from(screenshotsInput.files)) {
+        const imgUrl = await uploadImageToStorage(file, 'screenshots');
+        if(imgUrl) screenshotsList.push(imgUrl);
+      }
     } else if(window.__itunesScreenshots && window.__itunesScreenshots.length > 0 && screenshotsList.length === 0){
       screenshotsList = [...window.__itunesScreenshots];
     }
     
-    let extraFilesList = [...existingExtraFiles];
-    if(extraFilesInput.files && extraFilesInput.files.length>0){
-      for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
-    }
-    
-    // ✅ التبديل لـ Supabase
+    // الحفظ في القاعدة
     if(editingId){
       const { error } = await supabase
         .from('apps')
         .update({
           publisher, category, platform, name, size, info, url,
           icon: iconResult, banner: bannerResult,
-          screenshots: screenshotsList, extra_files: extraFilesList
+          screenshots: screenshotsList
         })
         .eq('id', editingId);
       if(error) throw error;
@@ -2885,17 +2919,10 @@ function fileToDataURL(file){
       const { error } = await supabase
         .from('apps')
         .insert([{
-          name: name,
-          publisher: publisher,
-          category: category,
-          platform: platform,
-          size: size,
-          info: info,
-          url: url,
-          icon: iconResult,
-          banner: bannerResult,
+          name, publisher, category, platform, size, info, url,
+          icon: iconResult, banner: bannerResult,
           screenshots: screenshotsList,
-          extra_files: extraFilesList,
+          extra_files: [],
           downloads: 0,
           liked_by: [],
           downloaded_by: [],
@@ -2913,7 +2940,7 @@ function fileToDataURL(file){
     
   } catch(err){
     console.error('Save error:', err);
-    showToast('Error: ' + err.message, 'error');
+    showToast('Error: ' + err.message, 'error', 6000);
   }
 }
 async function deleteApp(id){
