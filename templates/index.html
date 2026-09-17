@@ -680,7 +680,6 @@ body[dir="rtl"] .coming-soon-features {
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
 <meta name="google-site-verification" content="IH9QNXDpJWrhJc2w-RTABEcQSd6zpI3Pv1fy4kLYT2k" />
@@ -767,10 +766,7 @@ body[dir="rtl"] .coming-soon-features {
 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
 <span data-i18n="addNewApp">Add New App</span>
 </button>
-<button class="admin-add-float" id="migrateFloatBtn" onclick="migrateFirebaseToSupabase()" style="bottom:150px;right:20px;background:linear-gradient(135deg,#32d74b,#1a8f2e);box-shadow:0 8px 24px rgba(50,215,75,0.5);display:none;">
-<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-<span>نقل البيانات</span>
-</button>
+
 <div class="floating-nav">
 <button class="nav-item active" data-tab="today" onclick="switchTab('today', this)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span data-i18n="navToday">Today</span></button>
 <button class="nav-item" data-tab="games" onclick="switchTab('games', this)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1.2" fill="currentColor"/><circle cx="18" cy="13" r="1.2" fill="currentColor"/></svg><span data-i18n="navGames">Games</span></button>
@@ -1064,58 +1060,6 @@ setTimeout(function(){
 
 const auth = firebase.auth();
 const db = firebase.firestore();
- // ==== إعدادات Supabase ====
-const supabaseUrl = 'https://yzinimcuebklmgs.supabase.co';
-const supabaseKey = 'sb_publishable_1094MpO6nY2nTJPA63cjjg_Swe6ttyT';
- window.supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-// دالة جلب التطبيقات من Supabase
-async function fetchAppsFromSupabase() {
-  try {
-    const { data, error } = await supabase
-      .from('apps')
-      .select('*')
-      .order('created_at', { ascending: false });
-      
-    if (error) throw error;
-    
-    // تحويل البيانات باش تتوافق مع الكود القديم
-    allAppsCache = data.map(app => ({
-      id: app.id,
-      name: app.name,
-      icon: app.icon,
-      banner: app.banner,
-      publisher: app.publisher,
-      category: app.category,
-      platform: app.platform,
-      size: app.size,
-      info: app.info,
-      url: app.url,
-      screenshots: app.screenshots || [],
-      extraFiles: app.extra_files || [],
-      downloads: app.downloads || 0,
-      likedBy: app.liked_by || [],
-      downloadedBy: app.downloaded_by || [],
-      ratingSum: app.rating_sum || 0,
-      ratingCount: app.rating_count || 0,
-      userRatings: app.user_ratings || {},
-      commentsCount: app.comments_count || 0,
-      createdAt: { seconds: new Date(app.created_at).getTime() / 1000 }
-    }));
-    
-    renderUI(); // تحديث الواجهة
-  } catch (err) {
-    console.error('Error fetching apps:', err);
-    showToast('Error loading apps from database', 'error');
-  }
-}
-
-// تشغيل التحديث التلقائي (باش أي تطبيق جديد يبان دغيا)
-supabase
-  .channel('custom-all-channel')
-  .on('postgres_changes', { event: '*', schema: 'public', table: 'apps' }, payload => {
-    fetchAppsFromSupabase();
-  })
-  .subscribe();
 
 // ====== STATE ======
 const ADMIN_EMAILS = ["benssariyassine@gmail.com"];
@@ -1682,15 +1626,14 @@ function toggleExtraMenu(appId, event){
 document.addEventListener('click', ()=>{ document.querySelectorAll('.extra-files-menu').forEach(m=>m.style.display='none'); });
 
 // ====== ADMIN UI ======
-  function applyAdminUI(){
+function applyAdminUI(){
   const floatBtn = document.getElementById('adminAddFloatBtn');
   const adminNavTab = document.getElementById('adminNavTab');
-  const migrateFloatBtn = document.getElementById('migrateFloatBtn');
   if(floatBtn) floatBtn.style.display = (isAdmin || isPublisher) ? 'flex' : 'none';
   if(adminNavTab) adminNavTab.style.display = isAdmin ? 'flex' : 'none';
-  if(migrateFloatBtn) migrateFloatBtn.style.display = isAdmin ? 'flex' : 'none';
   updateAvatarUI();
 }
+  
    // ====== TOGGLE USER PREVIEW ======
 function toggleUserPreview(){
   isUserPreview = !isUserPreview;
@@ -2127,41 +2070,22 @@ function incrementDownload(appId){
 }
 
 // ====== LIKE ======
-async function toggleStarLike(appId, event){
+function toggleStarLike(appId, event){
   if(event) event.stopPropagation();
   if(!requireVerifiedEmail()) return;
   if(!currentUser){ showToast('Please sign in to like', 'warning'); openAccountModal(); return; }
-  
-  try {
-    const app = allAppsCache.find(a => a.id === appId);
-    if (!app) return;
-    
-    let likedBy = app.likedBy || [];
-    const userEmail = currentUser.email;
-    let isLiked = likedBy.includes(userEmail);
-    
-    if (isLiked) {
-      likedBy = likedBy.filter(e => e !== userEmail);
-      showToast('Like removed', 'info', 1500);
-    } else {
-      likedBy.push(userEmail);
-      showToast('App liked!', 'success', 1500);
-    }
-    
-    const { error } = await supabase
-      .from('apps')
-      .update({ liked_by: likedBy })
-      .eq('id', appId);
-      
-    if (error) throw error;
-    
-    app.likedBy = likedBy;
-    renderUI();
-    
-  } catch (err) {
-    console.error(err);
-    showToast('Error liking app', 'error');
-  }
+  const appRef = db.collection("apps").doc(appId);
+  const userEmail = currentUser.email;
+  db.runTransaction(transaction=>{
+    return transaction.get(appRef).then(doc=>{
+      if(!doc.exists) return;
+      let data = doc.data();
+      let likedBy = data.likedBy || [];
+      if(likedBy.includes(userEmail)){ likedBy = likedBy.filter(e=>e!==userEmail); showToast('Like removed', 'info', 1500); }
+      else { likedBy.push(userEmail); showToast('App liked!', 'success', 1500); }
+      transaction.update(appRef, {likedBy: likedBy});
+    });
+  }).catch(err=>showToast('Error: '+err.message, 'error'));
 }
 
 // ====== SHARE ======
@@ -2502,8 +2426,15 @@ function rejectPublisher(requestId){
 }
 
 // ====== FIREBASE LISTENERS ======
-// ✅ جلب التطبيقات من Supabase (بدل Firebase)
-fetchAppsFromSupabase();
+db.collection("apps").orderBy("createdAt","desc").onSnapshot(snapshot=>{
+  allAppsCache = [];
+  snapshot.forEach(doc=>{
+    let data = doc.data();
+    if(data.name && data.name.toLowerCase().includes("gta") && data.category !== "games") data.category = "games";
+    allAppsCache.push({id:doc.id, ...data});
+  });
+  renderUI();
+}, err=>{ console.warn('Apps err:',err); });
 db.collection("reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
   allReportsCache = [];
   snapshot.forEach(doc=>allReportsCache.push({id:doc.id, ...doc.data()}));
@@ -2818,35 +2749,7 @@ function fileToDataURL(file){
     reader.readAsDataURL(file);
   });
 }
- // ====== رفع صورة لـ Supabase Storage ======
-async function uploadImageToStorage(file, folder) {
-  if (!file) return null;
-  
-  try {
-    const ext = file.name.split('.').pop() || 'jpg';
-    const fileName = folder + '/' + Date.now() + '_' + Math.random().toString(36).substring(7) + '.' + ext;
-    
-    const { data, error } = await supabase.storage
-      .from('app-images')
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: false
-      });
-    
-    if (error) throw error;
-    
-    const { data: urlData } = supabase.storage
-      .from('app-images')
-      .getPublicUrl(fileName);
-    
-    return urlData.publicUrl;
-    
-  } catch (err) {
-    console.error('Upload error:', err);
-    throw err;
-  }
-}
- async function saveNewApp(){
+async function saveNewApp(){
   if(!isAdmin && !isPublisher) return;
   const editingId = document.getElementById('editingAppId').value;
   const publisher = document.getElementById('appPublisher').value.trim();
@@ -2859,100 +2762,55 @@ async function uploadImageToStorage(file, folder) {
   const fileInput = document.getElementById('appImgFile');
   const bannerInput = document.getElementById('appBannerFile');
   const screenshotsInput = document.getElementById('appScreenshotsFile');
-  
+  const extraFilesInput = document.getElementById('appExtraFiles');
   if(!name){ showToast('Please enter app name', 'warning'); return; }
-  
-  showToast('Uploading... Please wait', 'info', 10000);
-  
   let iconResult = FALLBACK_ICON;
   let bannerResult = null;
   let existingScreenshots = [];
-  
+  let existingExtraFiles = [];
   if(editingId){
     const found = allAppsCache.find(a=>a.id===editingId);
     if(found){
       iconResult = found.icon || FALLBACK_ICON;
       bannerResult = found.banner || null;
       if(found.screenshots) existingScreenshots = found.screenshots;
+      if(found.extraFiles) existingExtraFiles = found.extraFiles;
     }
   }
-  
   try {
-    // رفع الأيقونة
-    if(fileInput.files && fileInput.files[0]) {
-      iconResult = await uploadImageToStorage(fileInput.files[0], 'icons');
-    } else if(window.__itunesIcon && !window.__itunesIcon.startsWith('data:')) {
-      iconResult = window.__itunesIcon;
-    }
-    
-    // رفع البانر
-    if(bannerInput.files && bannerInput.files[0]) {
-      bannerResult = await uploadImageToStorage(bannerInput.files[0], 'banners');
-    } else if(window.__itunesBanner && !window.__itunesBanner.startsWith('data:')) {
-      bannerResult = window.__itunesBanner;
-    }
-    
-    // رفع لقطات الشاشة
+    if(fileInput.files && fileInput.files[0]) iconResult = await fileToDataURL(fileInput.files[0]);
+    else if(window.__itunesIcon) iconResult = window.__itunesIcon;
+    if(bannerInput.files && bannerInput.files[0]) bannerResult = await fileToDataURL(bannerInput.files[0]);
+else if(window.__itunesBanner) bannerResult = window.__itunesBanner;
     let screenshotsList = [...existingScreenshots];
-    if(screenshotsInput.files && screenshotsInput.files.length > 0){
-      for(const file of Array.from(screenshotsInput.files)) {
-        const imgUrl = await uploadImageToStorage(file, 'screenshots');
-        if(imgUrl) screenshotsList.push(imgUrl);
-      }
+    if(screenshotsInput.files && screenshotsInput.files.length>0){
+      for(const file of Array.from(screenshotsInput.files)) screenshotsList.push(await fileToDataURL(file));
     } else if(window.__itunesScreenshots && window.__itunesScreenshots.length > 0 && screenshotsList.length === 0){
       screenshotsList = [...window.__itunesScreenshots];
     }
-    
-    // الحفظ في القاعدة
+    let extraFilesList = [...existingExtraFiles];
+    if(extraFilesInput.files && extraFilesInput.files.length>0){
+      for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
+    }
     if(editingId){
-      const { error } = await supabase
-        .from('apps')
-        .update({
-          publisher, category, platform, name, size, info, url,
-          icon: iconResult, banner: bannerResult,
-          screenshots: screenshotsList
-        })
-        .eq('id', editingId);
-      if(error) throw error;
+     await db.collection("apps").doc(editingId).update({publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList});
       showToast('App updated', 'success');
     } else {
-      const { error } = await supabase
-        .from('apps')
-        .insert([{
-          name, publisher, category, platform, size, info, url,
-          icon: iconResult, banner: bannerResult,
-          screenshots: screenshotsList,
-          extra_files: [],
-          downloads: 0,
-          liked_by: [],
-          downloaded_by: [],
-          rating_sum: 0,
-          rating_count: 0,
-          user_ratings: {},
-          comments_count: 0
-        }]);
-      if(error) throw error;
+      await db.collection("apps").add({
+        publisherEmail: (currentUser ? currentUser.email.toLowerCase() : ''),
+        publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList,
+        likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {},
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       showToast('App published', 'success');
     }
-    
     closeModal('addAppModal');
-    await fetchAppsFromSupabase();
-    
-  } catch(err){
-    console.error('Save error:', err);
-    showToast('Error: ' + err.message, 'error', 6000);
-  }
+  } catch(err){ showToast('Error: '+err.message, 'error'); }
 }
-async function deleteApp(id){
+function deleteApp(id){
   if(!isAdmin) return;
-  if(!confirm('Delete this app permanently?')) return;
-  try {
-    const { error } = await supabase.from('apps').delete().eq('id', id);
-    if(error) throw error;
-    showToast('App deleted', 'success');
-    await fetchAppsFromSupabase();
-  } catch(err){
-    showToast('Error: ' + err.message, 'error');
+  if(confirm('Delete this app permanently?')){
+    db.collection("apps").doc(id).delete().then(()=>showToast('App deleted', 'success'));
   }
 }
 function fetchFromItunes(){
@@ -3053,198 +2911,7 @@ auth.onAuthStateChanged(user=>{
     updateFavBtnVisibility(); renderUI();
   }
 });
-// ====== نقل البيانات من Firebase لـ Supabase (مع شريط تقدم) ======
-async function migrateFirebaseToSupabase() {
-  if(!isAdmin){ showToast('Admins only', 'warning'); return; }
-  
-  if(document.getElementById('migrationOverlay')) return;
-  
-  const overlay = document.createElement('div');
-  overlay.id = 'migrationOverlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999999;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(10px);';
-  
-  overlay.innerHTML = `
-    <div style="background:var(--modal-bg);border:1px solid var(--border-color);border-radius:24px;padding:32px 24px;width:100%;max-width:420px;text-align:center;animation:popIn 0.4s cubic-bezier(0.16,1,0.3,1);">
-      <div id="migIcon" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#32d74b,#1a8f2e);display:inline-flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 10px 30px rgba(50,215,75,0.4);animation:pulse 1.5s ease-in-out infinite;">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-      </div>
-      
-      <h3 id="migTitle" style="margin:0 0 8px 0;font-size:20px;font-weight:900;color:var(--text-color);">
-        جاري نقل البيانات
-      </h3>
-      
-      <p id="migSubtitle" style="margin:0 0 24px 0;font-size:13px;color:var(--subtext-color);line-height:1.5;">
-        لا تغلق الصفحة ولا تدير تحديث
-      </p>
-      
-      <div style="background:var(--input-bg);border-radius:16px;padding:16px;margin-bottom:20px;text-align:left;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <span style="font-size:12px;color:var(--subtext-color);font-weight:700;">التقدم</span>
-          <span id="migPercent" style="font-size:14px;color:var(--accent);font-weight:900;">0%</span>
-        </div>
-        <div style="width:100%;height:10px;background:var(--border-color);border-radius:6px;overflow:hidden;margin-bottom:16px;">
-          <div id="migBar" style="width:0%;height:100%;background:linear-gradient(90deg,#32d74b,#1a8f2e);border-radius:6px;transition:width 0.3s ease;"></div>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--subtext-color);font-weight:700;margin-bottom:6px;">
-          <span>الحالي:</span>
-          <span id="migCurrent" style="color:var(--text-color);font-weight:900;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">...</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--subtext-color);font-weight:700;">
-          <span>العدد:</span>
-          <span id="migCount" style="color:var(--text-color);font-weight:900;">0 / 0</span>
-        </div>
-      </div>
-      
-      <div style="display:flex;gap:10px;">
-        <div style="flex:1;background:rgba(50,215,75,0.12);border:1px solid rgba(50,215,75,0.3);border-radius:12px;padding:10px;text-align:center;">
-          <div style="font-size:10px;color:var(--success);font-weight:700;text-transform:uppercase;margin-bottom:4px;">ناجح</div>
-          <div id="migSuccess" style="font-size:20px;color:var(--success);font-weight:900;">0</div>
-        </div>
-        <div style="flex:1;background:rgba(255,69,58,0.12);border:1px solid rgba(255,69,58,0.3);border-radius:12px;padding:10px;text-align:center;">
-          <div style="font-size:10px;color:var(--danger);font-weight:700;text-transform:uppercase;margin-bottom:4px;">فاشل</div>
-          <div id="migFail" style="font-size:20px;color:var(--danger);font-weight:900;">0</div>
-        </div>
-      </div>
-      
-      <div id="migDoneBtn" style="display:none;margin-top:20px;">
-        <button onclick="closeMigrationOverlay()" style="width:100%;padding:15px;border-radius:14px;border:none;background:linear-gradient(135deg,#32d74b,#1a8f2e);color:#fff;font-weight:900;font-size:15px;cursor:pointer;font-family:inherit;box-shadow:0 8px 24px rgba(50,215,75,0.4);">
-          حسناً، إغلاق
-        </button>
-      </div>
-    </div>
-  `;
-  
-  document.body.appendChild(overlay);
-  
-  try {
-    // 1. جلب التطبيقات الموجودة في Supabase (لتجنب التكرار)
-    const { data: existingApps } = await supabase.from('apps').select('name, platform');
-    const existingSet = new Set();
-    (existingApps || []).forEach(a => {
-      existingSet.add((a.name || '').toLowerCase() + '|' + (a.platform || 'IPA'));
-    });
-    
-    // 2. جلب التطبيقات من Firebase
-const snapshot = await db.collection("apps")
-  .select('name', 'urlcategory', 'platform', 'size', 'info', 'desc', 'downloads', 'likedBy', 'downloadedBy', 'ratingSum', 'ratingCount', 'userRatings', 'commentsCount')
-  .get();
-    if(snapshot.empty){
-      document.getElementById('migTitle').innerText = 'لا توجد تطبيقات';
-      document.getElementById('migSubtitle').innerText = 'قاعدة Firebase فارغة';
-      document.getElementById('migDoneBtn').style.display = 'block';
-      document.getElementById('migIcon').style.animation = 'none';
-      return;
-    }
-    
-    const totalApps = snapshot.size;
-    let successCount = 0;
-    let failCount = 0;
-    let skipCount = 0;
-    let processedCount = 0;
-    let errorsList = [];
-    
-    // 3. المرور على كل تطبيق
-    for(const doc of snapshot.docs){
-      const data = doc.data();
-      processedCount++;
-      
-      // تحديث شريط التقدم
-      const percent = Math.round((processedCount / totalApps) * 100);
-      document.getElementById('migBar').style.width = percent + '%';
-      document.getElementById('migPercent').innerText = percent + '%';
-      document.getElementById('migCount').innerText = processedCount + ' / ' + totalApps;
-      document.getElementById('migCurrent').innerText = data.name || 'بدون اسم';
-      document.getElementById('migSuccess').innerText = successCount;
-      document.getElementById('migFail').innerText = failCount;
-      
-      try {
-        const key = (data.name || '').toLowerCase() + '|' + (data.platform || 'IPA');
-        if(existingSet.has(key)){
-          skipCount++;
-          continue;
-        }
-        
-        let createdAtISO = new Date().toISOString();
-        if(data.createdAt && data.createdAt.toDate){
-          createdAtISO = data.createdAt.toDate().toISOString();
-        }
-        
-        const newApp = {
-          name: data.name || 'Unknown',
-          icon: '',
-          banner: null,
-          publisher: data.publisher || '',
-          category: data.category || 'today',
-          platform: data.platform || 'IPA',
-          size: data.size || '',
-          info: (data.info || data.desc || '').substring(0, 3000),
-          url: data.url || '#',
-          screenshots: [],
-          extra_files: [],
-          downloads: data.downloads || 0,
-          liked_by: data.likedBy || [],
-          downloaded_by: data.downloadedBy || [],
-          rating_sum: data.ratingSum || 0,
-          rating_count: data.ratingCount || 0,
-          user_ratings: data.userRatings || {},
-          comments_count: data.commentsCount || 0,
-          created_at: createdAtISO
-        };
-        
-        const { error } = await supabase.from('apps').insert([newApp]);
-        if(error){
-          console.error('خطأ في', data.name, ':', error.message);
-          errorsList.push(data.name + ': ' + error.message);
-          failCount++;
-        } else {
-          successCount++;
-          existingSet.add(key);
-        }
-      } catch(err){
-        console.error('خطأ:', err);
-        failCount++;
-      }
-    }
-    
-    // 4. النتيجة النهائية
-    console.log('========== ملخص النقل ==========');
-    console.log('ناجح:', successCount);
-    console.log('فاشل:', failCount);
-    console.log('تم تخطيه (موجود مسبقاً):', skipCount);
-    console.log('الأخطاء:', errorsList);
-    
-    document.getElementById('migIcon').style.background = 'linear-gradient(135deg,#32d74b,#1a8f2e)';
-    document.getElementById('migIcon').style.animation = 'none';
-    document.getElementById('migTitle').innerText = 'انتهى النقل';
-    
-    let resultText = 'تم نقل ' + successCount + ' تطبيق بنجاح';
-    if(skipCount > 0) resultText += ' / تم تخطي ' + skipCount + ' موجود مسبقاً';
-    if(failCount > 0) resultText += ' / فشل ' + failCount;
-    document.getElementById('migSubtitle').innerText = resultText;
-    document.getElementById('migDoneBtn').style.display = 'block';
-    document.getElementById('migBar').style.width = '100%';
-    document.getElementById('migPercent').innerText = '100%';
-    
-    await fetchAppsFromSupabase();
-    
-  } catch(err){
-    console.error('Migration error:', err);
-    document.getElementById('migTitle').innerText = 'خطأ في النقل';
-    document.getElementById('migSubtitle').innerText = err.message;
-    document.getElementById('migDoneBtn').style.display = 'block';
-    document.getElementById('migIcon').style.background = 'linear-gradient(135deg,#ff453a,#d70015)';
-    document.getElementById('migIcon').style.animation = 'none';
-  }
-}
 
-function closeMigrationOverlay(){
-  const overlay = document.getElementById('migrationOverlay');
-  if(overlay) overlay.remove();
-}
 function handleFullLogin(user){
   document.getElementById('loginView').style.display = 'none';
   document.getElementById('registerView').style.display = 'none';
