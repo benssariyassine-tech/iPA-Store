@@ -1143,22 +1143,27 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   color: #fff;
   border: 1.5px solid #ff453a;
   padding: 0;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.5;
   white-space: normal;
-  width: 260px;
-  max-width: 85vw;
+  width: 210px;
+  max-width: 80vw;
   text-align: right;
   box-shadow: 0 12px 40px rgba(255, 69, 58, 0.5), 0 0 0 1px rgba(255,69,58,0.2);
   animation: bubblePulse 2.5s ease-in-out infinite;
   cursor: pointer;
   overflow: hidden;
   border-radius: 16px;
+  /* التعديل المهم: نقل الفقاعة لليمين باش ما تنزلش على المحتوى */
+  left: -10px;
+  transform: translateX(0);
 }
-.robot-bubble.news-mode::after {
+ .robot-bubble.news-mode::after {
   border-top-color: #ff453a;
   filter: none;
   bottom: -8px;
+  left: 20px;
+  transform: none;
 }
 .robot-bubble.news-mode .bubble-content {
   padding: 0;
