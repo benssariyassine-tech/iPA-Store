@@ -1136,40 +1136,78 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   fill: none;
   stroke-width: 2.5;
 }
- /* ===== News Bubble ===== */
+ /* ===== News Bubble (احترافي) ===== */
 .robot-bubble.news-mode {
-  background: linear-gradient(135deg, #ff453a, #d70015);
+  background: linear-gradient(160deg, #1c1c1e, #2c2c2e);
   color: #fff;
-  border-color: #d70015;
-  padding: 8px 30px 8px 12px;
-  font-size: 11px;
-  line-height: 1.4;
+  border: 1.5px solid #ff453a;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.5;
   white-space: normal;
-  max-width: 180px;
-  text-align: center;
-  box-shadow: 0 8px 24px rgba(255, 69, 58, 0.6);
-  animation: bubblePulse 2s ease-in-out infinite;
+  width: 260px;
+  max-width: 85vw;
+  text-align: right;
+  box-shadow: 0 12px 40px rgba(255, 69, 58, 0.5), 0 0 0 1px rgba(255,69,58,0.2);
+  animation: bubblePulse 2.5s ease-in-out infinite;
   cursor: pointer;
-}
-@keyframes bubblePulse {
-  0%, 100% { transform: translateX(-50%) translateY(0) scale(1); box-shadow: 0 8px 24px rgba(255,69,58,0.6); }
-  50% { transform: translateX(-50%) translateY(-5px) scale(1.05); box-shadow: 0 12px 32px rgba(255,69,58,0.9); }
+  overflow: hidden;
+  border-radius: 16px;
 }
 .robot-bubble.news-mode::after {
-  border-top-color: #d70015;
+  border-top-color: #ff453a;
   filter: none;
+  bottom: -8px;
+}
+.robot-bubble.news-mode .bubble-content {
+  padding: 0;
+}
+.robot-bubble.news-mode .bubble-header {
+  background: linear-gradient(135deg, #ff453a, #d70015);
+  padding: 10px 38px 10px 14px;
+  font-weight: 900;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+}
+.robot-bubble.news-mode .bubble-body {
+  padding: 12px 14px 14px 14px;
+  color: #e5e5ea;
+  font-size: 12px;
+  line-height: 1.7;
+  font-weight: 500;
+}
+.robot-bubble.news-mode .bubble-body strong {
+  color: #fff;
+  font-weight: 800;
+}
+.robot-bubble.news-mode .news-countdown-num {
+  background: #ff453a;
+  color: #fff;
+  padding: 2px 10px;
+  border-radius: 8px;
+  font-weight: 900;
+  display: inline-block;
+  margin: 0 3px;
+  font-size: 13px;
+}
+@keyframes bubblePulse {
+  0%, 100% { transform: translateX(-50%) translateY(0) scale(1); box-shadow: 0 12px 40px rgba(255,69,58,0.5); }
+  50% { transform: translateX(-50%) translateY(-5px) scale(1.02); box-shadow: 0 16px 50px rgba(255,69,58,0.8); }
 }
 .bubble-close-btn {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  width: 20px;
-  height: 20px;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: #000;
+  background: rgba(255,255,255,0.25);
   color: #fff;
-  border: 2px solid #fff;
-  font-size: 12px;
+  border: none;
+  font-size: 16px;
   font-weight: 900;
   line-height: 1;
   cursor: pointer;
@@ -1178,15 +1216,10 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   justify-content: center;
   padding: 0;
   z-index: 10;
+  transition: background 0.2s;
 }
-.news-countdown-num {
-  background: #fff;
-  color: #d70015;
-  padding: 1px 6px;
-  border-radius: 6px;
-  font-weight: 900;
-  display: inline-block;
-  margin: 0 2px;
+.bubble-close-btn:hover {
+  background: rgba(255,255,255,0.4);
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -3825,11 +3858,12 @@ async function sendAiMessage() {
 
 </script>
 <!-- AI Chatbot Robot -->
-<div id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
-  <div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
-    <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
-    <span id="bubbleContent">هل تحتاج مساعدة؟</span>
+<div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
+  <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
+  <div id="bubbleContent" class="bubble-content">
+    <div class="bubble-normal">هل تحتاج مساعدة؟</div>
   </div>
+</div>
   <div class="robot-antenna"></div>
   <div class="robot-head">
     <div class="robot-eye left">
