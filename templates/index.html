@@ -3753,81 +3753,30 @@ const NEWS_CONFIG = {
   stopDate: new Date('2026-10-18T00:00:00'),
   returnDate: new Date('2026-11-01T00:00:00')
 };
-
 function updateNewsBubble() {
-  const bubble = document.getElementById('robotBubble');
-  const content = document.getElementById('bubbleContent');
-  const closeBtn = document.getElementById('bubbleCloseBtn');
+    const banner = document.getElementById('maintenanceBanner');
+    const textEl = document.getElementById('maintenanceText');
+    
+    if (!banner || !textEl) return;
 
-  if (!bubble || !content || !closeBtn) return;
+    const isAr = (typeof currentLang !== 'undefined' && currentLang === 'ar');
+    
+    // النص حسب اللغة
+    const T = isAr ? {
+        msg: `⚠️ إعلان مهم: سيتم إيقاف الموقع مؤقتاً لأعمال الصيانة التقنية خلال ${Math.max(0, Math.ceil((NEWS_CONFIG.stopDate - new Date()) / (1000 * 60 * 60 * 24)))} يوماً. يرجى تحميل التطبيقات المطلوبة قبل 18 أكتوبر 2026. شكراً لصبركم.`
+    } : {
+        msg: `⚠️ Important Notice: The site will be temporarily paused for technical maintenance in ${Math.max(0, Math.ceil((NEWS_CONFIG.stopDate - new Date()) / (1000 * 60 * 60 * 24)))} days. Please download your required apps before Oct 18, 2026. Thank you for your patience.`
+    };
 
-  // ===== الترجمة حسب اللغة الحالية =====
-  const isAr = (typeof currentLang !== 'undefined' && currentLang === 'ar');
-  
-  const T = isAr ? {
-    normal: 'هل تحتاج مساعدة؟',
-    headerSoon: '⚠️ إعلان مهم',
-    headerStopped: '⚠️ الموقع متوقف مؤقتاً',
-    bodySoon: (days) => `سيتم إيقاف الموقع مؤقتاً لأعمال الصيانة التقنية خلال <span class="news-countdown-num">${days}</span> يوماً.<br><strong>يرجى تحميل التطبيقات المطلوبة قبل التاريخ المذكور.</strong>`,
-    bodyStopped: `سيعود الموقع <strong>قريباً جداً</strong>.<br>شكراً لصبركم. 🙏`
-  } : {
-    normal: 'Need help?',
-    headerSoon: '⚠️ Important Notice',
-    headerStopped: '⚠️ Site Temporarily Down',
-    bodySoon: (days) => `The site will be temporarily paused for technical maintenance in <span class="news-countdown-num">${days}</span> day(s).<br><strong>Please download your required apps before that date.</strong>`,
-    bodyStopped: `The site will be back <strong>very soon</strong>.<br>Thanks for your patience. 🙏`
-  };
+    // إذا الإعلان مقفل، نخفيوه
+    if (!NEWS_CONFIG.enabled || NEWS_CONFIG.dismissed) {
+        banner.classList.remove('active');
+        return;
+    }
 
-  if (!NEWS_CONFIG.enabled || NEWS_CONFIG.dismissed) {
-    bubble.classList.remove('news-mode');
-    content.innerHTML = `<div class="bubble-normal">${T.normal}</div>`;
-    closeBtn.style.display = 'none';
-    return;
-  }
-
-  const now = new Date();
-  const diff = NEWS_CONFIG.stopDate - now;
-  const days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
-
-  bubble.classList.add('news-mode');
-  closeBtn.style.display = 'flex';
-
-  if (days > 0) {
-    content.innerHTML = `
-      <div class="bubble-header">${T.headerSoon}</div>
-      <div class="bubble-body">${T.bodySoon(days)}</div>
-    `;
-  } else {
-    content.innerHTML = `
-      <div class="bubble-header">${T.headerStopped}</div>
-      <div class="bubble-body">${T.bodyStopped}</div>
-    `;
-  }
-}
-
-setInterval(updateNewsBubble, 60 * 60 * 1000);
-setTimeout(updateNewsBubble, 500);
-
-function handleBubbleClick(event) {
-  event.stopPropagation();
-  if (NEWS_CONFIG.enabled && !NEWS_CONFIG.dismissed) {
-    openAiChat();
-    setTimeout(() => {
-      const input = document.getElementById('aiChatInput');
-      if (input) {
-        input.value = 'واش كاين على توقف الموقع؟';
-        sendAiMessage();
-      }
-    }, 700);
-  } else {
-    openAiChat();
-  }
-}
-
-function dismissNews(event) {
-  event.stopPropagation();
-  NEWS_CONFIG.dismissed = true;
-  updateNewsBubble();
+    // إظهار الشريط وتعيين النص
+    banner.classList.add('active');
+    textEl.innerText = T.msg;
 }
 function openAiChat() {
   document.getElementById('aiChatDrawer').classList.add('open');
