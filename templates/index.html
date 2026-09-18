@@ -3541,13 +3541,13 @@ function getAppsContext() {
   ctx += '\n🎯 استعمل فقط المعلومات أعلاه. لا تخترع أي تطبيق أو رقم.';
   return ctx;
 }
-// ⚠️ هنا حط رابط Render تاعك (بدل الرابط اللي تحت برابطك الحقيقي)
-  const RENDER_API_URL = 'https://istore-ai-proxy.onrender.com/api/ai'; 
+// ⚠️ الرابط الجديد تاع Render
+  const RENDER_API_URL = 'https://ipa-store-api.onrender.com/api/ai'; 
 
   const response = await fetch(RENDER_API_URL, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json' // ماكانش Authorization هنا، راه مخبي في Render
+      'Content-Type': 'application/json' 
     },
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
