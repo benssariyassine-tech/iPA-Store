@@ -1593,6 +1593,11 @@ User
 <div class="setting-label" style="margin-bottom:6px;" data-i18n="platform">Platform</div>
 <select id="appPlatform" class="input-field"><option value="IPA">iOS (IPA)</option><option value="APK">Android (APK)</option></select>
 <div class="setting-label" style="margin-bottom:6px;" data-i18n="appIcon">App Icon</div>
+ <div class="setting-label" style="margin-bottom:6px;">نوع التطبيق (App Type)</div>
+<select id="appType" class="input-field" onchange="handleAppTypeChange()">
+    <option value="mod">MOD (معدل - تحميل مباشر)</option>
+    <option value="official">Official (رسمي - من المتجر الرسمي)</option>
+</select>
 <input type="file" id="appImgFile" class="input-field" accept="image/*">
   <div class="setting-label" style="margin-bottom:6px;">Banner Image (Hero)</div>
 <input type="file" id="appBannerFile" class="input-field" accept="image/*">
