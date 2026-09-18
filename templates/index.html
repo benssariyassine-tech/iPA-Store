@@ -3538,6 +3538,9 @@ function renderUI(){
   const fc = document.getElementById('filteredContainer');
   if(list.length===0) fc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">'+(currentLang==='ar'?'لا توجد تطبيقات في هذه الفئة':'No apps in this category yet.')+'</p>';
 else list.forEach((app) => { fc.innerHTML += createAppCardHTML(app); });
+
+}
+ 
 // ====== PUBLISHER LINK (Instagram) ======
 function getPublisherHTML(publisher, options){
   if(!publisher) return '';
@@ -3545,7 +3548,7 @@ function getPublisherHTML(publisher, options){
   const fontSize = opts.fontSize || '11px';
   const marginTop = opts.marginTop || '2px';
   const iconSize = opts.iconSize || 11;
-  
+
   // نحاول نستخرج اسم المستخدم من الانستغرام
   let username = '';
   const instaMatch = publisher.match(/^Instagram\s*:?\s*(.+)$/i);
