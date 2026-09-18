@@ -4036,6 +4036,10 @@ async function sendAiMessage() {
     input.focus();
   }
 }
+  function handleBubbleClick(event) {
+  if(event) event.stopPropagation();
+  openAiChat();
+}
 // ✅ استدعاء الشريط كي تفتح الصفحة
 setTimeout(updateNewsBubble, 500);
 </script>
