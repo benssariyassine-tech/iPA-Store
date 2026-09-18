@@ -3548,7 +3548,7 @@ async function sendAiMessage() {
   const text = input.value.trim();
   if (!text) return;
 
-  const GROQ_API_KEY = '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';
+  const GROQ_API_KEY = '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';
 
   // رسالة المستخدم
   const userMsg = document.createElement('div');
@@ -3637,7 +3637,7 @@ async function sendAiMessage() {
     messages.appendChild(botMsg);
     messages.scrollTop = messages.scrollHeight;
 
-  } catch (err) {
+ } catch (err) {
     console.error('AI error:', err);
     const elapsed = Date.now() - startTime;
     if (elapsed < MIN_DELAY) {
@@ -3647,11 +3647,27 @@ async function sendAiMessage() {
     const typingEl = document.getElementById('aiTypingIndicator');
     if (typingEl) typingEl.remove();
 
+    // 🎯 تشخيص مفصل للخطأ
+    let errText = '⚠️ حدث خطأ. حاول مرة أخرى.';
+    const errStr = (err.message || String(err)).toLowerCase();
+
+    if (errStr.includes('401') || errStr.includes('unauthorized') || errStr.includes('invalid api key')) {
+      errText = '🔑 المفتاح غير صحيح أو محظور. يرجى التواصل مع الدعم.';
+    } else if (errStr.includes('429') || errStr.includes('rate limit') || errStr.includes('quota')) {
+      errText = '⏱️ تم تجاوز الحد المسموح. حاول بعد قليل.';
+    } else if (errStr.includes('failed to fetch') || errStr.includes('networkerror')) {
+      errText = '🌐 مشكلة في الاتصال بالخادم. تحقق من الإنترنت.';
+    } else if (errStr.includes('cors')) {
+      errText = '🚫 مشكلة CORS. جاري الحل.';
+    } else if (errStr.includes('model') || errStr.includes('decommissioned') || errStr.includes('not found')) {
+      errText = '⚠️ الموديل غير متاح.';
+    } else {
+      // نعرض الخطأ الحقيقي باش نعرفو السبب
+      errText = '⚠️ خطأ تقني: ' + (err.message || 'unknown').substring(0, 150);
+    }
+
     const errMsg = document.createElement('div');
     errMsg.className = 'aiMsg bot';
-    let errText = '⚠️ حدث خطأ. حاول مرة أخرى.';
-    if (err.message && err.message.toLowerCase().includes('rate')) errText = '⚠️ تم تجاوز الحد. انتظر لحظة.';
-    else if (err.message && err.message.includes('401')) errText = '⚠️ المفتاح غير صحيح.';
     errMsg.textContent = errText;
     messages.appendChild(errMsg);
     messages.scrollTop = messages.scrollHeight;
