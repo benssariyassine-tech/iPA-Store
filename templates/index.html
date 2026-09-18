@@ -1848,8 +1848,8 @@ function changeLanguage(lang){
   localStorage.setItem('istore_lang', lang);
   applyTranslations();
   renderUI();
+  if (typeof updateNewsBubble === 'function') updateNewsBubble();
   showToast(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language changed to English', 'success', 1500);
- 
 }
 
 // ====== ICONS ======
