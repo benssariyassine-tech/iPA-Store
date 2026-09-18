@@ -2382,6 +2382,20 @@ if(badgeEl){
   }
 }
   function startRealDownload(appId, fileUrl, appName) {
+   // ✅ 1. التحقق من نوع التطبيق (Official)
+  const app = allAppsCache.find(a => a.id === appId);
+  
+  if (app && app.appType === 'official') {
+      if (fileUrl && fileUrl !== '#' && fileUrl.trim() !== '') {
+          window.open(fileUrl, '_blank'); // يفتح App Store / Google Play
+          showToast(currentLang === 'ar' ? 'جاري توجيهك للمتجر الرسمي...' : 'Redirecting to official store...', 'info', 3000);
+      } else {
+          showToast(currentLang === 'ar' ? 'رابط المتجر الرسمي غير متوفر' : 'Official store link not available', 'warning');
+      }
+      return; // نوقف الدالة هنا، ما نكملوش لكود الإعلانات
+  }
+
+  // ✅ 2. إذا كان MOD، نكملو الكود القديم تاعك عادي
   // ✅ نتأكد من الرابط فقط
   if (!fileUrl || fileUrl === '#' || fileUrl.trim() === '') {
     showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
@@ -3271,10 +3285,13 @@ function createAppCardHTML(app, rankBadge){
   
   return '<div class="app-card-pro">'+
     '<div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1;">'+
-      '<div style="position:relative;width:62px;height:62px;flex-shrink:0;cursor:pointer;" onclick="openAppDetails(\''+app.id+'\')">'+
-         '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
+   '<div class="app-icon-wrapper" onclick="openAppDetails(\''+app.id+'\')" style="cursor:pointer;">'+
+    '<div style="position:relative;width:62px;height:62px;">'+
+        '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" style="width:100%;height:100%;" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
         '<div style="position:absolute;top:-4px;right:-4px;width:22px;height:22px;border-radius:8px;background:var(--card-bg);border:1px solid var(--border-color);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.2);">'+platformIcon+'</div>'+
-      '</div>'+
+    '</div>'+
+    ((app.appType === 'official') ? '<span class="app-badge badge-official">Official</span>' : '<span class="app-badge badge-mod">MOD</span>')+
+'</div>'+
       '<div style="flex:1;min-width:0;">'+
         '<div style="display:flex;align-items:center;gap:5px;margin-bottom:4px;">'+
           (rankBadge ? rankBadge : '')+
@@ -3316,6 +3333,7 @@ function openAddAppModal(){
   document.getElementById('appExtraFiles').value = "";
   document.getElementById('itunesUrlInput').value = "";
   document.getElementById('fetchStatus').style.display = 'none';
+ document.getElementById('appType').value = 'mod';
   window.__itunesBanner = null;
   window.__itunesIcon = null;
   window.__itunesScreenshots = null;
@@ -3364,6 +3382,7 @@ async function saveNewApp(){
   const publisher = document.getElementById('appPublisher').value.trim();
   const category = document.getElementById('appCategory').value;
   const platform = document.getElementById('appPlatform').value;
+ const appType = document.getElementById('appType').value || 'mod';
   const name = document.getElementById('appName').value;
   const size = document.getElementById('appSize').value;
   const info = document.getElementById('appInfo').value;
@@ -3402,15 +3421,16 @@ else if(window.__itunesBanner) bannerResult = window.__itunesBanner;
       for(const file of Array.from(extraFilesInput.files)) extraFilesList.push({name: file.name, url: url});
     }
     if(editingId){
-     await db.collection("apps").doc(editingId).update({publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList});
-      showToast('App updated', 'success');
+     await db.collection("apps").doc(editingId).update({publisher, category, platform, appType, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList});
     } else {
-      await db.collection("apps").add({
-        publisherEmail: (currentUser ? currentUser.email.toLowerCase() : ''),
-        publisher, category, platform, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList,
-        likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {},
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+ await db.collection("apps").add({
+    publisherEmail: (currentUser ? currentUser.email.toLowerCase() : ''),
+    publisher, category, platform, appType, name, size, info, url, icon: iconResult, banner: bannerResult, screenshots: screenshotsList, extraFiles: extraFilesList,
+    likedBy: [], downloadedBy: [], downloads: 0, commentsCount: 0, ratingSum: 0, ratingCount: 0, ratingAvg: 0, userRatings: {},
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+
+  
+});
       showToast('App published', 'success');
     }
     closeModal('addAppModal');
