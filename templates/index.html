@@ -3537,8 +3537,7 @@ function renderUI(){
   container.innerHTML = '<div class="today-header"><div class="today-title">'+(titles[currentTab]||(currentLang==='ar'?'التطبيقات':'Applications'))+'</div><div class="today-subtitle">'+(currentLang==='ar'?'مكتبة محدثة باستمرار':'Continuously updated')+'</div></div><div class="filter-chips"><button class="chip '+(currentFilter==='all'?'active':'')+'" onclick="setFilter(\'all\')">'+(currentLang==='ar'?'الكل':'All')+'</button><button class="chip '+(currentFilter==='IPA'?'active':'')+'" onclick="setFilter(\'IPA\')">iOS</button><button class="chip '+(currentFilter==='APK'?'active':'')+'" onclick="setFilter(\'APK\')">Android</button></div><div id="filteredContainer" style="margin-top:10px;"></div>';
   const fc = document.getElementById('filteredContainer');
   if(list.length===0) fc.innerHTML = '<p style="color:var(--subtext-color);font-size:13px;text-align:center;margin-top:40px;">'+(currentLang==='ar'?'لا توجد تطبيقات في هذه الفئة':'No apps in this category yet.')+'</p>';
-  else list.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; fc.innerHTML += createAppCardHTML(app,badge); });
-}
+else list.forEach((app) => { fc.innerHTML += createAppCardHTML(app); });
 // ====== PUBLISHER LINK (Instagram) ======
 function getPublisherHTML(publisher, options){
   if(!publisher) return '';
