@@ -3571,7 +3571,7 @@ function getPublisherHTML(publisher, options){
 }
 // ====== FEATURED CARD ======
 function createFeaturedCardHTML(app, index){
-  let isTopOne = index===0 ? '<span style="background:var(--danger);color:#fff;font-size:9px;font-weight:900;padding:3px 8px;border-radius:6px;">#1 Trending</span>' : '';
+let isTopOne = '';
   let platformType = app.platform || 'IPA';
   let pubText = getPublisherHTML(app.publisher, {fontSize:'11px', marginTop:'2px'});
   let likesCount = (app.likedBy && Array.isArray(app.likedBy)) ? app.likedBy.length : 0;
