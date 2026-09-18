@@ -3532,7 +3532,67 @@ const AI_SYSTEM_PROMPT = `أنت "مساعد iStore"، المساعد الذكي
 - المنصات: iOS (IPA) + Android (APK)
 - التحميل مباشر بدون جيلبريك`;
 let aiChatHistory = [];
+// ====== NEWS / ANNOUNCEMENT SYSTEM ======
+const NEWS_CONFIG = {
+  enabled: true,
+  dismissed: false,
+  // ⚠️ بدل هذي التواريخ حسب رغبتك
+  stopDate: new Date('2026-10-18T00:00:00'),
+  returnDate: new Date('2026-11-01T00:00:00')
+};
 
+function updateNewsBubble() {
+  const bubble = document.getElementById('robotBubble');
+  const content = document.getElementById('bubbleContent');
+  const closeBtn = document.getElementById('bubbleCloseBtn');
+
+  if (!bubble || !content || !closeBtn) return;
+
+  if (!NEWS_CONFIG.enabled || NEWS_CONFIG.dismissed) {
+    bubble.classList.remove('news-mode');
+    content.innerHTML = 'Support · مساعدة';
+    closeBtn.style.display = 'none';
+    return;
+  }
+
+  const now = new Date();
+  const diff = NEWS_CONFIG.stopDate - now;
+  const days = Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
+
+  bubble.classList.add('news-mode');
+  closeBtn.style.display = 'flex';
+
+  if (days > 0) {
+    content.innerHTML = '⚠️ إعلان مهم<br>توقف مؤقت خلال <span class="news-countdown-num">' + days + '</span> يوم';
+  } else {
+    content.innerHTML = '⚠️ الموقع متوقف مؤقتاً<br>سيعود قريباً';
+  }
+}
+
+setInterval(updateNewsBubble, 60 * 60 * 1000);
+setTimeout(updateNewsBubble, 500);
+
+function handleBubbleClick(event) {
+  event.stopPropagation();
+  if (NEWS_CONFIG.enabled && !NEWS_CONFIG.dismissed) {
+    openAiChat();
+    setTimeout(() => {
+      const input = document.getElementById('aiChatInput');
+      if (input) {
+        input.value = 'واش كاين على توقف الموقع؟';
+        sendAiMessage();
+      }
+    }, 700);
+  } else {
+    openAiChat();
+  }
+}
+
+function dismissNews(event) {
+  event.stopPropagation();
+  NEWS_CONFIG.dismissed = true;
+  updateNewsBubble();
+}
 function openAiChat() {
   document.getElementById('aiChatDrawer').classList.add('open');
   setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
@@ -3758,7 +3818,10 @@ async function sendAiMessage() {
 </script>
 <!-- AI Chatbot Robot -->
 <button id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
-  <div class="robot-bubble">هل تحتاج مساعدة؟</div>
+<div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
+  <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
+  <span id="bubbleContent">هل تحتاج مساعدة؟</span>
+</div>
   <div class="robot-antenna"></div>
   <div class="robot-head">
     <div class="robot-eye left">
