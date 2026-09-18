@@ -1297,6 +1297,63 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     background: linear-gradient(135deg, #00d2ff, #0055ff, #00d2ff);
     --glow-color: rgba(0, 85, 255, 0.8);
 }
+ /* ====== MAINTENANCE BANNER ====== */
+.maintenance-banner {
+    display: none; /* مخفي افتراضياً */
+    width: 100%;
+    background: linear-gradient(90deg, rgba(139, 0, 0, 0.4), rgba(26, 0, 0, 0.6), rgba(139, 0, 0, 0.4));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 69, 58, 0.5);
+    position: relative;
+    z-index: 99;
+    padding: 8px 0;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(255, 69, 58, 0.2);
+}
+
+.maintenance-banner.active {
+    display: block;
+}
+
+.marquee-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.marquee-text {
+    display: inline-block;
+    padding-left: 100%; /* يبدأ من برا الشاشة */
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 0 12px rgba(255, 69, 58, 0.9), 0 2px 4px rgba(0,0,0,0.5);
+    animation: marqueeLeftToRight 18s linear infinite;
+    letter-spacing: 0.5px;
+}
+
+/* للغة العربية (RTL): نخليوها تجري من اليمين لليسار */
+body[dir="rtl"] .marquee-text {
+    padding-left: 0;
+    padding-right: 100%;
+    animation: marqueeRightToLeft 18s linear infinite;
+}
+
+@keyframes marqueeLeftToRight {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
+@keyframes marqueeRightToLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(100%); }
+}
+
+/* نخفي فقاعة الروبوت القديمة باش ما تتعارضش */
+.robot-bubble.news-mode {
+    display: none !important;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
