@@ -3590,9 +3590,26 @@ function updateNewsBubble() {
 
   if (!bubble || !content || !closeBtn) return;
 
+  // ===== الترجمة حسب اللغة الحالية =====
+  const isAr = (typeof currentLang !== 'undefined' && currentLang === 'ar');
+  
+  const T = isAr ? {
+    normal: 'هل تحتاج مساعدة؟',
+    headerSoon: '⚠️ إعلان مهم',
+    headerStopped: '⚠️ الموقع متوقف مؤقتاً',
+    bodySoon: (days) => `سيتم إيقاف الموقع مؤقتاً لأعمال الصيانة التقنية خلال <span class="news-countdown-num">${days}</span> يوماً.<br><strong>يرجى تحميل التطبيقات المطلوبة قبل التاريخ المذكور.</strong>`,
+    bodyStopped: `سيعود الموقع <strong>قريباً جداً</strong>.<br>شكراً لصبركم. 🙏`
+  } : {
+    normal: 'Need help?',
+    headerSoon: '⚠️ Important Notice',
+    headerStopped: '⚠️ Site Temporarily Down',
+    bodySoon: (days) => `The site will be temporarily paused for technical maintenance in <span class="news-countdown-num">${days}</span> day(s).<br><strong>Please download your required apps before that date.</strong>`,
+    bodyStopped: `The site will be back <strong>very soon</strong>.<br>Thanks for your patience. 🙏`
+  };
+
   if (!NEWS_CONFIG.enabled || NEWS_CONFIG.dismissed) {
     bubble.classList.remove('news-mode');
-    content.innerHTML = 'Support · مساعدة';
+    content.innerHTML = `<div class="bubble-normal">${T.normal}</div>`;
     closeBtn.style.display = 'none';
     return;
   }
@@ -3605,9 +3622,15 @@ function updateNewsBubble() {
   closeBtn.style.display = 'flex';
 
   if (days > 0) {
-    content.innerHTML = '⚠️ إعلان مهم<br>توقف مؤقت خلال <span class="news-countdown-num">' + days + '</span> يوم';
+    content.innerHTML = `
+      <div class="bubble-header">${T.headerSoon}</div>
+      <div class="bubble-body">${T.bodySoon(days)}</div>
+    `;
   } else {
-    content.innerHTML = '⚠️ الموقع متوقف مؤقتاً<br>سيعود قريباً';
+    content.innerHTML = `
+      <div class="bubble-header">${T.headerStopped}</div>
+      <div class="bubble-body">${T.bodyStopped}</div>
+    `;
   }
 }
 
@@ -3859,12 +3882,13 @@ async function sendAiMessage() {
 
 </script>
 <!-- AI Chatbot Robot -->
-<div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
-  <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
-  <div id="bubbleContent" class="bubble-content">
-    <div class="bubble-normal">هل تحتاج مساعدة؟</div>
+<div id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
+  <div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
+    <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
+    <div id="bubbleContent" class="bubble-content">
+      <div class="bubble-normal">هل تحتاج مساعدة؟</div>
+    </div>
   </div>
-</div>
   <div class="robot-antenna"></div>
   <div class="robot-head">
     <div class="robot-eye left">
