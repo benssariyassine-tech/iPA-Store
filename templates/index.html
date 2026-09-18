@@ -3602,6 +3602,9 @@ function createFeaturedCardHTML(app, index){
 }
 
 // ====== APP CARD (محسّن) ======
+// ⚠️ تاريخ بداية ميزة NEW/UPDATED (غدوة)
+const NEW_FEATURE_START_DATE = new Date('2026-09-19T00:00:00').getTime() / 1000;
+
 function createAppCardHTML(app, rankBadge){
   rankBadge = rankBadge || '';
   let platformIcon = (app.platform==='APK') ? ICONS.android : ICONS.apple;
@@ -3616,48 +3619,48 @@ function createAppCardHTML(app, rankBadge){
   let ratingAvg = getAverageRating(app);
   let ratingInline = ratingAvg>0 ? '<span class="rating-inline">'+ICONS.starFill+' '+ratingAvg.toFixed(1)+'</span>' : '';
 
-  // UPDATED / NEW badge
-  let updatedBadge = '';
-  let newBadge = '';
-  if(app.createdAt && app.createdAt.seconds){
+  // NEW/UPDATED badge (للمستقبل فقط)
+  let slantBadge = '';
+  if(app.createdAt && app.createdAt.seconds && app.createdAt.seconds > NEW_FEATURE_START_DATE){
     let now = Date.now()/1000;
     let age = now - app.createdAt.seconds;
     let sevenDays = 7 * 24 * 60 * 60;
     let fourteenDays = 14 * 24 * 60 * 60;
     if(age < sevenDays){
-      newBadge = '<span class="new-badge">'+(currentLang==='ar'?'جديد':'NEW')+'</span>';
+      slantBadge = '<span class="slant-badge slant-new">'+(currentLang==='ar'?'جديد':'NEW')+'</span>';
     } else if(age < fourteenDays){
-      updatedBadge = '<span class="updated-badge">'+(currentLang==='ar'?'محدّث':'UPDATED')+'</span>';
+      slantBadge = '<span class="slant-badge slant-updated">'+(currentLang==='ar'?'محدّث':'UPDATED')+'</span>';
     }
   }
 
-  // Feature line
+  // Feature line (كلمات مفتاحية فقط)
   let featureText = '';
   if(app.info){
-    let shortInfo = app.info.substring(0, 50);
-    if(app.info.length > 50) shortInfo += '...';
-    featureText = '<div class="card-feature-line">'+ICONS.bolt+' '+shortInfo+'</div>';
+    let shortInfo = app.info.substring(0, 42);
+    featureText = '<div class="card-feature-line">'+ICONS.bolt+' '+shortInfo+'..<span class="card-feature-more" onclick="openAppDetails(\''+app.id+'\')">'+(currentLang==='ar'?'تفاصيل':'more')+'</span></div>';
   }
 
   const thumbUp = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
   const thumbUpFill = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+  const warnIcon = '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
 
   return '<div class="app-card-pro">'+
     '<div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1;">'+
       '<div class="app-icon-wrapper" onclick="openAppDetails(\''+app.id+'\')">'+
         '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
-        '<div style="position:absolute;top:-6px;right:-6px;width:28px;height:28px;border-radius:9px;background:#0b0b0f;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.5);z-index:2;">'+platformIcon+'</div>'+
         ((app.appType === 'official') ? '<span class="app-badge badge-official">ORIG</span>' : '<span class="app-badge badge-mod">MOD</span>')+
+        slantBadge+
       '</div>'+
       '<div style="flex:1;min-width:0;">'+
         '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;">'+
+          (rankBadge ? '<span style="margin-right:4px;">'+rankBadge+'</span>' : '')+
           '<h4 class="card-app-name" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
-          updatedBadge + newBadge +
         '</div>'+
         '<div class="card-meta-line">'+
           '<span>'+getCategoryNameEn(app.category)+'</span>'+
           '<span>·</span>'+
           '<span>'+(app.size||'N/A')+'</span>'+
+          '<span style="display:inline-flex;align-items:center;">'+platformIcon+'</span>'+
         '</div>'+
         featureText+
       '</div>'+
@@ -3669,7 +3672,7 @@ function createAppCardHTML(app, rankBadge){
         ratingInline+
       '</div>'+
       '<div style="display:flex;gap:6px;align-items:center;">'+
-        '<button class="btn-card-details" onclick="openAppDetails(\''+app.id+'\')">'+(currentLang==='ar'?'التفاصيل':'Details')+'</button>'+
+        '<button class="btn-report-icon" onclick="openReportModal(\''+app.id+'\')">'+warnIcon+' '+(currentLang==='ar'?'إبلاغ':'Report')+'</button>'+
         (isAdmin?'<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal(\''+app.id+'\')">'+(currentLang==='ar'?'تعديل':'Edit')+'</button><button class="btn-del" onclick="deleteApp(\''+app.id+'\')">'+(currentLang==='ar'?'حذف':'Del')+'</button></div>':'')+
       '</div>'+
     '</div>'+
