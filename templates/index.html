@@ -1250,15 +1250,16 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     height: 62px;
     flex-shrink: 0;
     cursor: pointer;
-    overflow: visible !important;
+    overflow: hidden;
+    border-radius: 17px;
 }
 
-.app-badge {
+ .app-badge {
     position: absolute;
-    top: 7px;
-    left: -20px;
-    width: 70px;
-    height: 15px;
+    top: -8px;
+    left: -8px;
+    width: 80px;
+    height: 16px;
     transform: rotate(-45deg);
     transform-origin: center;
     display: flex;
@@ -1271,7 +1272,8 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     color: #ffffff;
     z-index: 15;
     pointer-events: none;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    border-radius: 4px;
 
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
@@ -1280,26 +1282,16 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     animation: gradientMove 3s ease infinite;
 }
 
-.badge-mod {
-    background: linear-gradient(135deg, rgba(255, 42, 0, 0.75), rgba(139, 0, 0, 0.75), rgba(255, 42, 0, 0.75));
-    box-shadow: 0 0 10px rgba(255, 42, 0, 0.5);
-}
-
-.badge-official {
-    background: linear-gradient(135deg, rgba(0, 210, 255, 0.75), rgba(0, 85, 255, 0.75), rgba(0, 210, 255, 0.75));
-    box-shadow: 0 0 10px rgba(0, 85, 255, 0.5);
-}
-
 /* 🔴 MOD (أحمر شفاف) */
 .badge-mod {
-    background: linear-gradient(135deg, rgba(255, 42, 0, 0.7), rgba(139, 0, 0, 0.7), rgba(255, 42, 0, 0.7));
-    box-shadow: 0 0 15px rgba(255, 42, 0, 0.5);
+    background: linear-gradient(135deg, rgba(255, 60, 0, 0.85), rgba(139, 0, 0, 0.85), rgba(255, 60, 0, 0.85));
+    box-shadow: 0 0 10px rgba(255, 42, 0, 0.4);
 }
 
 /* 🔵 ORIG (أزرق شفاف) */
 .badge-official {
-    background: linear-gradient(135deg, rgba(0, 210, 255, 0.7), rgba(0, 85, 255, 0.7), rgba(0, 210, 255, 0.7));
-    box-shadow: 0 0 15px rgba(0, 85, 255, 0.5);
+    background: linear-gradient(135deg, rgba(0, 210, 255, 0.85), rgba(0, 85, 255, 0.85), rgba(0, 210, 255, 0.85));
+    box-shadow: 0 0 10px rgba(0, 85, 255, 0.4);
 }
 
  /* ====== MAINTENANCE BANNER ====== */
