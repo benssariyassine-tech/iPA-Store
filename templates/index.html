@@ -3517,8 +3517,8 @@ function renderUI(){
     if(displayList.length===0) tc.innerHTML = `<p style="color:var(--subtext-color);font-size:13px;text-align:center;">${currentLang==='ar'?'لا توجد تطبيقات مميزة':'No featured apps yet.'}</p>`;
     else displayList.forEach((app,index)=>tc.innerHTML += createFeaturedCardHTML(app,index));
     const gc = document.getElementById('generalAppsContainer');
-    if(generalList.length===0) gc.innerHTML = `<p style="color:var(--subtext-color);font-size:13px;text-align:center;">${currentLang==='ar'?'لا توجد تطبيقات بعد':'No apps yet.'}</p>`;
-    else generalList.forEach((app,idx)=>{ let badge = idx===0 ? '<span style="color:var(--danger);font-weight:900;margin-right:4px;">#1</span>' : ''; gc.innerHTML += createAppCardHTML(app,badge); });
+    if(generalList.length===0) gc.innerHTML = `<p style="color:var(--subtext-color);font-size:13px;text-align:center;">${currentLang==='ar'?'لا توجد تطبيقات بعد':'No apps yet.'}</p>`; 
+     else generalList.forEach((app) => { gc.innerHTML += createAppCardHTML(app); });
     return;
   }
 
