@@ -3825,11 +3825,11 @@ async function sendAiMessage() {
 
 </script>
 <!-- AI Chatbot Robot -->
-<button id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
-<div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
-  <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
-  <span id="bubbleContent">هل تحتاج مساعدة؟</span>
-</div>
+<div id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
+  <div class="robot-bubble" id="robotBubble" onclick="handleBubbleClick(event)">
+    <button class="bubble-close-btn" id="bubbleCloseBtn" onclick="dismissNews(event)" style="display:none;">×</button>
+    <span id="bubbleContent">هل تحتاج مساعدة؟</span>
+  </div>
   <div class="robot-antenna"></div>
   <div class="robot-head">
     <div class="robot-eye left">
@@ -3844,7 +3844,7 @@ async function sendAiMessage() {
     </div>
     <div class="robot-mouth"></div>
   </div>
-</button>
+</div>
 
 <div id="aiChatDrawer">
   <div class="aiChatPanel" onclick="event.stopPropagation()">
