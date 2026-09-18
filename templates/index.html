@@ -1361,6 +1361,20 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     z-index: 1;
 }
 
+.btn-card-details {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 7px 14px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+.btn-card-details:active { transform: scale(0.95); }
+
 .rating-inline {
     font-size: 11px;
     font-weight: 800;
@@ -1505,6 +1519,58 @@ body[dir="rtl"] .marquee-text {
     padding: 5px 10px;
     border-radius: 8px;
     border: 1px solid rgba(255, 159, 10, 0.2);
+}
+ /* NEW badge */
+.new-badge {
+    background: linear-gradient(135deg, #32d74b, #1a9c33);
+    color: #fff;
+    font-size: 8px;
+    font-weight: 900;
+    padding: 4px 9px;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(50, 215, 75, 0.5);
+    animation: pulseNew 2s ease-in-out infinite;
+}
+
+@keyframes pulseNew {
+    0%, 100% { box-shadow: 0 2px 8px rgba(50, 215, 75, 0.5); }
+    50% { box-shadow: 0 2px 14px rgba(50, 215, 75, 0.9); }
+}
+
+/* ✨ Card Glow Animation */
+.app-card-pro {
+    animation: cardGlow 4s ease-in-out infinite;
+}
+
+@keyframes cardGlow {
+    0%, 100% { 
+        border-color: var(--border-color);
+        box-shadow: 0 0 0 rgba(255, 69, 58, 0);
+    }
+    50% { 
+        border-color: rgba(255, 69, 58, 0.3);
+        box-shadow: 0 0 20px rgba(255, 69, 58, 0.1);
+    }
+}
+
+/* ✨ Different glow for official apps */
+.app-card-pro:has(.badge-official) {
+    animation: cardGlowBlue 4s ease-in-out infinite;
+}
+
+@keyframes cardGlowBlue {
+    0%, 100% { 
+        border-color: var(--border-color);
+        box-shadow: 0 0 0 rgba(10, 132, 255, 0);
+    }
+    50% { 
+        border-color: rgba(10, 132, 255, 0.3);
+        box-shadow: 0 0 20px rgba(10, 132, 255, 0.1);
+    }
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -3520,20 +3586,26 @@ function createAppCardHTML(app, rankBadge){
   let ratingAvg = getAverageRating(app);
   let ratingInline = ratingAvg>0 ? '<span class="rating-inline">'+ICONS.starFill+' '+ratingAvg.toFixed(1)+'</span>' : '';
 
-  // UPDATED badge: التطبيقات الجدد (أقل من 14 يوم)
+  // UPDATED / NEW badge
   let updatedBadge = '';
+  let newBadge = '';
   if(app.createdAt && app.createdAt.seconds){
     let now = Date.now()/1000;
-    if((now - app.createdAt.seconds) < (14 * 24 * 60 * 60)){
+    let age = now - app.createdAt.seconds;
+    let sevenDays = 7 * 24 * 60 * 60;
+    let fourteenDays = 14 * 24 * 60 * 60;
+    if(age < sevenDays){
+      newBadge = '<span class="new-badge">'+(currentLang==='ar'?'جديد':'NEW')+'</span>';
+    } else if(age < fourteenDays){
       updatedBadge = '<span class="updated-badge">'+(currentLang==='ar'?'محدّث':'UPDATED')+'</span>';
     }
   }
 
-  // Feature line (الميزة)
+  // Feature line
   let featureText = '';
   if(app.info){
-    let shortInfo = app.info.substring(0, 55);
-    if(app.info.length > 55) shortInfo += '...';
+    let shortInfo = app.info.substring(0, 50);
+    if(app.info.length > 50) shortInfo += '...';
     featureText = '<div class="card-feature-line">'+ICONS.bolt+' '+shortInfo+'</div>';
   }
 
@@ -3544,14 +3616,13 @@ function createAppCardHTML(app, rankBadge){
     '<div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1;">'+
       '<div class="app-icon-wrapper" onclick="openAppDetails(\''+app.id+'\')">'+
         '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
-        '<div style="position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:9px;background:#0b0b0f;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.5);z-index:2;">'+platformIcon+'</div>'+
+        '<div style="position:absolute;top:-6px;right:-6px;width:28px;height:28px;border-radius:9px;background:#0b0b0f;border:1.5px solid rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.5);z-index:2;">'+platformIcon+'</div>'+
         ((app.appType === 'official') ? '<span class="app-badge badge-official">ORIG</span>' : '<span class="app-badge badge-mod">MOD</span>')+
       '</div>'+
       '<div style="flex:1;min-width:0;">'+
-        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px;">'+
-          (rankBadge ? '<span style="margin-right:4px;">'+rankBadge+'</span>' : '')+
+        '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;">'+
           '<h4 class="card-app-name" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
-          updatedBadge+
+          updatedBadge + newBadge +
         '</div>'+
         '<div class="card-meta-line">'+
           '<span>'+getCategoryNameEn(app.category)+'</span>'+
@@ -3568,7 +3639,7 @@ function createAppCardHTML(app, rankBadge){
         ratingInline+
       '</div>'+
       '<div style="display:flex;gap:6px;align-items:center;">'+
-        '<button class="btn-report-text" onclick="openReportModal(\''+app.id+'\')">'+(currentLang==='ar'?'إبلاغ':'Report')+'</button>'+
+        '<button class="btn-card-details" onclick="openAppDetails(\''+app.id+'\')">'+(currentLang==='ar'?'التفاصيل':'Details')+'</button>'+
         (isAdmin?'<div class="admin-btns"><button class="btn-edit" onclick="openEditAppModal(\''+app.id+'\')">'+(currentLang==='ar'?'تعديل':'Edit')+'</button><button class="btn-del" onclick="deleteApp(\''+app.id+'\')">'+(currentLang==='ar'?'حذف':'Del')+'</button></div>':'')+
       '</div>'+
     '</div>'+
