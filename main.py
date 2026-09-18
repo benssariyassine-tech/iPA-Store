@@ -82,6 +82,63 @@ def serve_icon():
 def get_apps():
     return jsonify(APPS_DATABASE)
 
+
+# ============================================
+# ✅ AI PROXY — يحمي مفتاح Groq
+# ============================================
+@app.route('/api/ai', methods=['POST', 'OPTIONS'])
+def ai_proxy():
+    """🛡️ وسيط للذكاء الاصطناعي — المفتاح مخبّى هنا فقط"""
+    
+    # دعم CORS preflight
+    if request.method == 'OPTIONS':
+        response = jsonify({})
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+        return response, 204
+    
+    try:
+        # خذ البيانات من المتصفح
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': {'message': 'No data provided'}}), 400
+        
+        # المفتاح من متغيرات البيئة في Render
+        groq_key = os.environ.get('GROQ_API_KEY', '')
+        
+        if not groq_key:
+            return jsonify({
+                'error': {'message': 'GROQ_API_KEY not configured on server'}
+            }), 500
+        
+        # راسل Groq
+        response = requests.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            headers={
+                'Authorization': f'Bearer {groq_key}',
+                'Content-Type': 'application/json'
+            },
+            json=data,
+            timeout=30
+        )
+        
+        # رجع الرد
+        result = jsonify(response.json())
+        result.headers['Access-Control-Allow-Origin'] = '*'
+        return result, response.status_code
+        
+    except requests.exceptions.Timeout:
+        return jsonify({
+            'error': {'message': 'Request timeout. Try again.'}
+        }), 504
+    except Exception as e:
+        return jsonify({
+            'error': {'message': str(e)}
+        }), 500
+# ============================================
+
+
 # ====== VirusTotal API ======
 @app.route('/api/scan', methods=['POST'])
 def scan_file():
