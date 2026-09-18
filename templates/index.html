@@ -1526,27 +1526,41 @@ body[dir="rtl"] .marquee-text {
     border-radius: 8px;
     border: 1px solid rgba(255, 159, 10, 0.2);
 }
- /* NEW badge */
-.new-badge {
-    background: linear-gradient(135deg, #32d74b, #1a9c33);
-    color: #fff;
-    font-size: 8px;
+ /* NEW/UPDATED - متناظر مع MOD/ORIG */
+.slant-badge {
+    position: absolute;
+    top: 2px;
+    right: -30px;
+    width: 80px;
+    height: 15px;
+    transform: rotate(45deg);
+    transform-origin: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8.5px;
     font-weight: 900;
-    padding: 4px 9px;
-    border-radius: 6px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
-    white-space: nowrap;
-    flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(50, 215, 75, 0.5);
+    color: #ffffff;
+    z-index: 15;
+    pointer-events: none;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.7);
     animation: pulseNew 2s ease-in-out infinite;
 }
 
-@keyframes pulseNew {
-    0%, 100% { box-shadow: 0 2px 8px rgba(50, 215, 75, 0.5); }
-    50% { box-shadow: 0 2px 14px rgba(50, 215, 75, 0.9); }
+.slant-badge.slant-new {
+    background: linear-gradient(135deg, #32d74b, #1a9c33);
 }
 
+.slant-badge.slant-updated {
+    background: linear-gradient(135deg, #ff453a, #d70015);
+}
+
+@keyframes pulseNew {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
 /* ✨ Card Glow Animation */
 .app-card-pro {
     background: linear-gradient(135deg, 
