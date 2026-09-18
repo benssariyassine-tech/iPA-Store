@@ -1136,6 +1136,58 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   fill: none;
   stroke-width: 2.5;
 }
+ /* ===== News Bubble ===== */
+.robot-bubble.news-mode {
+  background: linear-gradient(135deg, #ff453a, #d70015);
+  color: #fff;
+  border-color: #d70015;
+  padding: 8px 30px 8px 12px;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: normal;
+  max-width: 180px;
+  text-align: center;
+  box-shadow: 0 8px 24px rgba(255, 69, 58, 0.6);
+  animation: bubblePulse 2s ease-in-out infinite;
+  cursor: pointer;
+}
+@keyframes bubblePulse {
+  0%, 100% { transform: translateX(-50%) translateY(0) scale(1); box-shadow: 0 8px 24px rgba(255,69,58,0.6); }
+  50% { transform: translateX(-50%) translateY(-5px) scale(1.05); box-shadow: 0 12px 32px rgba(255,69,58,0.9); }
+}
+.robot-bubble.news-mode::after {
+  border-top-color: #d70015;
+  filter: none;
+}
+.bubble-close-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 10;
+}
+.news-countdown-num {
+  background: #fff;
+  color: #d70015;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-weight: 900;
+  display: inline-block;
+  margin: 0 2px;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
