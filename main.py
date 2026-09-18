@@ -120,7 +120,7 @@ def ai_proxy():
                 'Content-Type': 'application/json'
             },
             json=data,
-            timeout=30
+            timeout=60
         )
         
         # رجع الرد
