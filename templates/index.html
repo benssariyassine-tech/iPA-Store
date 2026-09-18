@@ -2932,6 +2932,7 @@ similarApps = similarApps.slice(0, 6);
       '<button onclick="closeModal(\'appDetailModal\')" class="btn-secondary" style="margin-top:6px;">'+(currentLang==='ar'?'إغلاق':'Close')+'</button>'+
 '</div>';
     document.getElementById('appDetailModal').style.display = 'flex';
+   document.querySelector('.bottom-sheet-content').scrollTop = 0;
   }).catch(err=>{ console.warn('Comments err:',err); });
 }
 
