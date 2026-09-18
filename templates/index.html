@@ -3348,6 +3348,15 @@ function fileToDataURL(file){
     reader.readAsDataURL(file);
   });
 }
+ function handleAppTypeChange() {
+    const type = document.getElementById('appType').value;
+    const urlInput = document.getElementById('appUrl');
+    if (type === 'official') {
+        urlInput.placeholder = 'Official Store Link (App Store / Google Play)';
+    } else {
+        urlInput.placeholder = 'Download Link (.ipa / .apk)';
+    }
+}
 async function saveNewApp(){
   if(!isAdmin && !isPublisher) return;
   const editingId = document.getElementById('editingAppId').value;
