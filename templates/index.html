@@ -2480,7 +2480,19 @@ function handleSignOut(){
     showToast("Signed out / تم تسجيل الخروج", "info");
   });
 }
-
+function reloadUserVerification(){
+  if(currentUser){
+    loadUserProfile();
+    setTimeout(()=>{
+      if(userProfile.isVerified){
+        showToast('Account verified! / تم تفعيل الحساب', 'success');
+        renderUI();
+      } else {
+        showToast('Still not verified / لم يتم التفعيل بعد', 'warning');
+      }
+    }, 1500);
+  }
+}
 // ====== OPEN ACCOUNT MODAL ======
 function openAccountModal(){
   if(currentUser){
