@@ -1244,16 +1244,6 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     100% { background-position: 0% 50%; }
 }
 
-.app-icon-wrapper {
-    position: relative;
-    width: 62px;
-    height: 62px;
-    flex-shrink: 0;
-    cursor: pointer;
-    overflow: hidden;
-    border-radius: 17px;
-}
-
 /* ====== APP TYPE BADGES (IPAOMTK Style) ====== */
 .app-icon-wrapper {
     position: relative;
@@ -1261,7 +1251,8 @@ body[dir="rtl"] .robot-bubble.news-mode::after {
     height: 62px;
     flex-shrink: 0;
     cursor: pointer;
-    overflow: visible;
+    overflow: hidden; /* ✨ كتقص الشريط على شكل الزاوية */
+    border-radius: 17px;
 }
 
 .app-badge {
