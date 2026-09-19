@@ -3805,10 +3805,32 @@ setTimeout(()=>{
   const activeBtn = document.querySelector('.nav-item[data-tab="'+currentTab+'"]');
   if(activeBtn) activeBtn.classList.add('active');
 }, 100);
-if(window.location.hash.startsWith('#app-')){
+// 🔗 فتح التطبيق تلقائياً عند الوصول من رابط مشارك
+function openAppFromHash(){
+  if(!window.location.hash.startsWith('#app-')) return;
   const appId = window.location.hash.replace('#app-','');
-  setTimeout(()=>{ if(allAppsCache.find(a=>a.id===appId)) openAppDetails(appId); }, 1500);
+  let attempts = 25; // يحاول لمدة ~10 ثواني
+  const tryOpen = () => {
+    if(allAppsCache.find(a => a.id === appId)){
+      // نتأكد أن المستخدم مسجل دخول قبل فتح التطبيق
+      if(!currentUser){
+        showToast(
+          currentLang === 'ar'
+            ? '🔒 سجّل الدخول لتحميل التطبيق'
+            : '🔒 Sign in to download the app',
+          'warning', 3500
+        );
+        openAccountModal();
+      }
+      openAppDetails(appId);
+    } else if(attempts-- > 0){
+      setTimeout(tryOpen, 400);
+    }
+  };
+  setTimeout(tryOpen, 300);
 }
+openAppFromHash();
+window.addEventListener('hashchange', openAppFromHash);
  // ====== AI CHATBOT (Puter.js) ======
 const AI_SYSTEM_PROMPT = `أنت "مساعد iStore"، المساعد الذكي الرسمي لموقع iStore لتحميل تطبيقات وألعاب الآيفون (IPA) والأندرويد (APK).
 
