@@ -2809,51 +2809,27 @@ function shareApp(appId, event){
 }
 async function shareToInstagramStory(imageUrl) {
     try {
-        // 1. جلب الصورة كـ Blob
-        let blob;
-        if(imageUrl.startsWith('data:')){
-            // إذا Base64: حولها لـ Blob
-            const response = await fetch(imageUrl);
-            blob = await response.blob();
-        } else {
-            // إذا رابط عادي
-            const response = await fetch(imageUrl);
-            blob = await response.blob();
-        }
+        // ✅ الحل: "احجز" عملية النسخ فوراً، ومرّر الوعد (Promise) للـ Blob
+        const clipboardItem = new ClipboardItem({
+            'image/png': fetch(imageUrl).then(res => res.blob())
+        });
 
-        // 2. تأكد أنها PNG (إنستغرام كيحتاج PNG)
-        if(blob.type !== 'image/png'){
-            // حولها لـ PNG باستعمال Canvas
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            const pngBlob = await new Promise((resolve, reject) => {
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    canvas.toBlob(b => resolve(b), 'image/png');
-                };
-                img.onerror = reject;
-                img.src = imageUrl;
-            });
-            blob = pngBlob;
-        }
+        // ✅ نسخ داخل سياق الضغطة مباشرة
+        await navigator.clipboard.write([clipboardItem]);
 
-        // 3. نسخ الصورة كـ ClipboardItem (ماشي نص)
-        await navigator.clipboard.write([
-            new ClipboardItem({ 'image/png': blob })
-        ]);
-
-        // 4. بعد تأخير بسيط، افتح إنستغرام
-        setTimeout(() => {
-            window.location.href = 'instagram-stories://share';
-        }, 500);
+        // ✅ من بعد ما تنسخ، افتح إنستغرام
+        window.location.href = 'instagram-stories://share';
 
     } catch (error) {
         console.error('خطأ في المشاركة:', error);
         showToast(currentLang === 'ar' ? 'خطأ: ' + error.message : 'Error: ' + error.message, 'error', 5000);
+
+        // ✅ حل احتياطي: إذا فشل، حمّل الصورة
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = 'app-icon.png';
+        link.click();
+        showToast(currentLang === 'ar' ? 'تم تحميل الصورة، أضفها يدوياً للستوري' : 'Image downloaded, add it manually to your story', 'info', 5000);
     }
 }
 // ====== RATING ======
