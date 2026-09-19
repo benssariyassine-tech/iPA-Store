@@ -2850,37 +2850,60 @@ function shareApp(appId, event){
   if(navigator.share) navigator.share(shareData).catch(()=>{});
   else navigator.clipboard.writeText(shareData.url).then(()=>showToast('Link copied', 'success')).catch(()=>showToast('Could not share', 'error'));
 }
-async function shareToInstagramStory(imageUrl, appName) {
-    try {
-        // 1. جيب الصورة كـ Blob
-        const response = await fetch(imageUrl);
-        const blob = await response.blob();
-        const file = new File([blob], 'app-icon.png', { type: 'image/png' });
+function shareApp(appId, event){
+  if(event) event.stopPropagation();
+  const app = allAppsCache.find(a=>a.id===appId);
+  if(!app) return;
 
-        // 2. إذا كان المتصفح كيدعم مشاركة الملفات
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({
-                files: [file],
-                title: appName,
-                text: 'Check out ' + appName + ' on iStore!'
-            });
-        } else {
-            // 3. حل احتياطي: حمل الصورة
-            const link = document.createElement('a');
-            link.href = imageUrl;
-            link.download = appName + '.png';
-            link.click();
-            showToast(currentLang === 'ar' 
-                ? 'تم تحميل الصورة. افتح إنستغرام وأضفها للستوري' 
-                : 'Image downloaded. Open Instagram and add it manually', 
-                'success', 5000);
-        }
-    } catch (error) {
-        console.error('خطأ:', error);
-        if (error.name !== 'AbortError') {
-            showToast(currentLang === 'ar' ? 'لم نستطع المشاركة' : 'Could not share', 'warning');
-        }
+  // 🔗 رابط مباشر لصفحة التطبيق داخل الموقع
+  const baseUrl = window.location.href.split('#')[0];
+  const shareUrl = baseUrl + '#app-' + appId;
+
+  const shareText = (currentLang === 'ar'
+    ? '🎮 شاهد ' + app.name + ' على متجر iStore!'
+    : '🎮 Check out ' + app.name + ' on iStore!');
+
+  const shareData = {
+    title: app.name,
+    text: shareText,
+    url: shareUrl
+  };
+
+  // ✅ 1. Web Share API (أفضل حل - يخلي المستخدم يختار التطبيق)
+  if(navigator.share) {
+    navigator.share(shareData).catch(()=>{});
+    return;
+  }
+
+  // ✅ 2. نسخ الرابط للحافظة
+  const copyFallback = () => {
+    const textToCopy = shareText + '\n' + shareUrl;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(textToCopy)
+        .then(()=>showToast(currentLang==='ar'?'✅ تم نسخ رابط التطبيق':'✅ App link copied', 'success', 2000))
+        .catch(()=>legacyCopy(textToCopy));
+    } else {
+      legacyCopy(textToCopy);
     }
+  };
+
+  const legacyCopy = (text) => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+      document.execCommand('copy');
+      showToast(currentLang==='ar'?'✅ تم نسخ رابط التطبيق':'✅ App link copied', 'success', 2000);
+    } catch(e){
+      showToast('Could not share', 'error');
+    }
+    document.body.removeChild(ta);
+  };
+
+  copyFallback();
 }
 // ====== RATING ======
 function setRating(appId, value){
