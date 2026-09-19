@@ -196,8 +196,10 @@ def share_app(app_id):
 <meta name="twitter:image" content="{icon}">
 
 <!-- ✅ التحويل التلقائي للمستخدم للموقع -->
-<meta http-equiv="refresh" content="0; url=https://ipa-store.onrender.com/?app={app_id}">
-<script>window.location.replace('https://ipa-store.onrender.com/?app={app_id}');</script>
+<script>
+  // هاد السطر كيخلي المستخدم العادي يتوجه للموقع بعد قراءة المعلومات
+  window.location.replace('https://ipa-store-api.onrender.com/?app={app_id}');
+</script>
 
 <style>
   body {{
