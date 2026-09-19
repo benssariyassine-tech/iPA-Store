@@ -2856,8 +2856,7 @@ function shareApp(appId, event){
   if(!app) return;
 
   // 🔗 رابط مباشر لصفحة التطبيق داخل الموقع
-  const baseUrl = window.location.href.split('#')[0];
-  const shareUrl = baseUrl + '#app-' + appId;
+const shareUrl = 'https://ipa-store-api.onrender.com/app/' + appId;
 
   const shareText = (currentLang === 'ar'
     ? '🎮 شاهد ' + app.name + ' على متجر iStore!'
