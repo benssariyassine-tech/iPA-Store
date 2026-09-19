@@ -1,12 +1,36 @@
 import os
+import json
 import requests
 from flask import Flask, jsonify, render_template, send_from_directory, request
 from flask_cors import CORS
 
+# ===== Firebase Admin =====
+import firebase_admin
+from firebase_admin import credentials, firestore
+
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
-# قاعدة بيانات المتجر
+# ============================================
+# 🔥 تهيئة Firebase (باش نجيبو معلومات التطبيقات)
+# ============================================
+db = None
+try:
+    firebase_cred_json = os.environ.get('FIREBASE_SERVICE_ACCOUNT', '')
+    if firebase_cred_json and not firebase_admin._apps:
+        cred_dict = json.loads(firebase_cred_json)
+        cred = credentials.Certificate(cred_dict)
+        firebase_admin.initialize_app(cred)
+        db = firestore.client()
+        print("✅ Firebase initialized successfully")
+    else:
+        print("⚠️ FIREBASE_SERVICE_ACCOUNT not set")
+except Exception as e:
+    print(f"⚠️ Firebase init error: {e}")
+    db = None
+
+
+# ===== قاعدة بيانات المتجر =====
 APPS_DATABASE = [
     {
         "id": 1,
@@ -70,17 +94,111 @@ APPS_DATABASE = [
     }
 ]
 
+
+# ============================================
+# 🏠 الصفحة الرئيسية
+# ============================================
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route('/static/icon.png')
 def serve_icon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'icon.png', mimetype='image/png')
 
+
 @app.route('/api/apps', methods=['GET'])
 def get_apps():
     return jsonify(APPS_DATABASE)
+
+
+# ============================================
+# 🔥 صفحة المشاركة الديناميكية (جديد!)
+# ============================================
+@app.route('/app/<app_id>')
+def share_app(app_id):
+    """
+    صفحة خاصة بكل تطبيق — كتوري صورة التطبيق 
+    ملي تصيفط الرابط فواتساب/إنستغرام
+    """
+    # القيم الافتراضية
+    name = "iStore"
+    desc = "حمّل التطبيقات والألعاب من iStore مجاناً"
+    icon = "https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png"
+
+    # إلا كان Firebase شغال، جيبو معلومات التطبيق
+    if db:
+        try:
+            doc = db.collection('apps').document(app_id).get()
+            if doc.exists:
+                d = doc.to_dict()
+                name = d.get('name', name)
+                info = d.get('info', '') or d.get('desc', '') or desc
+                desc = info[:160]
+                app_icon = d.get('icon', '')
+                # نتأكدو بلي الصورة رابط حقيقي ماشي data URL
+                if app_icon and not app_icon.startswith('data:'):
+                    icon = app_icon
+                print(f"✅ App found: {name}")
+            else:
+                print(f"⚠️ App {app_id} not found")
+        except Exception as e:
+            print(f"⚠️ Error fetching app: {e}")
+
+    # صفحة HTML فيها meta tags للصورة
+    html = f'''<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>{name} - iStore</title>
+
+<!-- 🔥 Open Graph (Instagram / WhatsApp / Facebook / Telegram) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="{name} - iStore">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="{icon}">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:site_name" content="iStore">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{name} - iStore">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{icon}">
+
+<!-- ✅ التحويل التلقائي للمستخدم للموقع -->
+<meta http-equiv="refresh" content="0; url=https://ipa-store.onrender.com/?app={app_id}">
+<script>window.location.replace('https://ipa-store.onrender.com/?app={app_id}');</script>
+
+<style>
+  body {{
+    background:#0b0b0f;color:#fff;text-align:center;
+    padding:60px 20px;font-family:-apple-system,sans-serif;
+  }}
+  img {{ width:120px;height:120px;border-radius:28px;margin-bottom:20px; }}
+  h1 {{ font-size:20px;margin:10px 0; }}
+  p {{ color:#8e8e93;font-size:14px; }}
+  .loader {{
+    display:inline-block;width:24px;height:24px;
+    border:3px solid rgba(255,255,255,0.2);
+    border-top-color:#0a84ff;border-radius:50%;
+    animation:spin 0.8s linear infinite;margin-top:20px;
+  }}
+  @keyframes spin {{ to {{ transform:rotate(360deg); }} }}
+</style>
+</head>
+<body>
+  <img src="{icon}" alt="{name}">
+  <h1>{name}</h1>
+  <p>جاري تحويلك إلى iStore...</p>
+  <div class="loader"></div>
+</body>
+</html>'''
+
+    return html
+# ============================================
 
 
 # ============================================
@@ -90,7 +208,6 @@ def get_apps():
 def ai_proxy():
     """🛡️ وسيط للذكاء الاصطناعي — المفتاح مخبّى هنا فقط"""
     
-    # دعم CORS preflight
     if request.method == 'OPTIONS':
         response = jsonify({})
         response.headers['Access-Control-Allow-Origin'] = '*'
@@ -99,12 +216,10 @@ def ai_proxy():
         return response, 204
     
     try:
-        # خذ البيانات من المتصفح
         data = request.get_json()
         if not data:
             return jsonify({'error': {'message': 'No data provided'}}), 400
         
-        # المفتاح من متغيرات البيئة في Render
         groq_key = os.environ.get('GROQ_API_KEY', '')
         
         if not groq_key:
@@ -112,7 +227,6 @@ def ai_proxy():
                 'error': {'message': 'GROQ_API_KEY not configured on server'}
             }), 500
         
-        # راسل Groq
         response = requests.post(
             'https://api.groq.com/openai/v1/chat/completions',
             headers={
@@ -123,7 +237,6 @@ def ai_proxy():
             timeout=60
         )
         
-        # رجع الرد
         result = jsonify(response.json())
         result.headers['Access-Control-Allow-Origin'] = '*'
         return result, response.status_code
@@ -136,10 +249,9 @@ def ai_proxy():
         return jsonify({
             'error': {'message': str(e)}
         }), 500
-# ============================================
 
 
-# ====== VirusTotal API ======
+# ====== stats VirusTotal API ======
 @app.route('/api/scan', methods=['POST'])
 def scan_file():
     """يفحص ملف بالـ SHA256 hash عبر VirusTotal"""
@@ -164,7 +276,7 @@ def scan_file():
             stats = data['data']['attributes']['last_analysis_stats']
             malicious = stats['malicious']
             suspicious = stats['suspicious']
-            harmless = stats['harmless']
+            harmless =['harmless']
             undetected = stats['undetected']
             total = malicious + suspicious + harmless + undetected
             
@@ -192,13 +304,16 @@ def scan_file():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route('/sitemap.xml')
 def sitemap():
     return send_from_directory('templates', 'sitemap.xml', mimetype='application/xml')
 
+
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('templates', 'robots.txt', mimetype='text/plain')
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
