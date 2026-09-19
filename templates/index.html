@@ -2807,6 +2807,36 @@ function shareApp(appId, event){
   if(navigator.share) navigator.share(shareData).catch(()=>{});
   else navigator.clipboard.writeText(shareData.url).then(()=>showToast('Link copied', 'success')).catch(()=>showToast('Could not share', 'error'));
 }
+ async function shareToInstagramStory(imageUrl, appId) {
+    try {
+        // 1. جلب الصورة من الرابط وتحويلها لـ Base64
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const base64Data = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result.split(',')[1]);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+
+        // 2. تجهيز البيانات الخاصة بإنستغرام
+        // 'com.instagram.sharedSticker.backgroundImage' هو المفتاح اللي كيفهمو إنستغرام
+        const clipboardData = {
+            'com.instagram.sharedSticker.backgroundImage': `data:${blob.type};base64,${base64Data}`,
+        };
+
+        // 3. نسخ البيانات في الحافظة (هنا كاين السر)
+        await navigator.clipboard.writeText(JSON.stringify(clipboardData));
+
+        // 4. فتح تطبيق إنستغرام مباشرة
+        const instagramUrl = `instagram-stories://share?source_application=${appId}`;
+        window.location.href = instagramUrl;
+
+    } catch (error) {
+        console.error('خطأ في المشاركة:', error);
+        // هنا تقدر تدير حل بديل: تحميل الصورة، ولا نسخ الرابط...
+    }
+}
 
 // ====== RATING ======
 function setRating(appId, value){
