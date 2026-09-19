@@ -2807,29 +2807,36 @@ function shareApp(appId, event){
   if(navigator.share) navigator.share(shareData).catch(()=>{});
   else navigator.clipboard.writeText(shareData.url).then(()=>showToast('Link copied', 'success')).catch(()=>showToast('Could not share', 'error'));
 }
-async function shareToInstagramStory(imageUrl) {
+async function shareToInstagramStory(imageUrl, appName) {
     try {
-        // ✅ الحل: "احجز" عملية النسخ فوراً، ومرّر الوعد (Promise) للـ Blob
-        const clipboardItem = new ClipboardItem({
-            'image/png': fetch(imageUrl).then(res => res.blob())
-        });
+        // 1. جيب الصورة كـ Blob
+        const response = await fetch(imageUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'app-icon.png', { type: 'image/png' });
 
-        // ✅ نسخ داخل سياق الضغطة مباشرة
-        await navigator.clipboard.write([clipboardItem]);
-
-        // ✅ من بعد ما تنسخ، افتح إنستغرام
-        window.location.href = 'instagram-stories://share';
-
+        // 2. إذا كان المتصفح كيدعم مشاركة الملفات
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: appName,
+                text: 'Check out ' + appName + ' on iStore!'
+            });
+        } else {
+            // 3. حل احتياطي: حمل الصورة
+            const link = document.createElement('a');
+            link.href = imageUrl;
+            link.download = appName + '.png';
+            link.click();
+            showToast(currentLang === 'ar' 
+                ? 'تم تحميل الصورة. افتح إنستغرام وأضفها للستوري' 
+                : 'Image downloaded. Open Instagram and add it manually', 
+                'success', 5000);
+        }
     } catch (error) {
-        console.error('خطأ في المشاركة:', error);
-        showToast(currentLang === 'ar' ? 'خطأ: ' + error.message : 'Error: ' + error.message, 'error', 5000);
-
-        // ✅ حل احتياطي: إذا فشل، حمّل الصورة
-        const link = document.createElement('a');
-        link.href = imageUrl;
-        link.download = 'app-icon.png';
-        link.click();
-        showToast(currentLang === 'ar' ? 'تم تحميل الصورة، أضفها يدوياً للستوري' : 'Image downloaded, add it manually to your story', 'info', 5000);
+        console.error('خطأ:', error);
+        if (error.name !== 'AbortError') {
+            showToast(currentLang === 'ar' ? 'لم نستطع المشاركة' : 'Could not share', 'warning');
+        }
     }
 }
 // ====== RATING ======
