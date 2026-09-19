@@ -12,7 +12,7 @@ app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
 
 # ============================================
-# 🔥 تهيئة Firebase (باش نجيبو معلومات التطبيقات)
+# 🔥 تهيئة Firebase
 # ============================================
 db = None
 try:
@@ -114,7 +114,35 @@ def get_apps():
 
 
 # ============================================
-# 🔥 صفحة المشاركة الديناميكية (جديد!)
+# 🧪 ROUTE اختبار (باش نتأكدو السيرفر خدام)
+# ============================================
+@app.route('/test123')
+def test123():
+    return "OK - Server is alive! ✅"
+
+
+# ============================================
+# 🔍 ROUTE لتشخيص المسارات المتاحة
+# ============================================
+@app.route('/debug/routes')
+def debug_routes():
+    """كيعرض لائحة بكل الـ routes المتاحة"""
+    routes = []
+    for rule in app.url_map.iter_rules():
+        routes.append({
+            'path': str(rule),
+            'methods': list(rule.methods - {'HEAD', 'OPTIONS'}),
+            'endpoint': rule.endpoint
+        })
+    return jsonify({
+        'total': len(routes),
+        'firebase_connected': db is not None,
+        'routes': routes
+    })
+
+
+# ============================================
+# 🔥 صفحة المشاركة الديناميكية
 # ============================================
 @app.route('/app/<app_id>')
 def share_app(app_id):
@@ -137,7 +165,6 @@ def share_app(app_id):
                 info = d.get('info', '') or d.get('desc', '') or desc
                 desc = info[:160]
                 app_icon = d.get('icon', '')
-                # نتأكدو بلي الصورة رابط حقيقي ماشي data URL
                 if app_icon and not app_icon.startswith('data:'):
                     icon = app_icon
                 print(f"✅ App found: {name}")
@@ -198,7 +225,6 @@ def share_app(app_id):
 </html>'''
 
     return html
-# ============================================
 
 
 # ============================================
@@ -251,7 +277,7 @@ def ai_proxy():
         }), 500
 
 
-# ====== stats VirusTotal API ======
+# ====== VirusTotal API ======
 @app.route('/api/scan', methods=['POST'])
 def scan_file():
     """يفحص ملف بالـ SHA256 hash عبر VirusTotal"""
@@ -276,7 +302,7 @@ def scan_file():
             stats = data['data']['attributes']['last_analysis_stats']
             malicious = stats['malicious']
             suspicious = stats['suspicious']
-            harmless =['harmless']
+            harmless = stats['harmless']          # ✅ تصحيح الخطأ
             undetected = stats['undetected']
             total = malicious + suspicious + harmless + undetected
             
