@@ -2805,6 +2805,26 @@ function startRealDownload(appId, fileUrl, appName) {
   incrementDownload(appId);
   goToDownload(fileUrl, appName);
 }
+ // ====== فتح رابط التحميل ======
+function goToDownload(fileUrl, appName){
+  if(!fileUrl || fileUrl === '#'){
+    showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
+    return;
+  }
+  
+  showToast(
+    currentLang === 'ar' 
+      ? '⏳ جاري فتح رابط التحميل...' 
+      : '⏳ Opening download link...', 
+    'info', 
+    2000
+  );
+  
+  // فتح الرابط فـ نافذة جديدة
+  setTimeout(() => {
+    window.open(fileUrl, '_blank', 'noopener,noreferrer');
+  }, 400);
+}
 // ====== DOWNLOAD COUNTER ======
 function incrementDownload(appId){
   const userId = currentUser ? currentUser.email : 'guest_'+Math.random().toString(36).substring(7);
@@ -2842,14 +2862,6 @@ function toggleStarLike(appId, event){
 }
 
 // ====== SHARE ======
-function shareApp(appId, event){
-  if(event) event.stopPropagation();
-  const app = allAppsCache.find(a=>a.id===appId);
-  if(!app) return;
-  const shareData = {title: app.name, text: 'Check out '+app.name+' on iStore!', url: window.location.href.split('#')[0]+'#app-'+appId};
-  if(navigator.share) navigator.share(shareData).catch(()=>{});
-  else navigator.clipboard.writeText(shareData.url).then(()=>showToast('Link copied', 'success')).catch(()=>showToast('Could not share', 'error'));
-}
 function shareApp(appId, event){
   if(event) event.stopPropagation();
   const app = allAppsCache.find(a=>a.id===appId);
