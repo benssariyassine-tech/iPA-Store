@@ -2812,14 +2812,12 @@ async function shareToInstagramStory(imageUrl) {
         let base64Data = '';
         let blobType = 'image/png';
 
-        // إذا كانت الصورة Base64 (data:image/...)
+        // إذا كانت الصورة Base64
         if(imageUrl.startsWith('data:')){
-            // استخرج الـ Base64 مباشرة بلا fetch
             const parts = imageUrl.split(',');
             base64Data = parts[1];
             blobType = parts[0].split(':')[1].split(';')[0];
         } else {
-            // إذا كانت رابط عادي
             const response = await fetch(imageUrl);
             const blob = await response.blob();
             blobType = blob.type;
@@ -2836,7 +2834,17 @@ async function shareToInstagramStory(imageUrl) {
             'com.instagram.sharedSticker.backgroundImage': `data:${blobType};base64,${base64Data}`,
         };
 
-        await navigator.clipboard.writeText(JSON.stringify(clipboardData));
+        // ⬅️ استعمل الطريقة القديمة باش تنسخ (كتخدم في كل مكان)
+        const textToCopy = JSON.stringify(clipboardData);
+        const textarea = document.createElement('textarea');
+        textarea.value = textToCopy;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        textarea.setSelectionRange(0, textToCopy.length);
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
 
         // فتح إنستغرام
         const instagramUrl = `instagram-stories://share?source_application=0e7d5571e19e38f7ac7bcf707090ef`;
@@ -2844,7 +2852,7 @@ async function shareToInstagramStory(imageUrl) {
 
     } catch (error) {
         console.error('خطأ في المشاركة:', error);
-        showToast(currentLang === 'ar' ? 'الخطأ: ' + error.message : 'Error: ' + error.message, 'error', 5000);
+        showToast(currentLang === 'ar' ? 'خطأ: ' + error.message : 'Error: ' + error.message, 'error', 5000);
     }
 }
 // ====== RATING ======
