@@ -2939,6 +2939,10 @@ similarApps = similarApps.slice(0, 6);
         '<div class="hero-text"><span class="hero-title">'+(currentLang==='ar'?'تحميل الآن':'Download Now')+'</span><span class="hero-sub">'+(app.size||'N/A')+' • '+(app.platform||'IPA')+'</span></div>'+
         '<div class="hero-arrow">→</div>'+
       '</button>'+
+     '<button class="btn-secondary" style="margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;" onclick="shareToInstagramStory(\''+(app.icon||FALLBACK_ICON)+'\')">'+
+  '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>'+
+  '<span>'+(currentLang==='ar'?'شارك في ستوري إنستغرام':'Share to Instagram Story')+'</span>'+
+'</button>'+
       '<div class="detail-section">'+
         '<h4 class="detail-section-title">'+ICONS.starFill+' '+(currentLang==='ar'?'التقييم':'Rating')+'</h4>'+
         '<div class="rating-summary"><span>'+(app.ratingCount?(app.ratingCount+(currentLang==='ar'?' تقييم':' ratings')):(currentLang==='ar'?'لا توجد تقييمات':'No ratings'))+'</span><span class="rating-value">'+ICONS.starFill+' '+(ratingAvg>0?ratingAvg.toFixed(1):'—')+'</span></div>'+
