@@ -4401,21 +4401,21 @@ async function sendAiMessage() {
     const typingEl = document.getElementById('aiTypingIndicator');
     if (typingEl) typingEl.remove();
 
-    let errText = '⚠️ حدث خطأ. حاول مرة أخرى.';
+    let errText = ' حدث خطأ. حاول مرة أخرى.';
     const errStr = (err.message || String(err)).toLowerCase();
 
     if (errStr.includes('401') || errStr.includes('unauthorized') || errStr.includes('invalid api key')) {
-      errText = '🔑 المفتاح غير صحيح أو محظور. يرجى التواصل مع الدعم.';
+      errText = ' المفتاح غير صحيح أو محظور. يرجى التواصل مع الدعم.';
     } else if (errStr.includes('429') || errStr.includes('rate limit') || errStr.includes('quota')) {
-      errText = '⏱️ تم تجاوز الحد المسموح. حاول بعد قليل.';
+      errText = ' تم تجاوز الحد المسموح. حاول بعد قليل.';
     } else if (errStr.includes('failed to fetch') || errStr.includes('networkerror')) {
-      errText = '🌐 مشكلة في الاتصال بالخادم. تحقق من الإنترنت.';
+      errText = ' مشكلة في الاتصال بالخادم. تحقق من الإنترنت.';
     } else if (errStr.includes('cors')) {
-      errText = '🚫 مشكلة CORS. جاري الحل.';
+      errText = ' مشكلة CORS. جاري الحل.';
     } else if (errStr.includes('model') || errStr.includes('decommissioned') || errStr.includes('not found')) {
-      errText = '⚠️ الموديل غير متاح.';
+      errText = ' الموديل غير متاح.';
     } else {
-      errText = '⚠️ خطأ تقني: ' + (err.message || 'unknown').substring(0, 150);
+      errText = 'خطأ تقني: ' + (err.message || 'unknown').substring(0, 150);
     }
 
     const errMsg = document.createElement('div');
