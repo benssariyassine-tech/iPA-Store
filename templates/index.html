@@ -1659,6 +1659,55 @@ body[dir="rtl"] .marquee-text {
   height: 20px;
   flex-shrink: 0;
 }
+ /* ===== Comment Report Options ===== */
+.report-reason-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.report-reason-option:hover {
+  border-color: rgba(255,159,10,0.5);
+  background: rgba(255,159,10,0.05);
+}
+.report-reason-option.selected {
+  border-color: var(--warning);
+  background: rgba(255,159,10,0.1);
+  box-shadow: 0 0 0 3px rgba(255,159,10,0.15);
+}
+.report-reason-option .reason-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(255,159,10,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.report-reason-option .reason-content {
+  flex: 1;
+  min-width: 0;
+}
+.report-reason-option .reason-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text-color);
+  margin-bottom: 3px;
+}
+.report-reason-option .reason-desc {
+  font-size: 11px;
+  color: var(--subtext-color);
+  font-weight: 500;
+  line-height: 1.4;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
