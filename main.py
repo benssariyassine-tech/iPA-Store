@@ -198,7 +198,7 @@ def share_app(app_id):
 <!-- ✅ التحويل التلقائي للمستخدم للموقع -->
 <script>
   // هاد السطر كيخلي المستخدم العادي يتوجه للموقع بعد قراءة المعلومات
-  window.location.replace('https://ipa-store-api.onrender.com/?app={app_id}');
+window.location.replace('https://ipa-store.onrender.com/?app={app_id}');
 </script>
 
 <style>
