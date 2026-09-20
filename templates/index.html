@@ -4506,37 +4506,34 @@ function updateNewsBubble() {
         msg: `⚠️ Important Notice: The site will be temporarily paused for technical maintenance in ${Math.max(0, Math.ceil((NEWS_CONFIG.stopDate - new Date()) / (1000 * 60 * 60 * 24)))} days. Please download your required apps before Oct 18, 2026. Thank you for your patience.`
     };
 
-    // إذا الإعلان مقفل، نخفيوه
+    
     if (!NEWS_CONFIG.enabled || NEWS_CONFIG.dismissed) {
         banner.classList.remove('active');
         return;
     }
 
-    // إظهار الشريط وتعيين النص
+   
     banner.classList.add('active');
-console.log('Banner should be visible now!'); // باش نتأكدو بلي الدالة خدمت
+console.log('Banner should be visible now!');  
     textEl.innerText = T.msg;
 }
- function openAiChat() {
+function openAiChat() {
   document.getElementById('aiChatDrawer').classList.add('open');
-  
-  // ✅ زيد هاد السطر باش النافذة ترجع لمكانها الطبيعي
   const aiChatPanel = document.getElementById('aiChatPanel');
   if (aiChatPanel) {
     aiChatPanel.style.transition = 'none';
     aiChatPanel.style.transform = 'translateY(0)';
   }
-
-  // ... باقي كود التوهج (اللي حطيتيه قبل)
   const inputBar = document.querySelector('.aiChatInputBar');
   if (inputBar) {
     inputBar.classList.remove('animate-glow');
     void inputBar.offsetWidth;
     inputBar.classList.add('animate-glow');
   }
+  applyTranslations(); 
   setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
 }
- // 👀 تتبع عينين الروبوت لمؤشر الماوس
+ 
 document.addEventListener('mousemove', function(e) {
   const pupils = document.querySelectorAll('.robot-pupil');
   const btn = document.getElementById('aiChatBtn');
