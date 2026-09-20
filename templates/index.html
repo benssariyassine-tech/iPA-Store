@@ -4505,20 +4505,17 @@ console.log('Banner should be visible now!'); // باش نتأكدو بلي ال
 }
 function openAiChat() {
   document.getElementById('aiChatDrawer').classList.add('open');
+
+  // ✅ تشغيل التوهج الزاهي لمدة 4 ثوانٍ
+  const inputBar = document.querySelector('.aiChatInputBar');
+  if (inputBar) {
+    inputBar.classList.remove('animate-glow');
+    void inputBar.offsetWidth; // حيلة برمجية لإعادة تشغيل الأنيميشن في كل مرة
+    inputBar.classList.add('animate-glow');
+  }
+
   setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
 }
-function closeAiChat() {
-  document.getElementById('aiChatDrawer').classList.remove('open');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  const drawer = document.getElementById('aiChatDrawer');
-  if (drawer) {
-    drawer.addEventListener('click', function(e) {
-      if (e.target === this) closeAiChat();
-    });
-  }
-});
 // 👀 تتبع عينين الروبوت لمؤشر الماوس
 document.addEventListener('mousemove', function(e) {
   const pupils = document.querySelectorAll('.robot-pupil');
