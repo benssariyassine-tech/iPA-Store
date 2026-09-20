@@ -1526,37 +1526,37 @@ body[dir="rtl"] .marquee-text {
     border-radius: 8px;
     border: 1px solid rgba(255, 159, 10, 0.2);
 }
- /* NEW/UPDATED - متناظر مع MOD/ORIG */
+
+/* ✅ شارة مائلة في زاوية البطاقة (أخضر) */
 .slant-badge {
     position: absolute;
-    top: 2px;
-    right: -30px;
-    width: 80px;
-    height: 15px;
-    transform: rotate(45deg);
-    transform-origin: center;
+    top: 22px;           /* المسافة من الأعلى */
+    right: -42px;        /* إخراج الشريط للخارج */
+    width: 150px;        /* العرض */
+    height: 24px;        /* الارتفاع */
+    transform: rotate(45deg); /* الميلان */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 8.5px;
+    font-size: 10px;
     font-weight: 900;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     text-transform: uppercase;
     color: #ffffff;
-    z-index: 15;
-    pointer-events: none;
+    z-index: 10;
+    pointer-events: none; /* حتى لا يمنع النقر على البطاقة */
     text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     animation: pulseNew 2s ease-in-out infinite;
 }
 
 .slant-badge.slant-new {
-    background: linear-gradient(135deg, #32d74b, #1a9c33);
+    background: linear-gradient(135deg, #32d74b, #1a9c33); /* ✅ تدرج أخضر */
 }
 
 .slant-badge.slant-updated {
-    background: linear-gradient(135deg, #ff453a, #d70015);
+    background: linear-gradient(135deg, #ff453a, #d70015); /* أحمر للتحديث */
 }
-
 @keyframes pulseNew {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.85; }
