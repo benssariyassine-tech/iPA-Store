@@ -3577,6 +3577,39 @@ function renderUI(){
     let totalDownloads = allAppsCache.reduce((s,a)=>s+(a.downloads||0),0);
     let totalLikes = allAppsCache.reduce((s,a)=>s+((a.likedBy&&a.likedBy.length)||0),0);
     let pendingPublishers = allPublisherRequests.filter(r=>r.status === 'pending').length;
+   let totalCommentReports = allCommentReportsCache.length;
+let commentReportsHTML = "";
+if(totalCommentReports === 0){
+  commentReportsHTML = `<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">${currentLang==='ar'?'لا توجد تقارير تعليقات':'No comment reports'}</p></div>`;
+} else {
+  allCommentReportsCache.forEach(rep=>{
+    let targetApp = allAppsCache.find(a=>a.id===rep.appId);
+    let appName = targetApp ? targetApp.name : "Unknown App";
+    let reasonLabels = {
+      'spam': currentLang==='ar'?'سبام':'Spam',
+      'hate': currentLang==='ar'?'خطاب كراهية':'Hate Speech',
+      'profanity': currentLang==='ar'?'ألفاظ نابية':'Profanity',
+      'harassment': currentLang==='ar'?'تحرش':'Harassment',
+      'misinformation': currentLang==='ar'?'معلومات كاذبة':'Misinformation',
+      'other': currentLang==='ar'?'أخرى':'Other'
+    };
+    commentReportsHTML += '<div class="report-admin-item" style="border-color:rgba(255,159,10,0.3);">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">'+
+        '<span style="color:var(--warning);font-weight:900;font-size:12px;">'+appName+'</span>'+
+        '<span style="background:rgba(255,159,10,0.15);color:var(--warning);font-size:10px;padding:3px 8px;border-radius:6px;font-weight:800;">'+(reasonLabels[rep.reason]||rep.reason)+'</span>'+
+      '</div>'+
+      '<div style="background:var(--modal-bg);padding:8px 10px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--warning);">'+
+        '<div style="font-size:11px;color:var(--subtext-color);font-weight:700;margin-bottom:3px;">@'+rep.commentAuthor+'</div>'+
+        '<div style="color:var(--text-color);font-size:12px;line-height:1.5;">"'+rep.commentText+'"</div>'+
+      '</div>'+
+      '<div style="font-size:10px;color:var(--subtext-color);margin-bottom:8px;">'+(currentLang==='ar'?'بواسطة':'By')+': '+rep.reporter+'</div>'+
+      '<div style="display:flex;gap:6px;justify-content:flex-end;">'+
+        '<button onclick="deleteCommentFromReport(\''+rep.appId+'\',\''+rep.commentId+'\',\''+rep.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'حذف التعليق':'Delete Comment')+'</button>'+
+        '<button onclick="ignoreCommentReport(\''+rep.id+'\')" style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'تجاهل':'Ignore')+'</button>'+
+      '</div>'+
+    '</div>';
+  });
+}
     let reportsHTML = "";
     if(totalReports===0) reportsHTML = `<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">${currentLang==='ar'?'لا توجد تقارير معلقة':'All clear! No pending reports.'}</p></div>`;
     else allReportsCache.forEach(rep=>{
