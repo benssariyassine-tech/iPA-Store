@@ -4559,12 +4559,7 @@ document.addEventListener('touchmove', function(e) {
   return ctx;
 }
 
-async function sendAiMessage() {
-  const input = document.getElementById('aiChatInput');
-  const sendBtn = document.getElementById('aiChatSendBtn');
-  const messages = document.getElementById('aiChatMessages');
-  const text = input.value.trim();
-  if (!text) return;
+
 async function sendAiMessage() {
   const input = document.getElementById('aiChatInput');
   const sendBtn = document.getElementById('aiChatSendBtn');
