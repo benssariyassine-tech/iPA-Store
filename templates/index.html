@@ -3267,9 +3267,7 @@ similarApps = similarApps.slice(0, 6);
         '<div class="screenshots-container">'+screenshotsHTML+'</div>'+
       '</div>'+
       similarHTML+
-    '<button onclick="openReportModal(\''+app.id+'\')" style="width:100%;background:linear-gradient(135deg,rgba(255,159,10,0.15),rgba(255,159,10,0.05));border:1.5px solid rgba(255,159,10,0.4);color:var(--warning);padding:14px;border-radius:14px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;transition:all 0.2s;">'+
-     (currentLang==='ar'?'الإبلاغ عن مشكلة':'Report an Issue')+
-'</button>'+
+    
       '<div class="detail-section">'+
         '<h4 class="detail-section-title">'+(currentLang==='ar'?'التعليقات':'Comments')+' ('+commentsList.length+')</h4>'+
         '<div style="max-height:200px;overflow-y:auto;margin-bottom:12px;">'+commentsHTML+'</div>'+
