@@ -3114,21 +3114,16 @@ function postComment(appId){
 
 // ====== REPORT ======
 function openReportModal(appId){
-  if(!requireVerifiedEmail()) return;
+  console.log('🔍 Report button clicked, appId:', appId);
+  const modal = document.getElementById('reportModal');
+  if(!modal){
+    alert('خطأ: modal الإبلاغ ماشي موجود!');
+    return;
+  }
   document.getElementById('reportAppId').value = appId;
   document.getElementById('reportReason').value = '';
-  openModal('reportModal');
-}
-function setReportReasonText(t){ document.getElementById('reportReason').value = t; }
-function submitReport(){
-  if(!requireVerifiedEmail()) return;
-  const appId = document.getElementById('reportAppId').value;
-  const reason = document.getElementById('reportReason').value.trim();
-  if(!reason){ showToast('Please select or type a reason', 'warning'); return; }
-  db.collection("reports").add({appId, reason, user: currentUser ? currentUser.email : 'Guest', createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-    showToast('Report sent', 'success');
-    closeModal('reportModal');
-  });
+  modal.style.display = 'flex';
+  console.log('✅ Modal opened successfully');
 }
 function deleteReport(reportId){
   if(!isAdmin) return;
