@@ -4880,30 +4880,47 @@ function ignoreCommentReport(reportId){
 document.getElementById('commentReportModal')?.addEventListener('click', function(e){
   if(e.target === this) closeCommentReport();
 });
- document.addEventListener('DOMContentLoaded', () => {
+ // ✅ إضافة خاصية السحب لأسفل (نسخة سريعة ومحسنة)
+document.addEventListener('DOMContentLoaded', () => {
   const dragHandle = document.getElementById('aiChatDragHandle');
   const aiChatPanel = document.getElementById('aiChatPanel');
   let startY = 0; let currentY = 0; let isDragging = false;
 
   if (dragHandle && aiChatPanel) {
     dragHandle.addEventListener('touchstart', (e) => {
-      startY = e.touches[0].clientY; isDragging = true;
+      startY = e.touches[0].clientY; 
+      isDragging = true;
       aiChatPanel.style.transition = 'none';
     });
+
     dragHandle.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
       currentY = e.touches[0].clientY;
       let diff = currentY - startY;
-      if (diff > 0) aiChatPanel.style.transform = `translateY(${diff}px)`;
+      
+      // ✅ مضاعفة السرعة (1.2x) باش النافذة تهبط بسرعة مع الصبع
+      if (diff > 0) {
+        aiChatPanel.style.transform = `translateY(${diff * 1.2}px)`;
+      }
     });
+
     dragHandle.addEventListener('touchend', () => {
       if (!isDragging) return;
       isDragging = false;
       aiChatPanel.style.transition = 'transform 0.3s cubic-bezier(0.16,1,0.3,1)';
-      if ((currentY - startY) > 100) {
-        closeAiChat();
-        setTimeout(() => { aiChatPanel.style.transform = 'translateY(0)'; }, 300);
+      let diff = currentY - startY;
+
+      // ✅ خفضنا العتبة لـ 50 بكسل (باش تتحبس بسرعة)
+      if (diff > 50) {
+        // نزل النافذة لتحت كاملة قبل ما نغلقوها (باش ما تبانش شفافة)
+        aiChatPanel.style.transform = 'translateY(100%)';
+        setTimeout(() => {
+          closeAiChat(); // غادي تغلق الـ drawer هنا
+          // بعد الإغلاق، نرجعو النافذة لمكانها باش تكون جاهزة في المرة الجاية
+          setTimeout(() => { aiChatPanel.style.transform = 'translateY(0)'; }, 50);
+        }, 300); // كنسناو 300ms باش الأنيميشن يكمل
       } else {
+        // إذا السحبة صغيرة، ترجع لمكانها
         aiChatPanel.style.transform = 'translateY(0)';
       }
       startY = 0; currentY = 0;
