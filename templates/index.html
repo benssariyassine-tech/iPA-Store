@@ -4510,20 +4510,26 @@ function updateNewsBubble() {
 console.log('Banner should be visible now!'); // باش نتأكدو بلي الدالة خدمت
     textEl.innerText = T.msg;
 }
-function openAiChat() {
+ function openAiChat() {
   document.getElementById('aiChatDrawer').classList.add('open');
+  
+  // ✅ زيد هاد السطر باش النافذة ترجع لمكانها الطبيعي
+  const aiChatPanel = document.getElementById('aiChatPanel');
+  if (aiChatPanel) {
+    aiChatPanel.style.transition = 'none';
+    aiChatPanel.style.transform = 'translateY(0)';
+  }
 
-  // ✅ تشغيل التوهج الزاهي لمدة 4 ثوانٍ
+  // ... باقي كود التوهج (اللي حطيتيه قبل)
   const inputBar = document.querySelector('.aiChatInputBar');
   if (inputBar) {
     inputBar.classList.remove('animate-glow');
-    void inputBar.offsetWidth; // حيلة برمجية لإعادة تشغيل الأنيميشن في كل مرة
+    void inputBar.offsetWidth;
     inputBar.classList.add('animate-glow');
   }
-
   setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
 }
-// 👀 تتبع عينين الروبوت لمؤشر الماوس
+ // 👀 تتبع عينين الروبوت لمؤشر الماوس
 document.addEventListener('mousemove', function(e) {
   const pupils = document.querySelectorAll('.robot-pupil');
   const btn = document.getElementById('aiChatBtn');
