@@ -4567,6 +4567,41 @@ function submitCommentReport(){
     showToast('Error: ' + err.message, 'error', 4000);
   });
 }
+// ====== ADMIN: ACTIONS ON COMMENT REPORTS ======
+function deleteCommentFromReport(appId, commentId, reportId){
+  if(!isAdmin) return;
+  if(!confirm(currentLang === 'ar' ? 'حذف التعليق و التقرير؟' : 'Delete comment and report?')) return;
+  
+  // 1. احذف التعليق
+  db.collection("apps").doc(appId).collection("comments").doc(commentId).delete()
+    .then(() => {
+      // 2. نقص عدد التعليقات
+      db.collection("apps").doc(appId).update({
+        commentsCount: firebase.firestore.FieldValue.increment(-1)
+      }).catch(()=>{});
+      
+      // 3. احذف التقرير
+      return db.collection("comment_reports").doc(reportId).delete();
+    })
+    .then(() => {
+      showToast(currentLang === 'ar' ? 'تم حذف التعليق والتقرير' : 'Comment and report deleted', 'success', 2500);
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      showToast('Error: ' + err.message, 'error', 3000);
+    });
+}
+
+function ignoreCommentReport(reportId){
+  if(!isAdmin) return;
+  if(!confirm(currentLang === 'ar' ? 'تجاهل هذا التقرير؟' : 'Ignore this report?')) return;
+  
+  db.collection("comment_reports").doc(reportId).delete()
+    .then(() => {
+      showToast(currentLang === 'ar' ? 'تم تجاهل التقرير' : 'Report ignored', 'success', 2000);
+    })
+    .catch(err => showToast('Error: ' + err.message, 'error', 3000));
+}
 
 // إلا كان المستخدم سدّ الـ modal من برا
 document.getElementById('commentReportModal')?.addEventListener('click', function(e){
