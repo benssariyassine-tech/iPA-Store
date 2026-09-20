@@ -3056,7 +3056,7 @@ similarApps = similarApps.slice(0, 6);
         '<div style="max-height:200px;overflow-y:auto;margin-bottom:12px;">'+commentsHTML+'</div>'+
         (currentUser?'<input type="text" id="newCommentText" class="input-field" placeholder="'+(currentLang==='ar'?'اكتب تعليقاً...':'Write a comment...')+'"><button onclick="postComment(\''+app.id+'\')" class="btn-primary" style="padding:11px;font-size:13px;">'+(currentLang==='ar'?'نشر التعليق':'Post Comment')+'</button>':'<p style="color:var(--danger);font-size:12px;text-align:center;padding:10px;">'+(currentLang==='ar'?'سجّل الدخول للتعليق':'Sign in to comment.')+'</p>')+
       '</div>'+
-      '<button onclick="closeModal(\'appDetailModal\')" class="btn-secondary" style="margin-top:6px;">'+(currentLang==='ar'?'إغلاق':'Close')+'</button>'+
+'<button onclick="closeModal(\'appDetailModal\')" style="position:fixed;top:20px;right:20px;background:rgba(0,0,0,0.7);border:2px solid rgba(255,255,255,0.2);color:#fff;width:44px;height:44px;border-radius:50%;cursor:pointer;z-index:999;font-size:24px;font-weight:900;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);">✕</button>'+
 '</div>';
     document.getElementById('appDetailModal').style.display = 'flex';
    document.querySelector('.bottom-sheet-content').scrollTop = 0;
