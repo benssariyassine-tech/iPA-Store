@@ -4438,6 +4438,99 @@ async function sendAiMessage() {
 }
 // ✅ استدعاء الشريط كي تفتح الصفحة
 setTimeout(updateNewsBubble, 500);
+ // ====== COMMENT REPORT SYSTEM ======
+let selectedCommentReason = '';
+
+function openCommentReport(appId, commentId, userName){
+  // نسد modal التطبيق مؤقتاً
+  document.getElementById('appDetailModal').style.display = 'none';
+  
+  // جيب نص التعليق الأصلي
+  let commentText = '';
+  const commentEl = document.getElementById('comment_'+commentId);
+  if(commentEl){
+    commentText = commentEl.querySelector('.comment-text')?.innerText || '';
+  }
+  
+  // حط البيانات
+  document.getElementById('commentReportAppId').value = appId;
+  document.getElementById('commentReportId').value = commentId;
+  document.getElementById('reportedCommentUser').innerText = userName;
+  document.getElementById('reportedCommentText').innerText = commentText || '(Comment)';
+  
+  // Avatar
+  const avatarEl = document.getElementById('reportedCommentAvatar');
+  if(avatarEl){
+    avatarEl.innerText = (userName || 'U').charAt(0).toUpperCase();
+  }
+  
+  // صفّر الاختيار
+  selectedCommentReason = '';
+  document.querySelectorAll('.report-reason-option').forEach(el => el.classList.remove('selected'));
+  document.querySelectorAll('input[name="commentReportReason"]').forEach(el => el.checked = false);
+  
+  // افتح الـ modal
+  const modal = document.getElementById('commentReportModal');
+  modal.style.display = 'flex';
+  modal.style.zIndex = '99999';
+}
+
+function selectCommentReason(el, reason){
+  selectedCommentReason = reason;
+  document.querySelectorAll('.report-reason-option').forEach(opt => opt.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+}
+
+function closeCommentReport(){
+  document.getElementById('commentReportModal').style.display = 'none';
+  // رجّع modal التطبيق
+  document.getElementById('appDetailModal').style.display = 'flex';
+}
+
+function submitCommentReport(){
+  if(!selectedCommentReason){
+    showToast(
+      currentLang === 'ar' ? 'يرجى اختيار سبب للإبلاغ' : 'Please select a reason',
+      'warning',
+      2000
+    );
+    return;
+  }
+  
+  const appId = document.getElementById('commentReportAppId').value;
+  const commentId = document.getElementById('commentReportId').value;
+  const userName = document.getElementById('reportedCommentUser').innerText;
+  const commentText = document.getElementById('reportedCommentText').innerText;
+  const reporterEmail = currentUser ? currentUser.email : 'anonymous';
+  
+  // خزّن التقرير فـ Firebase
+  db.collection("comment_reports").add({
+    appId: appId,
+    commentId: commentId,
+    commentAuthor: userName,
+    commentText: commentText,
+    reason: selectedCommentReason,
+    reporter: reporterEmail,
+    status: 'pending',
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    showToast(
+      currentLang === 'ar' ? 'تم إرسال التقرير، شكراً لك' : 'Report sent, thank you',
+      'success',
+      3000
+    );
+    closeCommentReport();
+  }).catch(err => {
+    console.error('Report error:', err);
+    showToast('Error: ' + err.message, 'error', 4000);
+  });
+}
+
+// إلا كان المستخدم سدّ الـ modal من برا
+document.getElementById('commentReportModal')?.addEventListener('click', function(e){
+  if(e.target === this) closeCommentReport();
+});
 </script>
 <!-- AI Chatbot Robot -->
 <div id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
