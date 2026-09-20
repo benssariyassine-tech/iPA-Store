@@ -3570,46 +3570,47 @@ function renderUI(){
     else favApps.forEach(app=>fc.innerHTML += createAppCardHTML(app));
     return;
   }
-
-  if(currentTab === 'admin_panel' && isAdmin){
+if(currentTab === 'admin_panel' && isAdmin){
     let totalApps = allAppsCache.length;
     let totalReports = allReportsCache.length;
     let totalDownloads = allAppsCache.reduce((s,a)=>s+(a.downloads||0),0);
     let totalLikes = allAppsCache.reduce((s,a)=>s+((a.likedBy&&a.likedBy.length)||0),0);
     let pendingPublishers = allPublisherRequests.filter(r=>r.status === 'pending').length;
-   let totalCommentReports = allCommentReportsCache.length;
-let commentReportsHTML = "";
-if(totalCommentReports === 0){
-  commentReportsHTML = `<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">${currentLang==='ar'?'لا توجد تقارير تعليقات':'No comment reports'}</p></div>`;
-} else {
-  allCommentReportsCache.forEach(rep=>{
-    let targetApp = allAppsCache.find(a=>a.id===rep.appId);
-    let appName = targetApp ? targetApp.name : "Unknown App";
-    let reasonLabels = {
-      'spam': currentLang==='ar'?'سبام':'Spam',
-      'hate': currentLang==='ar'?'خطاب كراهية':'Hate Speech',
-      'profanity': currentLang==='ar'?'ألفاظ نابية':'Profanity',
-      'harassment': currentLang==='ar'?'تحرش':'Harassment',
-      'misinformation': currentLang==='ar'?'معلومات كاذبة':'Misinformation',
-      'other': currentLang==='ar'?'أخرى':'Other'
-    };
-    commentReportsHTML += '<div class="report-admin-item" style="border-color:rgba(255,159,10,0.3);">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">'+
-        '<span style="color:var(--warning);font-weight:900;font-size:12px;">'+appName+'</span>'+
-        '<span style="background:rgba(255,159,10,0.15);color:var(--warning);font-size:10px;padding:3px 8px;border-radius:6px;font-weight:800;">'+(reasonLabels[rep.reason]||rep.reason)+'</span>'+
-      '</div>'+
-      '<div style="background:var(--modal-bg);padding:8px 10px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--warning);">'+
-        '<div style="font-size:11px;color:var(--subtext-color);font-weight:700;margin-bottom:3px;">@'+rep.commentAuthor+'</div>'+
-        '<div style="color:var(--text-color);font-size:12px;line-height:1.5;">"'+rep.commentText+'"</div>'+
-      '</div>'+
-      '<div style="font-size:10px;color:var(--subtext-color);margin-bottom:8px;">'+(currentLang==='ar'?'بواسطة':'By')+': '+rep.reporter+'</div>'+
-      '<div style="display:flex;gap:6px;justify-content:flex-end;">'+
-        '<button onclick="deleteCommentFromReport(\''+rep.appId+'\',\''+rep.commentId+'\',\''+rep.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'حذف التعليق':'Delete Comment')+'</button>'+
-        '<button onclick="ignoreCommentReport(\''+rep.id+'\')" style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'تجاهل':'Ignore')+'</button>'+
-      '</div>'+
-    '</div>';
-  });
-}
+    let totalCommentReports = allCommentReportsCache.length;
+
+    let commentReportsHTML = "";
+    if(totalCommentReports === 0){
+      commentReportsHTML = `<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">${currentLang==='ar'?'لا توجد تقارير تعليقات':'No comment reports'}</p></div>`;
+    } else {
+      allCommentReportsCache.forEach(rep=>{
+        let targetApp = allAppsCache.find(a=>a.id===rep.appId);
+        let appName = targetApp ? targetApp.name : "Unknown App";
+        let reasonLabels = {
+          'spam': currentLang==='ar'?'سبام':'Spam',
+          'hate': currentLang==='ar'?'خطاب كراهية':'Hate Speech',
+          'profanity': currentLang==='ar'?'ألفاظ نابية':'Profanity',
+          'harassment': currentLang==='ar'?'تحرش':'Harassment',
+          'misinformation': currentLang==='ar'?'معلومات كاذبة':'Misinformation',
+          'other': currentLang==='ar'?'أخرى':'Other'
+        };
+        commentReportsHTML += '<div class="report-admin-item" style="border-color:rgba(255,159,10,0.3);">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">'+
+            '<span style="color:var(--warning);font-weight:900;font-size:12px;">'+appName+'</span>'+
+            '<span style="background:rgba(255,159,10,0.15);color:var(--warning);font-size:10px;padding:3px 8px;border-radius:6px;font-weight:800;">'+(reasonLabels[rep.reason]||rep.reason)+'</span>'+
+          '</div>'+
+          '<div style="background:var(--modal-bg);padding:8px 10px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--warning);">'+
+            '<div style="font-size:11px;color:var(--subtext-color);font-weight:700;margin-bottom:3px;">@'+rep.commentAuthor+'</div>'+
+            '<div style="color:var(--text-color);font-size:12px;line-height:1.5;">"'+rep.commentText+'"</div>'+
+          '</div>'+
+          '<div style="font-size:10px;color:var(--subtext-color);margin-bottom:8px;">'+(currentLang==='ar'?'بواسطة':'By')+': '+rep.reporter+'</div>'+
+          '<div style="display:flex;gap:6px;justify-content:flex-end;">'+
+            '<button onclick="deleteCommentFromReport(\''+rep.appId+'\',\''+rep.commentId+'\',\''+rep.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'حذف التعليق':'Delete Comment')+'</button>'+
+            '<button onclick="ignoreCommentReport(\''+rep.id+'\')" style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:6px 12px;border-radius:8px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'تجاهل':'Ignore')+'</button>'+
+          '</div>'+
+        '</div>';
+      });
+    }
+
     let reportsHTML = "";
     if(totalReports===0) reportsHTML = `<div style="text-align:center;padding:25px 0;"><p style="color:var(--success);font-weight:700;font-size:13px;margin:0;">${currentLang==='ar'?'لا توجد تقارير معلقة':'All clear! No pending reports.'}</p></div>`;
     else allReportsCache.forEach(rep=>{
@@ -3617,6 +3618,7 @@ if(totalCommentReports === 0){
       let appName = targetApp ? targetApp.name : "Unknown App";
       reportsHTML += '<div class="report-admin-item"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;"><span style="color:var(--danger);font-weight:900;font-size:12px;">'+appName+'</span><span style="color:var(--subtext-color);font-size:10px;">By: '+rep.user+'</span></div><div style="color:var(--text-color);font-size:12px;margin-bottom:8px;background:var(--modal-bg);padding:6px 8px;border-radius:6px;">"'+rep.reason+'"</div><div style="display:flex;justify-content:flex-end;"><button onclick="deleteReport(\''+rep.id+'\')" style="background:var(--danger);color:#fff;border:none;padding:5px 12px;border-radius:8px;font-weight:bold;font-size:11px;cursor:pointer;font-family:inherit;">'+(currentLang==='ar'?'حل':'Resolve')+'</button></div></div>';
     });
+
     let publisherHTML = "";
     if(pendingPublishers === 0) publisherHTML = `<div style="text-align:center;padding:20px 0;"><p style="color:var(--subtext-color);font-weight:700;font-size:13px;margin:0;">${currentLang==='ar'?'لا توجد طلبات ناشرين':'No pending applications.'}</p></div>`;
     else {
@@ -3626,11 +3628,61 @@ if(totalCommentReports === 0){
         publisherHTML += '<div class="partner-req"><div class="partner-req-head"><div class="partner-req-avatar">'+avatarContent+'</div><div style="flex:1;min-width:0;"><div class="partner-req-name">'+(req.displayName||'Unknown')+'</div><div class="partner-req-email">'+req.email+'</div></div></div><div class="partner-req-reason">'+req.reason+'</div><div class="partner-req-actions"><button class="btn-reject" onclick="rejectPublisher(\''+req.id+'\')">'+(currentLang==='ar'?'رفض':'Reject')+'</button><button class="btn-approve" onclick="approvePublisher(\''+req.id+'\',\''+req.email+'\')">'+(currentLang==='ar'?'قبول':'Approve')+'</button></div></div>';
       });
     }
-   '<div class="admin-section-card"><h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><span>'+(currentLang==='ar'?'تقارير التعليقات':'Comment Reports')+'</span><span style="background:rgba(255,159,10,0.15);color:var(--warning);font-size:11px;padding:3px 10px;border-radius:8px;font-weight:900;">'+totalCommentReports+'</span></h4><div style="max-height:400px;overflow-y:auto;">'+commentReportsHTML+'</div></div>'+
-    container.innerHTML = '<div class="today-header"><div class="today-title">'+(currentLang==='ar'?'لوحة الإدارة':'Admin Dashboard')+'</div><div class="today-subtitle" style="color:var(--danger);">'+ICONS.trophy+' iStore</div></div><div style="margin-bottom:15px; display:flex; gap:10px;"><button onclick="toggleUserPreview()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:11px 15px;border-radius:14px;font-weight:bold;font-size:13px;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;box-shadow:0 6px 20px rgba(10,132,255,0.35);">'+ICONS.eye+' '+(currentLang==='ar'?'معاينة كمستخدم':'Switch to User Preview')+'</button><button onclick="toggleAdminPremiumTest()" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;border:none;padding:11px 15px;border-radius:14px;font-weight:bold;font-size:13px;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;box-shadow:0 6px 20px rgba(255,159,10,0.35);"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> '+(currentLang==='ar'?'تفعيل وضع المشترك':'Enable Premium Mode')+'</button></div><div style="display:flex;flex-direction:column;gap:16px;"><div class="admin-section-card"><h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;">'+(currentLang==='ar'?'الإحصائيات':'Platform Stats')+'</h4><div class="admin-stats-grid"><div class="stat-box"><h5>'+(currentLang==='ar'?'التطبيقات':'Apps')+'</h5><p style="color:var(--text-color);">'+totalApps+'</p></div><div class="stat-box"><h5>'+(currentLang==='ar'?'التقارير':'Reports')+'</h5><p>'+totalReports+'</p></div><div class="stat-box"><h5>'+(currentLang==='ar'?'التحميلات':'Downloads')+'</h5><p style="color:var(--success);">'+totalDownloads+'</p></div><div class="stat-box"><h5>'+(currentLang==='ar'?'الإعجابات':'Likes')+'</h5><p style="color:var(--warning);">'+totalLikes+'</p></div></div></div><div class="admin-section-card"><h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><span>'+(currentLang==='ar'?'طلبات الناشرين':'Publisher Requests')+'</span><span style="background:rgba(10,132,255,0.15);color:var(--accent);font-size:11px;padding:3px 10px;border-radius:8px;font-weight:900;">'+pendingPublishers+'</span></h4><div style="max-height:400px;overflow-y:auto;">'+publisherHTML+'</div></div><div class="admin-section-card"><h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center;"><span>'+(currentLang==='ar'?'تقارير المستخدمين':'User Reports')+'</span><span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:11px;padding:3px 10px;border-radius:8px;font-weight:900;">'+totalReports+'</span></h4><div style="max-height:350px;overflow-y:auto;">'+reportsHTML+'</div></div></div>';
+
+    // ✅ كل شيء داخل Backticks واحدة
+    container.innerHTML = `
+      <div class="admin-section-card">
+        <h4 style="font-size:14px; margin:0 0 12px 0; color:var(--text-color); border-bottom:1px solid var(--border-color); padding-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+          <span>${currentLang === 'ar' ? 'تقارير التعليقات' : 'Comment Reports'}</span>
+          <span style="background:rgba(255,159,10,0.15); color:var(--warning); font-size:11px; padding:3px 10px; border-radius:8px; font-weight:900;">
+            ${totalCommentReports}
+          </span>
+        </h4>
+        <div style="max-height:400px; overflow-y:auto;">
+          ${commentReportsHTML}
+        </div>
+      </div>
+      
+      <div class="today-header">
+        <div class="today-title">${currentLang==='ar'?'لوحة الإدارة':'Admin Dashboard'}</div>
+        <div class="today-subtitle" style="color:var(--danger);">${ICONS.trophy} iStore</div>
+      </div>
+      
+      <div style="margin-bottom:15px; display:flex; gap:10px;">
+        <button onclick="toggleUserPreview()" style="background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;padding:11px 15px;border-radius:14px;font-weight:bold;font-size:13px;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;box-shadow:0 6px 20px rgba(10,132,255,0.35);">${ICONS.eye} ${currentLang==='ar'?'معاينة كمستخدم':'Switch to User Preview'}</button>
+        <button onclick="toggleAdminPremiumTest()" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00);color:#fff;border:none;padding:11px 15px;border-radius:14px;font-weight:bold;font-size:13px;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit;box-shadow:0 6px 20px rgba(255,159,10,0.35);"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg> ${currentLang==='ar'?'تفعيل وضع المشترك':'Enable Premium Mode'}</button>
+      </div>
+      
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="admin-section-card">
+          <h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;">${currentLang==='ar'?'الإحصائيات':'Platform Stats'}</h4>
+          <div class="admin-stats-grid">
+            <div class="stat-box"><h5>${currentLang==='ar'?'التطبيقات':'Apps'}</h5><p style="color:var(--text-color);">${totalApps}</p></div>
+            <div class="stat-box"><h5>${currentLang==='ar'?'التقارير':'Reports'}</h5><p>${totalReports}</p></div>
+            <div class="stat-box"><h5>${currentLang==='ar'?'التحميلات':'Downloads'}</h5><p style="color:var(--success);">${totalDownloads}</p></div>
+            <div class="stat-box"><h5>${currentLang==='ar'?'الإعجابات':'Likes'}</h5><p style="color:var(--warning);">${totalLikes}</p></div>
+          </div>
+        </div>
+        
+        <div class="admin-section-card">
+          <h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+            <span>${currentLang==='ar'?'طلبات الناشرين':'Publisher Requests'}</span>
+            <span style="background:rgba(10,132,255,0.15);color:var(--accent);font-size:11px;padding:3px 10px;border-radius:8px;font-weight:900;">${pendingPublishers}</span>
+          </h4>
+          <div style="max-height:400px;overflow-y:auto;">${publisherHTML}</div>
+        </div>
+        
+        <div class="admin-section-card">
+          <h4 style="font-size:14px;margin:0 0 12px 0;color:var(--text-color);border-bottom:1px solid var(--border-color);padding-bottom:8px;display:flex;justify-content:space-between;align-items:center;">
+            <span>${currentLang==='ar'?'تقارير المستخدمين':'User Reports'}</span>
+            <span style="background:rgba(255,69,58,0.15);color:var(--danger);font-size:11px;padding:3px 10px;border-radius:8px;font-weight:900;">${totalReports}</span>
+          </h4>
+          <div style="max-height:350px;overflow-y:auto;">${reportsHTML}</div>
+        </div>
+      </div>
+    `;
     return;
   }
-
   if(currentTab === 'today'){
     let trendingList = [...uniqueApps].sort((a,b)=>getTrendingScore(b)-getTrendingScore(a));
     let todayList = trendingList.filter(app=>app.category==='today'||!app.category);
