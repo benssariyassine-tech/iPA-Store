@@ -3853,14 +3853,15 @@ function createAppCardHTML(app, rankBadge){
   const thumbUpFill = '<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
   const warnIcon = '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
 
-  return '<div class="app-card-pro">'+
+return '<div class="app-card-pro">'+
+    slantBadge+  
     '<div style="display:flex;gap:14px;align-items:flex-start;position:relative;z-index:1;">'+
       '<div class="app-icon-wrapper" onclick="openAppDetails(\''+app.id+'\')">'+
         '<img src="'+(app.icon||FALLBACK_ICON)+'" class="app-icon-img" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
+        
         ((app.appType === 'official') ? '<span class="app-badge badge-official">ORIG</span>' : '<span class="app-badge badge-mod">MOD</span>')+
-        slantBadge+
-      '</div>'+
-      '<div style="flex:1;min-width:0;">'+
+      '</div>'+ 
+      '<div style="flex:1;min-width:
         '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;">'+
           (rankBadge ? '<span style="margin-right:4px;">'+rankBadge+'</span>' : '')+
           '<h4 class="card-app-name" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
