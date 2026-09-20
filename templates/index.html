@@ -3816,32 +3816,39 @@ setTimeout(()=>{
   const activeBtn = document.querySelector('.nav-item[data-tab="'+currentTab+'"]');
   if(activeBtn) activeBtn.classList.add('active');
 }, 100);
-// 🔗 فتح التطبيق تلقائياً عند الوصول من رابط مشارك
+// 🔗 فتح التطبيق تلقائياً من رابط المشاركة (?app= أو #app-)
 function openAppFromHash(){
-  if(!window.location.hash.startsWith('#app-')) return;
-  const appId = window.location.hash.replace('#app-','');
-  let attempts = 25; // يحاول لمدة ~10 ثواني
+  let appId = '';
+
+  // 1. الأولوية لـ ?app= (الطريقة الجديدة)
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('app')){
+    appId = params.get('app');
+  }
+  // 2. احتياطي: #app- (الطريقة القديمة)
+  else if(window.location.hash.startsWith('#app-')){
+    appId = window.location.hash.replace('#app-','');
+  }
+
+  if(!appId) return;
+
+  let attempts = 25;
   const tryOpen = () => {
     if(allAppsCache.find(a => a.id === appId)){
-      // نتأكد أن المستخدم مسجل دخول قبل فتح التطبيق
-      if(!currentUser){
-        showToast(
-          currentLang === 'ar'
-            ? '🔒 سجّل الدخول لتحميل التطبيق'
-            : '🔒 Sign in to download the app',
-          'warning', 3500
-        );
-        openAccountModal();
-      }
+      // فتح التطبيق مباشرة
       openAppDetails(appId);
+      // تنظيف الرابط باش يبان نظيف
+      window.history.replaceState({}, '', window.location.pathname);
     } else if(attempts-- > 0){
       setTimeout(tryOpen, 400);
     }
   };
-  setTimeout(tryOpen, 300);
+  setTimeout(tryOpen, 500);
 }
+
 openAppFromHash();
 window.addEventListener('hashchange', openAppFromHash);
+window.addEventListener('popstate', openAppFromHash);
  // ====== AI CHATBOT (Puter.js) ======
 const AI_SYSTEM_PROMPT = `أنت "مساعد iStore"، المساعد الذكي الرسمي لموقع iStore لتحميل تطبيقات وألعاب الآيفون (IPA) والأندرويد (APK).
 
