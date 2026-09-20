@@ -852,17 +852,24 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-.aiChatPanel::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 4px;
-  border-radius: 4px;
-  background: rgba(255,255,255,0.3);
-  z-index: 10;
+.aiChatDragHandle {
+    width: 100%;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    cursor: grab;
+    touch-action: none; /* منع المتصفح من التمرير أثناء السحب */
+}
+.aiChatDragHandle .drag-bar {
+    width: 40px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.3);
 }
 
 .aiChatHeader {
