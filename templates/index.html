@@ -3868,7 +3868,8 @@ return '<div class="app-card-pro">'+
         
         ((app.appType === 'official') ? '<span class="app-badge badge-official">ORIG</span>' : '<span class="app-badge badge-mod">MOD</span>')+
       '</div>'+ 
-      '<div style="flex:1;min-width:
+
+      '<div style="flex:1;min-width:0;">'+
         '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;">'+
           (rankBadge ? '<span style="margin-right:4px;">'+rankBadge+'</span>' : '')+
           '<h4 class="card-app-name" onclick="openAppDetails(\''+app.id+'\')">'+app.name+'</h4>'+
