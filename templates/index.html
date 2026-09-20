@@ -3507,21 +3507,16 @@ db.collection("apps").orderBy("createdAt","desc").onSnapshot(snapshot=>{
   renderUI();
 }, err=>{ console.warn('Apps err:',err); });
 db.collection("reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
- db.collection("comment_reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
-  allCommentReportsCache = [];
-  snapshot.forEach(doc=>allCommentReportsCache.push({id:doc.id, ...doc.data()}));
-  if(currentTab === 'admin_panel') renderUI();
-}, err=>{ console.warn('Comment reports err:',err); });
   allReportsCache = [];
   snapshot.forEach(doc=>allReportsCache.push({id:doc.id, ...doc.data()}));
   if(currentTab === 'admin_panel') renderUI();
 }, err=>{ console.warn('Reports err:',err); });
-db.collection("publisher_requests").orderBy("createdAt","desc").onSnapshot(snapshot=>{
-  allPublisherRequests = [];
-  snapshot.forEach(doc=>allPublisherRequests.push({id:doc.id, ...doc.data()}));
+
+db.collection("comment_reports").orderBy("createdAt","desc").onSnapshot(snapshot=>{
+  allCommentReportsCache = [];
+  snapshot.forEach(doc=>allCommentReportsCache.push({id:doc.id, ...doc.data()}));
   if(currentTab === 'admin_panel') renderUI();
-  updateAvatarUI();
-}, err=>{ console.warn('Publisher requests err:',err); });
+}, err=>{ console.warn('Comment reports err:',err); });
 
 // ====== RENDER UI ======
 function renderUI(){
