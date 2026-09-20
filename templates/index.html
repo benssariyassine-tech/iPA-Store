@@ -4931,6 +4931,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+ function closeAiChat() {
+  document.getElementById('aiChatDrawer').classList.remove('open');
+  const aiChatPanel = document.getElementById('aiChatPanel');
+  if (aiChatPanel) {
+    setTimeout(() => {
+      aiChatPanel.style.transform = 'translateY(0)';
+    }, 300);
+  }
+}
 </script>
 <!-- AI Chatbot Robot -->
 <div id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
