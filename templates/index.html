@@ -1526,48 +1526,79 @@ body[dir="rtl"] .marquee-text {
     border-radius: 8px;
     border: 1px solid rgba(255, 159, 10, 0.2);
 }
-
-/* ✅ شارة مائلة في زاوية البطاقة (أخضر) */
+/* ✅ شارة مائلة في زاوية البطاقة (شريط متحرك وجذاب) */
 .slant-badge {
     position: absolute;
-    top: -5px;           /* الالتصاق بالحافة العلوية للبطاقة */
-    right: -45px;        /* الإخراج للخارج (للوضع الإنجليزي LTR) */
-    width: 160px;        /* العرض */
-    height: 26px;        /* الارتفاع */
+    top: 22px;           /* المسافة من الأعلى */
+    right: -48px;        /* إخراج الشريط للخارج (للوضع الإنجليزي) */
+    width: 180px;        /* عرض كافٍ ليغطي الزاوية */
+    height: 26px;        /* ارتفاع مناسب */
     transform: rotate(45deg); /* الميلان */
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 900;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
     color: #ffffff;
     z-index: 10;
     pointer-events: none;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.7);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-    animation: pulseNew 2s ease-in-out infinite;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.3);
+    /* ✨ تأثير التوهج والنبض المتحرك */
+    animation: badgeGlow 2s ease-in-out infinite;
 }
 
-/* ✅ تصحيح مهم للغة العربية (RTL) */
+/* ✅ تعديل اتجاه الشارة للغة العربية (RTL) */
 body[dir="rtl"] .slant-badge {
     right: auto;
-    left: -45px;
+    left: -48px;
     transform: rotate(-45deg);
 }
 
+/* 🟢 تطبيق جديد (أخضر زاهي) */
 .slant-badge.slant-new {
-    background: linear-gradient(135deg, #32d74b, #1a9c33); /* ✅ اللون الأخضر */
+    background: linear-gradient(135deg, #34c759, #28a745); /* أخضر زاهي */
+    box-shadow: 0 4px 15px rgba(52, 199, 89, 0.4);
 }
 
+/* 🔴 تطبيق محدّث (أحمر زاهي) */
 .slant-badge.slant-updated {
-    background: linear-gradient(135deg, #ff453a, #d70015); /* أحمر للتحديث */
+    background: linear-gradient(135deg, #ff3b30, #d70015); /* أحمر زاهي */
+    box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
 }
-@keyframes pulseNew {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
+
+/* ✨ تأثير النبض والتوهج */
+@keyframes badgeGlow {
+    0%, 100% { 
+        opacity: 0.95;
+        transform: rotate(45deg) scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: rotate(45deg) scale(1.05);
+        filter: brightness(1.2);
+    }
 }
+
+body[dir="rtl"] .slant-badge {
+    animation: badgeGlowRTL 2s ease-in-out infinite;
+}
+@keyframes badgeGlowRTL {
+    0%, 100% { 
+        opacity: 0.95;
+        transform: rotate(-45deg) scale(1);
+        filter: brightness(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: rotate(-45deg) scale(1.05);
+        filter: brightness(1.2);
+    }
+}
+
 /* ✨ Card Glow Animation */
 .app-card-pro {
     background: linear-gradient(135deg, 
