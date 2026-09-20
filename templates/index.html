@@ -3025,12 +3025,26 @@ similarApps = similarApps.slice(0, 6);
       '<div class="detail-section">'+
         '<h4 class="detail-section-title">'+ICONS.starFill+' '+(currentLang==='ar'?'التقييم':'Rating')+'</h4>'+
         '<div class="rating-summary"><span>'+(app.ratingCount?(app.ratingCount+(currentLang==='ar'?' تقييم':' ratings')):(currentLang==='ar'?'لا توجد تقييمات':'No ratings'))+'</span><span class="rating-value">'+ICONS.starFill+' '+(ratingAvg>0?ratingAvg.toFixed(1):'—')+'</span></div>'+
-        '<div class="star-rating">'+starsHTML+'</div>'+
+   '<div class="star-rating">'+
+  (function(){
+    let displayStars = '';
+    const avgRounded = Math.round(ratingAvg);
+    for(let i=1;i<=5;i++){
+      const isFilled = i <= avgRounded;
+      displayStars += '<span style="font-size:30px;color:'+(isFilled?'#ffd60a':'var(--border-color)')+';">★</span>';
+    }
+    return displayStars;
+  })()+
+'</div>'+
         (userRating>0?'<p style="margin:6px 0 0 0;font-size:11px;color:var(--subtext-color);text-align:center;">'+(currentLang==='ar'?'تقييمك: ':'You rated: ')+userRating+' ⭐</p>':'')+
       '</div>'+
       '<div class="detail-section">'+
         '<h4 class="detail-section-title">'+ICONS.infoCircle+' '+(currentLang==='ar'?'معلومات التطبيق':'App Info')+'</h4>'+
-        '<p class="detail-info-text">'+(app.info||app.desc||(currentLang==='ar'?'لا توجد معلومات إضافية.':'No additional info available.'))+'</p>'+
+   '<p class="detail-info-text" id="appInfoText" style="display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;line-height:1.6;">'+(app.info||app.desc||(currentLang==='ar'?'لا توجد معلومات إضافية.':'No additional info available.'))+'</p>'+
+((app.info && app.info.length > 200) ? 
+  '<button onclick="toggleAppInfo()" id="readMoreBtn" style="background:transparent;border:none;color:var(--accent);font-weight:800;font-size:12px;cursor:pointer;padding:8px 0;font-family:inherit;display:flex;align-items:center;gap:4px;">'+
+  (currentLang==='ar'?'اقرأ المزيد ↓':'Read more ↓')+
+  '</button>' : '')+
       '</div>'+
       '<div class="detail-section">'+
         '<h4 class="detail-section-title">'+(currentLang==='ar'?'لقطات الشاشة':'Screenshots')+'</h4>'+
@@ -3059,7 +3073,22 @@ function deleteComment(appId, commentId){
     });
   }
 }
-
+// ====== قراءة المزيد من معلومات التطبيق ======
+function toggleAppInfo(){
+  const el = document.getElementById('appInfoText');
+  const btn = document.getElementById('readMoreBtn');
+  if(!el || !btn) return;
+  
+  const isExpanded = el.style.webkitLineClamp === 'unset' || el.style.webkitLineClamp === 'none';
+  
+  if(isExpanded){
+    el.style.webkitLineClamp = '5';
+    btn.innerHTML = (currentLang === 'ar' ? 'اقرأ المزيد ↓' : 'Read more ↓');
+  } else {
+    el.style.webkitLineClamp = 'none';
+    btn.innerHTML = (currentLang === 'ar' ? 'عرض أقل ↑' : 'Show less ↑');
+  }
+}
 function postComment(appId){
   if(!requireVerifiedEmail()) return;
   if(!currentUser){ showToast('Sign in first', 'warning'); return; }
