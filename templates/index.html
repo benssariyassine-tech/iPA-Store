@@ -1530,10 +1530,10 @@ body[dir="rtl"] .marquee-text {
 /* ✅ شارة مائلة في زاوية البطاقة (أخضر) */
 .slant-badge {
     position: absolute;
-    top: 22px;           /* المسافة من الأعلى */
-    right: -42px;        /* إخراج الشريط للخارج */
-    width: 150px;        /* العرض */
-    height: 24px;        /* الارتفاع */
+    top: -5px;           /* الالتصاق بالحافة العلوية للبطاقة */
+    right: -45px;        /* الإخراج للخارج (للوضع الإنجليزي LTR) */
+    width: 160px;        /* العرض */
+    height: 26px;        /* الارتفاع */
     transform: rotate(45deg); /* الميلان */
     display: flex;
     align-items: center;
@@ -1544,14 +1544,21 @@ body[dir="rtl"] .marquee-text {
     text-transform: uppercase;
     color: #ffffff;
     z-index: 10;
-    pointer-events: none; /* حتى لا يمنع النقر على البطاقة */
+    pointer-events: none;
     text-shadow: 0 1px 2px rgba(0,0,0,0.7);
     box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     animation: pulseNew 2s ease-in-out infinite;
 }
 
+/* ✅ تصحيح مهم للغة العربية (RTL) */
+body[dir="rtl"] .slant-badge {
+    right: auto;
+    left: -45px;
+    transform: rotate(-45deg);
+}
+
 .slant-badge.slant-new {
-    background: linear-gradient(135deg, #32d74b, #1a9c33); /* ✅ تدرج أخضر */
+    background: linear-gradient(135deg, #32d74b, #1a9c33); /* ✅ اللون الأخضر */
 }
 
 .slant-badge.slant-updated {
