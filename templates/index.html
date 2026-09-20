@@ -3311,7 +3311,12 @@ function postComment(appId){
   if(!currentUser){ showToast('Sign in first', 'warning'); return; }
   const text = document.getElementById('newCommentText').value.trim();
   if(!text) return;
-  db.collection("apps").doc(appId).collection("comments").add({userName: (userProfile.displayName || currentUser.email.split('@')[0]), text: text, createdAt: firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+  db.collection("apps").doc(appId).collection("comments").add({
+    userName: (userProfile.displayName || currentUser.email.split('@')[0]), 
+    userEmail: currentUser.email,
+    text: text, 
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
     db.collection("apps").doc(appId).update({commentsCount: firebase.firestore.FieldValue.increment(1)}).catch(()=>{});
     showToast('Comment posted', 'success', 1500);
     document.getElementById('newCommentText').value = '';
