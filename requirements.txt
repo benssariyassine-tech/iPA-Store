@@ -6,3 +6,4 @@ requests
 firebase-admin
 beautifulsoup4
 google-play-scraper
+apkpure
