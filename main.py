@@ -1,6 +1,8 @@
+from bs4 import BeautifulSoup
+from google_play_scraper import app as gp_app, search as gp_search
+import requests
 import os
 import json
-import requests
 from flask import Flask, jsonify, render_template, send_from_directory, request
 from flask_cors import CORS
 
