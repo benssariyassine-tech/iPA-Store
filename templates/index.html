@@ -2974,7 +2974,50 @@ function openAccountModal(){
   }
   openModal('accountModal');
 }
+// ====== SECURITY: HTML Escape (حماية من XSS) ======
+function escapeHTML(str){
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
+// ====== REPORT: Set Reason Text ======
+function setReportReasonText(text){
+  const textarea = document.getElementById('reportReason');
+  if(textarea) textarea.value = text;
+}
+
+// ====== REPORT: Submit Report ======
+function submitReport(){
+  const appId = document.getElementById('reportAppId').value;
+  const reason = document.getElementById('reportReason').value.trim();
+  if(!reason){
+    showToast(currentLang==='ar'?'يرجى كتابة سبب الإبلاغ':'Please write a reason', 'warning');
+    return;
+  }
+  if(!currentUser){
+    showToast(currentLang==='ar'?'سجّل الدخول أولاً':'Sign in first', 'warning');
+    openAccountModal();
+    return;
+  }
+  db.collection("reports").add({
+    appId: appId,
+    reason: reason,
+    user: currentUser.email,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    showToast(currentLang==='ar'?'تم إرسال التقرير، شكراً لك':'Report sent, thanks!', 'success', 3000);
+    closeModal('reportModal');
+    document.getElementById('reportReason').value = '';
+  }).catch(err => showToast('Error: '+err.message, 'error'));
+}
+
+// ====== SEARCH ======
+function onSearchInput(){
 // ====== SEARCH ======
 function onSearchInput(){
   const val = document.getElementById('searchInput').value;
