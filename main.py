@@ -3,8 +3,6 @@ from google_play_scraper import app as gp_app, search as gp_search
 import requests
 import os
 import json
-import re
-import time
 from flask import Flask, jsonify, render_template, send_from_directory, request
 from flask_cors import CORS
 
@@ -14,167 +12,6 @@ from firebase_admin import credentials, firestore
 
 app = Flask(__name__, template_folder='templates', static_folder='static')
 CORS(app)
-
-# ============================================
-# 📱 Telegram Public Channels (بدون API)
-# ============================================
-TELEGRAM_CHANNELS = [
-    "IPA1_KP",           # قناة المستخدم
-]
-
-def extract_telegram_apps(query):
-    """
-    يبحث في قنوات تيليجرام العامة عن تطبيقات MOD
-    """
-    results = []
-    query_lower = query.lower().strip()
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36'
-    }
-
-    for channel in TELEGRAM_CHANNELS:
-        try:
-            url = f"https://t.me/s/{channel}"
-            r = requests.get(url, headers=headers, timeout=12)
-
-            if r.status_code != 200:
-                print(f"⚠️ Telegram channel {channel} returned {r.status_code}")
-                continue
-
-            soup = BeautifulSoup(r.text, 'html.parser')
-            messages = soup.find_all('div', class_='tgme_widget_message')
-            print(f"📨 {channel}: {len(messages)} messages found")
-
-            for msg in messages:
-                try:
-                    # 1. نص المنشور
-                    text_el = msg.find('div', class_='tgme_widget_message_text')
-                    text = text_el.get_text(separator=' ', strip=True) if text_el else ''
-
-                    # 2. إذا ما فيهش الكلمة، نتجاوزو
-                    if not text or query_lower not in text.lower():
-                        continue
-
-                    # 3. رابط المنشور
-                    date_el = msg.find('a', class_='tgme_widget_message_date')
-                    post_link = date_el.get('href') if date_el else ''
-
-                    if not post_link:
-                        data_post = msg.get('data-post')
-                        if data_post:
-                            post_link = f"https://t.me/{data_post}"
-
-                    # 4. الصورة (الأيقونة)
-                    icon_url = ''
-                    photo_el = msg.find('a', class_='tgme_widget_message_photo_wrap')
-                    if photo_el:
-                        style = photo_el.get('style', '')
-                        m = re.search(r"url\(['\"]?(.*?)['\"]?\)", style)
-                        if m:
-                            icon_url = m.group(1)
-
-                    # 5. اسم الملف المرفق (إذا كان APK/IPA)
-                    doc_name = ''
-                    doc_el = msg.find('a', class_='tgme_widget_message_document_wrap')
-                    if doc_el:
-                        name_el = doc_el.find('div', class_='tgme_widget_message_document_title')
-                        if name_el:
-                            doc_name = name_el.get_text(strip=True)
-
-                    # 6. اسم التطبيق
-                    app_name = ''
-                    if doc_name:
-                        # نحيدو الامتداد
-                        app_name = re.sub(r'\.(apk|ipa|zip|rar)$', '', doc_name, flags=re.IGNORECASE)
-                    else:
-                        # أول سطر من النص
-                        first_line = text.split('\n')[0].strip()
-                        app_name = first_line[:80] if first_line else query
-
-                    # 7. المنصة
-                    lower_check = (doc_name + ' ' + text).lower()
-                    if '.ipa' in lower_check or 'ios' in lower_check or 'ipa' in lower_check:
-                        platform = 'IPA'
-                    elif '.apk' in lower_check or 'android' in lower_check or 'apk' in lower_check:
-                        platform = 'APK'
-                    else:
-                        platform = 'APK'
-
-                    # 8. نجمعو النتيجة
-                    formatted = {
-                        'name': app_name,
-                        'icon': icon_url,
-                        'size': 'N/A',
-                        'info': text[:500],
-                        'publisher': f'@{channel}',
-                        'url': post_link,
-                        'platform': platform,
-                        'category': 'apps',
-                        'screenshots': [icon_url] if icon_url else [],
-                        'appType': 'mod',
-                        'likedBy': [],
-                        'downloadedBy': [],
-                        'downloads': 0,
-                        'commentsCount': 0,
-                        'ratingSum': 0,
-                        'ratingCount': 0,
-                        'ratingAvg': 0,
-                        'userRatings': {}
-                    }
-                    results.append(formatted)
-
-                    if len(results) >= 3:
-                        break
-
-                except Exception as parse_err:
-                    print(f"Parse error: {parse_err}")
-                    continue
-
-            if len(results) >= 3:
-                break
-
-            time.sleep(1)  # نرتاحو شوية بين القنوات
-
-        except Exception as ch_err:
-            print(f"⚠️ Channel {channel} error: {ch_err}")
-
-    return results[:5]
-
-
-@app.route('/api/fetch-telegram', methods=['POST'])
-def fetch_telegram_data():
-    """بحث في قنوات تيليجرام"""
-    data = request.json
-    query = (data.get('query') or '').strip()
-    if not query:
-        return jsonify({'found': False, 'message': 'Query required'}), 400
-
-    try:
-        results = extract_telegram_apps(query)
-
-        if not results:
-            return jsonify({'found': False, 'message': 'Not found on Telegram'}), 200
-
-        saved_ids = []
-        if db:
-            for app_data in results:
-                save_data = dict(app_data)
-                save_data['createdAt'] = firestore.SERVER_TIMESTAMP
-                doc_ref = db.collection('apps').document()
-                doc_ref.set(save_data)
-                saved_ids.append(doc_ref.id)
-
-        return jsonify({
-            'found': True,
-            'count': len(saved_ids) if saved_ids else len(results),
-            'saved_ids': saved_ids,
-            'apps': results
-        }), 200
-
-    except Exception as e:
-        print(f"Telegram fetch error: {e}")
-        return jsonify({'found': False, 'message': str(e)}), 500
-
 
 # ============================================
 # 🔥 تهيئة Firebase
@@ -222,7 +59,6 @@ def debug_routes():
     return jsonify({
         'total': len(routes),
         'firebase_connected': db is not None,
-        'channels': TELEGRAM_CHANNELS,
         'routes': routes
     })
 
@@ -231,7 +67,7 @@ def debug_routes():
 # 🔥 جلب البيانات التلقائي (Auto-Fetch APIs)
 # ============================================
 
-# 1. iTunes Search API
+# 1. جلب بيانات تطبيق iOS من iTunes Search API
 @app.route('/api/fetch-ios', methods=['POST'])
 def fetch_ios_data():
     data = request.json
@@ -243,12 +79,12 @@ def fetch_ios_data():
         url = f"https://itunes.apple.com/search?term={requests.utils.quote(app_name)}&entity=software&limit=1"
         response = requests.get(url, timeout=10)
         results = response.json().get('results', [])
-
+        
         if not results:
             return jsonify({'error': 'App not found'}), 404
-
+        
         app_data = results[0]
-
+        
         formatted_data = {
             'name': app_data.get('trackName'),
             'icon': app_data.get('artworkUrl512'),
@@ -269,7 +105,7 @@ def fetch_ios_data():
             'ratingAvg': 0,
             'userRatings': {}
         }
-
+        
         if db:
             save_data = dict(formatted_data)
             save_data['createdAt'] = firestore.SERVER_TIMESTAMP
@@ -283,7 +119,7 @@ def fetch_ios_data():
         return jsonify({'error': str(e)}), 500
 
 
-# 2. Google Play
+# 2. جلب بيانات تطبيق Android من Google Play
 @app.route('/api/fetch-android', methods=['POST'])
 def fetch_android_data():
     data = request.json
@@ -294,20 +130,20 @@ def fetch_android_data():
     try:
         result = gp_app(
             package_name,
-            lang='en',
+            lang='en', 
             country='us'
         )
-
+        
         formatted_data = {
             'name': result.get('title'),
             'icon': result.get('icon'),
-            'size': f"{result.get('size', 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
-            'info': result.get('description'),
+            'size': f"{(result.get('size') or 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+            'info': (result.get('description') or '')[:2000],
             'publisher': result.get('developer'),
             'url': f"https://play.google.com/store/apps/details?id={package_name}",
             'platform': 'APK',
             'category': 'apps',
-            'screenshots': result.get('screenshots', []),
+            'screenshots': (result.get('screenshots') or [])[:5],
             'appType': 'official',
             'likedBy': [],
             'downloadedBy': [],
@@ -318,7 +154,7 @@ def fetch_android_data():
             'ratingAvg': 0,
             'userRatings': {}
         }
-
+        
         if db:
             save_data = dict(formatted_data)
             save_data['createdAt'] = firestore.SERVER_TIMESTAMP
@@ -327,12 +163,12 @@ def fetch_android_data():
             return jsonify({'success': True, 'id': doc_ref.id, 'data': formatted_data}), 200
         else:
             return jsonify({'success': True, 'data': formatted_data, 'warning': 'Firebase not connected'}), 200
-
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
-# 3. MOD Scraper (generic)
+# 3. جلب بيانات تطبيق معدل (نموذج مبدئي باستخدام BeautifulSoup)
 @app.route('/api/fetch-mod', methods=['POST'])
 def fetch_mod_data():
     data = request.json
@@ -346,9 +182,9 @@ def fetch_mod_data():
         }
         response = requests.get(url_to_scrape, headers=headers, timeout=15)
         soup = BeautifulSoup(response.text, 'html.parser')
-
+        
         title = soup.find('h1').text.strip() if soup.find('h1') else 'Unknown App'
-
+        
         formatted_data = {
             'name': title,
             'url': url_to_scrape,
@@ -358,15 +194,133 @@ def fetch_mod_data():
             'publisher': 'Unknown',
             'size': 'N/A'
         }
-
+        
         return jsonify({'success': True, 'data': formatted_data}), 200
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 
+# 4. جلب Top التطبيقات (استعمال يدوي — bulk)
+@app.route('/api/fetch-top', methods=['POST'])
+def fetch_top_apps():
+    """
+    يجيب Top تطبيقات من Google Play و iTunes.
+    الاستعمال اليدوي: 
+      POST /api/fetch-top
+      body: {"limit": 20}
+    """
+    data = request.json or {}
+    limit = int(data.get('limit') or 15)
+    limit = min(limit, 30)  # حد أقصى 30 لكل مصدر
+
+    all_results = []
+
+    # 1. Google Play Top (search "popular apps")
+    try:
+        gp_results = gp_search(
+            "popular apps",
+            lang='en',
+            country='us',
+            n_hits=limit
+        )
+        
+        for app_info in gp_results[:limit]:
+            try:
+                package_name = app_info.get('appId')
+                if not package_name:
+                    continue
+                result = gp_app(package_name, lang='en', country='us')
+                if result and result.get('title') and result.get('icon'):
+                    formatted = {
+                        'name': result.get('title'),
+                        'icon': result.get('icon'),
+                        'size': f"{(result.get('size') or 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+                        'info': (result.get('description') or '')[:1000],
+                        'publisher': result.get('developer'),
+                        'url': f"https://play.google.com/store/apps/details?id={package_name}",
+                        'platform': 'APK',
+                        'category': 'apps',
+                        'screenshots': (result.get('screenshots') or [])[:3],
+                        'appType': 'official',
+                        'likedBy': [],
+                        'downloadedBy': [],
+                        'downloads': 0,
+                        'commentsCount': 0,
+                        'ratingSum': 0,
+                        'ratingCount': 0,
+                        'ratingAvg': 0,
+                        'userRatings': {}
+                    }
+                    all_results.append(formatted)
+            except Exception as inner_e:
+                print(f"GP detail error: {inner_e}")
+                continue
+        print(f"✅ Google Play: {len(all_results)} apps")
+    except Exception as e:
+        print(f"❌ Google Play top error: {e}")
+
+    # 2. iTunes Top Free (RSS Feed)
+    try:
+        itunes_url = f"https://rss.applemarketingtools.com/api/v2/us/apps/top-free/{limit}/apps.json"
+        r = requests.get(itunes_url, timeout=10)
+        itunes_data = r.json()
+        itunes_apps = itunes_data.get('feed', {}).get('results', [])
+
+        for app in itunes_apps[:limit]:
+            formatted = {
+                'name': app.get('name'),
+                'icon': (app.get('artworkUrl100') or '').replace('100x100', '512x512'),
+                'size': 'N/A',
+                'info': '',
+                'publisher': app.get('artistName'),
+                'url': app.get('url'),
+                'platform': 'IPA',
+                'category': 'apps',
+                'screenshots': [],
+                'appType': 'official',
+                'likedBy': [],
+                'downloadedBy': [],
+                'downloads': 0,
+                'commentsCount': 0,
+                'ratingSum': 0,
+                'ratingCount': 0,
+                'ratingAvg': 0,
+                'userRatings': {}
+            }
+            all_results.append(formatted)
+        print(f"✅ iTunes: {len(itunes_apps)} apps")
+    except Exception as e:
+        print(f"❌ iTunes top error: {e}")
+
+    if not all_results:
+        return jsonify({'found': False, 'message': 'No apps found'}), 200
+
+    # 3. سجّل الكل في Firebase
+    saved_ids = []
+    if db:
+        for app_data in all_results:
+            try:
+                save_data = dict(app_data)
+                save_data['createdAt'] = firestore.SERVER_TIMESTAMP
+                doc_ref = db.collection('apps').document()
+                doc_ref.set(save_data)
+                saved_ids.append(doc_ref.id)
+            except Exception as e:
+                print(f"Save error: {e}")
+                continue
+        print(f"✅ Saved {len(saved_ids)} apps to Firebase")
+
+    return jsonify({
+        'found': True,
+        'count': len(saved_ids),
+        'total': len(all_results),
+        'saved_ids': saved_ids
+    }), 200
+
+
 # ============================================
-# 🔥 صفحة المشاركة
+# 🔥 صفحة المشاركة الديناميكية
 # ============================================
 @app.route('/app/<app_id>')
 def share_app(app_id):
@@ -437,16 +391,16 @@ def ai_proxy():
         response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
         return response, 204
-
+    
     try:
         data = request.get_json()
         if not data:
             return jsonify({'error': {'message': 'No data provided'}}), 400
-
+        
         groq_key = os.environ.get('GROQ_API_KEY', '')
         if not groq_key:
             return jsonify({'error': {'message': 'GROQ_API_KEY not configured on server'}}), 500
-
+        
         response = requests.post(
             'https://api.groq.com/openai/v1/chat/completions',
             headers={'Authorization': f'Bearer {groq_key}', 'Content-Type': 'application/json'},
@@ -456,7 +410,7 @@ def ai_proxy():
         result = jsonify(response.json())
         result.headers['Access-Control-Allow-Origin'] = '*'
         return result, response.status_code
-
+        
     except requests.exceptions.Timeout:
         return jsonify({'error': {'message': 'Request timeout. Try again.'}}), 504
     except Exception as e:
@@ -470,14 +424,14 @@ def scan_file():
     file_hash = data.get('hash') if data else None
     if not file_hash:
         return jsonify({"error": "Hash required"}), 400
-
+    
     api_key = os.environ.get("VIRUSTOTAL_API_KEY")
     if not api_key:
         return jsonify({"error": "API key not configured"}), 500
-
+    
     headers = {"x-apikey": api_key}
     url = f"https://www.virustotal.com/api/v3/files/{file_hash}"
-
+    
     try:
         response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200:
@@ -522,28 +476,19 @@ def robots():
 
 
 # ============================================
-# 🤖 SMART FETCH
+# 🤖 SMART FETCH — بحث ذكي وجلب أوتوماتيكي
 # ============================================
 @app.route('/api/smart-fetch', methods=['POST'])
 def smart_fetch():
     data = request.json
     query = (data.get('query') or '').strip()
-
+    
     if not query or len(query) < 2:
         return jsonify({'found': False, 'message': 'Query too short'}), 200
 
     results = []
 
-    # 1️⃣ Telegram (MOD) — الأولوية
-    try:
-        tg_results = extract_telegram_apps(query)
-        if tg_results:
-            results.extend(tg_results)
-            print(f"✅ Found {len(tg_results)} app(s) on Telegram")
-    except Exception as e:
-        print(f"Telegram search error: {e}")
-
-    # 2️⃣ iTunes (IPA رسمي)
+    # 1️⃣ جرّب iTunes (لـ IPA)
     try:
         url = f"https://itunes.apple.com/search?term={requests.utils.quote(query)}&entity=software&limit=1"
         r = requests.get(url, timeout=8)
@@ -554,12 +499,12 @@ def smart_fetch():
                 'name': app_data.get('trackName'),
                 'icon': app_data.get('artworkUrl512'),
                 'size': f"{int(app_data.get('fileSizeBytes', 0)) / (1024*1024):.2f} MB",
-                'info': app_data.get('description', '')[:500],
+                'info': (app_data.get('description') or '')[:500],
                 'publisher': app_data.get('artistName'),
                 'url': app_data.get('trackViewUrl'),
                 'platform': 'IPA',
                 'category': 'apps',
-                'screenshots': app_data.get('screenshotUrls', [])[:3],
+                'screenshots': (app_data.get('screenshotUrls') or [])[:3],
                 'appType': 'official',
                 'likedBy': [],
                 'downloadedBy': [],
@@ -575,46 +520,47 @@ def smart_fetch():
     except Exception as e:
         print(f"iTunes search error: {e}")
 
-    # 3️⃣ Google Play (APK رسمي)
+    # 2️⃣ جرّب Google Play (لـ APK)
     try:
         gp_results = gp_search(query, lang='ar', country='dz', n_hits=1)
         if gp_results:
-            package_name = gp_results[0]['appId']
-            result = gp_app(package_name, lang='ar', country='dz')
-
-            if result and result.get('title') and result.get('icon'):
-                formatted = {
-                    'name': result.get('title'),
-                    'icon': result.get('icon'),
-                    'size': f"{result.get('size', 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
-                    'info': result.get('description', '')[:500],
-                    'publisher': result.get('developer'),
-                    'url': f"https://play.google.com/store/apps/details?id={package_name}",
-                    'platform': 'APK',
-                    'category': 'apps',
-                    'screenshots': result.get('screenshots', [])[:3],
-                    'appType': 'official',
-                    'likedBy': [],
-                    'downloadedBy': [],
-                    'downloads': 0,
-                    'commentsCount': 0,
-                    'ratingSum': 0,
-                    'ratingCount': 0,
-                    'ratingAvg': 0,
-                    'userRatings': {}
-                }
-                results.append(formatted)
-                print(f"✅ Found on Google Play: {result.get('title')}")
+            package_name = gp_results[0].get('appId')
+            if package_name:
+                result = gp_app(package_name, lang='ar', country='dz')
+                
+                if result and result.get('title') and result.get('icon'):
+                    formatted = {
+                        'name': result.get('title'),
+                        'icon': result.get('icon'),
+                        'size': f"{(result.get('size') or 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+                        'info': (result.get('description') or '')[:500],
+                        'publisher': result.get('developer'),
+                        'url': f"https://play.google.com/store/apps/details?id={package_name}",
+                        'platform': 'APK',
+                        'category': 'apps',
+                        'screenshots': (result.get('screenshots') or [])[:3],
+                        'appType': 'official',
+                        'likedBy': [],
+                        'downloadedBy': [],
+                        'downloads': 0,
+                        'commentsCount': 0,
+                        'ratingSum': 0,
+                        'ratingCount': 0,
+                        'ratingAvg': 0,
+                        'userRatings': {}
+                    }
+                    results.append(formatted)
+                    print(f"✅ Found on Google Play: {result.get('title')}")
     except Exception as e:
         print(f"Google Play search error: {e}")
 
     if not results:
         return jsonify({
             'found': False,
-            'message': 'No app found in stores.'
+            'message': 'لم يتم العثور على التطبيق في المتاجر الرسمية.'
         }), 200
 
-    # 4️⃣ حفظ في Firebase
+    # 3️⃣ سجّل التطبيقات في Firebase
     saved_ids = []
     if db:
         try:
@@ -629,20 +575,20 @@ def smart_fetch():
             print(f"❌ Firebase save error: {e}")
             return jsonify({
                 'found': False,
-                'message': f'Save error: {str(e)}'
+                'message': f'خطأ في الحفظ: {str(e)}'
             }), 500
     else:
         return jsonify({
             'found': False,
-            'message': 'Firebase not connected'
+            'message': 'Firebase غير متصل'
         }), 500
-
+    
     if len(saved_ids) == 0:
         return jsonify({
             'found': False,
-            'message': 'No app was saved'
+            'message': 'لم يتم حفظ أي تطبيق'
         }), 200
-
+    
     return jsonify({
         'found': True,
         'count': len(saved_ids),
