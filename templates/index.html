@@ -3519,7 +3519,7 @@ similarApps = similarApps.slice(0, 6);
       '</div>'+
       '<div class="detail-section">'+
         '<h4 class="detail-section-title">'+ICONS.infoCircle+' '+(currentLang==='ar'?'معلومات التطبيق':'App Info')+'</h4>'+
-   '<p class="detail-info-text" id="appInfoText" style="display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;line-height:1.6;">'+(app.info||app.desc||(currentLang==='ar'?'لا توجد معلومات إضافية.':'No additional info available.'))+'</p>'+
+   '<p class="detail-info-text" id="appInfoText" style="display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;line-height:1.6;">'+escapeHTML(app.info||app.desc||(currentLang==='ar'?'لا توجد معلومات إضافية.':'No additional info available.'))+'</p>'+
 ((app.info && app.info.length > 200) ? 
   '<button onclick="toggleAppInfo()" id="readMoreBtn" style="background:transparent;border:none;color:var(--accent);font-weight:800;font-size:12px;cursor:pointer;padding:8px 0;font-family:inherit;display:flex;align-items:center;gap:4px;">'+
   (currentLang==='ar'?'اقرأ المزيد ↓':'Read more ↓')+
