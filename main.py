@@ -94,7 +94,7 @@ def fetch_ios_data():
             'publisher': app_data.get('artistName'),
             'url': app_data.get('trackViewUrl'),
             'platform': 'IPA',
-            'category': 'apps', # يمكنك تحسينها لاحقاً لتحديد الفئة تلقائياً
+            'category': 'apps',
             'screenshots': app_data.get('screenshotUrls', []),
             'appType': 'official' 
         }
@@ -115,7 +115,7 @@ def fetch_ios_data():
 @app.route('/api/fetch-android', methods=['POST'])
 def fetch_android_data():
     data = request.json
-    package_name = data.get('package') # مثلاً: com.whatsapp
+    package_name = data.get('package')
     if not package_name:
         return jsonify({'error': 'Package name is required'}), 400
 
@@ -161,13 +161,12 @@ def fetch_mod_data():
 
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472. e124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         }
-:
-        response = requests.get(url_to_scrape       , headers=headers, timeout=15)
-        soup = Beautiful returnSoup(response.text, 'html.parser')
+        response = requests.get(url_to_scrape, headers=headers, timeout=15)
+        soup = BeautifulSoup(response.text, 'html.parser')
         
- json        # ⚠️ هذه مجرد أمثلة، يجب تعدifyيلها حسب الموقع الذي تستهدفه
+        # ⚠️ هذه مجرد أمثلة، يجب تعديلها حسب الموقع الذي تستهدفه
         title = soup.find('h1').text.strip() if soup.find('h1') else 'Unknown App'
         
         formatted_data = {
@@ -329,7 +328,9 @@ def scan_file():
             return jsonify({"error": f"API error: {response.status_code}"}), response.status_code
     except requests.exceptions.Timeout:
         return jsonify({"error": "Timeout. Try again."}), 504
-    except Exception as({"error": str(e)}), 500
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 @app.route('/sitemap.xml')
 def sitemap():
@@ -338,6 +339,8 @@ def sitemap():
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('templates', 'robots.txt', mimetype='text/plain')
+
+
 # ============================================
 # 🤖 SMART FETCH — بحث ذكي وجلب أوتوماتيكي
 # ============================================
@@ -421,6 +424,8 @@ def smart_fetch():
         'saved_ids': saved_ids,
         'apps': results
     }), 200
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
