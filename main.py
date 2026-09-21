@@ -75,8 +75,7 @@ def fetch_ios_data():
         return jsonify({'error': 'App name is required'}), 400
 
     try:
-        # استخدام iTunes Search API (مجاني ولا يحتاج مفتاح)
-        url = f"https://itunes.apple.com/search?term={app_name}&entity=software&limit=1"
+        url = f"https://itunes.apple.com/search?term={requests.utils.quote(app_name)}&entity=software&limit=1"
         response = requests.get(url, timeout=10)
         results = response.json().get('results', [])
         
@@ -85,7 +84,6 @@ def fetch_ios_data():
         
         app_data = results[0]
         
-        # تجهيز البيانات
         formatted_data = {
             'name': app_data.get('trackName'),
             'icon': app_data.get('artworkUrl512'),
@@ -96,10 +94,18 @@ def fetch_ios_data():
             'platform': 'IPA',
             'category': 'apps',
             'screenshots': app_data.get('screenshotUrls', []),
-            'appType': 'official' 
+            'appType': 'official',
+            'createdAt': firestore.SERVER_TIMESTAMP,
+            'likedBy': [],
+            'downloadedBy': [],
+            'downloads': 0,
+            'commentsCount': 0,
+            'ratingSum': 0,
+            'ratingCount': 0,
+            'ratingAvg': 0,
+            'userRatings': {}
         }
         
-        # حفظ البيانات في Firebase (إذا كان متصلاً)
         if db:
             doc_ref = db.collection('apps').document()
             doc_ref.set(formatted_data)
@@ -120,7 +126,6 @@ def fetch_android_data():
         return jsonify({'error': 'Package name is required'}), 400
 
     try:
-        # استخدام google-play-scraper
         result = gp_app(
             package_name,
             lang='en', 
@@ -137,7 +142,16 @@ def fetch_android_data():
             'platform': 'APK',
             'category': 'apps',
             'screenshots': result.get('screenshots', []),
-            'appType': 'official'
+            'appType': 'official',
+            'createdAt': firestore.SERVER_TIMESTAMP,
+            'likedBy': [],
+            'downloadedBy': [],
+            'downloads': 0,
+            'commentsCount': 0,
+            'ratingSum': 0,
+            'ratingCount': 0,
+            'ratingAvg': 0,
+            'userRatings': {}
         }
         
         if db:
@@ -166,7 +180,6 @@ def fetch_mod_data():
         response = requests.get(url_to_scrape, headers=headers, timeout=15)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        # ⚠️ هذه مجرد أمثلة، يجب تعديلها حسب الموقع الذي تستهدفه
         title = soup.find('h1').text.strip() if soup.find('h1') else 'Unknown App'
         
         formatted_data = {
@@ -375,7 +388,16 @@ def smart_fetch():
                 'platform': 'IPA',
                 'category': 'apps',
                 'screenshots': app_data.get('screenshotUrls', [])[:3],
-                'appType': 'official'
+                'appType': 'official',
+                'createdAt': firestore.SERVER_TIMESTAMP,
+                'likedBy': [],
+                'downloadedBy': [],
+                'downloads': 0,
+                'commentsCount': 0,
+                'ratingSum': 0,
+                'ratingCount': 0,
+                'ratingAvg': 0,
+                'userRatings': {}
             }
             results.append(formatted)
     except Exception as e:
@@ -387,19 +409,33 @@ def smart_fetch():
         if gp_results:
             package_name = gp_results[0]['appId']
             result = gp_app(package_name, lang='ar', country='dz')
-            formatted = {
-                'name': result.get('title'),
-                'icon': result.get('icon'),
-                'size': f"{result.get('size', 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
-                'info': result.get('description', '')[:500],
-                'publisher': result.get('developer'),
-                'url': f"https://play.google.com/store/apps/details?id={package_name}",
-                'platform': 'APK',
-                'category': 'apps',
-                'screenshots': result.get('screenshots', [])[:3],
-                'appType': 'official'
-            }
-            results.append(formatted)
+            
+            if result and result.get('title') and result.get('icon'):
+                formatted = {
+                    'name': result.get('title'),
+                    'icon': result.get('icon'),
+                    'size': f"{result.get('size', 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+                    'info': result.get('description', '')[:500],
+                    'publisher': result.get('developer'),
+                    'url': f"https://play.google.com/store/apps/details?id={package_name}",
+                    'platform': 'APK',
+                    'category': 'apps',
+                    'screenshots': result.get('screenshots', [])[:3],
+                    'appType': 'official',
+                    'createdAt': firestore.SERVER_TIMESTAMP,
+                    'likedBy': [],
+                    'downloadedBy': [],
+                    'downloads': 0,
+                    'commentsCount': 0,
+                    'ratingSum': 0,
+                    'ratingCount': 0,
+                    'ratingAvg': 0,
+                    'userRatings': {}
+                }
+                results.append(formatted)
+                print(f"✅ Found on Google Play: {result.get('title')}")
+            else:
+                print(f"⚠️ Google Play returned incomplete data for: {package_name}")
     except Exception as e:
         print(f"Google Play search error: {e}")
 
@@ -412,15 +448,34 @@ def smart_fetch():
     # 3️⃣ سجّل التطبيقات في Firebase
     saved_ids = []
     if db:
-        for app_data in results:
-            doc_ref = db.collection('apps').document()
-            doc_ref.set(app_data)
-            saved_ids.append(doc_ref.id)
-        print(f"✅ Auto-saved {len(saved_ids)} apps to Firebase")
+        try:
+            for app_data in results:
+                doc_ref = db.collection('apps').document()
+                doc_ref.set(app_data)
+                saved_ids.append(doc_ref.id)
+            print(f"✅ Auto-saved {len(saved_ids)} apps to Firebase")
+        except Exception as e:
+            print(f"❌ Firebase save error: {e}")
+            return jsonify({
+                'found': False,
+                'message': f'خطأ في الحفظ: {str(e)}'
+            }), 500
+    else:
+        return jsonify({
+            'found': False,
+            'message': 'Firebase غير متصل'
+        }), 500
+    
+    # تحقق: إلا ما تسجل حتى تطبيق، رجع فشل
+    if len(saved_ids) == 0:
+        return jsonify({
+            'found': False,
+            'message': 'لم يتم حفظ أي تطبيق'
+        }), 200
     
     return jsonify({
         'found': True,
-        'count': len(results),
+        'count': len(saved_ids),
         'saved_ids': saved_ids,
         'apps': results
     }), 200
