@@ -40,6 +40,7 @@ svg{display:inline-block;vertical-align:middle}
 @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 @keyframes popSuccess{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15);opacity:1}100%{transform:scale(1);opacity:1}}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+ @keyframes toastOut{from{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}to{opacity:0;transform:translateX(-50%) translateY(-20px) scale(0.9)}}
 
 /* HEADER */
 .header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--header-bg);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border-color)}
