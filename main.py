@@ -32,103 +32,23 @@ except Exception as e:
     db = None
 
 
-# ===== قاعدة بيانات المتجر =====
-APPS_DATABASE = [
-    {
-        "id": 1,
-        "title": "Delta Emulator",
-        "category": "games",
-        "description": "محاكي ألعاب نينتندو الشهير للأيفون، يدعم ألعاب GBA و NDS بجودة عالية.",
-        "size": "78 MB",
-        "version": "v1.5.2",
-        "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/3d/e8/30/3de8305c-4394-0d72-4d2d-222a27ffb3aa/AppIcon-0-0-1x_U007emarketing-0-7-0-sRGB-85-220.png/512x512bb.jpg",
-        "download_url": "https://github.com/rileytestut/Delta/releases/download/v1.5.2/Delta.ipa"
-    },
-    {
-        "id": 2,
-        "title": "Minecraft PE",
-        "category": "games",
-        "description": "لعبة ماين كرافت الشهيرة النسخة الكاملة جاهزة للتثبيت المباشر.",
-        "size": "450 MB",
-        "version": "v1.20",
-        "icon": "https://is1-ssl.mzstatic.com/image/thumb/Purple116/v4/3d/33/c7/3d33c7a1-2d7c-85a2-3f85-1d4e0e5e0321/AppIcon-0-1x_U007emarketing-0-5-0-0-85-220.png/512x512bb.jpg",
-        "download_url": "https://t.me/IPA1_KP"
-    },
-    {
-        "id": 3,
-        "title": "E-Sign",
-        "category": "tools",
-        "description": "أداة التوقيع الأقوى على أجهزة iOS لتثبيت الشهواد والتطبيقات الخارجية.",
-        "size": "45 MB",
-        "version": "v5.0.2",
-        "icon": "https://is5-ssl.mzstatic.com/image/thumb/Purple126/v4/09/b6/42/09b642a8-124e-3759-b146-24003d1681a5/AppIcon-0-1x_U007emarketing-0-0-G4-85-220.png/512x512bb.jpg",
-        "download_url": "https://esign.yyyp.vip/esign.ipa"
-    },
-    {
-        "id": 4,
-        "title": "Scarlet",
-        "category": "tools",
-        "description": "متجر بديل لتثبيت ملفات الـ IPA بدون كمبيوتر وبكل سهولة.",
-        "size": "15 MB",
-        "version": "v1.0.2",
-        "icon": "https://usescarlet.com/assets/img/scarlet.png",
-        "download_url": "https://usescarlet.com/download/Scarlet.ipa"
-    },
-    {
-        "id": 5,
-        "title": "YouTube Plus",
-        "category": "apps",
-        "description": "يوتيوب بلس مع ميزة منع الإعلانات وتشغيل الفيديوهات في الخلفية.",
-        "size": "95 MB",
-        "version": "v18.4",
-        "icon": "https://is2-ssl.mzstatic.com/image/thumb/Purple211/v4/03/5b/c2/035bc297-3f36-3b5a-ef8b-e8537b029272/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-85-220.png/512x512bb.jpg",
-        "download_url": "https://t.me/IPA1_KP"
-    },
-    {
-        "id": 6,
-        "title": "Spotify Deluxe",
-        "category": "music",
-        "description": "تطبيق سبوتيفاي للاستماع للغناء والموسيقى بدون إعلانات وبمزايا مدفوعة.",
-        "size": "85 MB",
-        "version": "v8.8",
-        "icon": "https://is3-ssl.mzstatic.com/image/thumb/Purple211/v4/66/1b/38/661b382d-114d-6bc1-ef28-d7f6b986e42b/AppIcon-0-0-1x_U007emarketing-0-0-0-85-220.png/512x512bb.jpg",
-        "download_url": "https://t.me/IPA1_KP"
-    }
-]
-
-
 # ============================================
-# 🏠 الصفحة الرئيسية
+# 🏠 الصفحة الرئيسية والملفات الثابتة
 # ============================================
 @app.route('/')
 def home():
     return render_template('index.html')
 
-
 @app.route('/static/icon.png')
 def serve_icon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'icon.png', mimetype='image/png')
 
-
-@app.route('/api/apps', methods=['GET'])
-def get_apps():
-    return jsonify(APPS_DATABASE)
-
-
-# ============================================
-# 🧪 ROUTE اختبار (باش نتأكدو السيرفر خدام)
-# ============================================
 @app.route('/test123')
 def test123():
     return "OK - Server is alive! ✅"
 
-
-# ============================================
-# 🔍 ROUTE لتشخيص المسارات المتاحة
-# ============================================
 @app.route('/debug/routes')
 def debug_routes():
-    """كيعرض لائحة بكل الـ routes المتاحة"""
     routes = []
     for rule in app.url_map.iter_rules():
         routes.append({
@@ -142,22 +62,139 @@ def debug_routes():
         'routes': routes
     })
 
+# ============================================
+# 🔥 جلب البيانات التلقائي (Auto-Fetch APIs)
+# ============================================
+
+# 1. جلب بيانات تطبيق iOS من iTunes Search API
+@app.route('/api/fetch-ios', methods=['POST'])
+def fetch_ios_data():
+    data = request.json
+    app_name = data.get('name')
+    if not app_name:
+        return jsonify({'error': 'App name is required'}), 400
+
+    try:
+        # استخدام iTunes Search API (مجاني ولا يحتاج مفتاح)
+        url = f"https://itunes.apple.com/search?term={app_name}&entity=software&limit=1"
+        response = requests.get(url, timeout=10)
+        results = response.json().get('results', [])
+        
+        if not results:
+            return jsonify({'error': 'App not found'}), 404
+        
+        app_data = results[0]
+        
+        # تجهيز البيانات
+        formatted_data = {
+            'name': app_data.get('trackName'),
+            'icon': app_data.get('artworkUrl512'),
+            'size': f"{int(app_data.get('fileSizeBytes', 0)) / (1024*1024):.2f} MB",
+            'info': app_data.get('description'),
+            'publisher': app_data.get('artistName'),
+            'url': app_data.get('trackViewUrl'),
+            'platform': 'IPA',
+            'category': 'apps', # يمكنك تحسينها لاحقاً لتحديد الفئة تلقائياً
+            'screenshots': app_data.get('screenshotUrls', []),
+            'appType': 'official' 
+        }
+        
+        # حفظ البيانات في Firebase (إذا كان متصلاً)
+        if db:
+            doc_ref = db.collection('apps').document()
+            doc_ref.set(formatted_data)
+            return jsonify({'success': True, 'id': doc_ref.id, 'data': formatted_data}), 200
+        else:
+            return jsonify({'success': True, 'data': formatted_data, 'warning': 'Firebase not connected'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# 2. جلب بيانات تطبيق Android من Google Play
+@app.route('/api/fetch-android', methods=['POST'])
+def fetch_android_data():
+    data = request.json
+    package_name = data.get('package') # مثلاً: com.whatsapp
+    if not package_name:
+        return jsonify({'error': 'Package name is required'}), 400
+
+    try:
+        # استخدام google-play-scraper
+        result = gp_app(
+            package_name,
+            lang='en', 
+            country='us'
+        )
+        
+        formatted_data = {
+            'name': result.get('title'),
+            'icon': result.get('icon'),
+            'size': f"{result.get('size', 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+            'info': result.get('description'),
+            'publisher': result.get('developer'),
+            'url': f"https://play.google.com/store/apps/details?id={package_name}",
+            'platform': 'APK',
+            'category': 'apps',
+            'screenshots': result.get('screenshots', []),
+            'appType': 'official'
+        }
+        
+        if db:
+            doc_ref = db.collection('apps').document()
+            doc_ref.set(formatted_data)
+            return jsonify({'success': True, 'id': doc_ref.id, 'data': formatted_data}), 200
+        else:
+            return jsonify({'success': True, 'data': formatted_data, 'warning': 'Firebase not connected'}), 200
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# 3. جلب بيانات تطبيق معدل (نموذج مبدئي باستخدام BeautifulSoup)
+@app.route('/api/fetch-mod', methods=['POST'])
+def fetch_mod_data():
+    data = request.json
+    url_to_scrape = data.get('url')
+    if not url_to_scrape:
+        return jsonify({'error': 'URL is required'}), 400
+
+    try:
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472. e124 Safari/537.36'
+        }
+:
+        response = requests.get(url_to_scrape       , headers=headers, timeout=15)
+        soup = Beautiful returnSoup(response.text, 'html.parser')
+        
+ json        # ⚠️ هذه مجرد أمثلة، يجب تعدifyيلها حسب الموقع الذي تستهدفه
+        title = soup.find('h1').text.strip() if soup.find('h1') else 'Unknown App'
+        
+        formatted_data = {
+            'name': title,
+            'url': url_to_scrape,
+            'platform': 'APK' if 'apk' in url_to_scrape.lower() else 'IPA',
+            'appType': 'mod',
+            'info': 'تم الجلب التلقائي من الموقع الخارجي.',
+            'publisher': 'Unknown',
+            'size': 'N/A'
+        }
+        
+        return jsonify({'success': True, 'data': formatted_data}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 # ============================================
 # 🔥 صفحة المشاركة الديناميكية
 # ============================================
 @app.route('/app/<app_id>')
 def share_app(app_id):
-    """
-    صفحة خاصة بكل تطبيق — كتوري صورة التطبيق 
-    ملي تصيفط الرابط فواتساب/إنستغرام
-    """
-    # القيم الافتراضية
     name = "iStore"
     desc = "حمّل التطبيقات والألعاب من iStore مجاناً"
     icon = "https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png"
 
-    # إلا كان Firebase شغال، جيبو معلومات التطبيق
     if db:
         try:
             doc = db.collection('apps').document(app_id).get()
@@ -169,20 +206,14 @@ def share_app(app_id):
                 app_icon = d.get('icon', '')
                 if app_icon and not app_icon.startswith('data:'):
                     icon = app_icon
-                print(f"✅ App found: {name}")
-            else:
-                print(f"⚠️ App {app_id} not found")
         except Exception as e:
             print(f"⚠️ Error fetching app: {e}")
 
-    # صفحة HTML فيها meta tags للصورة
     html = f'''<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <title>{name} - iStore</title>
-
-<!-- 🔥 Open Graph (Instagram / WhatsApp / Facebook / Telegram) -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="{name} - iStore">
 <meta property="og:description" content="{desc}">
@@ -190,33 +221,19 @@ def share_app(app_id):
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta property="og:site_name" content="iStore">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{name} - iStore">
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{icon}">
-
-<!-- ✅ التحويل التلقائي للمستخدم للموقع -->
 <script>
-  // هاد السطر كيخلي المستخدم العادي يتوجه للموقع بعد قراءة المعلومات
 window.location.replace('https://ipa-store.onrender.com/?app={app_id}');
 </script>
-
 <style>
-  body {{
-    background:#0b0b0f;color:#fff;text-align:center;
-    padding:60px 20px;font-family:-apple-system,sans-serif;
-  }}
+  body {{ background:#0b0b0f;color:#fff;text-align:center;padding:60px 20px;font-family:-apple-system,sans-serif; }}
   img {{ width:120px;height:120px;border-radius:28px;margin-bottom:20px; }}
   h1 {{ font-size:20px;margin:10px 0; }}
   p {{ color:#8e8e93;font-size:14px; }}
-  .loader {{
-    display:inline-block;width:24px;height:24px;
-    border:3px solid rgba(255,255,255,0.2);
-    border-top-color:#0a84ff;border-radius:50%;
-    animation:spin 0.8s linear infinite;margin-top:20px;
-  }}
+  .loader {{ display:inline-block;width:24px;height:24px;border:3px solid rgba(255,255,255,0.2);border-top-color:#0a84ff;border-radius:50%;animation:spin 0.8s linear infinite;margin-top:20px; }}
   @keyframes spin {{ to {{ transform:rotate(360deg); }} }}
 </style>
 </head>
@@ -227,17 +244,14 @@ window.location.replace('https://ipa-store.onrender.com/?app={app_id}');
   <div class="loader"></div>
 </body>
 </html>'''
-
     return html
 
 
 # ============================================
-# ✅ AI PROXY — يحمي مفتاح Groq
+# ✅ AI PROXY
 # ============================================
 @app.route('/api/ai', methods=['POST', 'OPTIONS'])
 def ai_proxy():
-    """🛡️ وسيط للذكاء الاصطناعي — المفتاح مخبّى هنا فقط"""
-    
     if request.method == 'OPTIONS':
         response = jsonify({})
         response.headers['Access-Control-Allow-Origin'] = '*'
@@ -251,43 +265,30 @@ def ai_proxy():
             return jsonify({'error': {'message': 'No data provided'}}), 400
         
         groq_key = os.environ.get('GROQ_API_KEY', '')
-        
         if not groq_key:
-            return jsonify({
-                'error': {'message': 'GROQ_API_KEY not configured on server'}
-            }), 500
+            return jsonify({'error': {'message': 'GROQ_API_KEY not configured on server'}}), 500
         
         response = requests.post(
             'https://api.groq.com/openai/v1/chat/completions',
-            headers={
-                'Authorization': f'Bearer {groq_key}',
-                'Content-Type': 'application/json'
-            },
+            headers={'Authorization': f'Bearer {groq_key}', 'Content-Type': 'application/json'},
             json=data,
             timeout=60
         )
-        
         result = jsonify(response.json())
         result.headers['Access-Control-Allow-Origin'] = '*'
         return result, response.status_code
         
     except requests.exceptions.Timeout:
-        return jsonify({
-            'error': {'message': 'Request timeout. Try again.'}
-        }), 504
+        return jsonify({'error': {'message': 'Request timeout. Try again.'}}), 504
     except Exception as e:
-        return jsonify({
-            'error': {'message': str(e)}
-        }), 500
+        return jsonify({'error': {'message': str(e)}}), 500
 
 
 # ====== VirusTotal API ======
 @app.route('/api/scan', methods=['POST'])
 def scan_file():
-    """يفحص ملف بالـ SHA256 hash عبر VirusTotal"""
     data = request.get_json()
     file_hash = data.get('hash') if data else None
-    
     if not file_hash:
         return jsonify({"error": "Hash required"}), 400
     
@@ -300,16 +301,14 @@ def scan_file():
     
     try:
         response = requests.get(url, headers=headers, timeout=10)
-        
         if response.status_code == 200:
             data = response.json()
             stats = data['data']['attributes']['last_analysis_stats']
             malicious = stats['malicious']
             suspicious = stats['suspicious']
-            harmless = stats['harmless']          # ✅ تصحيح الخطأ
+            harmless = stats['harmless']
             undetected = stats['undetected']
             total = malicious + suspicious + harmless + undetected
-            
             return jsonify({
                 "safe": malicious == 0,
                 "malicious": malicious,
@@ -328,22 +327,17 @@ def scan_file():
             return jsonify({"error": "Invalid API key"}), 401
         else:
             return jsonify({"error": f"API error: {response.status_code}"}), response.status_code
-            
     except requests.exceptions.Timeout:
         return jsonify({"error": "Timeout. Try again."}), 504
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
+    except Exception as({"error": str(e)}), 500
 
 @app.route('/sitemap.xml')
 def sitemap():
     return send_from_directory('templates', 'sitemap.xml', mimetype='application/xml')
 
-
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('templates', 'robots.txt', mimetype='text/plain')
-
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
