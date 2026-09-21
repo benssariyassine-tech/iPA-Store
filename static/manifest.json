@@ -1,0 +1,40 @@
+{
+  "name": "iStore - متجر التطبيقات",
+  "short_name": "iStore",
+  "description": "حمّل التطبيقات والألعاب المدفوعة والمعدلة مجاناً للآيفون والأندرويد",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0b0f",
+  "theme_color": "#0a84ff",
+  "lang": "ar",
+  "dir": "rtl",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "productivity"],
+  "shortcuts": [
+    {
+      "name": "التطبيقات",
+      "url": "/?tab=apps",
+      "description": "تصفح التطبيقات"
+    },
+    {
+      "name": "الألعاب",
+      "url": "/?tab=games",
+      "description": "تصفح الألعاب"
+    }
+  ]
+}
