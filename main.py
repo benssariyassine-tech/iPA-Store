@@ -338,7 +338,89 @@ def sitemap():
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('templates', 'robots.txt', mimetype='text/plain')
+# ============================================
+# 🤖 SMART FETCH — بحث ذكي وجلب أوتوماتيكي
+# ============================================
+@app.route('/api/smart-fetch', methods=['POST'])
+def smart_fetch():
+    """
+    يستقبل سؤال المستخدم، يبحث في iTunes و Google Play،
+    وإذا لقى التطبيق يسجلو في Firebase.
+    """
+    data = request.json
+    query = (data.get('query') or '').strip()
+    
+    if not query or len(query) < 2:
+        return jsonify({'found': False, 'message': 'Query too short'}), 200
 
+    results = []
+
+    # 1️⃣ جرّب iTunes (لـ IPA)
+    try:
+        url = f"https://itunes.apple.com/search?term={requests.utils.quote(query)}&entity=software&limit=1"
+        r = requests.get(url, timeout=8)
+        ios_results = r.json().get('results', [])
+        if ios_results:
+            app_data = ios_results[0]
+            formatted = {
+                'name': app_data.get('trackName'),
+                'icon': app_data.get('artworkUrl512'),
+                'size': f"{int(app_data.get('fileSizeBytes', 0)) / (1024*1024):.2f} MB",
+                'info': app_data.get('description', '')[:500],
+                'publisher': app_data.get('artistName'),
+                'url': app_data.get('trackViewUrl'),
+                'platform': 'IPA',
+                'category': 'apps',
+                'screenshots': app_data.get('screenshotUrls', [])[:3],
+                'appType': 'official'
+            }
+            results.append(formatted)
+    except Exception as e:
+        print(f"iTunes search error: {e}")
+
+    # 2️⃣ جرّب Google Play (لـ APK)
+    try:
+        gp_results = gp_search(query, lang='ar', country='dz', n_hits=1)
+        if gp_results:
+            package_name = gp_results[0]['appId']
+            result = gp_app(package_name, lang='ar', country='dz')
+            formatted = {
+                'name': result.get('title'),
+                'icon': result.get('icon'),
+                'size': f"{result.get('size', 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+                'info': result.get('description', '')[:500],
+                'publisher': result.get('developer'),
+                'url': f"https://play.google.com/store/apps/details?id={package_name}",
+                'platform': 'APK',
+                'category': 'apps',
+                'screenshots': result.get('screenshots', [])[:3],
+                'appType': 'official'
+            }
+            results.append(formatted)
+    except Exception as e:
+        print(f"Google Play search error: {e}")
+
+    if not results:
+        return jsonify({
+            'found': False,
+            'message': 'لم يتم العثور على التطبيق في المتاجر الرسمية.'
+        }), 200
+
+    # 3️⃣ سجّل التطبيقات في Firebase
+    saved_ids = []
+    if db:
+        for app_data in results:
+            doc_ref = db.collection('apps').document()
+            doc_ref.set(app_data)
+            saved_ids.append(doc_ref.id)
+        print(f"✅ Auto-saved {len(saved_ids)} apps to Firebase")
+    
+    return jsonify({
+        'found': True,
+        'count': len(results),
+        'saved_ids': saved_ids,
+        'apps': results
+    }), 200
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
