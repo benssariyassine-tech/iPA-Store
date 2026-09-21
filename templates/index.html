@@ -3780,6 +3780,12 @@ db.collection("comment_reports").orderBy("createdAt","desc").onSnapshot(snapshot
   if(currentTab === 'admin_panel') renderUI();
 }, err=>{ console.warn('Comment reports err:',err); });
 
+db.collection("publisher_requests").orderBy("createdAt","desc").onSnapshot(snapshot=>{
+  allPublisherRequests = [];
+  snapshot.forEach(doc=>allPublisherRequests.push({id:doc.id, ...doc.data()}));
+  if(currentTab === 'admin_panel') renderUI();
+  updateAvatarUI();
+}, err=>{ console.warn('Publisher requests err:',err); });
 // ====== RENDER UI ======
 function renderUI(){
   const container = document.getElementById('dynamicContent');
