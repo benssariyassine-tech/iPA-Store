@@ -95,7 +95,6 @@ def fetch_ios_data():
             'category': 'apps',
             'screenshots': app_data.get('screenshotUrls', []),
             'appType': 'official',
-            'createdAt': firestore.SERVER_TIMESTAMP,
             'likedBy': [],
             'downloadedBy': [],
             'downloads': 0,
@@ -107,8 +106,10 @@ def fetch_ios_data():
         }
         
         if db:
+            save_data = dict(formatted_data)
+            save_data['createdAt'] = firestore.SERVER_TIMESTAMP
             doc_ref = db.collection('apps').document()
-            doc_ref.set(formatted_data)
+            doc_ref.set(save_data)
             return jsonify({'success': True, 'id': doc_ref.id, 'data': formatted_data}), 200
         else:
             return jsonify({'success': True, 'data': formatted_data, 'warning': 'Firebase not connected'}), 200
@@ -143,7 +144,6 @@ def fetch_android_data():
             'category': 'apps',
             'screenshots': result.get('screenshots', []),
             'appType': 'official',
-            'createdAt': firestore.SERVER_TIMESTAMP,
             'likedBy': [],
             'downloadedBy': [],
             'downloads': 0,
@@ -155,8 +155,10 @@ def fetch_android_data():
         }
         
         if db:
+            save_data = dict(formatted_data)
+            save_data['createdAt'] = firestore.SERVER_TIMESTAMP
             doc_ref = db.collection('apps').document()
-            doc_ref.set(formatted_data)
+            doc_ref.set(save_data)
             return jsonify({'success': True, 'id': doc_ref.id, 'data': formatted_data}), 200
         else:
             return jsonify({'success': True, 'data': formatted_data, 'warning': 'Firebase not connected'}), 200
@@ -389,7 +391,6 @@ def smart_fetch():
                 'category': 'apps',
                 'screenshots': app_data.get('screenshotUrls', [])[:3],
                 'appType': 'official',
-                'createdAt': firestore.SERVER_TIMESTAMP,
                 'likedBy': [],
                 'downloadedBy': [],
                 'downloads': 0,
@@ -422,7 +423,6 @@ def smart_fetch():
                     'category': 'apps',
                     'screenshots': result.get('screenshots', [])[:3],
                     'appType': 'official',
-                    'createdAt': firestore.SERVER_TIMESTAMP,
                     'likedBy': [],
                     'downloadedBy': [],
                     'downloads': 0,
@@ -450,8 +450,10 @@ def smart_fetch():
     if db:
         try:
             for app_data in results:
+                save_data = dict(app_data)
+                save_data['createdAt'] = firestore.SERVER_TIMESTAMP
                 doc_ref = db.collection('apps').document()
-                doc_ref.set(app_data)
+                doc_ref.set(save_data)
                 saved_ids.append(doc_ref.id)
             print(f"✅ Auto-saved {len(saved_ids)} apps to Firebase")
         except Exception as e:
@@ -466,7 +468,6 @@ def smart_fetch():
             'message': 'Firebase غير متصل'
         }), 500
     
-    # تحقق: إلا ما تسجل حتى تطبيق، رجع فشل
     if len(saved_ids) == 0:
         return jsonify({
             'found': False,
