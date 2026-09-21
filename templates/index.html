@@ -3465,7 +3465,7 @@ similarApps = similarApps.slice(0, 6);
   '<div class="detail-header-row">'+
     '<img src="'+(app.icon||FALLBACK_ICON)+'" class="detail-icon" onerror="this.src=\''+FALLBACK_ICON+'\'">'+
     '<div class="detail-title-block">'+
-      '<h3 class="detail-title">'+app.name+'</h3>'+
+     '<h3 class="detail-title">'+escapeHTML(app.name)+'</h3>'+
       getPublisherHTML(app.publisher, {fontSize:'12px', marginTop:'0', iconSize:14})+
       '<div class="detail-meta">'+
         '<span class="detail-chip danger">'+(app.platform||'IPA')+'</span>'+
