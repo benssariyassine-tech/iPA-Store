@@ -2817,6 +2817,79 @@ User
 </div>
 
 <script>
+ // ====== THEME MANAGEMENT SYSTEM ======
+try {
+  window.THEMES_LIST = ['dark', 'light', 'gold', 'algeria', 'redblack', 'sea'];
+  window.THEME_CLASSES = {
+    dark: [],
+    light: ['light-mode'],
+    gold: ['premium-mode'],
+    algeria: ['algeria-mode'],
+    redblack: ['redblack-mode'],
+    sea: ['sea-mode']
+  };
+
+  window.getCurrentTheme = function() {
+    try { return localStorage.getItem('istore_theme') || 'gold'; }
+    catch(e) { return 'gold'; }
+  };
+
+  window.applyTheme = function(themeName) {
+    if (!window.THEMES_LIST.includes(themeName)) themeName = 'dark';
+    document.body.classList.remove('light-mode', 'premium-mode', 'algeria-mode', 'redblack-mode', 'sea-mode');
+    (window.THEME_CLASSES[themeName] || []).forEach(c => document.body.classList.add(c));
+    if (typeof isLightMode !== 'undefined') isLightMode = (themeName === 'light');
+    document.querySelectorAll('.theme-option').forEach(opt => {
+      opt.classList.toggle('active', opt.dataset.theme === themeName);
+    });
+  };
+
+  window.selectTheme = function(themeName) {
+    if (!window.THEMES_LIST.includes(themeName)) themeName = 'dark';
+    try { localStorage.setItem('istore_theme', themeName); } catch(e) {}
+    window.applyTheme(themeName);
+    const lang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
+    const labels = {
+      dark:    { en: 'Dark theme activated',        ar: 'تم تفعيل الوضع الداكن' },
+      light:   { en: 'Light theme activated',       ar: 'تم تفعيل الوضع الفاتح' },
+      gold:    { en: 'Gold theme activated',        ar: 'تم تفعيل الثيم الذهبي' },
+      algeria: { en: 'Algeria theme activated',     ar: 'تم تفعيل ثيم الجزائر' },
+      redblack:{ en: 'Red & Black theme activated', ar: 'تم تفعيل الثيم الأحمر والأسود' },
+      sea:     { en: 'Deep Sea theme activated',    ar: 'تم تفعيل ثيم البحر العميق' }
+    };
+    if (typeof showToast === 'function') {
+      showToast(labels[themeName][lang] || labels[themeName].en, 'success', 1800);
+    }
+    setTimeout(() => {
+      if (typeof closeModal === 'function') closeModal('themeModal');
+    }, 350);
+  };
+
+  window.openThemeModal = function() {
+    const current = window.getCurrentTheme();
+    window.applyTheme(current);
+    const lang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
+    const t = {
+      en: { title: 'Choose Theme', sub: 'Pick a look that fits your style', basic: 'Basic', special: 'Special' },
+      ar: { title: 'اختر الثيم', sub: 'اختر المظهر اللي يعجبك', basic: 'الأساسية', special: 'المميزة' }
+    }[lang] || { title: 'Choose Theme', sub: '', basic: 'Basic', special: 'Special' };
+
+    const titleEl = document.getElementById('themeModalTitle');
+    const subEl = document.getElementById('themeModalSub');
+    const basicEl = document.getElementById('themeBasicLabel');
+    const specialEl = document.getElementById('themeSpecialLabel');
+
+    if (titleEl) titleEl.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-4px;margin-right:6px;"><circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> ' + t.title;
+    if (subEl) subEl.innerText = t.sub;
+    if (basicEl) basicEl.innerText = t.basic;
+    if (specialEl) specialEl.innerText = t.special;
+    if (typeof openModal === 'function') openModal('themeModal');
+  };
+
+  console.log('✅ Theme system loaded OK');
+} catch(err) {
+  console.error('❌ Theme system error:', err);
+}
   const firebaseConfig = {
   apiKey: "AIzaSyC3r9wr8tgjRNwWFY01mxrVy640sQFs2bg",
   authDomain: "istore-ipa.firebaseapp.com",
