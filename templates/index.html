@@ -2739,6 +2739,66 @@ User
     </p>
   </div>
 </div>
+ <!-- ===== THEME PICKER MODAL ===== -->
+<div id="themeModal" class="modal">
+  <div class="modal-box theme-modal-box">
+    <button class="modal-close-x" onclick="closeModal('themeModal')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <h3 class="modal-title" id="themeModalTitle">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px;margin-right:6px;"><circle cx="13.5" cy="6.5" r="1.2"/><circle cx="17.5" cy="10.5" r="1.2"/><circle cx="8.5" cy="7.5" r="1.2"/><circle cx="6.5" cy="12.5" r="1.2"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+      Choose Theme
+    </h3>
+    <p class="modal-subtitle" id="themeModalSub">Pick a look that fits your style</p>
+
+    <!-- BASIC - الفوق -->
+    <div class="theme-section">
+      <div class="theme-section-label" id="themeBasicLabel">Basic</div>
+      <div class="theme-grid">
+        <button class="theme-option" data-theme="dark" onclick="selectTheme('dark')">
+          <div class="theme-preview preview-dark"></div>
+          <span class="theme-name" data-i18n="themeDark">Dark</span>
+          <div class="theme-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </button>
+        <button class="theme-option" data-theme="light" onclick="selectTheme('light')">
+          <div class="theme-preview preview-light"></div>
+          <span class="theme-name" data-i18n="themeLight">Light</span>
+          <div class="theme-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- SPECIAL - التحت -->
+    <div class="theme-section">
+      <div class="theme-section-label" id="themeSpecialLabel">Special</div>
+      <div class="theme-grid">
+        <button class="theme-option" data-theme="gold" onclick="selectTheme('gold')">
+          <div class="theme-preview preview-gold"></div>
+          <span class="theme-name" data-i18n="themeGold">Gold</span>
+          <div class="theme-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </button>
+        <button class="theme-option" data-theme="algeria" onclick="selectTheme('algeria')">
+          <div class="theme-preview preview-algeria"></div>
+          <span class="theme-name" data-i18n="themeAlgeria">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            Algeria
+          </span>
+          <div class="theme-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </button>
+        <button class="theme-option" data-theme="redblack" onclick="selectTheme('redblack')">
+          <div class="theme-preview preview-redblack"></div>
+          <span class="theme-name" data-i18n="themeRedBlack">Red &amp; Black</span>
+          <div class="theme-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </button>
+        <button class="theme-option" data-theme="sea" onclick="selectTheme('sea')">
+          <div class="theme-preview preview-sea"></div>
+          <span class="theme-name" data-i18n="themeSea">Deep Sea</span>
+          <div class="theme-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="reportModal" class="modal">
 <div class="modal-box">
 <button class="modal-close-x" onclick="closeModal('reportModal')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
