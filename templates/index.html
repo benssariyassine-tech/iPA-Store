@@ -3235,6 +3235,26 @@ function loadPrefs(){
   }catch(e){}
   const savedLang = localStorage.getItem('istore_lang');
   if(savedLang) currentLang = savedLang;
+
+  // ✅ حمّل الثيم المحفوظ (وكي ما كانش، استعمل Gold)
+  const savedTheme = localStorage.getItem('istore_theme');
+  if (typeof applyTheme === 'function') {
+    applyTheme(savedTheme || 'gold');
+  } else {
+    // احتياطي: طبّق الثيم يدوياً إذا applyTheme ماشي معرّفة بعد
+    const themeClasses = {
+      'dark': [],
+      'light': ['light-mode'],
+      'gold': ['premium-mode'],
+      'algeria': ['algeria-mode'],
+      'redblack': ['redblack-mode'],
+      'sea': ['sea-mode']
+    };
+    const themeToApply = (savedTheme && themeClasses[savedTheme]) ? savedTheme : 'gold';
+    document.body.classList.remove('light-mode', 'premium-mode', 'algeria-mode', 'redblack-mode', 'sea-mode');
+    themeClasses[themeToApply].forEach(c => document.body.classList.add(c));
+    if (themeToApply === 'light') isLightMode = true;
+  }
 }
 
 function toggleDarkMode(){
