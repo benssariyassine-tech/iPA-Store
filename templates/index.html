@@ -5512,6 +5512,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 300);
   }
 }
+ // إخفاء نهائي للـ premium badge
+setTimeout(() => {
+  const badge = document.getElementById('headerPremiumBadge');
+  if (badge) badge.remove();
+}, 500);
 </script>
 <!-- AI Chatbot Robot -->
 <div id="aiChatBtn" onclick="openAiChat()" title="مساعد iStore">
