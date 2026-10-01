@@ -38,267 +38,18 @@ except Exception as e:
 @app.route('/')
 def home():
     html = render_template('index.html')
-
-    theme_css = '''
-    <style>
-    body.theme-gold {
-        --accent: #d4a017;
-        --accent2: #b8860b;
-        --warning: #ffd700;
-        --header-bg: rgba(11,11,15,0.75);
-        --nav-bg: rgba(18,18,24,0.85);
-        --modal-bg: rgba(17, 17, 22, 0.9);
-        --glass-bg: rgba(255,255,255,0.04);
-        --glass-border: rgba(255,255,255,0.08);
-    }
-
-    body.theme-gold.light-mode {
-        --accent: #b8860b;
-        --accent2: #8b6508;
-        --warning: #d4a017;
-    }
-
-    body.theme-glass {
-        --bg-color: #061b16;
-        --text-color: #f4fff8;
-        --card-bg: rgba(13, 36, 29, 0.5);
-        --border-color: rgba(255,255,255,0.18);
-        --subtext-color: rgba(229, 255, 239, 0.8);
-        --header-bg: rgba(7, 31, 25, 0.52);
-        --nav-bg: rgba(8, 32, 26, 0.72);
-        --modal-bg: rgba(7, 26, 22, 0.82);
-        --input-bg: rgba(255,255,255,0.05);
-        --glass-bg: rgba(255,255,255,0.08);
-        --glass-border: rgba(255,255,255,0.18);
-        --accent: #d9b44a;
-        --accent2: #0f8a5b;
-        --warning: #e8d36f;
-        --danger: #ff4d68;
-        --success: #3ee19b;
-        --algeria-green: #0d7d4f;
-        --algeria-white: rgba(255,255,255,0.9);
-        --algeria-red: #d9232d;
-        background:
-            radial-gradient(circle at 15% 15%, rgba(13,125,79,0.55), transparent 28%),
-            radial-gradient(circle at 85% 20%, rgba(255,255,255,0.18), transparent 25%),
-            radial-gradient(circle at 50% 75%, rgba(217, 36, 45, 0.24), transparent 32%),
-            linear-gradient(135deg, #03170f 0%, #0a2f24 25%, #0d7d4f 50%, #f3f6f2 50%, #d9232d 100%);
-        background-attachment: fixed;
-        background-size: cover;
-        animation: glassFlow 18s ease-in-out infinite alternate;
-    }
-
-    body.theme-glass.light-mode {
-        --bg-color: #edfdf6;
-        --text-color: #0f1b18;
-        --card-bg: rgba(255,255,255,0.38);
-        --border-color: rgba(13,125,79,0.2);
-        --subtext-color: rgba(15,27,24,0.72);
-        --header-bg: rgba(255,255,255,0.34);
-        --nav-bg: rgba(255,255,255,0.5);
-        --modal-bg: rgba(255,255,255,0.75);
-        --input-bg: rgba(255,255,255,0.58);
-        --glass-bg: rgba(255,255,255,0.22);
-        --glass-border: rgba(13,125,79,0.18);
-        background:
-            radial-gradient(circle at 15% 15%, rgba(13,125,79,0.12), transparent 35%),
-            radial-gradient(circle at 85% 20%, rgba(255,255,255,0.75), transparent 30%),
-            radial-gradient(circle at 50% 75%, rgba(217, 36, 45, 0.10), transparent 28%),
-            linear-gradient(135deg, #dcefe6 0%, #edfdf6 32%, #f8faf9 58%, #f0f3ef 100%);
-    }
-
-    @keyframes glassFlow {
-        0% { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%; }
-        50% { background-position: 30% 18%, 70% 36%, 30% 80%, 100% 50%; }
-        100% { background-position: 0% 0%, 100% 0%, 50% 100%, 0% 50%; }
-    }
-
-    body.theme-glass .header,
-    body.theme-glass .floating-nav,
-    body.theme-glass .app-card-pro,
-    body.theme-glass .modal-box,
-    body.theme-glass .detail-section,
-    body.theme-glass .stat-box,
-    body.theme-glass .admin-section-card,
-    body.theme-glass .bottom-sheet-content,
-    body.theme-glass .coming-soon-box,
-    body.theme-glass .aiChatPanel {
-        backdrop-filter: blur(18px) saturate(1.3);
-        -webkit-backdrop-filter: blur(18px) saturate(1.3);
-        box-shadow: 0 12px 32px rgba(0,0,0,0.18);
-        border-color: rgba(255,255,255,0.18);
-    }
-
-    body.theme-glass .icon-btn,
-    body.theme-glass .chip,
-    body.theme-glass .btn-secondary,
-    body.theme-glass .btn-scroll,
-    body.theme-glass .search-input,
-    body.theme-glass .input-field,
-    body.theme-glass .setting-select,
-    body.theme-glass .extra-file-item,
-    body.theme-glass .account-action-btn,
-    body.theme-glass .lang-btn,
-    body.theme-glass .lang-switch,
-    body.theme-glass .comment-box,
-    body.theme-glass .similar-app-card,
-    body.theme-glass .report-admin-item,
-    body.theme-glass .detail-chip,
-    body.theme-glass .partner-req,
-    body.theme-glass .verify-box {
-        background: rgba(255,255,255,0.06);
-        border: 1px solid rgba(255,255,255,0.12);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-    }
-
-    body.theme-glass .nav-item.active {
-        color: #f7e7ac;
-    }
-
-    body.theme-glass .app-card-pro::before {
-        background: radial-gradient(circle at 100% 0%, rgba(217,180,74,0.18), transparent 60%);
-    }
-
-    body.theme-glass .btn-primary,
-    body.theme-glass .btn-install,
-    body.theme-glass .btn-download-hero,
-    body.theme-glass .account-action-btn.gold,
-    body.theme-glass .coming-soon-btn,
-    body.theme-glass .admin-add-float {
-        background: linear-gradient(135deg, var(--algeria-green), #d9b44a, var(--algeria-red));
-        background-size: 180% 180%;
-        animation: glassPulse 4s ease-in-out infinite alternate;
-        box-shadow: 0 10px 24px rgba(13,125,79,0.35);
-    }
-
-    @keyframes glassPulse {
-        0% { background-position: 0% 50%; }
-        100% { background-position: 100% 50%; }
-    }
-
-    body.theme-glass .modal-title,
-    body.theme-glass .logo-area span,
-    body.theme-glass .today-title {
-        background: linear-gradient(135deg, #f8f7f5, #d9b44a, #0d7d4f);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    body.theme-glass .floating-nav {
-        border: 1px solid rgba(255,255,255,0.14);
-    }
-
-    body.theme-glass .search-input:focus,
-    body.theme-glass .input-field:focus {
-        box-shadow: 0 0 0 4px rgba(13,125,79,0.18), 0 0 16px rgba(217,180,74,0.2);
-        border-color: rgba(217,180,74,0.9);
-    }
-
-    #themeToggleBtn {
-        position: fixed;
-        right: 18px;
-        bottom: 170px;
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 14px;
-        border: 1px solid rgba(255,255,255,0.18);
-        border-radius: 999px;
-        background: linear-gradient(135deg, rgba(212,160,23,0.92), rgba(184,134,11,0.86));
-        color: #fff;
-        font-size: 12px;
-        font-weight: 900;
-        letter-spacing: 0.3px;
-        box-shadow: 0 10px 24px rgba(212,160,23,0.4);
-        cursor: pointer;
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    body[dir="rtl"] #themeToggleBtn {
-        right: auto;
-        left: 18px;
-    }
-
-    body.theme-glass #themeToggleBtn {
-        background: linear-gradient(135deg, rgba(13,125,79,0.95), rgba(217,180,74,0.9), rgba(217,36,45,0.9));
-        box-shadow: 0 10px 24px rgba(13,125,79,0.35);
-    }
-
-    #themeToggleBtn:active {
-        transform: scale(0.96);
-    }
-
-    .theme-toggle-emoji {
-        font-size: 14px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .theme-toggle-label {
-        white-space: nowrap;
-    }
-    </style>
-    '''
-
-    theme_script = '''
-    <script>
-    (function () {
-        const key = 'ipa-store-theme';
-        function applyTheme(theme) {
-            const body = document.body;
-            body.classList.remove('theme-gold', 'theme-glass');
-            body.classList.add(theme === 'glass' ? 'theme-glass' : 'theme-gold');
-            const btn = document.getElementById('themeToggleBtn');
-            if (btn) {
-                const isGlass = theme === 'glass';
-                btn.innerHTML = '<span class="theme-toggle-emoji">' + (isGlass ? '🥇' : '🟢') + '</span><span class="theme-toggle-label">' + (isGlass ? 'Gold' : 'Glass') + '</span>';
-                btn.setAttribute('aria-label', isGlass ? 'تبديل إلى الثيم الذهبي' : 'تبديل إلى ثيم Glass');
-                btn.title = isGlass ? 'تبديل إلى الثيم الذهبي' : 'تبديل إلى ثيم Glass';
-            }
-            localStorage.setItem(key, theme);
-        }
-
-        function initThemeButton() {
-            let current = localStorage.getItem(key) || 'gold';
-            if (current !== 'gold' && current !== 'glass') current = 'gold';
-
-            const existing = document.getElementById('themeToggleBtn');
-            if (existing) existing.remove();
-
-            const btn = document.createElement('button');
-            btn.id = 'themeToggleBtn';
-            btn.type = 'button';
-            btn.setAttribute('aria-label', 'تبديل الثيم');
-            btn.addEventListener('click', function () {
-                const next = document.body.classList.contains('theme-glass') ? 'gold' : 'glass';
-                applyTheme(next);
-            });
-
-            document.body.appendChild(btn);
-            applyTheme(current);
-        }
-
-        document.addEventListener('DOMContentLoaded', initThemeButton);
-    })();
-    </script>
-    '''
-
-    return html.replace('</body>', theme_css + theme_script + '</body>')
+    return html
 
 
 @app.route('/static/icon.png')
 def serve_icon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'icon.png', mimetype='image/png')
 
+
 @app.route('/test123')
 def test123():
     return "OK - Server is alive! ✅"
+
 
 @app.route('/debug/routes')
 def debug_routes():
@@ -723,6 +474,7 @@ def scan_file():
 def sitemap():
     return send_from_directory('templates', 'sitemap.xml', mimetype='application/xml')
 
+
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('templates', 'robots.txt', mimetype='text/plain')
@@ -849,6 +601,7 @@ def smart_fetch():
         'apps': results
     }), 200
 
+
 # ============================================
 # 📱 PWA Routes
 # ============================================
@@ -860,6 +613,7 @@ def serve_manifest():
         mimetype='application/manifest+json'
     )
 
+
 @app.route('/static/service-worker.js')
 def serve_service_worker():
     response = send_from_directory(
@@ -869,6 +623,8 @@ def serve_service_worker():
     )
     response.headers['Service-Worker-Allowed'] = '/'
     return response
+
+
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
