@@ -1956,6 +1956,277 @@ body[dir="rtl"] .slant-badge {
     bottom: calc(150px + env(safe-area-inset-bottom)) !important;
   }
 }
+ /* ===== THEME MODAL ===== */
+.theme-modal-box { max-width: 430px; padding-bottom: 18px !important; }
+.theme-section { margin-bottom: 20px; }
+.theme-section:last-child { margin-bottom: 0; }
+.theme-section-label {
+  font-size: 10.5px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.8px;
+  color: var(--subtext-color);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-color), transparent);
+}
+body[dir="rtl"] .theme-section-label::after {
+  background: linear-gradient(-90deg, var(--border-color), transparent);
+}
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.theme-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 12px;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1.5px solid rgba(255,255,255,0.12);
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+body[dir="rtl"] .theme-option { text-align: right; flex-direction: row-reverse; }
+body.light-mode .theme-option {
+  background: rgba(255,255,255,0.55);
+  border-color: rgba(0,0,0,0.08);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.theme-option::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 100% 0%, rgba(255,255,255,0.15), transparent 60%);
+  pointer-events: none;
+}
+.theme-option:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255,255,255,0.28);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.theme-option.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10,132,255,0.22), 0 10px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
+}
+.theme-option .theme-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2), 0 3px 8px rgba(0,0,0,0.2);
+}
+.theme-option .theme-name {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--text-color);
+  line-height: 1.2;
+  flex: 1;
+  min-width: 0;
+  letter-spacing: 0.2px;
+}
+.theme-option .theme-check {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+body[dir="rtl"] .theme-option .theme-check { right: auto; left: 7px; }
+.theme-option.active .theme-check { display: flex; }
+.theme-option .theme-check svg { width: 11px; height: 11px; stroke: #fff; stroke-width: 3.5; fill: none; }
+
+/* Theme Previews */
+.preview-dark { background: linear-gradient(135deg, #1e1e2a 0%, #0b0b0f 60%, #000 100%); }
+.preview-light { background: linear-gradient(135deg, #ffffff 0%, #e5e5ea 60%, #d1d1d6 100%); }
+.preview-gold { background: linear-gradient(135deg, #ffd700 0%, #d4a017 45%, #8b6508 100%); }
+.preview-algeria { background: linear-gradient(135deg, #006233 0%, #ffffff 50%, #d21034 100%); }
+.preview-redblack { background: linear-gradient(135deg, #ff2a00 0%, #8b0000 45%, #000 100%); }
+.preview-sea { background: linear-gradient(135deg, #5ac8fa 0%, #0a84ff 45%, #051529 100%); }
+
+/* ===== ALGERIA THEME 🇩🇿 ===== */
+body.algeria-mode {
+  --bg-color: #f4f7f5;
+  --text-color: #0a1a10;
+  --card-bg: #ffffff;
+  --border-color: rgba(0,98,51,0.12);
+  --subtext-color: #5c6b62;
+  --header-bg: rgba(244,247,245,0.85);
+  --nav-bg: rgba(255,255,255,0.92);
+  --modal-bg: #ffffff;
+  --input-bg: #f0f5f1;
+  --accent: #006233;
+  --accent2: #004d28;
+  --danger: #d21034;
+  --success: #32d74b;
+  --warning: #ff9f0a;
+  --glass-bg: rgba(255,255,255,0.7);
+  --glass-border: rgba(0,98,51,0.18);
+  background-image: 
+    radial-gradient(ellipse 60% 50% at 10% 0%, rgba(0,98,51,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 100%, rgba(210,16,52,0.06) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+body.algeria-mode .header {
+  background: linear-gradient(135deg, rgba(0,98,51,0.14), rgba(210,16,52,0.06));
+  border-bottom: 1px solid rgba(0,98,51,0.25);
+}
+body.algeria-mode .logo-area span {
+  background: linear-gradient(135deg, #006233, #d21034);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.algeria-mode .floating-nav {
+  border-color: rgba(0,98,51,0.25);
+  box-shadow: 0 15px 40px rgba(0,98,51,0.15);
+}
+body.algeria-mode .nav-item.active { color: #006233; }
+body.algeria-mode .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(0,98,51,0.6)); }
+body.algeria-mode .app-card-pro:hover {
+  border-color: rgba(0,98,51,0.5);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,98,51,0.15);
+}
+body.algeria-mode .btn-primary {
+  background: linear-gradient(135deg, #006233, #d21034);
+  box-shadow: 0 6px 20px rgba(0,98,51,0.35);
+}
+body.algeria-mode .btn-download-hero {
+  background: linear-gradient(135deg, #006233, #004d28, #006233);
+  box-shadow: 0 14px 36px rgba(0,98,51,0.4);
+}
+
+/* ===== RED BLACK THEME ===== */
+body.redblack-mode {
+  --bg-color: #0a0a0a;
+  --text-color: #ffffff;
+  --card-bg: #141414;
+  --border-color: rgba(255,42,0,0.15);
+  --subtext-color: #8a8a8a;
+  --header-bg: rgba(10,10,10,0.88);
+  --nav-bg: rgba(20,20,20,0.92);
+  --modal-bg: #141414;
+  --input-bg: #0e0e0e;
+  --accent: #ff2a00;
+  --accent2: #c41e00;
+  --warning: #ff8a00;
+  --glass-bg: rgba(30,10,5,0.7);
+  --glass-border: rgba(255,42,0,0.28);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 15% 15%, rgba(255,42,0,0.15) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 25%, rgba(255,80,0,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 55% at 50% 95%, rgba(180,20,0,0.15) 0%, transparent 65%);
+  background-attachment: fixed;
+}
+body.redblack-mode .header {
+  background: linear-gradient(135deg, rgba(255,42,0,0.18), rgba(0,0,0,0.6));
+  border-bottom: 1px solid rgba(255,42,0,0.4);
+}
+body.redblack-mode .logo-area span {
+  background: linear-gradient(135deg, #ff2a00, #ff8a00);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.redblack-mode .floating-nav {
+  border-color: rgba(255,42,0,0.4);
+  box-shadow: 0 15px 40px rgba(255,42,0,0.22);
+}
+body.redblack-mode .nav-item.active { color: #ff2a00; }
+body.redblack-mode .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(255,42,0,0.8)); }
+body.redblack-mode .app-card-pro:hover {
+  border-color: rgba(255,42,0,0.65);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,42,0,0.25);
+}
+body.redblack-mode .btn-primary {
+  background: linear-gradient(135deg, #ff2a00, #c41e00);
+  box-shadow: 0 6px 20px rgba(255,42,0,0.45);
+}
+body.redblack-mode .btn-download-hero {
+  background: linear-gradient(135deg, #ff2a00, #8b0000, #ff2a00);
+  box-shadow: 0 14px 36px rgba(255,42,0,0.5);
+}
+
+/* ===== DEEP SEA THEME ===== */
+body.sea-mode {
+  --bg-color: #051529;
+  --text-color: #e6f0ff;
+  --card-bg: #0a2545;
+  --border-color: rgba(90,200,250,0.14);
+  --subtext-color: #7a94b3;
+  --header-bg: rgba(5,21,41,0.88);
+  --nav-bg: rgba(10,37,69,0.92);
+  --modal-bg: #0a2545;
+  --input-bg: #051529;
+  --accent: #5ac8fa;
+  --accent2: #0a84ff;
+  --warning: #64d2ff;
+  --glass-bg: rgba(10,37,69,0.7);
+  --glass-border: rgba(90,200,250,0.22);
+  background-image:
+    radial-gradient(ellipse 60% 50% at 15% 15%, rgba(90,200,250,0.14) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 45% at 85% 25%, rgba(10,132,255,0.12) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 55% at 50% 95%, rgba(0,98,210,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 5% 75%, rgba(90,200,250,0.10) 0%, transparent 65%);
+  background-attachment: fixed;
+}
+body.sea-mode .header {
+  background: linear-gradient(135deg, rgba(10,132,255,0.2), rgba(5,21,41,0.6));
+  border-bottom: 1px solid rgba(90,200,250,0.32);
+}
+body.sea-mode .logo-area span {
+  background: linear-gradient(135deg, #5ac8fa, #0a84ff);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+body.sea-mode .floating-nav {
+  border-color: rgba(90,200,250,0.35);
+  box-shadow: 0 15px 40px rgba(10,132,255,0.25);
+}
+body.sea-mode .nav-item.active { color: #5ac8fa; }
+body.sea-mode .nav-item.active svg { filter: drop-shadow(0 0 8px rgba(90,200,250,0.8)); }
+body.sea-mode .app-card-pro:hover {
+  border-color: rgba(90,200,250,0.55);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.25), 0 0 0 1px rgba(90,200,250,0.2);
+}
+body.sea-mode .btn-primary {
+  background: linear-gradient(135deg, #5ac8fa, #0a84ff);
+  box-shadow: 0 6px 20px rgba(10,132,255,0.45);
+}
+body.sea-mode .btn-download-hero {
+  background: linear-gradient(135deg, #5ac8fa, #0a84ff, #5ac8fa);
+  box-shadow: 0 14px 36px rgba(10,132,255,0.5);
+}
+
+/* Theme icon button (header) */
+#themeHeaderBtn { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+#themeHeaderBtn:active { transform: scale(0.9) rotate(15deg); }
+#themeHeaderBtn svg { transition: transform 0.4s ease; }
+#themeHeaderBtn:hover svg { transform: rotate(25deg); }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
