@@ -6043,10 +6043,29 @@ botTextForNotif = botText;
   sendBtn.disabled = false;
   input.focus();
   
-  // 🔴 فعّل Badge (نقطة حمراء) + اهتزاز
+  // 🔴 فعّل Badge (نقطة حمراء) + اهتزاز + إشعار isto
   const drawer = document.getElementById('aiChatDrawer');
   if (drawer && !drawer.classList.contains('open')) {
     pulseIstoBadge();
+    
+    // ✨ إشعار isto مع نص الرد
+    if (botTextForNotif) {
+      let shortText = botTextForNotif.trim();
+      if (shortText.length > 90) shortText = shortText.substring(0, 90) + '...';
+      
+      showNotification({
+        title: currentLang === 'ar' ? 'isto رد عليك' : 'isto replied',
+        desc: shortText,
+        image: 'https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png',
+        type: 'info',
+        duration: 7000,
+        vibrate: true,
+        action: {
+          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+          onClick: function() { openAiChat(); }
+        }
+      });
+    }
   }
  }
 }
