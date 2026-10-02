@@ -2845,6 +2845,14 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 @media (max-width: 380px) {
   .notif-opt-btn { font-size: 10.5px; padding: 8px 6px; }
 }
+ /* Notif type colors */
+.notif-card.notif-type-success { border-color: rgba(50,215,75,0.4); }
+.notif-card.notif-type-success .notif-icon { color: var(--success); }
+.notif-card.notif-type-error { border-color: rgba(255,69,58,0.4); }
+.notif-card.notif-type-error .notif-icon { color: var(--danger); }
+.notif-card.notif-type-warning { border-color: rgba(255,159,10,0.4); }
+.notif-card.notif-type-warning .notif-icon { color: var(--warning); }
+.notif-card.notif-type-info .notif-icon { color: var(--accent); }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -4080,6 +4088,75 @@ function handleProblemFromNotif(card) {
       sendAiMessage();
     }
   }, 500);
+}
+ // Backward compatible
+function showToast(msg, type, duration) {
+  showNotification({
+    title: msg,
+    type: type || 'info',
+    duration: (duration === 0) ? 0 : (duration || 3000)
+  });
+}
+
+// 🔄 تحديث محتوى الإشعار (بعد ما يكمل progress)
+function updateNotifContent(card, opts) {
+  if (!card) return;
+  const titleEl = card.querySelector('.notif-title');
+  const descEl = card.querySelector('.notif-desc');
+  const iconEl = card.querySelector('.notif-icon');
+  const progressEl = card.querySelector('.notif-progress');
+
+  if (titleEl && opts.title !== undefined) titleEl.textContent = opts.title;
+  if (descEl && opts.desc !== undefined) descEl.textContent = opts.desc;
+  if (iconEl && opts.icon) iconEl.innerHTML = opts.icon;
+
+  if (opts.type) {
+    card.classList.remove('notif-type-info', 'notif-type-success', 'notif-type-error', 'notif-type-warning');
+    card.classList.add('notif-type-' + opts.type);
+  }
+
+  if (progressEl) progressEl.style.display = 'none';
+}
+
+// 📥 إشعار التحميل مع progress bar + نتيجة بعد الإكمال
+function showDownloadNotif(appName, duration, appUrl, isOfficial) {
+  const d = duration || 3000;
+  const hasLink = !!(appUrl && appUrl !== '#' && appUrl.trim() !== '');
+
+  const card = showNotification({
+    title: currentLang === 'ar' ? 'جاري توجيهك لرابط التحميل...' : 'Redirecting to download link...',
+    desc: appName || '',
+    type: 'info',
+    icon: getNotifIcon('download'),
+    duration: 0,
+    progress: true,
+    vibrate: true,
+    context: { appName: appName, appUrl: appUrl }
+  });
+
+  if (!card) return;
+
+  setTimeout(() => {
+    if (hasLink) {
+      updateNotifContent(card, {
+        type: 'success',
+        title: currentLang === 'ar' ? 'تم فتح الرابط بنجاح' : 'Link opened successfully',
+        desc: appName || '',
+        icon: getNotifIcon('success')
+      });
+      setTimeout(() => dismissNotif(card), 2500);
+    } else {
+      updateNotifContent(card, {
+        type: 'error',
+        title: currentLang === 'ar' ? 'لا يمكن فتح الرابط' : 'Cannot open link',
+        desc: currentLang === 'ar'
+          ? 'رابط التحميل غير متوفر لهذا التطبيق'
+          : 'Download link not available for this app',
+        icon: getNotifIcon('error')
+      });
+      setTimeout(() => dismissNotif(card), 6000);
+    }
+  }, d);
 }
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 function openModal(id){ document.getElementById(id).style.display='flex'; }
