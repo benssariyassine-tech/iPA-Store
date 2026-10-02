@@ -4577,30 +4577,24 @@ if(badgeEl){
   }
   
 }
-
 function startRealDownload(appId, fileUrl, appName) {
-  // ✅ 1. التحقق من نوع التطبيق (Official)
   const app = allAppsCache.find(a => a.id === appId);
-  
-  if (app && app.appType === 'official') {
-      if (fileUrl && fileUrl !== '#' && fileUrl.trim() !== '') {
-          window.open(fileUrl, '_blank');
-          showToast(currentLang === 'ar' ? 'جاري توجيهك للمتجر الرسمي...' : 'Redirecting to official store...', 'info', 3000);
-      } else {
-          showToast(currentLang === 'ar' ? 'رابط المتجر الرسمي غير متوفر' : 'Official store link not available', 'warning');
-      }
-      return;
-  }
+  const isOfficial = app && app.appType === 'official';
+  const hasLink = !!(fileUrl && fileUrl !== '#' && fileUrl.trim() !== '');
 
-  // ✅ 2. إذا كان MOD، نتحقق من الرابط
-  if (!fileUrl || fileUrl === '#' || fileUrl.trim() === '') {
-    showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
+  if (isOfficial) {
+    showDownloadNotif(appName, 3000, fileUrl, true);
+    if (hasLink) setTimeout(() => window.open(fileUrl, '_blank'), 1500);
     return;
   }
 
-  // ✅ 3. تحميل مباشر بلا إعلانات ولا اشتراك
-  incrementDownload(appId);
-  goToDownload(fileUrl, appName);
+  showDownloadNotif(appName, 3000, fileUrl, false);
+  if (hasLink) {
+    incrementDownload(appId);
+    setTimeout(() => {
+      window.open(fileUrl, '_blank', 'noopener,noreferrer');
+    }, 1500);
+  }
 }
 // ====== فتح رابط التحميل ======
 function goToDownload(fileUrl, appName){
