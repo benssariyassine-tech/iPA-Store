@@ -5420,40 +5420,62 @@ function openAiChat() {
   setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
 }
  
+// 👀 تتبع الماوس - isto
 document.addEventListener('mousemove', function(e) {
-  const pupils = document.querySelectorAll('.robot-pupil');
-  const btn = document.getElementById('aiChatBtn');
+  const pupils = document.querySelectorAll('.isto-pupil');
+  const btn = document.getElementById('istoBtn');
   if (!pupils.length || !btn) return;
   const rect = btn.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
   const angle = Math.atan2(e.clientY - cy, e.clientX - cx);
-  const dist = Math.min(Math.hypot(e.clientX - cx, e.clientY - cy) / 25, 3.5);
+  const dist = Math.min(Math.hypot(e.clientX - cx, e.clientY - cy) / 25, 3);
   const px = Math.cos(angle) * dist;
   const py = Math.sin(angle) * dist;
-  pupils.forEach(p => {
-    p.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
-  });
+  pupils.forEach(p => p.style.transform = 'translate(' + px + 'px, ' + py + 'px)');
 });
 
-// 👀 للشاشات اللمسية: تتبع اللمس
+// 👀 تتبع اللمس - isto
 document.addEventListener('touchmove', function(e) {
   if (!e.touches || !e.touches[0]) return;
   const t = e.touches[0];
-  const pupils = document.querySelectorAll('.robot-pupil');
-  const btn = document.getElementById('aiChatBtn');
+  const pupils = document.querySelectorAll('.isto-pupil');
+  const btn = document.getElementById('istoBtn');
   if (!pupils.length || !btn) return;
   const rect = btn.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
   const angle = Math.atan2(t.clientY - cy, t.clientX - cx);
-  const dist = Math.min(Math.hypot(t.clientX - cx, t.clientY - cy) / 25, 3.5);
+  const dist = Math.min(Math.hypot(t.clientX - cx, t.clientY - cy) / 25, 3);
   const px = Math.cos(angle) * dist;
   const py = Math.sin(angle) * dist;
-  pupils.forEach(p => {
-    p.style.transform = 'translate(' + px + 'px, ' + py + 'px)';
-  });
+  pupils.forEach(p => p.style.transform = 'translate(' + px + 'px, ' + py + 'px)');
 }, { passive: true });
+
+// 🎨 تحديث لون الروبوت كي يتبدل الثيم
+function updateIstoTheme() {
+  // الروبوت كياخد اللون من CSS مباشرة عبر var(--accent)
+  // هذا دالة احتياطية إلا بغيت نضيف تأثير
+  const btn = document.getElementById('istoBtn');
+  if (btn) {
+    btn.style.transition = 'transform 0.3s, filter 0.3s';
+  }
+}
+
+// 📳 فيبراج كي يوصل Badge جديد
+function pulseIstoBadge() {
+  const badge = document.getElementById('istoBadge');
+  if (badge) {
+    badge.classList.add('show');
+    if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+  }
+}
+
+// ✅ إخفاء Badge كي يفتح الشات
+function hideIstoBadge() {
+  const badge = document.getElementById('istoBadge');
+  if (badge) badge.classList.remove('show');
+}
  // 🎯 دالة تبني سياق التطبيقات الحقيقية من الموقع
  function getAppsContext() {
   if (!allAppsCache || allAppsCache.length === 0) {
