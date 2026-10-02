@@ -2871,6 +2871,155 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .notif-card.notif-type-warning { border-color: rgba(255,159,10,0.4); }
 .notif-card.notif-type-warning .notif-icon { color: var(--warning); }
 .notif-card.notif-type-info .notif-icon { color: var(--accent); }
+ /* ============================================
+   🤖 ROBOT AVATAR IN CHAT HEADER (Theme-Aware)
+   ============================================ */
+.chat-robot-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2, var(--accent)) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 2px 8px rgba(255, 255, 255, 0.45),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.chat-robot-avatar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.4) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.chat-robot-avatar .cr-eye {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  box-shadow: inset 0 0 3px rgba(255,255,255,0.9), 0 0 5px rgba(255,255,255,0.5);
+}
+
+.chat-robot-avatar .cr-eyes {
+  display: flex;
+  gap: 6px;
+  margin-top: -3px;
+}
+
+.chat-robot-avatar .cr-pupil {
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #4a6a8a, #0b0b1f 80%);
+  transition: transform 0.15s ease-out;
+}
+
+.chat-robot-avatar .cr-mouth {
+  position: absolute;
+  bottom: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 2px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 2;
+  box-shadow: 0 0 4px rgba(255,255,255,0.5);
+}
+
+.chat-robot-avatar .cr-antenna {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 5px;
+  background: var(--accent);
+  border-radius: 2px;
+  z-index: 3;
+}
+
+.chat-robot-avatar .cr-antenna::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+  box-shadow: 0 0 6px var(--accent);
+  animation: crBlink 1.6s ease-in-out infinite;
+}
+
+@keyframes crBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ============================================
+   🔗 AI MESSAGE LINKS (Theme-Aware)
+   ============================================ */
+.aiMsg.bot .ai-app-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent);
+  font-weight: 800;
+  text-decoration: none;
+  border-bottom: 1.5px dashed var(--accent);
+  padding: 1px 4px;
+  margin: 0 1px;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+}
+.aiMsg.bot .ai-app-link:hover,
+.aiMsg.bot .ai-app-link:active {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border-bottom-style: solid;
+  transform: translateY(-1px);
+}
+.aiMsg.bot .ai-app-link::after {
+  content: '↗';
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.aiMsg.bot .ai-ext-link {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 3px;
+  word-break: break-all;
+}
+
+/* أيقونة صغيرة بجانب اسم التطبيق */
+.aiMsg.bot .ai-app-link::before {
+  content: '';
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' y1='15' x2='12' y2='3'/></svg>");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  filter: drop-shadow(0 0 2px currentColor);
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
