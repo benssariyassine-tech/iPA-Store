@@ -3622,7 +3622,6 @@ function loadPrefs(){
 const savedTheme = localStorage.getItem('istore_theme');
 if (typeof applyTheme === 'function') {
   applyTheme(savedTheme || 'sea');
-}
   } else {
     // احتياطي: طبّق الثيم يدوياً إذا applyTheme ماشي معرّفة بعد
     const themeClasses = {
