@@ -4018,8 +4018,9 @@ function loadUserProfile(){
 }
 // ====== PREMIUM THEME ======
 function applyPremiumTheme(){
-  // ✅ Premium للجميع
-  document.body.classList.add('premium-mode');
+  if (typeof applyTheme === 'function') {
+    applyTheme(getCurrentTheme());
+  }
 }
 
 function updateAvatarUI(){
