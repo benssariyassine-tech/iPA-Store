@@ -3619,9 +3619,10 @@ function loadPrefs(){
   if(savedLang) currentLang = savedLang;
 
   // ✅ حمّل الثيم المحفوظ (وكي ما كانش، استعمل Gold)
-  const savedTheme = localStorage.getItem('istore_theme');
-  if (typeof applyTheme === 'function') {
-    applyTheme(savedTheme || 'gold');
+const savedTheme = localStorage.getItem('istore_theme');
+if (typeof applyTheme === 'function') {
+  applyTheme(savedTheme || 'sea');
+}
   } else {
     // احتياطي: طبّق الثيم يدوياً إذا applyTheme ماشي معرّفة بعد
     const themeClasses = {
@@ -3632,7 +3633,7 @@ function loadPrefs(){
       'redblack': ['redblack-mode'],
       'sea': ['sea-mode']
     };
-    const themeToApply = (savedTheme && themeClasses[savedTheme]) ? savedTheme : 'gold';
+const themeToApply = (savedTheme && themeClasses[savedTheme]) ? savedTheme : 'sea';
     document.body.classList.remove('light-mode', 'premium-mode', 'algeria-mode', 'redblack-mode', 'sea-mode');
     themeClasses[themeToApply].forEach(c => document.body.classList.add(c));
     if (themeToApply === 'light') isLightMode = true;
