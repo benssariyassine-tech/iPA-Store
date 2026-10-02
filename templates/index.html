@@ -6560,7 +6560,7 @@ botTextForNotif = botText;
 
     const botMsg = document.createElement('div');
     botMsg.className = 'aiMsg bot';
-    botMsg.textContent = botText.trim();
+    botMsg.innerHTML =      renderBotMessage(botText.trim());
     messages.appendChild(botMsg);
     messages.scrollTop = messages.scrollHeight;
 
