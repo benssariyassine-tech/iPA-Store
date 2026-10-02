@@ -2569,6 +2569,16 @@ body[dir="rtl"] .isto-label {
   60%      { transform: translateX(-50%) rotate(-6deg); }
   80%      { transform: translateX(-50%) rotate(6deg); }
 }
+ .isto-btn.isto-shake {
+  animation: istoShake 0.55s ease-in-out !important;
+}
+@keyframes istoShake {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  20%      { transform: translateX(-50%) rotate(-9deg); }
+  40%      { transform: translateX(-50%) rotate(9deg); }
+  60%      { transform: translateX(-50%) rotate(-6deg); }
+  80%      { transform: translateX(-50%) rotate(6deg); }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -5737,6 +5747,7 @@ async function sendAiMessage() {
   if (drawer && !drawer.classList.contains('open')) {
     pulseIstoBadge();
   }
+ }
 }
   function handleBubbleClick(event) {
   if(event) event.stopPropagation();
