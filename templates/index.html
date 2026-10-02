@@ -5404,7 +5404,7 @@ console.log('Banner should be visible now!');
     textEl.innerText = T.msg;
 }
 function openAiChat() {
-  document.getElementById('aiChatDrawer').classList.add('open');
+  hideIstoBadge();   document.getElementById('aiChatDrawer').classList.add('open');
   const aiChatPanel = document.getElementById('aiChatPanel');
   if (aiChatPanel) {
     aiChatPanel.style.transition = 'none';
