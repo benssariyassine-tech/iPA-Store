@@ -2237,6 +2237,305 @@ body.sea-mode .btn-download-hero {
   overflow: hidden !important; 
   pointer-events: none !important;
 }
+ /* ============================================
+   🤖 ISTO ROBOT + GLASS NAV
+   ============================================ */
+
+.isto-nav-wrap {
+  position: fixed;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 480px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.isto-nav-wrap > * {
+  pointer-events: auto;
+}
+
+/* ===== NAV BAR ===== */
+.isto-nav-wrap .floating-nav {
+  position: relative;
+  bottom: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 10px 6px;
+  border-radius: 26px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-spacer {
+  width: 66px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.isto-nav-wrap .nav-item {
+  background: none;
+  border: none;
+  color: var(--subtext-color);
+  font-size: 9.5px;
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 6px 6px;
+  border-radius: 12px;
+  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
+  min-width: 54px;
+  flex: 1;
+}
+
+.isto-nav-wrap .nav-item svg {
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+  transition: all 0.25s;
+}
+
+.isto-nav-wrap .nav-item.active {
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.isto-nav-wrap .nav-item.active svg {
+  filter: drop-shadow(0 0 8px currentColor);
+  transform: scale(1.1);
+}
+
+.isto-nav-wrap .nav-item:active {
+  transform: scale(0.92);
+}
+
+/* ===== 🤖 ISTO ROBOT BUTTON ===== */
+.isto-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 42px;
+  transform: translateX(-50%);
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 4px solid var(--bg-color);
+  padding: 0;
+  cursor: pointer;
+  z-index: 10;
+  background: transparent;
+  font-family: inherit;
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+  -webkit-tap-highlight-color: transparent;
+  animation: istoFloat 3.2s ease-in-out infinite;
+}
+
+.isto-btn:active {
+  transform: translateX(-50%) scale(0.92);
+  animation-play-state: paused;
+}
+
+@keyframes istoFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+/* توهج خارجي - كيتبدل مع الثيم */
+.isto-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+  opacity: 0.5;
+  filter: blur(8px);
+  z-index: -1;
+  animation: istoGlowPulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes istoGlowPulse {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+
+/* ring متحرك */
+.isto-ring {
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  opacity: 0.4;
+  animation: istoRingPulse 2s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes istoRingPulse {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* جسم الروبوت - glass + gradient */
+.isto-body {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2, var(--accent)) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow:
+    inset 0 2px 8px rgba(255,255,255,0.35),
+    inset 0 -3px 10px rgba(0,0,0,0.2),
+    0 8px 24px rgba(0,0,0,0.35);
+}
+
+/* طبقة glass شفافة */
+.isto-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 40%, transparent 60%);
+  pointer-events: none;
+}
+
+/* قرون صغيرة */
+.isto-antenna {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 8px;
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.isto-antenna::before {
+  content: '';
+  position: absolute;
+  top: -7px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+  box-shadow: 0 0 10px var(--accent);
+  animation: istoBlink 1.6s ease-in-out infinite;
+}
+
+@keyframes istoBlink {
+  0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--accent); }
+  50% { opacity: 0.6; box-shadow: 0 0 18px var(--accent); }
+}
+
+/* العينين - glass */
+.isto-eyes {
+  display: flex;
+  gap: 9px;
+  position: relative;
+  z-index: 2;
+  margin-top: -4px;
+}
+
+.isto-eye {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow:
+    inset 0 0 4px rgba(255,255,255,0.9),
+    0 0 8px rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: istoEyeBlink 4s infinite;
+}
+
+@keyframes istoEyeBlink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.08); }
+}
+
+/* البؤبؤ - كيتبع الماوس */
+.isto-pupil {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #4a6a8a, #0b0b1f 80%);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  transition: transform 0.15s ease-out;
+}
+
+/* الفم - glass */
+.isto-mouth {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18px;
+  height: 3px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+  z-index: 2;
+}
+
+/* Badge - نقطة حمراء */
+.isto-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ff3b30;
+  border: 2.5px solid var(--bg-color);
+  display: none;
+  z-index: 20;
+  box-shadow: 0 0 12px rgba(255,59,48,0.8);
+  animation: istoBadgePulse 1.4s ease-in-out infinite;
+}
+
+.isto-badge.show {
+  display: block;
+}
+
+@keyframes istoBadgePulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(255,59,48,0.8); }
+  50% { transform: scale(1.15); box-shadow: 0 0 20px rgba(255,59,48,1); }
+}
+
+/* RTL */
+body[dir="rtl"] .isto-nav-wrap { direction: rtl; }
+
+/* التجاوب مع شاشات صغيرة */
+@media (max-width: 380px) {
+  .isto-btn { width: 66px; height: 66px; bottom: 38px; }
+  .nav-spacer { width: 58px; }
+  .isto-nav-wrap .nav-item { font-size: 8.5px; min-width: 46px; }
+  .isto-nav-wrap .nav-item svg { width: 19px; height: 19px; }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -2336,12 +2635,51 @@ body.sea-mode .btn-download-hero {
 <span data-i18n="addNewApp">Add New App</span>
 </button>
 
-<div class="floating-nav">
-<button class="nav-item active" data-tab="today" onclick="switchTab('today', this)"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span data-i18n="navToday">Today</span></button>
-<button class="nav-item" data-tab="games" onclick="switchTab('games', this)"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1.2" fill="currentColor"/><circle cx="18" cy="13" r="1.2" fill="currentColor"/></svg><span data-i18n="navGames">Games</span></button>
-<button class="nav-item" data-tab="apps" onclick="switchTab('apps', this)"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg><span data-i18n="navApps">Apps</span></button>
-<button class="nav-item" data-tab="tools" onclick="switchTab('tools', this)"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span data-i18n="navTools">Tools</span></button>
-<button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg><span data-i18n="navAdmin">Admin</span></button>
+<!-- ===== ISTO NAV (Floating Robot + Glass Nav) ===== -->
+<div class="isto-nav-wrap">
+  
+  <!-- 🤖 الروبوت Glass -->
+  <button id="istoBtn" class="isto-btn" onclick="openAiChat(); if(navigator.vibrate) navigator.vibrate(15);" aria-label="مساعد isto">
+    <span class="isto-glow"></span>
+    <span class="isto-ring"></span>
+    <span class="isto-body">
+      <span class="isto-eyes">
+        <span class="isto-eye"><span class="isto-pupil"></span></span>
+        <span class="isto-eye"><span class="isto-pupil"></span></span>
+      </span>
+      <span class="isto-mouth"></span>
+      <span class="isto-antenna"></span>
+    </span>
+    <span class="isto-badge" id="istoBadge"></span>
+  </button>
+
+  <!-- 🧭 القائمة -->
+  <div class="floating-nav">
+    <button class="nav-item active" data-tab="today" onclick="switchTab('today', this)">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span data-i18n="navToday">Today</span>
+    </button>
+    <button class="nav-item" data-tab="games" onclick="switchTab('games', this)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="3" ry="3"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><circle cx="15" cy="11" r="1.2" fill="currentColor"/><circle cx="18" cy="13" r="1.2" fill="currentColor"/></svg>
+      <span data-i18n="navGames">Games</span>
+    </button>
+
+    <!-- 🎯 بلاصة فارغة للروبوت -->
+    <span class="nav-spacer"></span>
+
+    <button class="nav-item" data-tab="apps" onclick="switchTab('apps', this)">
+      <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+      <span data-i18n="navApps">Apps</span>
+    </button>
+    <button class="nav-item" data-tab="tools" onclick="switchTab('tools', this)">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      <span data-i18n="navTools">Tools</span>
+    </button>
+    <button class="nav-item" id="adminNavTab" style="display:none;color:#ff453a;" data-tab="admin_panel" onclick="switchTab('admin_panel', this)">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span data-i18n="navAdmin">Admin</span>
+    </button>
+  </div>
 </div>
 
 <div id="accountModal" class="modal">
