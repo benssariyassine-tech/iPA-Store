@@ -6134,6 +6134,21 @@ const AI_SYSTEM_PROMPT = `أنت "مساعد iStore"، المساعد الذكي
 - Quick AI = التطبيق المستقل (PWA).
 - الزوج من نفس الفريق والمصمم.
 - المستخدم يقدر يثبت Quick AI كتطبيق على هاتفو.
+-🔗 **نظام الروابط التلقائية:**
+عندما تذكر أي تطبيق موجود في المتجر، اكتب اسمه بهذه الصيغة بالضبط:
+[اسم التطبيق](https://ipa-store.onrender.com/app/APP_ID)
+
+مثال:
+- "تطبيق [WhatsApp](https://ipa-store.onrender.com/app/abc123) متوفر حالياً..."
+- "يمكنك تحميل [PUBG Mobile](https://ipa-store.onrender.com/app/xyz789) من المتجر..."
+
+⚠️ مهم:
+- APP_ID هو الـ ID الحقيقي الموجود في السياق لي فوق (بعد كلمة "ID:")
+- لا تخترع IDs. إذا ما عندكش الـ ID، اكتب اسم التطبيق عادي.
+- النظام راح يحول الرابط تلقائياً لزر تفاعلي جميل.
+- عندما يقترح المستخدم يروح للتطبيق، شجعه: "اضغط على الرابط فوق باش تفتح صفحة التطبيق مباشرة".
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
@@ -6245,10 +6260,12 @@ function hideIstoBadge() {
   const badge = document.getElementById('istoBadge');
   if (badge) badge.classList.remove('show');
 }
- // 🎯 دالة تبني سياق التطبيقات الحقيقية من الموقع
- function getAppsContext() {
+// ============================================
+// 📊 BUILD APPS CONTEXT (Dynamic Live Data)
+// ============================================
+function getAppsContext() {
   if (!allAppsCache || allAppsCache.length === 0) {
-    return '\n\n⚠️ قائمة التطبيقات فارغة حالياً. لا تخترع أي تطبيق. إذا سُئلت عن أي تطبيق، قل أنه غير متوفر حالياً ووجّه للدعم.';
+    return '\n\n⚠️ قائمة التطبيقات فارغة حالياً. لا تخترع أي تطبيق. إذا سُئلت عن أي تطبيق، قل أنه غير متوفر حالياً ووجّه للدعم: support.istoreipa@gmail.com';
   }
 
   const totalApps = allAppsCache.length;
@@ -6258,33 +6275,57 @@ function hideIstoBadge() {
   const ipaCount = allAppsCache.filter(a => (a.platform || 'IPA') === 'IPA').length;
   const apkCount = allAppsCache.filter(a => a.platform === 'APK').length;
   const totalDownloads = allAppsCache.reduce((s, a) => s + (a.downloads || 0), 0);
+  const totalLikes = allAppsCache.reduce((s, a) => s + ((a.likedBy && a.likedBy.length) || 0), 0);
+
+  // آخر 5 تطبيقات مضافة (للإعلان عن الجديد)
+  const recentApps = [...allAppsCache]
+    .filter(a => a.createdAt)
+    .sort((a, b) => (b.createdAt.seconds || 0) - (a.createdAt.seconds || 0))
+    .slice(0, 5);
 
   let ctx = '\n\n═══════════════════════════════════';
-  ctx += '\n📊 قائمة التطبيقات المتوفرة حالياً (مصدر الحقيقة الوحيد):';
+  ctx += '\n📊 قائمة التطبيقات الحية من متجر iStore (مصدر الحقيقة الوحيد):';
   ctx += '\n═══════════════════════════════════';
   ctx += '\n• العدد الإجمالي: ' + totalApps + ' (منها ' + totalUnique + ' تطبيق فريد)';
   ctx += '\n• iOS (IPA): ' + ipaCount;
   ctx += '\n• Android (APK): ' + apkCount;
   ctx += '\n• الألعاب: ' + gamesCount;
   ctx += '\n• إجمالي التحميلات: ' + totalDownloads;
-  ctx += '\n\n📱 قائمة التطبيقات:';
+  ctx += '\n• إجمالي الإعجابات: ' + totalLikes;
+
+  // آخر التحديثات
+  if (recentApps.length > 0) {
+    ctx += '\n\n🆕 أحدث الإضافات للمتجر:';
+    recentApps.forEach((app, i) => {
+      ctx += '\n  ' + (i + 1) + '. "' + app.name + '" (' + (app.platform || 'IPA') + ')';
+    });
+  }
+
+  ctx += '\n\n📱 قائمة التطبيقات الكاملة (مع IDs للروابط):';
+  ctx += '\n─────────────────────────────────';
+  ctx += '\n📌 قاعدة مهمة: عندما تذكر تطبيقاً، اكتبه هكذا: [اسم التطبيق](https://ipa-store.onrender.com/app/APP_ID)';
+  ctx += '\n   مثال: [WhatsApp](https://ipa-store.onrender.com/app/abc123)';
+  ctx += '\n   النظام راح يحولها تلقائياً لرابط تفاعلي يفتح صفحة التطبيق.';
   ctx += '\n─────────────────────────────────';
 
-  allAppsCache.slice(0, 50).forEach((app, i) => {
+  allAppsCache.slice(0, 100).forEach((app, i) => {
     const platform = app.platform || 'IPA';
     const size = app.size || 'غير محدد';
     const category = getCategoryNameEn(app.category);
     const rating = getAverageRating(app);
     const ratingText = rating > 0 ? rating.toFixed(1) + '⭐' : 'بدون تقييم';
     const downloads = app.downloads || 0;
-    ctx += '\n' + (i + 1) + '. "' + app.name + '" | ' + platform + ' | ' + category + ' | ' + size + ' | تحميلات: ' + downloads + ' | تقييم: ' + ratingText;
+    ctx += '\n' + (i + 1) + '. "' + app.name + '" | ID: ' + app.id + ' | ' + platform + ' | ' + category + ' | ' + size + ' | ⬇️' + downloads + ' | ' + ratingText;
   });
 
-  if (allAppsCache.length > 50) {
-    ctx += '\n(وهناك ' + (allAppsCache.length - 50) + ' تطبيق إضافي غير معروض)';
+  if (allAppsCache.length > 100) {
+    ctx += '\n(وهناك ' + (allAppsCache.length - 100) + ' تطبيق إضافي غير معروض)';
   }
+  
   ctx += '\n═══════════════════════════════════';
   ctx += '\n🎯 استعمل فقط المعلومات أعلاه. لا تخترع أي تطبيق أو رقم.';
+  ctx += '\n🔗 مهم جداً: عندما تذكر أي تطبيق، استعمل صيغة الرابط: [اسم التطبيق](https://ipa-store.onrender.com/app/APP_ID)';
+  
   return ctx;
 }
 // ====== كشف إذا كان السؤال عن تطبيق ======
@@ -6318,6 +6359,73 @@ function looksLikeAppQuery(msg) {
   if (words.length <= 4 && lower.length >= 3 && lower.length <= 30) return true;
   
   return false;
+}
+ // ============================================
+// 🎨 RENDER BOT MESSAGE (Auto-link apps + Markdown)
+// ============================================
+function renderBotMessage(text) {
+  if (!text) return '';
+  
+  // 1. Escape HTML باش نحميو من XSS
+  let html = escapeHTML(text);
+  
+  // 2. حول روابط Markdown [text](url) لروابط HTML
+  html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(match, label, url) {
+    // إذا الرابط هو app/ID → حولو لفتح تفاصيل التطبيق
+    const appMatch = url.match(/app\/([a-zA-Z0-9_-]+)/);
+    if (appMatch) {
+      const appId = appMatch[1];
+      const app = allAppsCache.find(a => a.id === appId);
+      const safeLabel = escapeHTML(app ? app.name : label);
+      return '<a href="#" class="ai-app-link" onclick="event.preventDefault(); closeAiChat(); setTimeout(function(){ openAppDetails(\'' + appId + '\'); }, 350); return false;">' + safeLabel + '</a>';
+    }
+    // رابط خارجي
+    return '<a href="' + url + '" target="_blank" rel="noopener noreferrer" class="ai-ext-link">' + label + '</a>';
+  });
+  
+  // 3. اكتشاف أسماء التطبيقات تلقائياً وتحويلها لروابط
+  if (allAppsCache && allAppsCache.length > 0) {
+    // رتب حسب طول الاسم (الأطول أولاً) باش ما يتعارضوش
+    const sortedApps = [...allAppsCache]
+      .filter(a => a.name && a.name.length >= 3)
+      .sort((a, b) => b.name.length - a.name.length);
+    
+    // تجنب التكرار
+    const linkedIds = new Set();
+    
+    sortedApps.forEach(function(app) {
+      if (linkedIds.has(app.id)) return;
+      
+      const escapedName = escapeHTML(app.name);
+      
+      // تحقق أن الاسم موجود وماشي داخل رابط موجود
+      if (html.includes(escapedName) && !html.includes('data-app-id="' + app.id + '"')) {
+        const regex = new RegExp(
+          '(?<![\\w\\u0600-\\u06FF])' + 
+          escapedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + 
+          '(?![\\w\\u0600-\\u06FF])',
+          'g'
+        );
+        
+        let replaced = false;
+        html = html.replace(regex, function(match) {
+          // ما نبدلوش داخل وسم <a>
+          replaced = true;
+          return '<a href="#" class="ai-app-link" data-app-id="' + app.id + '" onclick="event.preventDefault(); closeAiChat(); setTimeout(function(){ openAppDetails(\'' + app.id + '\'); }, 350); return false;">' + escapedName + '</a>';
+        });
+        
+        if (replaced) linkedIds.add(app.id);
+      }
+    });
+  }
+  
+  // 4. حول **bold** لـ <strong>
+  html = html.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  
+  // 5. حول *italic* لـ <em>
+  html = html.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+  
+  return html;
 }
  async function sendAiMessage() {
   let botTextForNotif = ''; 
