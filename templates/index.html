@@ -6018,7 +6018,8 @@ function looksLikeAppQuery(msg) {
     }
 
     const data = await response.json();
-    let botText = data?.choices?.[0]?.message?.content || 'عذراً، لم أستطع الحصول على رد.';
+let botText = data?.choices?.[0]?.message?.content || 'عذراً، لم أستطع الحصول على رد.';
+botTextForNotif = botText;       
 
     aiChatHistory.push({ role: 'user', content: text });
     aiChatHistory.push({ role: 'assistant', content: botText });
