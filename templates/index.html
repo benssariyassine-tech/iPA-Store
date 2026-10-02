@@ -5893,7 +5893,8 @@ function looksLikeAppQuery(msg) {
   
   return false;
 }
-async function sendAiMessage() {
+ async function sendAiMessage() {
+  let botTextForNotif = ''; 
   const input = document.getElementById('aiChatInput');
   const sendBtn = document.getElementById('aiChatSendBtn');
   const messages = document.getElementById('aiChatMessages');
