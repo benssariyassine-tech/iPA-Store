@@ -4055,16 +4055,22 @@ function showNotification(opts) {
   return card;
 }
 
-// 🚨 الإبلاغ من إشعار
+// 🚨 الإبلاغ — يفتح الإبلاغ على التطبيق بضبط
 function handleReportFromNotif(card) {
   const data = card._notifData || {};
-  const modal = document.getElementById('reportModal');
-  if (modal) {
-    const inp = document.getElementById('reportReason');
-    if (inp) inp.value = (data.title || '') + '\n' + (data.desc || '');
-    modal.style.display = 'flex';
-  }
+  const ctx = data.context || {};
+  
+  // نسد الإشعار
   dismissNotif(card);
+  
+  // إذا عندنا appId، نفتحو الإبلاغ على التطبيق
+  if (ctx.appId) {
+    setTimeout(() => {
+      if (typeof openReportModal === 'function') {
+        openReportModal(ctx.appId);
+      }
+    }, 200);
+  }
 }
 
 // 💬 سأل isto على المشكلة
@@ -4121,8 +4127,7 @@ function updateNotifContent(card, opts) {
   if (progressEl) progressEl.style.display = 'none';
 }
 
-// 📥 إشعار التحميل مع progress bar + نتيجة بعد الإكمال
-function showDownloadNotif(appName, duration, appUrl, isOfficial) {
+function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
   const d = duration || 3000;
   const hasLink = !!(appUrl && appUrl !== '#' && appUrl.trim() !== '');
 
@@ -4134,30 +4139,52 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial) {
     duration: 0,
     progress: true,
     vibrate: true,
-    context: { appName: appName, appUrl: appUrl }
+    context: { appName: appName, appUrl: appUrl, appId: appId },   // 👈 زيد appId
+    showProblem: true
   });
 
   if (!card) return;
 
   setTimeout(() => {
     if (hasLink) {
+      // ✅ نجح — نبدلو محتوى الإشعار
       updateNotifContent(card, {
         type: 'success',
         title: currentLang === 'ar' ? 'تم فتح الرابط بنجاح' : 'Link opened successfully',
         desc: appName || '',
         icon: getNotifIcon('success')
       });
-      setTimeout(() => dismissNotif(card), 2500);
+      
+      // نحيدو زر "هل واجهت مشكلة؟" و نخليو "إبلاغ" فقط
+      const problemBtn = card.querySelector('.notif-opt-problem');
+      if (problemBtn) problemBtn.remove();
+      
+      setTimeout(() => dismissNotif(card), 3000);
     } else {
+      // ❌ فشل — نحددو سبب الفشل
+      let errorDesc = '';
+      if (!appUrl || appUrl === '') {
+        errorDesc = currentLang === 'ar'
+          ? 'ما كاينش رابط تحميل لهذا التطبيق'
+          : 'No download link for this app';
+      } else if (appUrl === '#') {
+        errorDesc = currentLang === 'ar'
+          ? 'الرابط ماشي صحيح (placeholder)'
+          : 'Invalid link (placeholder)';
+      }
+      
       updateNotifContent(card, {
         type: 'error',
-        title: currentLang === 'ar' ? 'لا يمكن فتح الرابط' : 'Cannot open link',
-        desc: currentLang === 'ar'
-          ? 'رابط التحميل غير متوفر لهذا التطبيق'
-          : 'Download link not available for this app',
+        title: currentLang === 'ar' ? 'تعذر فتح الرابط' : 'Cannot open link',
+        desc: errorDesc,
         icon: getNotifIcon('error')
       });
-      setTimeout(() => dismissNotif(card), 6000);
+      
+      // نخليو فقط "إبلاغ" (باش يبلغ على الرابط المعطل)
+      const problemBtn = card.querySelector('.notif-opt-problem');
+      if (problemBtn) problemBtn.remove();
+      
+      setTimeout(() => dismissNotif(card), 8000);
     }
   }, d);
 }
@@ -4663,12 +4690,12 @@ function startRealDownload(appId, fileUrl, appName) {
   const hasLink = !!(fileUrl && fileUrl !== '#' && fileUrl.trim() !== '');
 
   if (isOfficial) {
-    showDownloadNotif(appName, 3000, fileUrl, true);
+    showDownloadNotif(appName, 3000, fileUrl, true, appId);
     if (hasLink) setTimeout(() => window.open(fileUrl, '_blank'), 1500);
     return;
   }
 
-  showDownloadNotif(appName, 3000, fileUrl, false);
+  showDownloadNotif(appName, 3000, fileUrl, false, appId);
   if (hasLink) {
     incrementDownload(appId);
     setTimeout(() => {
