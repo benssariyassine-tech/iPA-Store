@@ -2237,160 +2237,107 @@ body.sea-mode .btn-download-hero {
   overflow: hidden !important; 
   pointer-events: none !important;
 }
- /* ============================================
-   🤖 ISTO ROBOT + GLASS NAV
+/* ============================================
+   🤖 ISTO ROBOT BUTTON - FLOATING ABOVE NAV
    ============================================ */
 
-.isto-nav-wrap {
-  position: fixed;
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  width: 92%;
-  max-width: 480px;
-  z-index: 1000;
-  pointer-events: none;
-}
-
-.isto-nav-wrap > * {
-  pointer-events: auto;
-}
-
-/* ===== NAV BAR ===== */
-.isto-nav-wrap .floating-nav {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  transform: none;
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 10px 6px;
-  border-radius: 26px;
-  background: var(--nav-bg);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 2px;
-}
-
-.nav-spacer {
-  width: 66px;
-  flex-shrink: 0;
-  display: block;
-}
-
-.isto-nav-wrap .nav-item {
-  background: none;
-  border: none;
-  color: var(--subtext-color);
-  font-size: 9.5px;
-  font-weight: 800;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  cursor: pointer;
-  font-family: inherit;
-  padding: 6px 6px;
-  border-radius: 12px;
-  transition: all 0.25s cubic-bezier(0.16,1,0.3,1);
-  min-width: 54px;
-  flex: 1;
-}
-
-.isto-nav-wrap .nav-item svg {
-  width: 21px;
-  height: 21px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2.2;
-  transition: all 0.25s;
-}
-
-.isto-nav-wrap .nav-item.active {
-  color: var(--accent);
-  transform: translateY(-2px);
-}
-
-.isto-nav-wrap .nav-item.active svg {
-  filter: drop-shadow(0 0 8px currentColor);
-  transform: scale(1.1);
-}
-
-.isto-nav-wrap .nav-item:active {
-  transform: scale(0.92);
-}
-
-/* ===== 🤖 ISTO ROBOT BUTTON ===== */
 .isto-btn {
-  position: absolute;
+  /* 📍 الموضع: عائم فوق القائمة */
+  position: fixed;
   left: 50%;
-  bottom: 42px;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px) + 38px);
   transform: translateX(-50%);
-  width: 74px;
-  height: 74px;
+  
+  /* 📐 الحجم */
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
-  border: 4px solid var(--bg-color);
   padding: 0;
-  cursor: pointer;
-  z-index: 10;
+  
+  /* 🎨 الحدود - نفس لون الخلفية باش يبان "مقطوع" */
+  border: 4px solid var(--bg-color);
   background: transparent;
+  
+  /* 🎯 فوق القائمة */
+  z-index: 1001;
+  isolation: isolate;
+  cursor: pointer;
   font-family: inherit;
-  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
-  -webkit-tap-highlight-color: transparent;
+  
+  /* ✨ المظهر */
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  
+  /* 🎬 الحركات */
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   animation: istoFloat 3.2s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  overflow: visible;
 }
 
+/* كي تضغط */
 .isto-btn:active {
   transform: translateX(-50%) scale(0.92);
   animation-play-state: paused;
 }
 
+/* 🎈 الحركة العائمة */
 @keyframes istoFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-4px); }
+  0%, 100% { 
+    transform: translateX(-50%) translateY(0); 
+  }
+  50% { 
+    transform: translateX(-50%) translateY(-5px); 
+  }
 }
 
-/* توهج خارجي - كيتبدل مع الثيم */
+/* 🎬 الاهتزاز (بديل الفيبراج في iOS) */
+.isto-btn.isto-shake {
+  animation: istoShake 0.55s ease-in-out !important;
+}
+@keyframes istoShake {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  20%      { transform: translateX(-50%) rotate(-9deg); }
+  40%      { transform: translateX(-50%) rotate(9deg); }
+  60%      { transform: translateX(-50%) rotate(-6deg); }
+  80%      { transform: translateX(-50%) rotate(6deg); }
+}
+
+/* ✨ التوهج الخارجي */
 .isto-glow {
   position: absolute;
-  inset: -12px;
+  inset: -14px;
   border-radius: 50%;
   background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-  opacity: 0.5;
-  filter: blur(8px);
+  opacity: 0.55;
+  filter: blur(10px);
   z-index: -1;
   animation: istoGlowPulse 2.4s ease-in-out infinite;
   pointer-events: none;
 }
-
 @keyframes istoGlowPulse {
   0%, 100% { opacity: 0.4; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.08); }
+  50%      { opacity: 0.75; transform: scale(1.1); }
 }
 
-/* ring متحرك */
+/* 🔵 Ring متحرك */
 .isto-ring {
   position: absolute;
-  inset: -5px;
+  inset: -6px;
   border-radius: 50%;
   border: 2px solid var(--accent);
-  opacity: 0.4;
-  animation: istoRingPulse 2s ease-out infinite;
+  opacity: 0.5;
+  animation: istoRingPulse 2.2s ease-out infinite;
   pointer-events: none;
 }
-
 @keyframes istoRingPulse {
-  0% { transform: scale(0.9); opacity: 0.6; }
-  100% { transform: scale(1.25); opacity: 0; }
+  0%   { transform: scale(0.88); opacity: 0.65; }
+  100% { transform: scale(1.3); opacity: 0; }
 }
 
-/* جسم الروبوت - glass + gradient */
+/* 🤖 جسم الروبوت - glass + gradient */
 .isto-body {
   position: absolute;
   inset: 0;
@@ -2401,21 +2348,26 @@ body.sea-mode .btn-download-hero {
   justify-content: center;
   overflow: hidden;
   box-shadow:
-    inset 0 2px 8px rgba(255,255,255,0.35),
-    inset 0 -3px 10px rgba(0,0,0,0.2),
-    0 8px 24px rgba(0,0,0,0.35);
+    inset 0 3px 10px rgba(255, 255, 255, 0.4),
+    inset 0 -4px 12px rgba(0, 0, 0, 0.25);
 }
 
-/* طبقة glass شفافة */
+/* 🪟 طبقة glass شفافة */
 .isto-body::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(160deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.05) 40%, transparent 60%);
+  background: linear-gradient(
+    160deg, 
+    rgba(255, 255, 255, 0.45) 0%, 
+    rgba(255, 255, 255, 0.08) 40%, 
+    transparent 65%
+  );
   pointer-events: none;
+  z-index: 1;
 }
 
-/* قرون صغيرة */
+/* 📡 الهوائي (القرن) */
 .isto-antenna {
   position: absolute;
   top: -8px;
@@ -2425,116 +2377,113 @@ body.sea-mode .btn-download-hero {
   height: 8px;
   background: var(--accent);
   border-radius: 3px;
+  z-index: 3;
 }
-
 .isto-antenna::before {
   content: '';
   position: absolute;
-  top: -7px;
+  top: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
   box-shadow: 0 0 10px var(--accent);
   animation: istoBlink 1.6s ease-in-out infinite;
 }
-
 @keyframes istoBlink {
-  0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--accent); }
-  50% { opacity: 0.6; box-shadow: 0 0 18px var(--accent); }
+  0%, 100% { opacity: 1;   box-shadow: 0 0 10px var(--accent); }
+  50%      { opacity: 0.7; box-shadow: 0 0 18px var(--accent); }
 }
 
-/* العينين - glass */
+/* 👀 العينين glass */
 .isto-eyes {
   display: flex;
-  gap: 9px;
+  gap: 10px;
   position: relative;
   z-index: 2;
   margin-top: -4px;
 }
 
 .isto-eye {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   box-shadow:
-    inset 0 0 4px rgba(255,255,255,0.9),
-    0 0 8px rgba(255,255,255,0.5);
+    inset 0 0 4px rgba(255, 255, 255, 0.9),
+    0 0 8px rgba(255, 255, 255, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   animation: istoEyeBlink 4s infinite;
 }
-
 @keyframes istoEyeBlink {
   0%, 90%, 100% { transform: scaleY(1); }
-  95% { transform: scaleY(0.08); }
+  95%           { transform: scaleY(0.08); }
 }
 
-/* البؤبؤ - كيتبع الماوس */
+/* 👁️ البؤبؤ */
 .isto-pupil {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: radial-gradient(circle at 30% 30%, #4a6a8a, #0b0b1f 80%);
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
   transition: transform 0.15s ease-out;
 }
 
-/* الفم - glass */
+/* 👄 الفم glass */
 .isto-mouth {
   position: absolute;
-  bottom: 16px;
+  bottom: 17px;
   left: 50%;
   transform: translateX(-50%);
   width: 18px;
   height: 3px;
   border-radius: 3px;
-  background: rgba(255,255,255,0.85);
-  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
   z-index: 2;
 }
 
-/* Badge - نقطة حمراء */
+/* 🔴 Badge - نقطة حمراء */
 .isto-badge {
   position: absolute;
   top: -2px;
   right: -2px;
-  width: 14px;
-  height: 14px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: #ff3b30;
   border: 2.5px solid var(--bg-color);
   display: none;
   z-index: 20;
-  box-shadow: 0 0 12px rgba(255,59,48,0.8);
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.85);
   animation: istoBadgePulse 1.4s ease-in-out infinite;
 }
-
 .isto-badge.show {
   display: block;
 }
-
 @keyframes istoBadgePulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 12px rgba(255,59,48,0.8); }
-  50% { transform: scale(1.15); box-shadow: 0 0 20px rgba(255,59,48,1); }
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 12px rgba(255, 59, 48, 0.8); }
+  50%      { transform: scale(1.18); box-shadow: 0 0 22px rgba(255, 59, 48, 1); }
 }
 
-/* RTL */
-body[dir="rtl"] .isto-nav-wrap { direction: rtl; }
-
-/* التجاوب مع شاشات صغيرة */
+/* 📱 شاشات صغيرة */
 @media (max-width: 380px) {
-  .isto-btn { width: 66px; height: 66px; bottom: 38px; }
-  .nav-spacer { width: 58px; }
-  .isto-nav-wrap .nav-item { font-size: 8.5px; min-width: 46px; }
-  .isto-nav-wrap .nav-item svg { width: 19px; height: 19px; }
+  .isto-btn {
+    width: 66px;
+    height: 66px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px) + 34px);
+  }
+  .isto-eye { width: 14px; height: 14px; }
+  .isto-pupil { width: 7px; height: 7px; }
+  .isto-mouth { bottom: 14px; width: 16px; }
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
