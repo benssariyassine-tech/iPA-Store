@@ -3743,15 +3743,163 @@ const ICONS = {
   clock:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
 };
 
-// ====== UI HELPERS ======
-function showToast(msg, type='info', duration=3000){
-  const c = document.getElementById('toastContainer');
-  const toast = document.createElement('div');
-  toast.className = 'toast ' + type;
-  const map = {success:ICONS.check, error:ICONS.close, warning:ICONS.warning, info:ICONS.info};
-  toast.innerHTML = (map[type]||ICONS.info) + '<span>' + msg + '</span>';
-  c.appendChild(toast);
-  setTimeout(()=>{ toast.style.animation='toastOut 0.4s forwards'; setTimeout(()=>toast.remove(),400); }, duration);
+ // ====== NOTIFICATION SYSTEM ======
+function getNotifIcon(type) {
+  const icons = {
+    success: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
+    error:   '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+    warning: '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    info:    '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+    download:'<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>'
+  };
+  return icons[type] || icons.info;
+}
+
+function dismissNotif(card) {
+  if (!card || card.classList.contains('dismissing')) return;
+  card.classList.add('dismissing');
+  setTimeout(() => { try { card.remove(); } catch(e){} }, 350);
+}
+
+function showNotification(opts) {
+  const stack = document.getElementById('notifStack');
+  if (!stack) return;
+
+  const o = opts || {};
+  const title    = o.title || '';
+  const desc     = o.desc  || '';
+  const type     = o.type  || 'info';
+  const duration = (o.duration === 0) ? 0 : (o.duration || 3500);
+  const image    = o.image || null;
+  const iconSVG  = o.icon  || null;
+  const action   = o.action || null;
+  const progress = !!o.progress;
+  const vibrate  = (o.vibrate !== false);
+
+  const card = document.createElement('div');
+  card.className = 'notif-card notif-type-' + type;
+
+  let progressHTML = '';
+  if (progress) progressHTML = '<div class="notif-progress"></div>';
+
+  let iconHTML = '';
+  if (image) {
+    iconHTML = '<img src="' + image + '" alt="" onerror="this.style.display=\'none\'">';
+  } else if (iconSVG) {
+    iconHTML = iconSVG;
+  } else {
+    iconHTML = getNotifIcon(type);
+  }
+
+  let actionHTML = '';
+  if (action && action.icon) {
+    actionHTML = '<button class="notif-action" type="button" aria-label="action">' + action.icon + '</button>';
+  }
+
+  card.innerHTML =
+    progressHTML +
+    '<div class="notif-icon">' + iconHTML + '</div>' +
+    '<div class="notif-text">' +
+      (title ? '<div class="notif-title">' + title + '</div>' : '') +
+      (desc  ? '<div class="notif-desc">'  + desc  + '</div>' : '') +
+    '</div>' +
+    actionHTML;
+
+  // ضيفو فـ الفوق (الجديد فوق)
+  stack.insertBefore(card, stack.firstChild);
+
+  // فيبراج
+  if (vibrate && navigator.vibrate) {
+    try { navigator.vibrate(15); } catch(e){}
+  }
+
+  // زر الإجراء
+  if (action && action.onClick) {
+    const btn = card.querySelector('.notif-action');
+    if (btn) {
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        try { action.onClick(); } catch(err){ console.warn(err); }
+      });
+    }
+  }
+
+  // Progress bar (للتحميل)
+  if (progress && duration > 0) {
+    const pb = card.querySelector('.notif-progress');
+    if (pb) {
+      requestAnimationFrame(() => {
+        pb.style.transition = 'transform ' + duration + 'ms linear';
+        pb.style.transform = 'scaleX(0)';
+      });
+    }
+  }
+
+  // Auto dismiss
+  let dismissTimer = null;
+  if (duration > 0) {
+    dismissTimer = setTimeout(() => dismissNotif(card), duration);
+  }
+
+  // Swipe to dismiss
+  let startX = 0, currentX = 0, isDragging = false;
+  card.addEventListener('touchstart', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    startX = e.touches[0].clientX;
+    currentX = 0;
+    isDragging = true;
+    card.style.transition = 'none';
+    if (dismissTimer) { clearTimeout(dismissTimer); dismissTimer = null; }
+  }, { passive: true });
+
+  card.addEventListener('touchmove', (e) => {
+    if (!isDragging || !e.touches || !e.touches[0]) return;
+    currentX = e.touches[0].clientX - startX;
+    const rot = currentX * 0.03;
+    card.style.transform = 'translateX(' + currentX + 'px) rotate(' + rot + 'deg)';
+    card.style.opacity = Math.max(0, 1 - Math.abs(currentX) / 280);
+  }, { passive: true });
+
+  card.addEventListener('touchend', () => {
+    if (!isDragging) return;
+    isDragging = false;
+    card.style.transition = '';
+    if (Math.abs(currentX) > 70) {
+      dismissNotif(card);
+    } else {
+      card.style.transform = '';
+      card.style.opacity = '';
+      if (duration > 0) {
+        dismissTimer = setTimeout(() => dismissNotif(card), duration);
+      }
+    }
+    currentX = 0;
+  });
+
+  return card;
+}
+
+// Backward compatible
+function showToast(msg, type, duration) {
+  showNotification({
+    title: msg,
+    type: type || 'info',
+    duration: (duration === 0) ? 0 : (duration || 3000)
+  });
+}
+
+// 📥 إشعار التحميل (مع progress bar)
+function showDownloadNotif(appName, duration) {
+  const d = duration || 4000;
+  showNotification({
+    title: currentLang === 'ar' ? 'جاري فتح رابط التحميل...' : 'Opening download link...',
+    desc: appName || '',
+    type: 'info',
+    icon: getNotifIcon('download'),
+    duration: d,
+    progress: true,
+    vibrate: true
+  });
 }
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 function openModal(id){ document.getElementById(id).style.display='flex'; }
