@@ -3221,10 +3221,10 @@ try {
     sea: ['sea-mode']
   };
 
-  window.getCurrentTheme = function() {
-    try { return localStorage.getItem('istore_theme') || 'gold'; }
-    catch(e) { return 'gold'; }
-  };
+ window.getCurrentTheme = function() {
+  try { return localStorage.getItem('istore_theme') || 'sea'; }
+  catch(e) { return 'sea'; }
+};
 
   window.applyTheme = function(themeName) {
     if (!window.THEMES_LIST.includes(themeName)) themeName = 'dark';
