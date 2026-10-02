@@ -3094,70 +3094,24 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .notif-card.notif-type-warning { border-color: rgba(255,159,10,0.4); }
 .notif-card.notif-type-warning .notif-icon { color: var(--warning); }
 .notif-card.notif-type-info .notif-icon { color: var(--accent); }
- /* ============================================
-   🤖 ROBOT AVATAR IN CHAT HEADER (Theme-Aware)
+ /* 
+/* ============================================
+   🤖 ROBOT AVATAR IN CHAT HEADER (Fixed)
    ============================================ */
 .chat-robot-avatar {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2, var(--accent)) 100%);
+  background: linear-gradient(145deg, #4aa8ff 0%, #0a84ff 50%, #0062d2 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
   box-shadow: 
-    inset 0 2px 8px rgba(255, 255, 255, 0.45),
-    inset 0 -3px 8px rgba(0, 0, 0, 0.25);
-}
-
-.chat-robot-avatar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, rgba(255,255,255,0.4) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.chat-robot-avatar .cr-eye {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-  box-shadow: inset 0 0 3px rgba(255,255,255,0.9), 0 0 5px rgba(255,255,255,0.5);
-}
-
-.chat-robot-avatar .cr-eyes {
-  display: flex;
-  gap: 6px;
-  margin-top: -3px;
-}
-
-.chat-robot-avatar .cr-pupil {
-  width: 4.5px;
-  height: 4.5px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #4a6a8a, #0b0b1f 80%);
-  transition: transform 0.15s ease-out;
-}
-
-.chat-robot-avatar .cr-mouth {
-  position: absolute;
-  bottom: 11px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 2px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.9);
-  z-index: 2;
-  box-shadow: 0 0 4px rgba(255,255,255,0.5);
+    inset 0 2px 6px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
 }
 
 .chat-robot-avatar .cr-antenna {
@@ -3167,7 +3121,7 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   transform: translateX(-50%);
   width: 2px;
   height: 5px;
-  background: var(--accent);
+  background: rgba(255, 255, 255, 0.95);
   border-radius: 2px;
   z-index: 3;
 }
@@ -3175,22 +3129,60 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .chat-robot-avatar .cr-antenna::before {
   content: '';
   position: absolute;
-  top: -4px;
+  top: -3px;
   left: 50%;
   transform: translateX(-50%);
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
-  box-shadow: 0 0 6px var(--accent);
+  background: #ff453a;
+  box-shadow: 0 0 6px rgba(255, 69, 58, 0.9);
   animation: crBlink 1.6s ease-in-out infinite;
+}
+
+.chat-robot-avatar .cr-eyes {
+  display: flex;
+  gap: 5px;
+  margin-top: 4px;
+  position: relative;
+  z-index: 3;
+}
+
+.chat-robot-avatar .cr-eye {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.chat-robot-avatar .cr-pupil {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #0b0b1f;
+  transition: transform 0.15s ease-out;
+}
+
+.chat-robot-avatar .cr-mouth {
+  position: absolute;
+  bottom: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 13px;
+  height: 2.5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 3;
 }
 
 @keyframes crBlink {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  50% { opacity: 0.55; }
 }
-
 /* ============================================
    🔗 AI MESSAGE LINKS (Theme-Aware)
    ============================================ */
