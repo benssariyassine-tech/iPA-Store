@@ -5728,9 +5728,14 @@ async function sendAiMessage() {
     errMsg.textContent = 'خطأ تقني: ' + (err.message || 'unknown').substring(0, 150);
     messages.appendChild(errMsg);
     messages.scrollTop = messages.scrollHeight;
-  } finally {
-    sendBtn.disabled = false;
-    input.focus();
+} finally {
+  sendBtn.disabled = false;
+  input.focus();
+  
+  // 🔴 فعّل Badge (نقطة حمراء) + اهتزاز
+  const drawer = document.getElementById('aiChatDrawer');
+  if (drawer && !drawer.classList.contains('open')) {
+    pulseIstoBadge();
   }
 }
   function handleBubbleClick(event) {
