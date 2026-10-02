@@ -4602,19 +4602,15 @@ function startRealDownload(appId, fileUrl, appName) {
   incrementDownload(appId);
   goToDownload(fileUrl, appName);
 }
- // ====== فتح رابط التحميل ======
- function goToDownload(fileUrl, appName){
-  if(!fileUrl || fileUrl === '#'){
-    showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
-    return;
+// ====== فتح رابط التحميل ======
+function goToDownload(fileUrl, appName){
+  const hasLink = !!(fileUrl && fileUrl !== '#' && fileUrl.trim() !== '');
+  showDownloadNotif(appName, 3000, fileUrl, false);
+  if (hasLink) {
+    setTimeout(() => {
+      window.open(fileUrl, '_blank', 'noopener,noreferrer');
+    }, 1500);
   }
-  
-  // 🔥 إشعار تحميل مع progress bar
-  showDownloadNotif(appName, 4000);
-  
-  setTimeout(() => {
-    window.open(fileUrl, '_blank', 'noopener,noreferrer');
-  }, 400);
 }
 // ====== DOWNLOAD COUNTER ======
 function incrementDownload(appId){
