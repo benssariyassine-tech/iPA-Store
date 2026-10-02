@@ -4395,21 +4395,9 @@ if(badgeEl){
       }
     }
   }
-  // ✅ تطبيق الثيم الذهبي + شعار الهيدر
-  applyPremiumTheme();
   
-  const headerPremiumBadge = document.getElementById('headerPremiumBadge');
-  if (headerPremiumBadge) {
-      const isSubscribed = localStorage.getItem('istore_subscribed') === 'true';
-      const isAdminTestPremium = localStorage.getItem('istore_admin_test_premium') === 'true';
-      
-      if (isSubscribed || (isAdmin && isAdminTestPremium)) {
-          headerPremiumBadge.style.display = 'flex';
-      } else {
-          headerPremiumBadge.style.display = 'none';
-      }
-  }
-}
+  
+
 function startRealDownload(appId, fileUrl, appName) {
   // ✅ 1. التحقق من نوع التطبيق (Official)
   const app = allAppsCache.find(a => a.id === appId);
@@ -4435,19 +4423,15 @@ function startRealDownload(appId, fileUrl, appName) {
   goToDownload(fileUrl, appName);
 }
  // ====== فتح رابط التحميل ======
-function goToDownload(fileUrl, appName){
+ function goToDownload(fileUrl, appName){
   if(!fileUrl || fileUrl === '#'){
     showToast(currentLang === 'ar' ? 'رابط التحميل غير متوفر' : 'Download link not available', 'warning');
     return;
   }
   
-showToast(
-    currentLang === 'ar' ? 'جاري فتح رابط التحميل...' : 'Opening download link...',
-    'info', 
-    2000
-  );
+  // 🔥 إشعار تحميل مع progress bar
+  showDownloadNotif(appName, 4000);
   
-  // فتح الرابط فـ نافذة جديدة
   setTimeout(() => {
     window.open(fileUrl, '_blank', 'noopener,noreferrer');
   }, 400);
