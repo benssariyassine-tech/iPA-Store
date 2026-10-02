@@ -3875,21 +3875,19 @@ function showNotification(opts) {
   const action   = o.action || null;
   const progress = !!o.progress;
   const vibrate  = (o.vibrate !== false);
+  const context  = o.context || null;
 
   const card = document.createElement('div');
   card.className = 'notif-card notif-type-' + type;
+  card._notifData = { title, desc, type, context };
 
   let progressHTML = '';
   if (progress) progressHTML = '<div class="notif-progress"></div>';
 
   let iconHTML = '';
-  if (image) {
-    iconHTML = '<img src="' + image + '" alt="" onerror="this.style.display=\'none\'">';
-  } else if (iconSVG) {
-    iconHTML = iconSVG;
-  } else {
-    iconHTML = getNotifIcon(type);
-  }
+  if (image) iconHTML = '<img src="' + image + '" alt="" onerror="this.style.display=\'none\'">';
+  else if (iconSVG) iconHTML = iconSVG;
+  else iconHTML = getNotifIcon(type);
 
   let actionHTML = '';
   if (action && action.icon) {
@@ -3898,108 +3896,190 @@ function showNotification(opts) {
 
   card.innerHTML =
     progressHTML +
-    '<div class="notif-icon">' + iconHTML + '</div>' +
-    '<div class="notif-text">' +
-      (title ? '<div class="notif-title">' + title + '</div>' : '') +
-      (desc  ? '<div class="notif-desc">'  + desc  + '</div>' : '') +
+    '<div class="notif-main">' +
+      '<div class="notif-icon">' + iconHTML + '</div>' +
+      '<div class="notif-text">' +
+        (title ? '<div class="notif-title">' + title + '</div>' : '') +
+        (desc  ? '<div class="notif-desc">'  + desc  + '</div>' : '') +
+      '</div>' +
+      actionHTML +
     '</div>' +
-    actionHTML;
+    '<div class="notif-handle"></div>' +
+    '<div class="notif-options">' +
+      '<button class="notif-opt-btn notif-opt-report" type="button">' +
+        '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+        '<span>' + (currentLang === 'ar' ? 'إبلاغ' : 'Report') + '</span>' +
+      '</button>' +
+      '<button class="notif-opt-btn notif-opt-problem" type="button">' +
+        '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>' +
+        '<span>' + (currentLang === 'ar' ? 'هل واجهت مشكلة؟' : 'Had a problem?') + '</span>' +
+      '</button>' +
+    '</div>';
 
-  // ضيفو فـ الفوق (الجديد فوق)
   stack.insertBefore(card, stack.firstChild);
 
-  // فيبراج
   if (vibrate && navigator.vibrate) {
     try { navigator.vibrate(15); } catch(e){}
   }
 
-  // زر الإجراء
+  // زر الإجراء الرئيسي
   if (action && action.onClick) {
     const btn = card.querySelector('.notif-action');
-    if (btn) {
-      btn.addEventListener('click', function(e){
-        e.stopPropagation();
-        try { action.onClick(); } catch(err){ console.warn(err); }
-      });
-    }
+    if (btn) btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      try { action.onClick(); } catch(err){}
+    });
   }
 
-  // Progress bar (للتحميل)
+  // Progress bar
   if (progress && duration > 0) {
     const pb = card.querySelector('.notif-progress');
-    if (pb) {
-      requestAnimationFrame(() => {
-        pb.style.transition = 'transform ' + duration + 'ms linear';
-        pb.style.transform = 'scaleX(0)';
-      });
-    }
+    if (pb) requestAnimationFrame(() => {
+      pb.style.transition = 'transform ' + duration + 'ms linear';
+      pb.style.transform = 'scaleX(0)';
+    });
   }
 
   // Auto dismiss
   let dismissTimer = null;
-  if (duration > 0) {
-    dismissTimer = setTimeout(() => dismissNotif(card), duration);
-  }
+  if (duration > 0) dismissTimer = setTimeout(() => dismissNotif(card), duration);
 
-  // Swipe to dismiss
-  let startX = 0, currentX = 0, isDragging = false;
-  card.addEventListener('touchstart', (e) => {
+  // ===== Handle pull-down to expand =====
+  const handle = card.querySelector('.notif-handle');
+  const options = card.querySelector('.notif-options');
+  let hStartY = 0, hDrag = false;
+
+  handle.addEventListener('touchstart', function(e){
+    e.stopPropagation();
+    hStartY = e.touches[0].clientY;
+    hDrag = true;
+    if (dismissTimer) { clearTimeout(dismissTimer); dismissTimer = null; }
+    options.style.transition = 'none';
+  }, { passive: false });
+
+  handle.addEventListener('touchmove', function(e){
+    if (!hDrag) return;
+    e.stopPropagation();
+    const diff = e.touches[0].clientY - hStartY;
+    if (diff > 0) options.style.maxHeight = Math.min(diff, 55) + 'px';
+  }, { passive: false });
+
+  handle.addEventListener('touchend', function(e){
+    if (!hDrag) return;
+    e.stopPropagation();
+    hDrag = false;
+    options.style.transition = '';
+    const diff = (e.changedTouches[0].clientY || hStartY) - hStartY;
+    if (diff > 25) {
+      card.classList.add('expanded');
+      options.style.maxHeight = '55px';
+      options.style.marginTop = '10px';
+    } else {
+      card.classList.remove('expanded');
+      options.style.maxHeight = '0';
+      options.style.marginTop = '0';
+    }
+  });
+
+  // Tap على الخط يفتح/يسد
+  handle.addEventListener('click', function(e){
+    e.stopPropagation();
+    if (card.classList.contains('expanded')) {
+      card.classList.remove('expanded');
+      options.style.maxHeight = '0';
+      options.style.marginTop = '0';
+    } else {
+      card.classList.add('expanded');
+      options.style.maxHeight = '55px';
+      options.style.marginTop = '10px';
+    }
+    if (dismissTimer) { clearTimeout(dismissTimer); dismissTimer = null; }
+    if (duration > 0) dismissTimer = setTimeout(() => dismissNotif(card), 10000);
+  });
+
+  // أزرار الخيارات
+  card.querySelector('.notif-opt-report').addEventListener('click', function(e){
+    e.stopPropagation(); handleReportFromNotif(card);
+  });
+  card.querySelector('.notif-opt-problem').addEventListener('click', function(e){
+    e.stopPropagation(); handleProblemFromNotif(card);
+  });
+
+  // ===== Swipe UP to dismiss =====
+  let startY = 0, currentY = 0, isDragging = false;
+  card.addEventListener('touchstart', function(e){
     if (!e.touches || !e.touches[0]) return;
-    startX = e.touches[0].clientX;
-    currentX = 0;
+    if (e.target.closest('.notif-handle')) return;
+    if (e.target.closest('.notif-options')) return;
+    startY = e.touches[0].clientY;
+    currentY = 0;
     isDragging = true;
     card.style.transition = 'none';
     if (dismissTimer) { clearTimeout(dismissTimer); dismissTimer = null; }
   }, { passive: true });
 
-  card.addEventListener('touchmove', (e) => {
+  card.addEventListener('touchmove', function(e){
     if (!isDragging || !e.touches || !e.touches[0]) return;
-    currentX = e.touches[0].clientX - startX;
-    const rot = currentX * 0.03;
-    card.style.transform = 'translateX(' + currentX + 'px) rotate(' + rot + 'deg)';
-    card.style.opacity = Math.max(0, 1 - Math.abs(currentX) / 280);
+    currentY = e.touches[0].clientY - startY;
+    if (currentY < 0) {
+      card.style.transform = 'translateY(' + currentY + 'px)';
+      card.style.opacity = Math.max(0, 1 - Math.abs(currentY) / 200);
+    }
   }, { passive: true });
 
-  card.addEventListener('touchend', () => {
+  card.addEventListener('touchend', function(){
     if (!isDragging) return;
     isDragging = false;
     card.style.transition = '';
-    if (Math.abs(currentX) > 70) {
+    if (currentY < -70) {
       dismissNotif(card);
     } else {
       card.style.transform = '';
       card.style.opacity = '';
-      if (duration > 0) {
-        dismissTimer = setTimeout(() => dismissNotif(card), duration);
-      }
+      if (duration > 0) dismissTimer = setTimeout(() => dismissNotif(card), duration);
     }
-    currentX = 0;
+    currentY = 0;
   });
 
   return card;
 }
 
-// Backward compatible
-function showToast(msg, type, duration) {
-  showNotification({
-    title: msg,
-    type: type || 'info',
-    duration: (duration === 0) ? 0 : (duration || 3000)
-  });
+// 🚨 الإبلاغ من إشعار
+function handleReportFromNotif(card) {
+  const data = card._notifData || {};
+  const modal = document.getElementById('reportModal');
+  if (modal) {
+    const inp = document.getElementById('reportReason');
+    if (inp) inp.value = (data.title || '') + '\n' + (data.desc || '');
+    modal.style.display = 'flex';
+  }
+  dismissNotif(card);
 }
 
-// 📥 إشعار التحميل (مع progress bar)
-function showDownloadNotif(appName, duration) {
-  const d = duration || 4000;
-  showNotification({
-    title: currentLang === 'ar' ? 'جاري فتح رابط التحميل...' : 'Opening download link...',
-    desc: appName || '',
-    type: 'info',
-    icon: getNotifIcon('download'),
-    duration: d,
-    progress: true,
-    vibrate: true
-  });
+// 💬 سأل isto على المشكلة
+function handleProblemFromNotif(card) {
+  const data = card._notifData || {};
+  const ctx = data.context || {};
+  const message = currentLang === 'ar'
+    ? `واجهت مشكلة مع هذا الإشعار:\n📌 ${data.title || ''}\n${data.desc || ''}${ctx.appName ? '\n📱 التطبيق: ' + ctx.appName : ''}${ctx.appUrl ? '\n🔗 الرابط: ' + ctx.appUrl : ''}\n\nواش ندير باش نحلها؟`
+    : `I had a problem with this notification:\n📌 ${data.title || ''}\n${data.desc || ''}${ctx.appName ? '\n📱 App: ' + ctx.appName : ''}\n\nWhat should I do?`;
+
+  dismissNotif(card);
+
+  // افتح الشات
+  const drawer = document.getElementById('aiChatDrawer');
+  if (drawer) drawer.classList.add('open');
+  const panel = document.getElementById('aiChatPanel');
+  if (panel) { panel.style.transition = 'none'; panel.style.transform = 'translateY(0)'; }
+
+  // حط الرسالة و صيفطها
+  setTimeout(() => {
+    const inp = document.getElementById('aiChatInput');
+    if (inp) {
+      inp.value = message;
+      sendAiMessage();
+    }
+  }, 500);
 }
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 function openModal(id){ document.getElementById(id).style.display='flex'; }
