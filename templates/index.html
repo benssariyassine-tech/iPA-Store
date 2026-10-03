@@ -933,54 +933,28 @@ padding-top: 0;
   z-index: 10;
   min-height: 68px;
 }
-/* 🔙 زر الرجوع - دائرة زجاجية */
+/* 🔙 زر الرجوع - دائرة مصمتة داكنة (نمط Telegram) */
 .aiChatBack {
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #1c1c1e;
+  border: none;
   color: #fff;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.2s ease;
   padding: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   position: relative;
-  overflow: hidden;
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.aiChatBack::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 30% 20%, 
-    rgba(255, 255, 255, 0.4) 0%, 
-    rgba(255, 255, 255, 0.05) 30%,
-    transparent 50%);
-  pointer-events: none;
-  border-radius: 50%;
-}
-
-.aiChatBack:hover {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: scale(1.05);
 }
 
 .aiChatBack:active {
   transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.12);
+  background: #2c2c2e;
 }
 
 .aiChatBack svg {
@@ -991,59 +965,47 @@ padding-top: 0;
   stroke-width: 2.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: transform 0.25s ease;
-  position: relative;
-  z-index: 1;
   margin-left: -2px;
 }
 
-.aiChatBack:hover svg {
-  transform: translateX(-2px);
+/* 🔄 RTL */
+body[dir="rtl"] .aiChatBack svg {
+  transform: scaleX(-1);
+  margin-left: 0;
+  margin-right: -2px;
 }
 
-/* 📛 كتلة العنوان - في الوسط داخل دائرة زجاجية */
-.aiChatTitleBlock {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ✨ الوضع النهاري */
+body.light-mode .aiChatBack {
+  background: #f2f2f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ⭕ "الدعم الفني" في دائرة زجاجية */
+body.light-mode .aiChatBack svg {
+  stroke: #000;
+}
+/* ⭕ كتلة العنوان - نمط Telegram بالضبط */
 .aiChatTitlePill {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 8px 22px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 22px;
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  gap: 5px;
+  padding: 12px 36px;
+  background: #1c1c1e;
+  border: none;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   position: relative;
-  overflow: hidden;
-  min-width: 140px;
+  min-width: 190px;
   max-width: 100%;
+  transition: all 0.2s ease;
 }
 
-.aiChatTitlePill::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 50%;
-  background: linear-gradient(180deg, 
-    rgba(255, 255, 255, 0.15) 0%, 
-    transparent 100%);
-  pointer-events: none;
-  border-radius: 22px 22px 0 0;
+/* ✨ الوضع النهاري */
+body.light-mode .aiChatTitlePill {
+  background: #f2f2f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .aiChatName {
@@ -1095,24 +1057,19 @@ padding-top: 0;
   }
 }
 
-/* 🖼️ شعار iStore - دائرة زجاجية */
 .aiChatLogo {
   width: 42px;
   height: 42px;
   border-radius: 50%;
   flex-shrink: 0;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  background: #1c1c1e;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  padding: 0;
 }
 
 .aiChatLogo img {
@@ -1120,8 +1077,12 @@ padding-top: 0;
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  padding: 3px;
-  background: rgba(255, 255, 255, 0.05);
+}
+
+/* ✨ الوضع النهاري */
+body.light-mode .aiChatLogo {
+  background: #f2f2f7;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* 🔄 RTL */
