@@ -6514,7 +6514,8 @@ console.log('Banner should be visible now!');
     textEl.innerText = T.msg;
 }
 function openAiChat() {
-  hideIstoBadge();   document.getElementById('aiChatDrawer').classList.add('open');
+  hideIstoBadge();
+  document.getElementById('aiChatDrawer').classList.add('open');
   const aiChatPanel = document.getElementById('aiChatPanel');
   if (aiChatPanel) {
     aiChatPanel.style.transition = 'none';
@@ -6526,10 +6527,14 @@ function openAiChat() {
     void inputBar.offsetWidth;
     inputBar.classList.add('animate-glow');
   }
+  
+  // ✅ حط الخلفية الداكنة للشريط العلوي
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.setAttribute('content', '#0b0b0f');
+  
   applyTranslations(); 
   setTimeout(() => document.getElementById('aiChatInput').focus(), 300);
 }
- 
 // 👀 تتبع الماوس - isto
 document.addEventListener('mousemove', function(e) {
   const pupils = document.querySelectorAll('.isto-pupil');
