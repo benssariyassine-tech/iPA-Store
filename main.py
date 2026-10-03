@@ -3,6 +3,7 @@ from google_play_scraper import app as gp_app, search as gp_search
 import requests
 import os
 import json
+import re
 from flask import Flask, jsonify, render_template, send_from_directory, request
 from flask_cors import CORS
 
@@ -71,7 +72,6 @@ def debug_routes():
 # 🔥 جلب البيانات التلقائي (Auto-Fetch APIs)
 # ============================================
 
-# 1. جلب بيانات تطبيق iOS من iTunes Search API
 @app.route('/api/fetch-ios', methods=['POST'])
 def fetch_ios_data():
     data = request.json
@@ -123,7 +123,6 @@ def fetch_ios_data():
         return jsonify({'error': str(e)}), 500
 
 
-# 2. جلب بيانات تطبيق Android من Google Play
 @app.route('/api/fetch-android', methods=['POST'])
 def fetch_android_data():
     data = request.json
@@ -132,11 +131,7 @@ def fetch_android_data():
         return jsonify({'error': 'Package name is required'}), 400
 
     try:
-        result = gp_app(
-            package_name,
-            lang='en', 
-            country='us'
-        )
+        result = gp_app(package_name, lang='en', country='us')
         
         formatted_data = {
             'name': result.get('title'),
@@ -172,7 +167,6 @@ def fetch_android_data():
         return jsonify({'error': str(e)}), 500
 
 
-# 3. جلب بيانات تطبيق معدل (نموذج مبدئي باستخدام BeautifulSoup)
 @app.route('/api/fetch-mod', methods=['POST'])
 def fetch_mod_data():
     data = request.json
@@ -182,7 +176,7 @@ def fetch_mod_data():
 
     try:
         headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
         response = requests.get(url_to_scrape, headers=headers, timeout=15)
         soup = BeautifulSoup(response.text, 'html.parser')
@@ -205,29 +199,17 @@ def fetch_mod_data():
         return jsonify({'error': str(e)}), 500
 
 
-# 4. جلب Top التطبيقات (استعمال يدوي — bulk)
 @app.route('/api/fetch-top', methods=['POST'])
 def fetch_top_apps():
-    """
-    يجيب Top تطبيقات من Google Play و iTunes.
-    الاستعمال اليدوي: 
-      POST /api/fetch-top
-      body: {"limit": 20}
-    """
     data = request.json or {}
     limit = int(data.get('limit') or 15)
-    limit = min(limit, 30)  # حد أقصى 30 لكل مصدر
+    limit = min(limit, 30)
 
     all_results = []
 
-    # 1. Google Play Top (search "popular apps")
+    # 1. Google Play Top
     try:
-        gp_results = gp_search(
-            "popular apps",
-            lang='en',
-            country='us',
-            n_hits=limit
-        )
+        gp_results = gp_search("popular apps", lang='en', country='us', n_hits=limit)
         
         for app_info in gp_results[:limit]:
             try:
@@ -264,7 +246,7 @@ def fetch_top_apps():
     except Exception as e:
         print(f"❌ Google Play top error: {e}")
 
-    # 2. iTunes Top Free (RSS Feed)
+    # 2. iTunes Top Free
     try:
         itunes_url = f"https://rss.applemarketingtools.com/api/v2/us/apps/top-free/{limit}/apps.json"
         r = requests.get(itunes_url, timeout=10)
@@ -300,7 +282,6 @@ def fetch_top_apps():
     if not all_results:
         return jsonify({'found': False, 'message': 'No apps found'}), 200
 
-    # 3. سجّل الكل في Firebase
     saved_ids = []
     if db:
         for app_data in all_results:
@@ -481,124 +462,293 @@ def robots():
 
 
 # ============================================
-# 🤖 SMART FETCH — بحث ذكي وجلب أوتوماتيكي
+# 🤖 SMART FETCH — بحث ذكي مع تطابق دقيق
 # ============================================
+
+def normalize_text(text):
+    """تطبيع النص: حروف عربية + حالات + رمزية"""
+    if not text:
+        return ''
+    text = str(text).lower().strip()
+    text = text.replace('أ', 'ا').replace('إ', 'ا').replace('آ', 'ا')
+    text = text.replace('ة', 'ه')
+    text = text.replace('ى', 'ي')
+    text = re.sub(r'[^\w\s\u0600-\u06FF]', ' ', text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+
+def is_good_match(query, candidate_name):
+    """تحقق دقيق: هل النتيجة تطابق الاستعلام؟"""
+    q = normalize_text(query)
+    c = normalize_text(candidate_name)
+    
+    if not q or not c:
+        return False
+    
+    # 1. تطابق تام
+    if q == c:
+        return True
+    
+    # 2. الاسم الكامل مدكور في السؤال
+    if len(c) >= 3 and c in q:
+        return True
+    
+    # 3. السؤال مدكور في الاسم
+    if len(q) >= 3 and q in c:
+        return True
+    
+    # 4. كل كلمات السؤال موجودة في الاسم
+    q_words = [w for w in q.split() if len(w) >= 3]
+    c_words = [w for w in c.split() if len(w) >= 3]
+    
+    if q_words and c_words:
+        all_words_match = all(
+            any(qw in cw or cw in qw for cw in c_words)
+            for qw in q_words
+        )
+        if all_words_match:
+            return True
+    
+    return False
+
+
+def clean_query_text(query):
+    """تنظيف الاستعلام من الكلمات العامة"""
+    if not query:
+        return ''
+    
+    clean = query.lower()
+    stop_words = [
+        'ابحث عن', 'أبحث عن', 'اريد', 'أريد', 'جيبلي', 'جيب لي',
+        'دور على', 'حوس على', 'قلب على', 'هل يوجد', 'واش كاين',
+        'هل عندكم', 'عندك', 'تطبيق', 'لعبة', 'برنامج', 'app', 'game',
+        'download', 'find', 'search', 'looking for', 'is there',
+        'please', 'من فضلك', 'لو سمحت', 'ممكن', 'أرجوك'
+    ]
+    
+    for word in stop_words:
+        clean = clean.replace(word, ' ')
+    
+    clean = ' '.join(clean.split()).strip()
+    
+    if len(clean) < 2:
+        return query.strip()
+    
+    return clean
+
+
+def build_app_data(name, icon, size, info, publisher, url, platform, category, screenshots):
+    """بناء قاموس التطبيق بالشكل الموحد"""
+    return {
+        'name': name,
+        'icon': icon,
+        'size': size or 'N/A',
+        'info': (info or '')[:500],
+        'publisher': publisher or 'Unknown',
+        'url': url,
+        'platform': platform,
+        'category': category or 'apps',
+        'screenshots': (screenshots or [])[:3],
+        'appType': 'official',
+        'likedBy': [],
+        'downloadedBy': [],
+        'downloads': 0,
+        'commentsCount': 0,
+        'ratingSum': 0,
+        'ratingCount': 0,
+        'ratingAvg': 0,
+        'userRatings': {}
+    }
+
+
+def format_size(size_bytes):
+    """تحويل البايت لصيغة مقروءة"""
+    if not size_bytes:
+        return 'N/A'
+    mb = size_bytes / (1024 * 1024)
+    if mb >= 1024:
+        return f"{mb / 1024:.2f} GB"
+    return f"{mb:.2f} MB"
+
+
+def search_itunes(query):
+    """البحث في iTunes — يرجّع أول تطابق دقيق"""
+    try:
+        url = f"https://itunes.apple.com/search?term={requests.utils.quote(query)}&entity=software&limit=5"
+        r = requests.get(url, timeout=8)
+        ios_results = r.json().get('results', [])
+        
+        for app_data in ios_results:
+            track_name = app_data.get('trackName') or ''
+            
+            if not is_good_match(query, track_name):
+                print(f"⚠️ iTunes: skip '{track_name}'")
+                continue
+            
+            size_str = format_size(int(app_data.get('fileSizeBytes', 0)))
+            
+            genre = (app_data.get('primaryGenreName') or '').lower()
+            category = 'games' if 'game' in genre else 'apps'
+            
+            app = build_app_data(
+                name=track_name,
+                icon=app_data.get('artworkUrl512') or app_data.get('artworkUrl100'),
+                size=size_str,
+                info=app_data.get('description'),
+                publisher=app_data.get('artistName'),
+                url=app_data.get('trackViewUrl'),
+                platform='IPA',
+                category=category,
+                screenshots=app_data.get('screenshotUrls') or []
+            )
+            print(f"✅ iTunes matched: {track_name}")
+            return app
+    except Exception as e:
+        print(f"❌ iTunes error: {e}")
+    
+    return None
+
+
+def search_play_store(query):
+    """البحث في Google Play — يرجّع أول تطابق دقيق"""
+    try:
+        gp_results = gp_search(query, lang='ar', country='dz', n_hits=5)
+        
+        for gp_result in gp_results:
+            package_name = gp_result.get('appId')
+            candidate_title = gp_result.get('title') or ''
+            
+            if not package_name:
+                continue
+            
+            if not is_good_match(query, candidate_title):
+                print(f"⚠️ Play: skip '{candidate_title}'")
+                continue
+            
+            try:
+                result = gp_app(package_name, lang='ar', country='dz')
+            except Exception as inner_e:
+                print(f"⚠️ Play detail error: {inner_e}")
+                continue
+            
+            if not result or not result.get('title'):
+                continue
+            
+            if not is_good_match(query, result.get('title', '')):
+                continue
+            
+            size_str = format_size(result.get('size') or 0)
+            
+            genre = (result.get('genre') or '').lower()
+            category = 'games' if 'game' in genre else 'apps'
+            
+            app = build_app_data(
+                name=result.get('title'),
+                icon=result.get('icon'),
+                size=size_str,
+                info=result.get('description'),
+                publisher=result.get('developer'),
+                url=f"https://play.google.com/store/apps/details?id={package_name}",
+                platform='APK',
+                category=category,
+                screenshots=result.get('screenshots') or []
+            )
+            print(f"✅ Play matched: {result.get('title')}")
+            return app
+    except Exception as e:
+        print(f"❌ Play error: {e}")
+    
+    return None
+
+
+def save_to_firebase(app_data):
+    """حفظ التطبيق في Firebase (مع التحقق من التكرار)"""
+    if not db:
+        return None
+    
+    try:
+        existing = db.collection('apps').where('name', '==', app_data['name']).limit(1).get()
+        if len(list(existing)) > 0:
+            print(f"⚠️ Already exists: {app_data['name']}")
+            return None
+        
+        save_data = dict(app_data)
+        save_data['createdAt'] = firestore.SERVER_TIMESTAMP
+        doc_ref = db.collection('apps').document()
+        doc_ref.set(save_data)
+        return doc_ref.id
+    except Exception as e:
+        print(f"❌ Firebase save error: {e}")
+        return None
+
+
 @app.route('/api/smart-fetch', methods=['POST'])
 def smart_fetch():
+    """🎯 نقطة النهاية: البحث الذكي عن التطبيقات"""
     data = request.json
     query = (data.get('query') or '').strip()
     
     if not query or len(query) < 2:
         return jsonify({'found': False, 'message': 'Query too short'}), 200
-
+    
+    # 1. تنظيف الاستعلام
+    clean_query = clean_query_text(query)
+    print(f"🔍 Smart fetch: query='{query}' → cleaned='{clean_query}'")
+    
+    # 2. البحث في المصادر
     results = []
-
-    # 1️⃣ جرّب iTunes (لـ IPA)
-    try:
-        url = f"https://itunes.apple.com/search?term={requests.utils.quote(query)}&entity=software&limit=1"
-        r = requests.get(url, timeout=8)
-        ios_results = r.json().get('results', [])
-        if ios_results:
-            app_data = ios_results[0]
-            formatted = {
-                'name': app_data.get('trackName'),
-                'icon': app_data.get('artworkUrl512'),
-                'size': f"{int(app_data.get('fileSizeBytes', 0)) / (1024*1024):.2f} MB",
-                'info': (app_data.get('description') or '')[:500],
-                'publisher': app_data.get('artistName'),
-                'url': app_data.get('trackViewUrl'),
-                'platform': 'IPA',
-                'category': 'apps',
-                'screenshots': (app_data.get('screenshotUrls') or [])[:3],
-                'appType': 'official',
-                'likedBy': [],
-                'downloadedBy': [],
-                'downloads': 0,
-                'commentsCount': 0,
-                'ratingSum': 0,
-                'ratingCount': 0,
-                'ratingAvg': 0,
-                'userRatings': {}
-            }
-            results.append(formatted)
-            print(f"✅ Found on iTunes: {app_data.get('trackName')}")
-    except Exception as e:
-        print(f"iTunes search error: {e}")
-
-    # 2️⃣ جرّب Google Play (لـ APK)
-    try:
-        gp_results = gp_search(query, lang='ar', country='dz', n_hits=1)
-        if gp_results:
-            package_name = gp_results[0].get('appId')
-            if package_name:
-                result = gp_app(package_name, lang='ar', country='dz')
-                
-                if result and result.get('title') and result.get('icon'):
-                    formatted = {
-                        'name': result.get('title'),
-                        'icon': result.get('icon'),
-                        'size': f"{(result.get('size') or 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
-                        'info': (result.get('description') or '')[:500],
-                        'publisher': result.get('developer'),
-                        'url': f"https://play.google.com/store/apps/details?id={package_name}",
-                        'platform': 'APK',
-                        'category': 'apps',
-                        'screenshots': (result.get('screenshots') or [])[:3],
-                        'appType': 'official',
-                        'likedBy': [],
-                        'downloadedBy': [],
-                        'downloads': 0,
-                        'commentsCount': 0,
-                        'ratingSum': 0,
-                        'ratingCount': 0,
-                        'ratingAvg': 0,
-                        'userRatings': {}
-                    }
-                    results.append(formatted)
-                    print(f"✅ Found on Google Play: {result.get('title')}")
-    except Exception as e:
-        print(f"Google Play search error: {e}")
-
+    matched_sources = []
+    
+    itunes_app = search_itunes(clean_query)
+    if itunes_app:
+        results.append(itunes_app)
+        matched_sources.append(f"iTunes: {itunes_app['name']}")
+    
+    play_app = search_play_store(clean_query)
+    if play_app:
+        results.append(play_app)
+        matched_sources.append(f"Play: {play_app['name']}")
+    
+    # 3. ما لقيناش تطابق
     if not results:
+        print(f"❌ No match found for: {clean_query}")
         return jsonify({
             'found': False,
-            'message': 'لم يتم العثور على التطبيق في المتاجر الرسمية.'
+            'message': f'لم يتم العثور على تطابق دقيق لـ "{query}" في المتاجر الرسمية.',
+            'query': query,
+            'suggestions': [
+                'تأكد من كتابة اسم التطبيق بشكل صحيح',
+                'جرب بالإنجليزية إذا كان التطبيق أجنبياً',
+                'تواصل مع الدعم: support.istoreipa@gmail.com'
+            ]
         }), 200
-
-    # 3️⃣ سجّل التطبيقات في Firebase
-    saved_ids = []
-    if db:
-        try:
-            for app_data in results:
-                save_data = dict(app_data)
-                save_data['createdAt'] = firestore.SERVER_TIMESTAMP
-                doc_ref = db.collection('apps').document()
-                doc_ref.set(save_data)
-                saved_ids.append(doc_ref.id)
-            print(f"✅ Auto-saved {len(saved_ids)} apps to Firebase")
-        except Exception as e:
-            print(f"❌ Firebase save error: {e}")
-            return jsonify({
-                'found': False,
-                'message': f'خطأ في الحفظ: {str(e)}'
-            }), 500
-    else:
+    
+    # 4. حفظ في Firebase
+    if not db:
         return jsonify({
             'found': False,
             'message': 'Firebase غير متصل'
         }), 500
     
+    saved_ids = []
+    for app_data in results:
+        doc_id = save_to_firebase(app_data)
+        if doc_id:
+            saved_ids.append(doc_id)
+    
     if len(saved_ids) == 0:
         return jsonify({
             'found': False,
-            'message': 'لم يتم حفظ أي تطبيق'
+            'message': 'التطبيق موجود بالفعل في المتجر.'
         }), 200
     
     return jsonify({
         'found': True,
         'count': len(saved_ids),
         'saved_ids': saved_ids,
-        'apps': results
+        'apps': results,
+        'matched': matched_sources
     }), 200
 
 
