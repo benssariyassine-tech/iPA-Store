@@ -1010,36 +1010,33 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   animation: onlinePulse 2s ease-in-out infinite;
 }
 
-/* زر الإغلاق - سهم + Back */
+/* زر الإغلاق - شفاف بلا بطاقة */
 .aiChatClose {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 6px 12px 6px 8px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
   color: #fff;
   cursor: pointer;
   flex-shrink: 0;
-  transition: all 0.25s;
-  font-family: inherit;
-  font-size: 13px;
+  transition: opacity 0.2s;
+  font-family: 'IBM Plex Sans Arabic', -apple-system, sans-serif;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.2px;
 }
 .aiChatClose:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.25);
+  opacity: 0.75;
 }
 .aiChatClose:active {
+  opacity: 0.5;
   transform: scale(0.95);
 }
 .aiChatClose svg {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   stroke: #fff;
   fill: none;
   stroke-width: 2.5;
@@ -1047,18 +1044,24 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   stroke-linejoin: round;
   transition: transform 0.25s ease;
 }
+.aiChatClose span {
+  display: inline;
+  color: #fff;
+}
 .aiChatClose:hover svg {
   transform: translateX(-2px);
 }
 
-/* في RTL: نقلب السهم */
+/* RTL */
+body[dir="rtl"] .aiChatClose {
+  flex-direction: row-reverse;
+}
 body[dir="rtl"] .aiChatClose svg {
   transform: scaleX(-1);
 }
 body[dir="rtl"] .aiChatClose:hover svg {
   transform: scaleX(-1) translateX(-2px);
 }
-
 /* ===== منطقة الرسائل - زجاجية ===== */
 .aiChatMessages {
   flex: 1;
