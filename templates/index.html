@@ -3434,7 +3434,7 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   background-position: center;
   filter: drop-shadow(0 0 2px currentColor);
 }
-/* ===== زر الرجوع/الإغلاق في صفحة التطبيق — زجاجي ===== */
+/* ===== زر X (الرجوع) — زجاجي محاذي مع القلب ===== */
 .detail-close-btn {
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) + 16px);
@@ -3448,7 +3448,7 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
   cursor: pointer;
-  z-index: 999;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3456,11 +3456,20 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   transition: all 0.2s ease;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
   -webkit-tap-highlight-color: transparent;
+  pointer-events: auto;
+  outline: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .detail-close-btn:active {
   transform: scale(0.9);
   background: rgba(0, 0, 0, 0.7);
+}
+
+.detail-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .detail-close-btn svg {
@@ -3472,9 +3481,11 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   stroke-linecap: round;
   stroke-linejoin: round;
   margin-left: -2px;
+  display: block;
+  transition: transform 0.2s ease;
 }
 
-/* 🔄 RTL: انقل الزر لليمين + اقلب السهم */
+/* 🎨 الوضع RTL: الزر يروح لليمين والسهم ينقلب */
 body[dir="rtl"] .detail-close-btn {
   left: auto;
   right: 16px;
@@ -3484,6 +3495,21 @@ body[dir="rtl"] .detail-close-btn svg {
   transform: scaleX(-1);
   margin-left: 0;
   margin-right: -2px;
+}
+
+/* 🌓 الوضع الفاتح */
+body.light-mode .detail-close-btn {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #000;
+}
+
+body.light-mode .detail-close-btn svg {
+  stroke: #000;
+}
+
+body.light-mode .detail-close-btn:active {
+  background: rgba(255, 255, 255, 0.9);
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
