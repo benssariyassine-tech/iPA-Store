@@ -6908,10 +6908,21 @@ if (looksLikeAppQuery(text)) {
     const typingEl = document.getElementById('aiTypingIndicator');
     if (typingEl) typingEl.remove();
 
-    if (!response.ok) {
-      const errData = await response.json().catch(() => ({}));
-      throw new Error(errData.error?.message || ('HTTP ' + response.status));
-    }
+if (!response.ok) {
+  const errData = await response.json().catch(() => ({}));
+  const errMsg = errData.error?.message || ('HTTP ' + response.status);
+  
+  // إذا Rate Limit، استنى وعاود
+  if (errMsg.toLowerCase().includes('rate limit')) {
+    const typingEl = document.getElementById('aiTypingIndicator');
+    if (typingEl) typingEl.innerHTML = '<span class="thinkingText">⏳ انتظر قليلاً...</span>';
+    
+    await new Promise(r => setTimeout(r, 5000));
+    return sendAiMessage();
+  }
+  
+  throw new Error(errMsg);
+}
 
     const data = await response.json();
 let botText = data?.choices?.[0]?.message?.content || 'عذراً، لم أستطع الحصول على رد.';
