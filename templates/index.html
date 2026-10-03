@@ -919,15 +919,15 @@ padding-top: 0;
    ============================================ */
 .aiChatHeader {
   padding: calc(env(safe-area-inset-top, 0px) + 14px) 16px 14px 16px;
-  background: rgba(15, 15, 22, 0.72);          /* 👈 خلفية زجاجية */
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(15, 15, 22, 0.15);        /* 👈 خفيفة جداً - 15% */
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);  /* 👈 خط خفيف */
   display: flex;
   align-items: center;
   gap: 10px;
   color: #fff;
-  position: sticky;                             /* 👈 Sticky! */
+  position: sticky;
   top: 0;
   z-index: 100;
   min-height: 68px;
@@ -935,9 +935,8 @@ padding-top: 0;
 }
 
 body.light-mode .aiChatHeader {
-  background: rgba(255, 255, 255, 0.72);
-  border-bottom-color: rgba(0, 0, 0, 0.06);
-  color: #000;
+  background: rgba(255, 255, 255, 0.15);
+  border-bottom-color: rgba(0, 0, 0, 0.04);
 }
 /* ===== زر الرجوع - زجاجي ===== */
 .aiChatBack {
