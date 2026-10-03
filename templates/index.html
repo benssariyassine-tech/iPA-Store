@@ -1051,6 +1051,186 @@ body.light-mode .aiChatTitlePill {
   border-radius: 50%;
   flex-shrink: 0;
   overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.aiChatLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* ✨ الوضع النهاري */
+body.light-mode .aiChatLogo {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body.light-mode .aiChatName {
+  color: #000;
+}
+
+body.light-mode .aiChatStatus {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.aiChatName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.aiChatStatus {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #32d74b;
+  box-shadow: 0 0 6px rgba(50, 215, 75, 0.8);
+  animation: statusDotPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes statusDotPulse {
+  0%, 100% { 
+    opacity: 0.65;
+    box-shadow: 0 0 6px rgba(50, 215, 75, 0.6);
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(50, 215, 75, 1);
+  }
+}
+
+.aiChatLogo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15),
+              inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.aiChatLogo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* ✨ الوضع النهاري */
+body.light-mode .aiChatLogo {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+body.light-mode .aiChatName {
+  color: #000;
+}
+
+body.light-mode .aiChatStatus {
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.aiChatName {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.3px;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.aiChatStatus {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  position: relative;
+  z-index: 1;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #32d74b;
+  box-shadow: 0 0 6px rgba(50, 215, 75, 0.8);
+  animation: statusDotPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes statusDotPulse {
+  0%, 100% { 
+    opacity: 0.65;
+    box-shadow: 0 0 6px rgba(50, 215, 75, 0.6);
+  }
+  50% { 
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(50, 215, 75, 1);
+  }
+}
+
+.aiChatLogo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
   background: #1c1c1e;
   border: none;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
