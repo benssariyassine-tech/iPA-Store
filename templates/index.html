@@ -915,33 +915,33 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   display: none !important;
 }
 /* ============================================
-   📱 TELEGRAM-STYLE CHAT HEADER
+   📱 TELEGRAM-STYLE CHAT HEADER (v2 - Glass)
    ============================================ */
 
 .aiChatHeader {
-  padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 14px 16px;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: none !important;
   display: flex;
   align-items: center;
   gap: 10px;
   color: #fff;
   position: relative;
   z-index: 2;
-  min-height: 64px;
+  min-height: 68px;
 }
 
-/* 🔙 زر الرجوع - دائرة زجاجية كقطرة ماء */
+/* 🔙 زر الرجوع - دائرة زجاجية */
 .aiChatBack {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -952,12 +952,11 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   padding: 0;
   position: relative;
   overflow: hidden;
-  box-shadow: 
-    0 4px 12px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* ✨ انعكاس الضوء (قطرة ماء) */
 .aiChatBack::before {
   content: '';
   position: absolute;
@@ -966,7 +965,7 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   width: 200%;
   height: 200%;
   background: radial-gradient(circle at 30% 20%, 
-    rgba(255, 255, 255, 0.35) 0%, 
+    rgba(255, 255, 255, 0.4) 0%, 
     rgba(255, 255, 255, 0.05) 30%,
     transparent 50%);
   pointer-events: none;
@@ -974,14 +973,14 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
 }
 
 .aiChatBack:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
 }
 
 .aiChatBack:active {
   transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .aiChatBack svg {
@@ -1002,56 +1001,92 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   transform: translateX(-2px);
 }
 
-/* 📛 كتلة العنوان في الوسط */
+/* 📛 كتلة العنوان - في الوسط داخل دائرة زجاجية */
 .aiChatTitleBlock {
   flex: 1;
   min-width: 0;
-  text-align: center;
-  overflow: hidden;
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ⭕ "الدعم الفني" في دائرة زجاجية */
+.aiChatTitlePill {
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
+  padding: 8px 22px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 22px;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  min-width: 140px;
+  max-width: 100%;
+}
+
+.aiChatTitlePill::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.15) 0%, 
+    transparent 100%);
+  pointer-events: none;
+  border-radius: 22px 22px 0 0;
 }
 
 .aiChatName {
   font-size: 16px;
   font-weight: 700;
   color: #fff;
-  letter-spacing: -0.2px;
-  line-height: 1.2;
+  letter-spacing: -0.3px;
+  line-height: 1.15;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  position: relative;
+  z-index: 1;
 }
 
 .aiChatStatus {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.75);
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 5px;
   line-height: 1;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
+  position: relative;
+  z-index: 1;
 }
 
-/* 🟢 النقطة الخضراء (باهتة وتنبض) */
 .statusDot {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #32d74b;
-  box-shadow: 0 0 6px rgba(50, 215, 75, 0.7);
+  box-shadow: 0 0 6px rgba(50, 215, 75, 0.8);
   animation: statusDotPulse 2s ease-in-out infinite;
   flex-shrink: 0;
 }
 
 @keyframes statusDotPulse {
   0%, 100% { 
-    opacity: 0.7;
+    opacity: 0.65;
     box-shadow: 0 0 6px rgba(50, 215, 75, 0.6);
   }
   50% { 
@@ -1060,19 +1095,24 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   }
 }
 
-/* 🖼️ شعار iStore على اليمين */
+/* 🖼️ شعار iStore - دائرة زجاجية */
 .aiChatLogo {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   flex-shrink: 0;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .aiChatLogo img {
@@ -1080,9 +1120,11 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
+  padding: 3px;
+  background: rgba(255, 255, 255, 0.05);
 }
 
-/* 🔄 RTL: نقلب السهم */
+/* 🔄 RTL */
 body[dir="rtl"] .aiChatBack svg {
   transform: scaleX(-1);
 }
@@ -1092,31 +1134,42 @@ body[dir="rtl"] .aiChatBack:hover svg {
 
 /* ===== 🌞 الوضع النهاري ===== */
 body.light-mode .aiChatHeader {
-  background: rgba(255, 255, 255, 0.7);
-  border-bottom-color: rgba(0, 0, 0, 0.06);
+  background: transparent !important;
 }
 
 body.light-mode .aiChatBack {
   background: rgba(0, 0, 0, 0.06);
-  border-color: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.1);
   color: #000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 body.light-mode .aiChatBack::before {
   background: radial-gradient(circle at 30% 20%, 
-    rgba(255, 255, 255, 0.9) 0%, 
+    rgba(255, 255, 255, 0.95) 0%, 
     rgba(255, 255, 255, 0.3) 30%,
     transparent 50%);
 }
 
 body.light-mode .aiChatBack:hover {
   background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 body.light-mode .aiChatBack svg {
   stroke: #000;
+}
+
+body.light-mode .aiChatTitlePill {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+body.light-mode .aiChatTitlePill::before {
+  background: linear-gradient(180deg, 
+    rgba(255, 255, 255, 0.9) 0%, 
+    transparent 100%);
 }
 
 body.light-mode .aiChatName {
@@ -1124,13 +1177,15 @@ body.light-mode .aiChatName {
 }
 
 body.light-mode .aiChatStatus {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.65);
 }
 
 body.light-mode .aiChatLogo {
-  background: rgba(0, 0, 0, 0.04);
-  border-color: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
+ 
 /* ===== منطقة الرسائل - زجاجية ===== */
 .aiChatMessages {
   flex: 1;
