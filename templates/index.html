@@ -7144,7 +7144,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
- function closeAiChat() {
+function closeAiChat() {
   document.getElementById('aiChatDrawer').classList.remove('open');
   const aiChatPanel = document.getElementById('aiChatPanel');
   if (aiChatPanel) {
@@ -7152,6 +7152,10 @@ document.addEventListener('DOMContentLoaded', () => {
       aiChatPanel.style.transform = 'translateY(0)';
     }, 300);
   }
+  
+  // ✅ رجّع اللون الأزرق
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.setAttribute('content', '#0a84ff');
 }
  // إخفاء نهائي للـ premium badge
 setTimeout(() => {
