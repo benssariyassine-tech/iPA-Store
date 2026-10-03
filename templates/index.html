@@ -919,18 +919,24 @@ padding-top: 0;
    ============================================ */
 
 .aiChatHeader {
-  padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px 16px;
-  background: transparent !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  padding: max(55px, env(safe-area-inset-top, 0px)) 16px 14px 16px;
+  background: rgba(11, 11, 15, 0.55);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: none !important;
   border-bottom: none !important;
+  box-shadow: none !important;
   display: flex;
   align-items: center;
   gap: 10px;
   color: #fff;
-  position: relative;
-  z-index: 2;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   min-height: 68px;
+  /* ✨ خط رقيق شفاف بدل الشريط */
+  -webkit-mask-image: linear-gradient(to bottom, #000 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 85%, transparent 100%);
 }
 
 /* 🔙 زر الرجوع - دائرة زجاجية */
