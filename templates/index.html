@@ -390,7 +390,33 @@ body[dir="rtl"] .detail-fav-btn{
 body[dir="rtl"] .btn-download-hero .hero-text{text-align:right}
 .btn-download-hero .hero-title{font-size:17px;font-weight:900;display:block;letter-spacing:0.3px}
 .btn-download-hero .hero-sub{font-size:12px;font-weight:600;opacity:0.9;display:block;margin-top:3px}
-.btn-download-hero .hero-arrow{font-size:24px;opacity:0.95}
+.btn-download-hero .hero-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+.btn-download-hero .hero-arrow svg {
+  width: 22px;
+  height: 22px;
+  stroke: #fff;
+}
+
+.btn-download-hero:active .hero-arrow {
+  transform: translateX(4px);
+}
+
+body[dir="rtl"] .btn-download-hero .hero-arrow {
+  margin-left: 0;
+  margin-right: auto;
+  transform: rotate(180deg);
+}
+
+body[dir="rtl"] .btn-download-hero:active .hero-arrow {
+  transform: rotate(180deg) translateX(4px);
+}
 .detail-section{background:var(--input-bg);border:1px solid var(--border-color);border-radius:16px;padding:16px;margin-bottom:14px}
 .detail-section-title{font-size:12px;font-weight:900;color:var(--subtext-color);text-transform:uppercase;letter-spacing:1px;margin:0 0 12px 0;display:flex;align-items:center;gap:6px}
 .detail-info-text{font-size:13px;color:var(--text-color);line-height:1.7;margin:0}
