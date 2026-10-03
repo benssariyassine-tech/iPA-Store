@@ -911,44 +911,14 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   to { transform: translateY(0); opacity: 1; }
 }
 
-/* ===== شريط السحب في الأعلى ===== */
 .aiChatDragHandle {
-  width: 100%;
-  height: 32px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  z-index: 20;
-  cursor: grab;
-  touch-action: none;
-  padding-top: 8px;
+  display: none !important;
 }
-.aiChatDragHandle .drag-bar {
-  width: 42px;
-  height: 4px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.28);
-  transition: all 0.3s;
-}
-.aiChatDragHandle:active .drag-bar {
-  background: var(--accent);
-  width: 50px;
-}
-.aiChatDragHandle .drag-text {
-  font-size: 9.5px;
-  color: rgba(255, 255, 255, 0.45);
-  margin-top: 3px;
-  font-weight: 600;
-  user-select: none;
-  letter-spacing: 0.3px;
-}
+
 
 /* ===== الهيدر - زجاجي شفاف ===== */
 .aiChatHeader {
-  padding: 42px 18px 14px 18px;
+  padding: 16px 18px 14px 18px;
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
