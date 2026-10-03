@@ -6851,32 +6851,110 @@ function renderBotMessage(text) {
   `;
   messages.appendChild(typing);
   messages.scrollTop = messages.scrollHeight;
-// ✅ إضافة: إذا السؤال واضح على تطبيق، نعرضو كارت سريع
-if (looksLikeAppQuery(text)) {
-  const foundApp = allAppsCache.find(a => 
-    a.name && text.toLowerCase().includes(a.name.toLowerCase())
-  );
+// 🎯 البحث عن تطبيق في المتجر أولاً (قبل AI)
+const cleanedText = text.toLowerCase()
+  .replace(/ابحث عن|أبحث عن|جيبلي|جيب لي|دور على|حوس على|قلب على|هل يوجد|واش كاين|هل عندكم|عندك|download|find|search|هل |واش /gi, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+let existingApp = null;
+if (cleanedText.length >= 2) {
+  // نرتب التطبيقات حسب طول الاسم (نلقاو الأطول أولاً باش ما نغلطوش)
+  const sortedApps = [...allAppsCache]
+    .filter(a => a.name && a.name.length >= 2)   // ✅ مصحح
+    .sort((a, b) => b.name.length - a.name.length);
   
-  if (foundApp) {
-    // نعرضو كارت التطبيق مباشرة
-    const quickCard = document.createElement('div');
-    quickCard.className = 'aiMsg bot';
-    quickCard.style.padding = '12px';
-    quickCard.innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center;">
-        <img src="${foundApp.icon || FALLBACK_ICON}" style="width:44px;height:44px;border-radius:11px;object-fit:cover;background:rgba(255,255,255,0.05);">
-        <div style="flex:1;min-width:0;">
-          <div style="font-weight:800;font-size:14px;margin-bottom:2px;">${escapeHTML(foundApp.name)}</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.6);">${foundApp.platform || 'IPA'} • ${foundApp.size || 'N/A'}</div>
+  existingApp = sortedApps.find(a => {
+    const appName = a.name.toLowerCase();
+    return cleanedText === appName ||
+           (cleanedText.length >= 3 && cleanedText.includes(appName)) ||
+           (appName.length >= 3 && appName.includes(cleanedText));
+  });
+}
+
+if (existingApp) {
+  // نشيلو مؤشر "جاري التفكير"
+  const typingEl = document.getElementById('aiTypingIndicator');
+  if (typingEl) typingEl.remove();
+  
+  const app = existingApp;
+  const platformIcon = app.platform === 'APK' ? '🤖' : '🍎';
+  const ratingAvg = getAverageRating(app);
+  const ratingText = ratingAvg > 0 ? `⭐ ${ratingAvg.toFixed(1)}` : '⭐ جديد';
+  const appType = app.appType === 'official' ? 'رسمي' : 'معدّل';
+  
+  // 🎨 بطاقة التطبيق
+  const appCard = document.createElement('div');
+  appCard.className = 'aiMsg bot';
+  appCard.style.padding = '14px';
+  appCard.style.maxWidth = '90%';
+  appCard.style.cursor = 'pointer';
+  appCard.style.transition = 'transform 0.2s';
+  appCard.onmouseenter = () => appCard.style.transform = 'scale(1.02)';
+  appCard.onmouseleave = () => appCard.style.transform = 'scale(1)';
+  
+  appCard.innerHTML = `
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+      <img src="${app.icon || FALLBACK_ICON}" 
+           style="width:56px;height:56px;border-radius:14px;object-fit:cover;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);"
+           onerror="this.src='${FALLBACK_ICON}'">
+      <div style="flex:1;min-width:0;">
+        <div style="font-weight:800;font-size:15px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(app.name)}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.6);display:flex;gap:8px;flex-wrap:wrap;">
+          <span>${platformIcon} ${app.platform || 'IPA'}</span>
+          <span>${app.size || 'N/A'}</span>
+          <span>${ratingText}</span>
         </div>
       </div>
-      <button onclick="closeAiChat(); setTimeout(()=>openAppDetails('${foundApp.id}'), 350);" style="width:100%;margin-top:10px;padding:9px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2,var(--accent)));color:#fff;border:none;font-weight:800;font-family:inherit;cursor:pointer;font-size:12px;">
-        ← فتح التطبيق
+    </div>
+    
+    <div style="background:rgba(10,132,255,0.08);border:1px solid rgba(10,132,255,0.2);border-radius:10px;padding:10px;margin-bottom:12px;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.7);display:flex;justify-content:space-between;">
+        <span>📦 النوع: ${appType}</span>
+        <span>⬇️ ${app.downloads || 0} تحميل</span>
+      </div>
+    </div>
+    
+    <div style="display:flex;gap:8px;">
+      <button class="app-card-download-btn" 
+              style="flex:1;padding:10px;border-radius:10px;background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;border:none;font-weight:800;font-family:inherit;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 4px 12px rgba(10,132,255,0.4);">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        تحميل الآن
       </button>
-    `;
-    messages.insertBefore(quickCard, typing);
-    messages.scrollTop = messages.scrollHeight;
-  }
+      <button class="app-card-details-btn" 
+              style="padding:10px 14px;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.15);font-weight:700;font-family:inherit;cursor:pointer;font-size:13px;">
+        التفاصيل
+      </button>
+    </div>
+  `;
+  
+  messages.appendChild(appCard);
+  messages.scrollTop = messages.scrollHeight;
+  
+  // 🎯 زر التحميل
+  appCard.querySelector('.app-card-download-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeAiChat();
+    setTimeout(() => startRealDownload(app.id, app.url || '', app.name || ''), 350);
+  });
+  
+  // 🎯 زر التفاصيل
+  appCard.querySelector('.app-card-details-btn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeAiChat();
+    setTimeout(() => openAppDetails(app.id), 350);
+  });
+  
+  // 🎯 الكليك على البطاقة كاملة = فتحرق التفاصيل
+  appCard.addEventListener('click', () => {
+    closeAiChat();
+    setTimeout(() => openAppDetails(app.id), 350);
+  });
+  
+  // ⏹️ نوقف هنا — ما نبعثوش لـ AI
+  sendBtn.disabled = false;
+  input.focus();
+  return;
 }
   const appsContext = getAppsContext() + autoFetchNote;
   const fullSystemPrompt = AI_SYSTEM_PROMPT + appsContext;
