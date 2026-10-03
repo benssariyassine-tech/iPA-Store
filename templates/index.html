@@ -1432,6 +1432,16 @@ body.light-mode .aiChatHeader {
   border-bottom-color: rgba(0, 0, 0, 0.05);
   color: #000;
 }
+ body.light-mode .aiChatHeader::after {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.06) 20%,
+    rgba(0, 0, 0, 0.18) 50%,
+    rgba(0, 0, 0, 0.06) 80%,
+    transparent 100%
+  );
+}
 body.light-mode .aiChatHeader .aiName { color: #000; }
 body.light-mode .aiChatHeader .aiStatus { color: rgba(0, 0, 0, 0.6); }
 body.light-mode .aiChatClose { 
