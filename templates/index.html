@@ -7125,14 +7125,17 @@ setTimeout(() => {
     <span>تنبيه: لا يتم حفظ سجل المحادثات. جميع الرسائل مؤقتة وتُمسح تلقائياً عند إغلاق النافذة.</span>
   </div>
 </div>
-  <div class="aiChatInputBar">
+<div class="aiChatInputBar">
   <div class="aiChatInputWrap">
     <textarea id="aiChatInput" class="aiChatInput" placeholder="اكتب رسالتك..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAiMessage();}"></textarea>
-    <button class="aiChatSend" id="aiChatSendBtn" onclick="sendAiMessage()">
-      <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-    </button>
-     </div>
   </div>
+  <button class="aiChatSend" id="aiChatSendBtn" onclick="sendAiMessage()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="19" x2="12" y2="5"/>
+      <polyline points="5 12 12 5 19 12"/>
+    </svg>
+  </button>
+</div>
 </div>
 </div>
 </body>
