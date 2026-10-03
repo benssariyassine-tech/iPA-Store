@@ -1338,7 +1338,7 @@ body.light-mode .aiChatInputBar {
   100% { opacity: 0; background-position: 200% 50%; transform: translateX(-50%) scale(1); }
 }
 
-/* الحاوية الزجاجية للحقل */
+/* ===== حقل الإدخال - زجاجي فاخر ===== */
 .aiChatInputWrap {
   flex: 1;
   display: flex;
@@ -1346,7 +1346,7 @@ body.light-mode .aiChatInputBar {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(25px) saturate(180%);
   -webkit-backdrop-filter: blur(25px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+border: 1px solid rgba(10, 132, 255, 0.4);  
   border-radius: 22px;
   padding: 9px 16px;
   min-height: 44px;
@@ -1366,6 +1366,8 @@ body.light-mode .aiChatInputBar {
     0 6px 22px rgba(10, 132, 255, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
+
+/* ✨ الوضع الفاتح */
 body.light-mode .aiChatInputWrap {
   background: rgba(255, 255, 255, 0.7);
   border-color: rgba(0, 0, 0, 0.08);
@@ -1398,43 +1400,69 @@ body.light-mode .aiChatInputWrap:focus-within {
   font-weight: 500;
 }
 
-/* زر الإرسال - دائري زجاجي */
+/* ===== زر الإرسال — زجاجي شفاف ===== */
 .aiChatSend {
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2, var(--accent)) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   box-shadow: 
-    0 4px 14px rgba(10, 132, 255, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 4px 14px rgba(10, 132, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   position: relative;
   z-index: 1;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   flex-shrink: 0;
   padding: 0;
+  overflow: hidden;
+}
+
+/* ✨ لمعة زجاجية في الأعلى */
+.aiChatSend::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.18) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .aiChatSend:hover:not(:disabled) {
   transform: translateY(-2px) scale(1.05);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(10, 132, 255, 0.5);
   box-shadow: 
-    0 8px 22px rgba(10, 132, 255, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    0 8px 22px rgba(10, 132, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .aiChatSend:active:not(:disabled) {
   transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .aiChatSend:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .aiChatSend svg {
@@ -1443,10 +1471,41 @@ body.light-mode .aiChatInputWrap:focus-within {
   stroke: #fff;
   fill: none;
   transition: transform 0.25s;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 .aiChatSend:hover:not(:disabled) svg {
   transform: translateY(-2px);
+}
+
+/* ✨ الوضع الفاتح */
+body.light-mode .aiChatSend {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 4px 14px rgba(10, 132, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+}
+
+body.light-mode .aiChatSend::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.6) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+body.light-mode .aiChatSend svg {
+  stroke: var(--accent);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+body.light-mode .aiChatSend:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(10, 132, 255, 0.5);
 }
 
 /* ===== الوضع الفاتح (Light Mode) ===== */
