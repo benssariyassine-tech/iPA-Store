@@ -6644,7 +6644,7 @@ function getAppsContext() {
   ctx += '\n   النظام راح يحولها تلقائياً لرابط تفاعلي يفتح صفحة التطبيق.';
   ctx += '\n─────────────────────────────────';
 
-  allAppsCache.slice(0, 100).forEach((app, i) => {
+allAppsCache.slice(0, 20).forEach((app, i) => {
     const platform = app.platform || 'IPA';
     const size = app.size || 'غير محدد';
     const category = getCategoryNameEn(app.category);
