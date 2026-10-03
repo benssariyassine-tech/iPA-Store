@@ -868,7 +868,7 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
   overflow: hidden;
  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
   animation: fadeIn 0.25s ease;
-  padding-top: env(safe-area-inset-top, 0px);
+padding-top: 0;
   padding-bottom: env(safe-area-inset-bottom, 0px);
   position: relative;
 }
@@ -919,7 +919,7 @@ body[dir="rtl"] #aiChatBtn { left: auto; right: 18px; }
    ============================================ */
 
 .aiChatHeader {
-  padding: 14px 16px;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 14px 16px;
   background: transparent !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
