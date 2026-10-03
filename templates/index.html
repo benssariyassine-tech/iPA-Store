@@ -925,13 +925,13 @@ padding-top: 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   color: #fff;
   position: sticky;
   top: 0;
   z-index: 10;
   min-height: 68px;
-  justify-content: space-between;
+  justify-content: flex-start;
   flex-shrink: 0;
 }
 /* ===== زر الرجوع - زجاجي ===== */
@@ -1027,8 +1027,6 @@ body.light-mode .aiChatTitlePill {
   text-overflow: ellipsis;
   max-width: 100%;
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'IBM Plex Sans Arabic', 'Cairo', sans-serif;
-  position: relative;
-  z-index: 1;
 }
 
 .aiChatStatus {
@@ -1117,11 +1115,13 @@ body.light-mode .aiChatLogo {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
  .aiChatTitleBlock {
-  flex: 1;
-  min-width: 0;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: center;
-  align-items: center;
+  gap: 3px;
+  min-width: 0;
+  flex: 1;
 }
 
 /* ===== منطقة الرسائل - زجاجية ===== */
@@ -7064,27 +7064,18 @@ setTimeout(() => {
 <div class="aiChatPanel" id="aiChatPanel" onclick="event.stopPropagation()">
 
 <div class="aiChatHeader">
-  <!-- زر الرجوع - دائرة زجاجية -->
   <button class="aiChatBack" onclick="closeAiChat()">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="15 18 9 12 15 6"/>
     </svg>
   </button>
   
-  <!-- الاسم + الحالة داخل دائرة زجاجية -->
   <div class="aiChatTitleBlock">
-    <div class="aiChatTitlePill">
-      <div class="aiChatName">الدعم الفني</div>
-      <div class="aiChatStatus">
-        <span class="statusDot"></span>
-        <span>متصل</span>
-      </div>
+    <div class="aiChatName">الدعم الفني</div>
+    <div class="aiChatStatus">
+      <span class="statusDot"></span>
+      <span>متصل</span>
     </div>
-  </div>
-  
-  <!-- شعار iStore - دائرة زجاجية -->
-  <div class="aiChatLogo">
-    <img src="https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png" alt="iStore">
   </div>
 </div>
 <div class="aiChatMessages" id="aiChatMessages">
