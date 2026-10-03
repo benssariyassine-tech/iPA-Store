@@ -3095,33 +3095,34 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .notif-card.notif-type-warning .notif-icon { color: var(--warning); }
 .notif-card.notif-type-info .notif-icon { color: var(--accent); }
  /* 
-/* ============================================
-   🤖 ROBOT AVATAR IN CHAT HEADER (Fixed)
+ /* ============================================
+   🤖 ROBOT AVATAR IN CHAT HEADER (Fixed v2)
    ============================================ */
 .chat-robot-avatar {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: linear-gradient(145deg, #4aa8ff 0%, #0a84ff 50%, #0062d2 100%);
+  background: linear-gradient(145deg, #5ab4ff 0%, #0a84ff 50%, #0062d2 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
   box-shadow: 
-    inset 0 2px 6px rgba(255, 255, 255, 0.5),
-    inset 0 -2px 6px rgba(0, 0, 0, 0.25);
+    inset 0 3px 8px rgba(255, 255, 255, 0.55),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 
+/* 📡 الهوائي - فوق الراس */
 .chat-robot-avatar .cr-antenna {
   position: absolute;
-  top: 3px;
+  top: 6px;
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
-  height: 5px;
-  background: rgba(255, 255, 255, 0.95);
+  height: 6px;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 2px;
   z-index: 3;
 }
@@ -3129,34 +3130,37 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .chat-robot-avatar .cr-antenna::before {
   content: '';
   position: absolute;
-  top: -3px;
+  top: -4px;
   left: 50%;
   transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: #ff453a;
-  box-shadow: 0 0 6px rgba(255, 69, 58, 0.9);
+  box-shadow: 0 0 8px rgba(255, 69, 58, 0.9);
   animation: crBlink 1.6s ease-in-out infinite;
 }
 
+/* 👀 العيون - متقاربين */
 .chat-robot-avatar .cr-eyes {
   display: flex;
-  gap: 5px;
-  margin-top: 4px;
+  gap: 6px;
+  margin-top: 8px;
   position: relative;
   z-index: 3;
 }
 
 .chat-robot-avatar .cr-eye {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
   border-radius: 50%;
   background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    inset 0 1px 2px rgba(0, 0, 0, 0.15),
+    0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .chat-robot-avatar .cr-pupil {
@@ -3167,12 +3171,13 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   transition: transform 0.15s ease-out;
 }
 
+/* 👄 الفم - صغير وقريب من العيون */
 .chat-robot-avatar .cr-mouth {
   position: absolute;
-  bottom: 9px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
-  width: 13px;
+  width: 14px;
   height: 2.5px;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.95);
