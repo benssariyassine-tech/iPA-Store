@@ -3087,8 +3087,8 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .notif-card.notif-type-warning .notif-icon { color: var(--warning); }
 .notif-card.notif-type-info .notif-icon { color: var(--accent); }
  /* 
- /* ============================================
-   🤖 ROBOT AVATAR IN CHAT HEADER (Fixed v2)
+/* ============================================
+   🤖 ROBOT AVATAR IN CHAT HEADER (Fixed v3)
    ============================================ */
 .chat-robot-avatar {
   width: 100%;
@@ -3101,19 +3101,18 @@ body[dir="rtl"] #notifStack { direction: rtl; }
   justify-content: center;
   position: relative;
   box-shadow: 
-    inset 0 3px 8px rgba(255, 255, 255, 0.55),
-    inset 0 -3px 8px rgba(0, 0, 0, 0.3);
+    inset 0 2px 6px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
 
-/* 📡 الهوائي - فوق الراس */
 .chat-robot-avatar .cr-antenna {
   position: absolute;
-  top: 6px;
+  top: 4px;
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -1px;
   width: 2px;
-  height: 6px;
+  height: 5px;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 2px;
   z-index: 3;
@@ -3122,29 +3121,28 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 .chat-robot-avatar .cr-antenna::before {
   content: '';
   position: absolute;
-  top: -4px;
+  top: -3px;
   left: 50%;
-  transform: translateX(-50%);
+  margin-left: -3px;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #ff453a;
-  box-shadow: 0 0 8px rgba(255, 69, 58, 0.9);
+  box-shadow: 0 0 6px rgba(255, 69, 58, 0.9);
   animation: crBlink 1.6s ease-in-out infinite;
 }
 
-/* 👀 العيون - متقاربين */
 .chat-robot-avatar .cr-eyes {
   display: flex;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 5px;
+  margin-top: 6px;
   position: relative;
   z-index: 3;
 }
 
 .chat-robot-avatar .cr-eye {
-  width: 11px;
-  height: 11px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   background: #fff;
   display: flex;
@@ -3156,21 +3154,19 @@ body[dir="rtl"] #notifStack { direction: rtl; }
 }
 
 .chat-robot-avatar .cr-pupil {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: #0b0b1f;
-  transition: transform 0.15s ease-out;
 }
 
-/* 👄 الفم - صغير وقريب من العيون */
 .chat-robot-avatar .cr-mouth {
   position: absolute;
-  bottom: 12px;
+  bottom: 10px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 14px;
-  height: 2.5px;
+  margin-left: -6px;
+  width: 12px;
+  height: 2px;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.95);
   z-index: 3;
