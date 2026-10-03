@@ -287,27 +287,72 @@ body[dir="rtl"] .account-action-btn{text-align:right}
   background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.4) 50%,var(--modal-bg) 100%);
   pointer-events:none;
 }
-  .detail-fav-btn{
-  position:absolute;
-  top:16px;
-  right:16px;
-  background:rgba(0,0,0,0.55);
-  backdrop-filter:blur(15px);
-  -webkit-backdrop-filter:blur(15px);
-  border:1.5px solid rgba(255,255,255,0.3);
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:transform 0.2s;
-  z-index:10;
-  box-shadow:0 4px 12px rgba(0,0,0,0.3);
+/* ===== زر القلب (المفضلة) — زجاجي ===== */
+.detail-fav-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 10;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  -webkit-tap-highlight-color: transparent;
 }
-.detail-fav-btn:active{
-  transform:scale(0.9);
+
+/* 🎬 تأثيرات عند اللمس */
+.detail-fav-btn:active {
+  transform: scale(0.88);
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* 🎨 تأثير عند المرور (للأجهزة الكبيرة) */
+.detail-fav-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+/* ❤️ SVG القلب */
+.detail-fav-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2;
+  transition: transform 0.2s ease;
+}
+
+/* 💗 قلب مفعّل (Liked) */
+.detail-fav-btn.liked svg {
+  fill: #ff453a;
+  stroke: #ff453a;
+  filter: drop-shadow(0 0 8px rgba(255, 69, 58, 0.6));
+  animation: heartBeat 0.4s ease;
+}
+
+/* 🔄 RTL Support */
+body[dir="rtl"] .detail-fav-btn {
+  right: auto;
+  left: 16px;
+}
+
+/* 💓 أنيميشن القلب */
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.3); }
+  50% { transform: scale(0.95); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 body[dir="rtl"] .detail-fav-btn{
   right:auto;
