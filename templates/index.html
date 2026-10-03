@@ -280,6 +280,23 @@ body[dir="rtl"] .account-action-btn{text-align:right}
   border-top-left-radius:32px;
   border-top-right-radius:32px;
 }
+ /* ===== 🎨 خلفية مبلورة للتطبيقات بلا Banner ===== */
+.detail-banner.no-image {
+  background-color: var(--modal-bg);
+}
+
+.detail-banner.no-image::before {
+  content: '';
+  position: absolute;
+  inset: -60px;
+  background: inherit;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) saturate(180%) brightness(0.55);
+  z-index: 0;
+  transform: scale(1.2);
+  pointer-events: none;
+}
 .detail-banner::after{
   content:'';
   position:absolute;
