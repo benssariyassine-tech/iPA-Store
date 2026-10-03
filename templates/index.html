@@ -304,26 +304,26 @@ body[dir="rtl"] .account-action-btn{text-align:right}
   background:linear-gradient(180deg,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.4) 50%,var(--modal-bg) 100%);
   pointer-events:none;
 }
-/* ===== زر القلب (المفضلة) — زجاجي ===== */
+/* ===== زر القلب — ثابت ومحاذي مع X ===== */
 .detail-fav-btn {
-  position: absolute;
-  top: 16px;
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 16px);
   right: 16px;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   color: #fff;
   cursor: pointer;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 10;
+  transition: all 0.2s ease;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
   -webkit-tap-highlight-color: transparent;
 }
@@ -371,13 +371,8 @@ body[dir="rtl"] .detail-fav-btn {
   70% { transform: scale(1.15); }
   100% { transform: scale(1); }
 }
-body[dir="rtl"] .detail-fav-btn{
-  right:auto;
-  left:16px;
-}
-.detail-banner.no-image{
-  background:linear-gradient(135deg,rgba(10,132,255,0.4),rgba(10,132,255,0.1));
-}
+
+
 .detail-hero{
   position:relative;
   margin:-70px 22px 20px 22px;
