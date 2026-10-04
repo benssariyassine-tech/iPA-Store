@@ -4185,6 +4185,127 @@ body.overlay-active .isto-nav-wrap {
 #dynamicContent.tab-fading {
   opacity: 0.15;
 }
+ /* ============================================
+   🎤 SUPPORT BUTTON — Professional Redesign
+   (دائري ذهبي، مايك، بدون isto، ثابت)
+   ============================================ */
+
+/* 1️⃣ الموضع: أسفل يسار */
+.isto-nav-wrap .isto-btn {
+  position: fixed !important;
+  left: 16px !important;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+  top: auto !important;
+  transform: none !important;
+  width: 62px !important;
+  height: 62px !important;
+  border-radius: 50% !important;
+  background: rgba(28, 28, 34, 0.55) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  border: 1px solid rgba(212, 160, 23, 0.35) !important;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.45),
+    0 0 20px rgba(212, 160, 23, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  animation: none !important;
+  overflow: visible !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999 !important;
+  padding: 0 !important;
+  transition: transform 0.2s ease, background 0.2s ease !important;
+}
+
+/* 2️⃣ نخبيو كل أجزاء الروبوت القديم */
+.isto-nav-wrap .isto-btn .isto-glow,
+.isto-nav-wrap .isto-btn .isto-ring,
+.isto-nav-wrap .isto-btn .isto-eyes,
+.isto-nav-wrap .isto-btn .isto-eye,
+.isto-nav-wrap .isto-btn .isto-pupil,
+.isto-nav-wrap .isto-btn .isto-mouth,
+.isto-nav-wrap .isto-btn .isto-antenna,
+.isto-nav-wrap .isto-btn .isto-label {
+  display: none !important;
+}
+
+/* 3️⃣ الجسم: دائرة زجاجية + مايك ذهبي */
+.isto-nav-wrap .isto-btn .isto-body {
+  position: static !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: visible !important;
+}
+
+.isto-nav-wrap .isto-btn .isto-body::before {
+  content: '' !important;
+  position: static !important;
+  inset: auto !important;
+  width: 26px !important;
+  height: 26px !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a017' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z'/><path d='M19 10v2a7 7 0 0 1-14 0v-2'/><line x1='12' y1='19' x2='12' y2='22'/></svg>") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  filter: drop-shadow(0 0 8px rgba(212, 160, 23, 0.7)) !important;
+  display: block !important;
+}
+
+/* 4️⃣ عند الضغط */
+.isto-nav-wrap .isto-btn:active {
+  transform: scale(0.92) !important;
+  background: rgba(28, 28, 34, 0.75) !important;
+}
+
+/* 5️⃣ Badge (النقطة الحمراء كي يجي إشعار) */
+.isto-nav-wrap .isto-btn .isto-badge {
+  display: none !important;
+  position: absolute !important;
+  top: 2px !important;
+  right: 2px !important;
+  width: 12px !important;
+  height: 12px !important;
+  border-radius: 50% !important;
+  background: #ff3b30 !important;
+  border: 2px solid var(--bg-color) !important;
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.9) !important;
+  z-index: 20 !important;
+  animation: istoBadgePulse 1.4s ease-in-out infinite !important;
+}
+.isto-nav-wrap .isto-btn .isto-badge.show {
+  display: block !important;
+}
+
+/* 6️⃣ الوضع الفاتح */
+body.light-mode .isto-nav-wrap .isto-btn {
+  background: rgba(255, 255, 255, 0.7) !important;
+  border-color: rgba(212, 160, 23, 0.4) !important;
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(212, 160, 23, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+/* 7️⃣ شاشات صغيرة */
+@media (max-width: 380px) {
+  .isto-nav-wrap .isto-btn {
+    width: 56px !important;
+    height: 56px !important;
+    left: 12px !important;
+  }
+  .isto-nav-wrap .isto-btn .isto-body::before {
+    width: 22px !important;
+    height: 22px !important;
+  }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
