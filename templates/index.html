@@ -5994,6 +5994,131 @@ body.no-animations .search-fab::after {
   animation: none !important;
   display: none !important;
 }
+ /* ============================================
+   🎨 IOS CONFIRM DIALOG
+   ============================================ */
+.ios-confirm-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.ios-confirm-modal.open {
+  display: flex;
+}
+.ios-confirm-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  animation: stgFadeIn 0.25s ease;
+}
+.ios-confirm-content {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+  animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ios-confirm-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 26px;
+  padding: 24px 20px 18px;
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.ios-confirm-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  color: var(--accent);
+}
+.ios-confirm-icon.danger {
+  color: var(--danger);
+}
+.ios-confirm-icon.warning {
+  color: var(--warning);
+}
+.ios-confirm-icon svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ios-confirm-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--text-color);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+.ios-confirm-message {
+  font-size: 14px;
+  color: var(--subtext-color);
+  margin: 0 0 20px;
+  line-height: 1.55;
+}
+.ios-confirm-actions {
+  display: flex;
+  gap: 10px;
+}
+.ios-confirm-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 16px;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.ios-confirm-btn:active {
+  transform: scale(0.96);
+}
+.ios-confirm-cancel {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+.ios-confirm-ok {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 40%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.ios-confirm-ok.danger {
+  background: linear-gradient(135deg, var(--danger), #d70015);
+  box-shadow: 0 6px 20px rgba(255, 69, 58, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.ios-confirm-ok.warning {
+  background: linear-gradient(135deg, var(--warning), #ff6b00);
+  box-shadow: 0 6px 20px rgba(255, 159, 10, 0.4),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -11848,6 +11973,65 @@ function _swapNotifCards(topCard, behindCard) {
 })();
 
 console.log('✅ Notification Stack loaded (max 2)');
+/* ============================================
+   🎨 IOS CONFIRM DIALOG — Controller
+   ============================================ */
+let _iosConfirmResolve = null;
+
+const CONFIRM_ICONS = {
+  info:    '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/" y1="8" x2="12.01" y2="8"/></svg>',
+  warning: '<svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  danger:  '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+  trash:   '<svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+  wifi:    '<svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>',
+  reset:   '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>',
+  check:   '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>'
+};
+
+function showIOSConfirm(options) {
+  return new Promise((resolve) => {
+    const o = options || {};
+    const modal = document.getElementById('iosConfirmModal');
+    const iconEl = document.getElementById('iosConfirmIcon');
+    const titleEl = document.getElementById('iosConfirmTitle');
+    const msgEl = document.getElementById('iosConfirmMessage');
+    const cancelBtn = document.getElementById('iosConfirmCancel');
+    const okBtn = document.getElementById('iosConfirmOk');
+    
+    if (!modal) { resolve(false); return; }
+    
+    const type = o.type || 'info';
+    const iconKey = o.icon || type;
+    
+    iconEl.innerHTML = CONFIRM_ICONS[iconKey] || CONFIRM_ICONS.info;
+    iconEl.className = 'ios-confirm-icon' + (type !== 'info' ? ' ' + type : '');
+    
+    titleEl.textContent = o.title || (currentLang === 'ar' ? 'تأكيد' : 'Confirm');
+    msgEl.textContent = o.message || '';
+    
+    cancelBtn.querySelector('span').textContent = o.cancelText || (currentLang === 'ar' ? 'إلغاء' : 'Cancel');
+    okBtn.querySelector('span').textContent = o.okText || (currentLang === 'ar' ? 'موافق' : 'Confirm');
+    
+    okBtn.className = 'ios-confirm-btn ios-confirm-ok' + (type !== 'info' ? ' ' + type : '');
+    
+    _iosConfirmResolve = resolve;
+    
+    modal.classList.add('open');
+    if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+  });
+}
+
+function closeIOSConfirm(result) {
+  const modal = document.getElementById('iosConfirmModal');
+  if (modal) modal.classList.remove('open');
+  
+  const resolve = _iosConfirmResolve;
+  _iosConfirmResolve = null;
+  
+  if (resolve) resolve(result);
+}
+
+console.log('✅ IOS Confirm Dialog loaded');
 console.log('✅ Login Page JS loaded');
 </script>
 
@@ -12486,6 +12670,25 @@ console.log('✅ Login Page JS loaded');
       <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
       <span data-i18n="gotIt">Got it</span>
     </button>
+  </div>
+</div>
+ <!-- ===== IOS CONFIRM DIALOG ===== -->
+<div id="iosConfirmModal" class="ios-confirm-modal">
+  <div class="ios-confirm-bg" onclick="closeIOSConfirm(false)"></div>
+  <div class="ios-confirm-content">
+    <div class="ios-confirm-card">
+      <div class="ios-confirm-icon" id="iosConfirmIcon"></div>
+      <h3 class="ios-confirm-title" id="iosConfirmTitle">Confirm</h3>
+      <p class="ios-confirm-message" id="iosConfirmMessage">Are you sure?</p>
+      <div class="ios-confirm-actions">
+        <button class="ios-confirm-btn ios-confirm-cancel" id="iosConfirmCancel" onclick="closeIOSConfirm(false)">
+          <span>Cancel</span>
+        </button>
+        <button class="ios-confirm-btn ios-confirm-ok" id="iosConfirmOk" onclick="closeIOSConfirm(true)">
+          <span>Confirm</span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 </body>
