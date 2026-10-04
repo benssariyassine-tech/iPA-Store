@@ -8016,62 +8016,159 @@ setTimeout(() => {
   const badge = document.getElementById('headerPremiumBadge');
   if (badge) badge.remove();
 }, 500);
- // 🆕 فتح البحث (Overlay)
+// ============================================
+// 🔍 SEARCH OVERLAY SYSTEM
+// ============================================
+let searchOverlayFilter = 'all';
+
 function openSearchOverlay() {
-  const searchInput = document.getElementById('searchInput');
-  const searchBox = document.querySelector('.search-box');
+  const overlay = document.getElementById('searchOverlay');
+  if (!overlay) return;
   
-  if (!searchInput || !searchBox) return;
-
-  // 1. سكرول للفوق
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-
-  // 2. أضف class نشط للـ search-box
-  searchBox.classList.add('search-active');
-
-  // 3. ركّز على الحقل بعد ما يكمل السكرول
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  
+  // Reset filter
+  searchOverlayFilter = 'all';
+  document.querySelectorAll('.search-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.filter === 'all');
+  });
+  
+  // Focus input
   setTimeout(() => {
-    searchInput.focus();
-    // على iOS، click ضروري باش تبان الكيبورد
-    searchInput.click();
-  }, 350);
-
-  // 4. زيد Escape للخروج
-  document.addEventListener('keydown', handleSearchEscape);
-
-  // 5. زيد click خارج لخروج
-  document.addEventListener('click', handleSearchOutsideClick);
+    const input = document.getElementById('searchOverlayInput');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+  }, 400);
+  
+  // Initial empty state
+  renderSearchResults('');
 }
 
-// 🔍 إغلاق البحث
 function closeSearchOverlay() {
-  const searchBox = document.querySelector('.search-box');
-  const searchInput = document.getElementById('searchInput');
+  const overlay = document.getElementById('searchOverlay');
+  if (!overlay) return;
   
-  if (searchBox) searchBox.classList.remove('search-active');
-  if (searchInput) searchInput.blur();
-
-  // حيّد الـ listeners
-  document.removeEventListener('keydown', handleSearchEscape);
-  document.removeEventListener('click', handleSearchOutsideClick);
-}
-
-// ⌨️ زر Escape
-function handleSearchEscape(e) {
-  if (e.key === 'Escape') {
-    closeSearchOverlay();
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  
+  const input = document.getElementById('searchOverlayInput');
+  if (input) input.blur();
+  
+  // Hide keyboard
+  if (document.activeElement && document.activeElement.blur) {
+    document.activeElement.blur();
   }
 }
 
-// 🖱️ كليك خارج
-function handleSearchOutsideClick(e) {
-  const searchBox = document.querySelector('.search-box');
-  const searchInput = document.getElementById('searchInput');
+function onSearchOverlayInput() {
+  const input = document.getElementById('searchOverlayInput');
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (!input) return;
   
-  if (searchBox && !searchBox.contains(e.target) && e.target !== searchInput) {
+  const val = input.value.trim();
+  if (clearBtn) clearBtn.classList.toggle('show', val.length > 0);
+  
+  renderSearchResults(val);
+}
+
+function clearSearchOverlay() {
+  const input = document.getElementById('searchOverlayInput');
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (input) input.value = '';
+  if (clearBtn) clearBtn.classList.remove('show');
+  renderSearchResults('');
+  if (input) input.focus();
+}
+
+function setSearchFilter(filter, btnEl) {
+  searchOverlayFilter = filter;
+  document.querySelectorAll('.search-chip').forEach(c => c.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+  
+  const input = document.getElementById('searchOverlayInput');
+  renderSearchResults(input ? input.value.trim() : '');
+}
+
+function renderSearchResults(query) {
+  const container = document.getElementById('searchOverlayResults');
+  if (!container) return;
+  
+  // Empty state
+  if (!query || query.length === 0) {
+    container.innerHTML = `
+      <div class="search-empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>${currentLang === 'ar' ? 'ابحث عن أي تطبيق أو لعبة أو أداة' : 'Search for any app, game or tool'}</p>
+      </div>`;
+    return;
+  }
+  
+  const q = query.toLowerCase();
+  
+  // فلترة التطبيقات
+  let results = allAppsCache.filter(app => {
+    const name = (app.name || '').toLowerCase();
+    const info = (app.info || '').toLowerCase();
+    const publisher = (app.publisher || '').toLowerCase();
+    return name.includes(q) || info.includes(q) || publisher.includes(q);
+  });
+  
+  // تطبيق الفلتر
+  if (searchOverlayFilter === 'IPA' || searchOverlayFilter === 'APK') {
+    results = results.filter(a => (a.platform || 'IPA') === searchOverlayFilter);
+  } else if (searchOverlayFilter !== 'all') {
+    results = results.filter(a => a.category === searchOverlayFilter);
+  }
+  
+  // ترتيب: الاسم يبدأ بالكلمة أولاً
+  results.sort((a, b) => {
+    const an = (a.name || '').toLowerCase();
+    const bn = (b.name || '').toLowerCase();
+    const aStarts = an.startsWith(q) ? 1 : 0;
+    const bStarts = bn.startsWith(q) ? 1 : 0;
+    if (aStarts !== bStarts) return bStarts - aStarts;
+    return an.localeCompare(bn);
+  });
+  
+  // ما كاينش نتائج
+  if (results.length === 0) {
+    container.innerHTML = `
+      <div class="search-empty-state">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          <line x1="8" y1="11" x2="14" y2="11" opacity="0.5"/>
+        </svg>
+        <p>${currentLang === 'ar' ? 'لا توجد نتائج' : 'No results found'}</p>
+      </div>`;
+    return;
+  }
+  
+  // رسم النتائج
+  let html = `<div class="search-results-heading">
+    <span>${currentLang === 'ar' ? 'النتائج' : 'Results'}</span>
+    <span style="color:var(--accent);">${results.length}</span>
+  </div>`;
+  
+  results.forEach(app => {
+    html += createAppCardHTML(app);
+  });
+  
+  container.innerHTML = html;
+}
+ // 🔙 زر الرجوع في الهاتف يسد الـ Overlay
+window.addEventListener('popstate', function() {
+  const overlay = document.getElementById('searchOverlay');
+  if (overlay && overlay.classList.contains('open')) {
     closeSearchOverlay();
   }
-}
+});
 </script>
 
 <div id="aiChatDrawer">
