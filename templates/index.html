@@ -6234,6 +6234,7 @@ function toggleUserPreview(){
   if(user && ADMIN_EMAILS.map(e=>e.toLowerCase()).includes(user.email.toLowerCase())) isAdmin = !isUserPreview;
   document.getElementById('previewBar').style.display = isUserPreview ? 'flex' : 'none';
   applyAdminUI();
+  updateAdminPanelBtn();
   renderUI();
 }
 
