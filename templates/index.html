@@ -11472,6 +11472,223 @@ function closeVerifyInfoToast() {
 }
 
 console.log('✅ Verify Email + Resend Code loaded');
+ /* ============================================
+   🔔 NOTIFICATION STACK — iOS 26 (Max 2)
+   ============================================ */
+
+const NOTIF_MAX = 2;
+const NOTIF_DEFAULT_DURATION = 4000; // 4 ثواني
+
+function _refreshNotifStack() {
+  const stack = document.getElementById('notifStack');
+  if (!stack) return;
+  
+  const cards = Array.from(stack.querySelectorAll('.notif-card:not(.dismissing)'));
+  
+  // احذف الأقدم إذا أكثر من 2
+  while (cards.length > NOTIF_MAX) {
+    const oldest = cards.pop();
+    if (oldest) dismissNotif(oldest);
+  }
+  
+  // رتب: [0] = Top (جديد)، [1] = Behind (قديم)
+  cards.forEach((c, i) => {
+    if (i === 0) {
+      c.classList.add('is-top');
+      c.classList.remove('is-behind');
+    } else if (i === 1) {
+      c.classList.add('is-behind');
+      c.classList.remove('is-top');
+    }
+  });
+}
+
+/* ===== سحب (لفوق حذف / لتحت تبديل) ===== */
+function _setupNotifSwipe(card) {
+  if (!card || card._swipeSetup) return;
+  card._swipeSetup = true;
+  
+  let startY = 0;
+  let currentY = 0;
+  let isDragging = false;
+  
+  const onStart = (e) => {
+    if (!card.classList.contains('is-top')) return;
+    if (e.target.closest('.notif-handle')) return;
+    if (e.target.closest('.notif-options')) return;
+    if (e.target.closest('.notif-action')) return;
+    
+    const t = e.touches ? e.touches[0] : e;
+    startY = t.clientY;
+    currentY = 0;
+    isDragging = true;
+    card.classList.add('dragging');
+    
+    const stack = document.getElementById('notifStack');
+    if (stack) {
+      const behind = stack.querySelector('.notif-card.is-behind');
+      if (behind) behind.classList.add('dragging');
+    }
+  };
+  
+  const onMove = (e) => {
+    if (!isDragging) return;
+    const t = e.touches ? e.touches[0] : e;
+    currentY = t.clientY - startY;
+    
+    const stack = document.getElementById('notifStack');
+    const behind = stack ? stack.querySelector('.notif-card.is-behind') : null;
+    
+    if (currentY < 0) {
+      // ⬆️ سحب لفوق → حذف
+      const progress = Math.min(Math.abs(currentY) / 150, 1);
+      card.style.transform = `translateY(${currentY}px) scale(${1 - progress * 0.1})`;
+      card.style.opacity = String(1 - progress);
+      
+      if (behind) {
+        const lift = Math.max(14 + currentY * 0.4, 0);
+        behind.style.transform = `translateY(${lift}px) scale(${0.94 + progress * 0.06})`;
+        behind.style.opacity = String(0.6 + progress * 0.4);
+      }
+    } else if (currentY > 0) {
+      // ⬇️ سحب لتحت → كشف القديم
+      const progress = Math.min(currentY / 100, 1);
+      card.style.transform = `translateY(${currentY * 0.6}px) scale(${1 - progress * 0.06})`;
+      card.style.opacity = String(1 - progress * 0.4);
+      
+      if (behind) {
+        const lift = 14 - progress * 14;
+        const scale = 0.94 + progress * 0.06;
+        behind.style.transform = `translateY(${lift}px) scale(${scale})`;
+        behind.style.opacity = String(0.6 + progress * 0.4);
+      }
+    }
+  };
+  
+  const onEnd = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    card.classList.remove('dragging');
+    
+    const stack = document.getElementById('notifStack');
+    const behind = stack ? stack.querySelector('.notif-card.is-behind') : null;
+    if (behind) behind.classList.remove('dragging');
+    
+    if (currentY < -50) {
+      // 🗑️ سحب لفوق → احذف الكل
+      if (stack) {
+        stack.querySelectorAll('.notif-card:not(.dismissing)').forEach((c, i) => {
+          setTimeout(() => {
+            c.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+            c.style.transform = 'translateY(-120%) scale(0.8)';
+            c.style.opacity = '0';
+            setTimeout(() => dismissNotif(c), 250);
+          }, i * 60);
+        });
+      }
+    } else if (currentY > 50 && behind) {
+      // 🔄 سحب لتحت → تبديل
+      _swapNotifCards(card, behind);
+    } else {
+      // رجع
+      card.style.transform = '';
+      card.style.opacity = '';
+      if (behind) {
+        behind.style.transform = '';
+        behind.style.opacity = '';
+      }
+    }
+    
+    startY = 0;
+    currentY = 0;
+  };
+  
+  card.addEventListener('touchstart', onStart, { passive: true });
+  card.addEventListener('touchmove', onMove, { passive: true });
+  card.addEventListener('touchend', onEnd);
+  card.addEventListener('mousedown', onStart);
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onEnd);
+}
+
+/* ===== تبديل الكارتين ===== */
+function _swapNotifCards(topCard, behindCard) {
+  if (!topCard || !behindCard) return;
+  
+  topCard.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease';
+  behindCard.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease';
+  
+  topCard.style.transform = 'translateY(14px) scale(0.94)';
+  topCard.style.opacity = '0.6';
+  behindCard.style.transform = 'translateY(0) scale(1)';
+  behindCard.style.opacity = '1';
+  
+  setTimeout(() => {
+    topCard.classList.remove('is-top');
+    topCard.classList.add('is-behind');
+    behindCard.classList.add('is-top');
+    behindCard.classList.remove('is-behind');
+    
+    topCard.style.transform = '';
+    topCard.style.opacity = '';
+    topCard.style.transition = '';
+    behindCard.style.transform = '';
+    behindCard.style.opacity = '';
+    behindCard.style.transition = '';
+  }, 400);
+}
+
+/* ===== Wrapper على showNotification ===== */
+(function() {
+  if (typeof window.showNotification !== 'function') return;
+  if (window.showNotification._stackWrapped) return;
+  
+  const _orig = window.showNotification;
+  
+  window.showNotification = function(opts) {
+    const o = Object.assign({}, opts || {});
+    
+    if (o.duration === undefined) o.duration = NOTIF_DEFAULT_DURATION;
+    
+    const stack = document.getElementById('notifStack');
+    if (stack) {
+      const existing = stack.querySelectorAll('.notif-card:not(.dismissing)');
+      if (existing.length >= NOTIF_MAX) {
+        const oldest = existing[existing.length - 1];
+        dismissNotif(oldest);
+      }
+    }
+    
+    const card = _orig.call(this, o);
+    
+    if (card) {
+      setTimeout(() => _setupNotifSwipe(card), 50);
+    }
+    
+    setTimeout(_refreshNotifStack, 30);
+    
+    return card;
+  };
+  
+  window.showNotification._stackWrapped = true;
+})();
+
+/* ===== تحديث الترتيب عند الحذف ===== */
+(function() {
+  if (typeof window.dismissNotif !== 'function') return;
+  if (window.dismissNotif._stackWrapped) return;
+  
+  const _orig = window.dismissNotif;
+  
+  window.dismissNotif = function(card) {
+    if (card) _orig.call(this, card);
+    setTimeout(_refreshNotifStack, 400);
+  };
+  
+  window.dismissNotif._stackWrapped = true;
+})();
+
+console.log('✅ Notification Stack loaded (max 2)');
 console.log('✅ Login Page JS loaded');
 </script>
 
