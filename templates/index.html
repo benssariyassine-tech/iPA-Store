@@ -6179,7 +6179,11 @@ similarApps = similarApps.slice(0, 6);
     '<path d="M15 19l-7-7 7-7"/>'+
   '</svg>'+
 '</button>'
-    document.getElementById('appDetailModal').style.display = 'flex';
+    // سد البحث إلا كان مفتوح
+    const searchOv = document.getElementById('searchOverlay');
+    if (searchOv && searchOv.classList.contains('open')) {
+      closeSearchOverlay();
+    }document.getElementById('appDetailModal').style.display = 'flex';
    document.querySelector('.bottom-sheet-content').scrollTop = 0;
   }).catch(err=>{ console.warn('Comments err:',err); });
 }
