@@ -10402,12 +10402,28 @@ function closeSettingsPage(){
   if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
 }
 
-/* ===== SYNC UI (يجيب القيم من الحالة) ===== */
 function syncSettingsUI(){
   // ---- Account ----
   syncAccountRow();
   
+  // ---- Theme (نجيبو الحالي) ----
+  const curTheme = (typeof getCurrentTheme === 'function') ? getCurrentTheme() : 'sea';
+  
   // ---- Appearance ----
+  // 🎨 Dark Mode يبان فقط في ثيم Gold
+  const darkModeRow = document.getElementById('stgDarkModeRow');
+  if(darkModeRow){
+    if(curTheme === 'gold'){
+      darkModeRow.style.display = '';
+    } else {
+      darkModeRow.style.display = 'none';
+      // إذا خبي، تاكد من يمسح light-mode
+      if(isLightMode && curTheme !== 'light'){
+        // خليه كيفما هو، ما نغيروش
+      }
+    }
+  }
+  
   syncToggle('stgDarkMode', isLightMode);
   syncToggle('stgAnimations', appSettings.animations !== false);
   
@@ -10417,8 +10433,7 @@ function syncSettingsUI(){
       dark: 'Dark', light: 'Light', gold: 'Gold',
       algeria: 'Algeria', redblack: 'Red & Black', sea: 'Deep Sea'
     };
-    const cur = (typeof getCurrentTheme === 'function') ? getCurrentTheme() : 'sea';
-    themeVal.textContent = themeNames[cur] || 'Sea';
+    themeVal.textContent = themeNames[curTheme] || 'Sea';
   }
   
   const fontVal = document.getElementById('stgFontSizeValue');
