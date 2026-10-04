@@ -4538,6 +4538,479 @@ body.light-mode.algeria-mode { --accent: #006233; --accent2: #004d28; --glass-bg
 body.light-mode.redblack-mode { --accent: #ff2a00; --accent2: #c41e00; --glass-bg: rgba(255,255,255,0.85); }
 body.light-mode.sea-mode { --accent: #0a84ff; --accent2: #0062d2; --glass-bg: rgba(255,255,255,0.85); }
 body.light-mode.premium-mode { --accent: #d4a017; --accent2: #b8860b; --glass-bg: rgba(255,255,255,0.85); }
+ /* ============================================
+   ⚙️ SETTINGS PAGE — iOS 26 Style (Glass)
+   ============================================ */
+
+/* ===== PAGE CONTAINER ===== */
+.stg-page {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-color);
+  z-index: 4000;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.3s ease,
+              visibility 0.4s;
+  overflow: hidden;
+}
+.stg-page.open {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== FLOATING BACK BUTTON ===== */
+.stg-back {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  left: 16px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2),
+              inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.stg-back:active {
+  transform: scale(0.9);
+  background: var(--card-bg);
+}
+.stg-back svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  display: block;
+  margin-left: -2px;
+}
+body[dir="rtl"] .stg-back svg {
+  transform: scaleX(-1);
+  margin-left: 0;
+  margin-right: -2px;
+}
+
+/* ===== TITLE ===== */
+.stg-title {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 0px) + 22px);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-color);
+  margin: 0;
+  padding: 0 60px;
+  letter-spacing: -0.3px;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ===== SCROLL AREA ===== */
+.stg-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: calc(env(safe-area-inset-top, 0px) + 72px) 16px 40px;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* ===== SECTION LABEL ===== */
+.stg-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--subtext-color);
+  text-transform: uppercase;
+  letter-spacing: 1.6px;
+  padding: 0 6px;
+  margin: 22px 0 8px;
+  opacity: 0.85;
+}
+.stg-label:first-child {
+  margin-top: 6px;
+}
+
+/* ===== CARD (iOS 26 Glass) ===== */
+.stg-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12),
+              inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  margin-bottom: 4px;
+}
+
+/* ===== ROW ===== */
+.stg-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  width: 100%;
+  text-align: left;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 15px;
+  cursor: default;
+  position: relative;
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+body[dir="rtl"] .stg-row {
+  text-align: right;
+}
+.stg-row:last-child {
+  border-bottom: none;
+}
+
+/* صف اللي كيتكليكى عليه */
+button.stg-row {
+  cursor: pointer;
+}
+button.stg-row:active {
+  background: rgba(255, 255, 255, 0.05);
+}
+body.light-mode button.stg-row:active {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* ===== ICON CIRCLE ===== */
+.stg-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: var(--accent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+body.light-mode .stg-icon {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.stg-icon svg {
+  width: 17px;
+  height: 17px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+.stg-icon-danger {
+  color: var(--danger);
+}
+
+/* ===== INFO (Label + Sub) ===== */
+.stg-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stg-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-color);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stg-sub {
+  font-size: 12px;
+  color: var(--subtext-color);
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===== VALUE (Right Side) ===== */
+.stg-value {
+  font-size: 14px;
+  color: var(--subtext-color);
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: capitalize;
+}
+
+/* ===== CHEVRON ===== */
+.stg-chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--subtext-color);
+  opacity: 0.55;
+}
+.stg-chevron svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  display: block;
+}
+body[dir="rtl"] .stg-chevron svg {
+  transform: scaleX(-1);
+}
+
+/* ===== ACCOUNT ROW (Special) ===== */
+.stg-card-account .stg-row {
+  padding: 16px;
+}
+.stg-row-account {
+  gap: 14px;
+}
+.stg-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+}
+.stg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.stg-avatar svg {
+  width: 24px;
+  height: 24px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.stg-row-account .stg-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+.stg-row-account .stg-sub {
+  font-size: 12.5px;
+}
+
+/* ===== TOGGLE (iOS Style) ===== */
+.stg-toggle {
+  position: relative;
+  width: 51px;
+  height: 31px;
+  border-radius: 15.5px;
+  background: var(--border-color);
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0;
+  transition: background 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.stg-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25),
+              0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.stg-toggle.on {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.stg-toggle.on::after {
+  transform: translateX(20px);
+}
+.stg-toggle:active::after {
+  width: 31px;
+}
+.stg-toggle.on:active::after {
+  transform: translateX(16px);
+  width: 31px;
+}
+
+/* RTL Toggle */
+body[dir="rtl"] .stg-toggle::after {
+  left: auto;
+  right: 2px;
+}
+body[dir="rtl"] .stg-toggle.on::after {
+  transform: translateX(-20px);
+}
+body[dir="rtl"] .stg-toggle.on:active::after {
+  transform: translateX(-16px);
+}
+
+/* ===== DANGER ROW ===== */
+.stg-row-danger .stg-name {
+  color: var(--danger);
+}
+
+/* ===== LIGHT MODE ===== */
+body.light-mode .stg-page {
+  background: var(--bg-color);
+}
+body.light-mode .stg-card {
+  background: var(--glass-bg);
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+body.light-mode .stg-toggle {
+  background: rgba(0, 0, 0, 0.12);
+}
+body.light-mode .stg-back {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+              inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* ===== SMALL SCREENS (iPhone XR / SE) ===== */
+@media (max-width: 400px) {
+  .stg-back {
+    width: 38px;
+    height: 38px;
+    top: calc(env(safe-area-inset-top, 0px) + 12px);
+    left: 12px;
+  }
+  .stg-back svg {
+    width: 18px;
+    height: 18px;
+  }
+  .stg-title {
+    font-size: 18px;
+    top: calc(env(safe-area-inset-top, 0px) + 20px);
+  }
+  .stg-scroll {
+    padding: calc(env(safe-area-inset-top, 0px) + 64px) 14px 40px;
+  }
+  .stg-row {
+    padding: 13px 14px;
+    gap: 12px;
+  }
+  .stg-name {
+    font-size: 14.5px;
+  }
+  .stg-sub {
+    font-size: 11.5px;
+  }
+  .stg-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+  }
+  .stg-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  .stg-avatar {
+    width: 48px;
+    height: 48px;
+  }
+  .stg-toggle {
+    width: 46px;
+    height: 28px;
+  }
+  .stg-toggle::after {
+    width: 24px;
+    height: 24px;
+  }
+  .stg-toggle.on::after {
+    transform: translateX(18px);
+  }
+  body[dir="rtl"] .stg-toggle.on::after {
+    transform: translateX(-18px);
+  }
+}
+
+/* ===== SAFE AREA (iPhone X+ with notch) ===== */
+@supports (padding: env(safe-area-inset-top)) {
+  .stg-scroll {
+    padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+/* ===== SMOOTH ENTRY ANIMATION ===== */
+@keyframes stgFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stg-card,
+.stg-label {
+  animation: stgFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.stg-card:nth-of-type(1) { animation-delay: 0.02s; }
+.stg-card:nth-of-type(2) { animation-delay: 0.05s; }
+.stg-card:nth-of-type(3) { animation-delay: 0.08s; }
+.stg-card:nth-of-type(4) { animation-delay: 0.11s; }
+.stg-card:nth-of-type(5) { animation-delay: 0.14s; }
+.stg-card:nth-of-type(6) { animation-delay: 0.17s; }
+.stg-card:nth-of-type(7) { animation-delay: 0.20s; }
+.stg-card:nth-of-type(8) { animation-delay: 0.23s; }
+
+/* ===== PREVENT BODY SCROLL WHEN PAGE OPEN ===== */
+body.stg-open {
+  overflow: hidden;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -8875,6 +9348,523 @@ if (typeof renderUI === 'function' && !renderUI._wrapped) {
   };
   window.renderUI._wrapped = true;
 }
+ 
+/* ============================================
+   ⚙️ SETTINGS PAGE — JavaScript Controller
+   ============================================ */
+
+/* ===== OPEN / CLOSE ===== */
+function openSettingsPage(){
+  const page = document.getElementById('settingsPage');
+  if(!page) return;
+  
+  // زامن كل شي قبل ما تفتح
+  syncSettingsUI();
+  
+  // زيد كلاس
+  page.classList.add('open');
+  document.body.classList.add('stg-open');
+  
+  // خبي القائمة السفلية
+  const nav = document.querySelector('.isto-nav-wrap');
+  if(nav) nav.style.display = 'none';
+  
+  // سكرول لفوق
+  const scroll = page.querySelector('.stg-scroll');
+  if(scroll) scroll.scrollTop = 0;
+  
+  // حسب حجم الكاش
+  setTimeout(updateCacheSize, 200);
+  
+  // Vibration خفيف (iPhone XR ما فيهش لكن ماشي مشكل)
+  if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
+}
+
+function closeSettingsPage(){
+  const page = document.getElementById('settingsPage');
+  if(!page) return;
+  
+  page.classList.remove('open');
+  document.body.classList.remove('stg-open');
+  
+  // رجع القائمة السفلية
+  const nav = document.querySelector('.isto-nav-wrap');
+  if(nav) nav.style.display = '';
+  
+  if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
+}
+
+/* ===== SYNC UI (يجيب القيم من الحالة) ===== */
+function syncSettingsUI(){
+  // ---- Account ----
+  syncAccountRow();
+  
+  // ---- Appearance ----
+  syncToggle('stgDarkMode', isLightMode);
+  syncToggle('stgAnimations', appSettings.animations !== false);
+  
+  const themeVal = document.getElementById('stgThemeValue');
+  if(themeVal){
+    const themeNames = {
+      dark: 'Dark', light: 'Light', gold: 'Gold',
+      algeria: 'Algeria', redblack: 'Red & Black', sea: 'Deep Sea'
+    };
+    const cur = (typeof getCurrentTheme === 'function') ? getCurrentTheme() : 'sea';
+    themeVal.textContent = themeNames[cur] || 'Sea';
+  }
+  
+  const fontVal = document.getElementById('stgFontSizeValue');
+  if(fontVal){
+    const fontNames = { small: 'Small', medium: 'Medium', large: 'Large' };
+    fontVal.textContent = fontNames[appSettings.fontSize] || 'Medium';
+  }
+  
+  // ---- Notifications ----
+  syncToggle('stgNotifications', appSettings.notifications !== false);
+  syncToggle('stgUpdateAlerts', appSettings.updateAlerts !== false);
+  
+  // ---- Downloads ----
+  syncToggle('stgAutoDownload', appSettings.autoDownload !== false);
+  syncToggle('stgWifiOnly', appSettings.wifiOnly === true);
+  
+  // ---- Language ----
+  const langVal = document.getElementById('stgLanguageValue');
+  if(langVal){
+    langVal.textContent = (currentLang === 'ar') ? 'العربية' : 'English';
+    langVal.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
+  }
+  
+  // ---- Admin ----
+  syncAdminSection();
+}
+
+function syncToggle(id, isOn){
+  const el = document.getElementById(id);
+  if(el) el.classList.toggle('on', !!isOn);
+}
+
+function syncAccountRow(){
+  const avatar = document.getElementById('stgAvatar');
+  const name = document.getElementById('stgName');
+  const email = document.getElementById('stgEmail');
+  
+  if(!avatar || !name || !email) return;
+  
+  if(currentUser){
+    // مسجل - نعرضو معلوماتو
+    if(userProfile.avatar){
+      avatar.innerHTML = '<img src="'+userProfile.avatar+'" alt="Avatar" onerror="this.parentNode.innerHTML=\'<svg viewBox=\\\'0 0 24 24\\\' fill=\\\'none\\\' stroke=\\\'currentColor\\\' stroke-width=\\\'2.2\\\'><path d=\\\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\\\'/><circle cx=\\\'12\\\' cy=\\\'7\\\' r=\\\'4\\\'/></svg>\'">';
+    } else {
+      avatar.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    }
+    name.textContent = userProfile.displayName || currentUser.email.split('@')[0] || 'User';
+    email.textContent = currentUser.email || '';
+    name.removeAttribute('data-i18n');
+    email.removeAttribute('data-i18n');
+  } else {
+    // ماشي مسجل
+    avatar.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    name.textContent = t('signIn') || 'Sign In';
+    email.textContent = t('tapToSignIn') || 'Tap to sign in';
+    name.setAttribute('data-i18n', 'signIn');
+    email.setAttribute('data-i18n', 'tapToSignIn');
+  }
+}
+
+function syncAdminSection(){
+  const label = document.getElementById('stgAdminLabel');
+  const card = document.getElementById('stgAdminCard');
+  if(!label || !card) return;
+  
+  if(isAdmin && !isUserPreview){
+    label.style.display = '';
+    card.style.display = '';
+    syncToggle('stgUserPreview', false);
+  } else {
+    label.style.display = 'none';
+    card.style.display = 'none';
+  }
+}
+
+/* ===== CACHE SIZE ===== */
+async function updateCacheSize(){
+  const el = document.getElementById('stgCacheSize');
+  if(!el) return;
+  
+  el.textContent = '...';
+  
+  try {
+    let total = 0;
+    
+    // 1. localStorage
+    try {
+      for(let key in localStorage){
+        if(localStorage.hasOwnProperty(key)){
+          total += (localStorage[key].length + key.length) * 2; // UTF-16
+        }
+      }
+    } catch(e){}
+    
+    // 2. IndexedDB
+    try {
+      if(window.indexedDB && indexedDB.databases){
+        const dbs = await indexedDB.databases();
+        for(const db of dbs){
+          if(db.name){
+            // نقدرو نقدرو الحجم بشكل تقريبي
+            total += 50 * 1024; // 50KB افتراضي لكل DB (تقريبي)
+          }
+        }
+      }
+    } catch(e){}
+    
+    // 3. Cache API
+    try {
+      if('caches' in window){
+        const cacheNames = await caches.keys();
+        for(const name of cacheNames){
+          const cache = await caches.open(name);
+          const keys = await cache.keys();
+          for(const req of keys){
+            const res = await cache.match(req);
+            if(res){
+              const blob = await res.clone().blob();
+              total += blob.size;
+            }
+          }
+        }
+      }
+    } catch(e){}
+    
+    // 4. Service Worker Registration (تقريبي)
+    try {
+      if('serviceWorker' in navigator){
+        const reg = await navigator.serviceWorker.getRegistration();
+        if(reg) total += 20 * 1024; // 20KB تقريبي
+      }
+    } catch(e){}
+    
+    el.textContent = formatBytes(total);
+  } catch(e){
+    el.textContent = '—';
+  }
+}
+
+function formatBytes(bytes){
+  if(bytes === 0) return '0 B';
+  if(bytes < 1024) return bytes + ' B';
+  if(bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  if(bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+  return (bytes / (1024 * 1024 * 1024)).toFixed(2) + ' GB';
+}
+
+/* ===== TOGGLE SETTING (محدث - يدعم القديم والجديد) ===== */
+function toggleSetting(name){
+  if(name === 'darkMode'){
+    // Dark Mode يتحكم في الوضع فقط
+    if(typeof toggleDarkMode === 'function'){
+      toggleDarkMode();
+    } else {
+      isLightMode = !isLightMode;
+      document.body.classList.toggle('light-mode', isLightMode);
+    }
+    appSettings.darkMode = isLightMode;
+    syncToggle('stgDarkMode', isLightMode);
+    // تحديث القديم تاني
+    const oldEl = document.getElementById('settingDarkMode');
+    if(oldEl) oldEl.classList.toggle('on', isLightMode);
+  } else {
+    // باقي الإعدادات
+    appSettings[name] = !appSettings[name];
+    
+    // تحديث الجديد
+    const newMap = {
+      notifications: 'stgNotifications',
+      updateAlerts: 'stgUpdateAlerts',
+      autoDownload: 'stgAutoDownload',
+      wifiOnly: 'stgWifiOnly',
+      animations: 'stgAnimations'
+    };
+    if(newMap[name]) syncToggle(newMap[name], appSettings[name]);
+    
+    // تحديث القديم
+    const oldMap = {
+      notifications: 'settingNotifications',
+      autoDownload: 'settingAutoDownload'
+    };
+    if(oldMap[name]){
+      const oldEl = document.getElementById(oldMap[name]);
+      if(oldEl) oldEl.classList.toggle('on', appSettings[name]);
+    }
+    
+    // إجراءات خاصة
+    if(name === 'notifications'){
+      if(appSettings[name]){
+        requestNotificationPermission();
+      } else {
+        showToast(currentLang==='ar'?'تم إيقاف الإشعارات':'Notifications disabled', 'info', 1500);
+      }
+    } else if(name === 'animations'){
+      applyAnimationsSetting(appSettings[name]);
+      showToast(
+        currentLang==='ar'
+          ? (appSettings[name]?'تم تفعيل الحركات':'تم إيقاف الحركات')
+          : ('Animations: ' + (appSettings[name]?'ON':'OFF')),
+        'info', 1500
+      );
+    } else if(name === 'wifiOnly'){
+      showToast(
+        currentLang==='ar'
+          ? (appSettings[name]?'التحميل على Wi-Fi فقط':'التحميل على أي شبكة')
+          : ('Wi-Fi Only: ' + (appSettings[name]?'ON':'OFF')),
+        'info', 1500
+      );
+    } else {
+      showToast(name + ': ' + (appSettings[name] ? 'ON' : 'OFF'), 'info', 1500);
+    }
+  }
+  
+  saveSettings();
+}
+
+/* ===== NOTIFICATION PERMISSION ===== */
+function requestNotificationPermission(){
+  if(!('Notification' in window)){
+    showToast(
+      currentLang==='ar'?'متصفحك ما يدعمش الإشعارات':'Browser doesn\'t support notifications',
+      'warning', 2500
+    );
+    appSettings.notifications = false;
+    syncToggle('stgNotifications', false);
+    saveSettings();
+    return;
+  }
+  
+  if(Notification.permission === 'granted'){
+    showToast(
+      currentLang==='ar'?'الإشعارات مفعّلة':'Notifications enabled',
+      'success', 1500
+    );
+    return;
+  }
+  
+  if(Notification.permission === 'denied'){
+    showToast(
+      currentLang==='ar'?'الإشعارات محظورة من إعدادات المتصفح':'Notifications blocked in browser settings',
+      'error', 3000
+    );
+    appSettings.notifications = false;
+    syncToggle('stgNotifications', false);
+    saveSettings();
+    return;
+  }
+  
+  Notification.requestPermission().then(perm => {
+    if(perm === 'granted'){
+      showToast(
+        currentLang==='ar'?'تم تفعيل الإشعارات':'Notifications enabled',
+        'success', 1800
+      );
+      appSettings.notifications = true;
+    } else {
+      showToast(
+        currentLang==='ar'?'تم رفض الإشعارات':'Notifications denied',
+        'warning', 2000
+      );
+      appSettings.notifications = false;
+    }
+    syncToggle('stgNotifications', appSettings.notifications);
+    saveSettings();
+  });
+}
+
+/* ===== ANIMATIONS ===== */
+function applyAnimationsSetting(enabled){
+  const html = document.documentElement;
+  if(enabled){
+    html.style.removeProperty('--anim-duration');
+    document.body.classList.remove('no-animations');
+  } else {
+    document.body.classList.add('no-animations');
+  }
+}
+
+/* ===== FONT SIZE PAGE ===== */
+function openFontSizePage(){
+  // دركا، نعرضو قائمة سريعة
+  const sizes = [
+    { value: 'small',  label: currentLang==='ar'?'صغير'  : 'Small'  },
+    { value: 'medium', label: currentLang==='ar'?'متوسط' : 'Medium' },
+    { value: 'large',  label: currentLang==='ar'?'كبير'  : 'Large'  }
+  ];
+  
+  const current = appSettings.fontSize || 'medium';
+  
+  // نستعملو UI بسيط
+  const choice = prompt(
+    currentLang==='ar'?'اختر حجم الخط:\n1. صغير\n2. متوسط\n3. كبير':'Choose font size:\n1. Small\n2. Medium\n3. Large',
+    String(sizes.findIndex(s => s.value === current) + 1)
+  );
+  
+  const idx = parseInt(choice) - 1;
+  if(sizes[idx]){
+    const newSize = sizes[idx].value;
+    appSettings.fontSize = newSize;
+    applyFontSize(newSize);
+    saveSettings();
+    
+    const fontVal = document.getElementById('stgFontSizeValue');
+    if(fontVal) fontVal.textContent = sizes[idx].label;
+    
+    showToast(
+      currentLang==='ar'?'حجم الخط: '+sizes[idx].label:'Font size: '+sizes[idx].label,
+      'success', 1500
+    );
+  }
+}
+
+/* ===== LANGUAGE PAGE ===== */
+function openLanguagePage(){
+  const langs = [
+    { value: 'ar', label: 'العربية' },
+    { value: 'en', label: 'English' }
+  ];
+  
+  const current = currentLang || 'ar';
+  const choice = prompt(
+    currentLang==='ar'?'اختر اللغة:\n1. العربية\n2. English':'Choose language:\n1. العربية\n2. English',
+    String(langs.findIndex(l => l.value === current) + 1)
+  );
+  
+  const idx = parseInt(choice) - 1;
+  if(langs[idx]){
+    changeLanguage(langs[idx].value);
+    setTimeout(syncSettingsUI, 100);
+  }
+}
+
+/* ===== CONTACT SUPPORT ===== */
+function contactSupport(){
+  closeSettingsPage();
+  setTimeout(() => {
+    if(typeof openAiChat === 'function') openAiChat();
+  }, 250);
+}
+
+/* ===== RATE STORE ===== */
+function rateStore(){
+  showToast(
+    currentLang==='ar'?'شكراً لتقييمك iStore':'Thanks for rating iStore',
+    'success', 2000
+  );
+  // ممكن نضيف رابط Play Store / موقع
+}
+
+/* ===== RESET ALL SETTINGS ===== */
+function resetAllSettings(){
+  const msg = currentLang==='ar'
+    ? 'إعادة تعيين كل الإعدادات؟\nراح ترجع الثيم، اللغة، الإشعارات وكل شي للحالة الأصلية.'
+    : 'Reset all settings?\nTheme, language, notifications and everything will return to defaults.';
+  
+  if(!confirm(msg)) return;
+  
+  try {
+    // امسح كل شي متعلق بالإعدادات
+    localStorage.removeItem('istore_prefs');
+    localStorage.removeItem('istore_app_settings');
+    localStorage.removeItem('istore_lang');
+    localStorage.removeItem('istore_theme');
+    localStorage.removeItem('istore_admin_test_premium');
+    
+    showToast(
+      currentLang==='ar'?'تم إعادة التعيين، جاري التحديث...':'Settings reset. Reloading...',
+      'success', 1800
+    );
+    
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+  } catch(e){
+    showToast('Error: ' + e.message, 'error', 2500);
+  }
+}
+
+/* ===== UPDATE OPEN SETTINGS (القديم) ===== */
+// نخليو الدالة القديمة تفتح الصفحة الجديدة
+const _oldOpenSettings = window.openSettings;
+window.openSettings = function(){
+  openSettingsPage();
+};
+
+/* ===== LOAD SETTINGS (محدث) ===== */
+const _oldLoadSettings = window.loadSettings;
+window.loadSettings = function(){
+  try {
+    const s = JSON.parse(localStorage.getItem('istore_app_settings') || '{}');
+    if(s.darkMode !== undefined) appSettings.darkMode = s.darkMode;
+    if(s.notifications !== undefined) appSettings.notifications = s.notifications;
+    if(s.updateAlerts !== undefined) appSettings.updateAlerts = s.updateAlerts;
+    if(s.autoDownload !== undefined) appSettings.autoDownload = s.autoDownload;
+    if(s.wifiOnly !== undefined) appSettings.wifiOnly = s.wifiOnly;
+    if(s.animations !== undefined) appSettings.animations = s.animations;
+    if(s.fontSize) appSettings.fontSize = s.fontSize;
+    
+    // طبق الإعدادات
+    if(appSettings.darkMode && !isLightMode){
+      isLightMode = true;
+      document.body.classList.add('light-mode');
+    }
+    
+    if(appSettings.fontSize && typeof applyFontSize === 'function'){
+      applyFontSize(appSettings.fontSize);
+    }
+    
+    if(appSettings.animations === false){
+      applyAnimationsSetting(false);
+    }
+  } catch(e){
+    console.warn('loadSettings error:', e);
+  }
+};
+
+/* ===== INITIALIZE - كي يتحمل الموقع ===== */
+document.addEventListener('DOMContentLoaded', () => {
+  // تأكد أن الصفحة مقفولة في البداية
+  const page = document.getElementById('settingsPage');
+  if(page) page.classList.remove('open');
+  
+  // زامن بعد شوية
+  setTimeout(syncSettingsUI, 800);
+  setTimeout(syncSettingsUI, 2500);
+});
+
+/* ===== SYNC OVER TIME ===== */
+// كي يتبدل المستخدم (login/logout)
+if(typeof auth !== 'undefined' && auth.onAuthStateChanged){
+  auth.onAuthStateChanged(() => {
+    setTimeout(syncSettingsUI, 500);
+  });
+}
+
+// كي يتبدل الثيم
+const _oldApplyTheme = window.applyTheme;
+if(typeof _oldApplyTheme === 'function'){
+  window.applyTheme = function(theme){
+    _oldApplyTheme.call(this, theme);
+    setTimeout(syncSettingsUI, 50);
+  };
+}
+
+// كي تتبدل اللغة
+const _oldApplyTranslations = window.applyTranslations;
+if(typeof _oldApplyTranslations === 'function'){
+  window.applyTranslations = function(){
+    _oldApplyTranslations.call(this);
+    setTimeout(syncSettingsUI, 50);
+  };
+}
+
+console.log('✅ Settings Page JS loaded');
 </script>
 
 <div id="aiChatDrawer">
@@ -8967,6 +9957,342 @@ if (typeof renderUI === 'function' && !renderUI._wrapped) {
       <polyline points="6 15 12 9 18 15"/>
     </svg>
   </button>
+</div>
+ <!-- ============================================
+     ⚙️ SETTINGS PAGE (iOS 26 Style — Final)
+     ============================================ -->
+<div id="settingsPage" class="stg-page">
+  
+  <!-- ===== FLOATING BACK BUTTON ===== -->
+  <button class="stg-back" onclick="closeSettingsPage()" aria-label="Back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="15 18 9 12 15 6"/>
+    </svg>
+  </button>
+  
+  <!-- ===== TITLE (Centered) ===== -->
+  <h1 class="stg-title" data-i18n="settings">Settings</h1>
+  
+  <!-- ===== SCROLL ===== -->
+  <div class="stg-scroll">
+    
+    <!-- ===== ACCOUNT ===== -->
+    <section class="stg-card stg-card-account">
+      <button class="stg-row stg-row-account" onclick="openAccountModal()">
+        <div class="stg-avatar" id="stgAvatar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" id="stgName" data-i18n="signIn">Sign In</div>
+          <div class="stg-sub" id="stgEmail" data-i18n="tapToSignIn">Tap to sign in</div>
+        </div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+    </section>
+    
+    <!-- ===== APPEARANCE ===== -->
+    <div class="stg-label" data-i18n="sectionAppearance">APPEARANCE</div>
+    <section class="stg-card">
+      
+      <button class="stg-row" onclick="openThemeModal()">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13.5" cy="6.5" r="1.2"/>
+            <circle cx="17.5" cy="10.5" r="1.2"/>
+            <circle cx="8.5" cy="7.5" r="1.2"/>
+            <circle cx="6.5" cy="12.5" r="1.2"/>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="theme">Theme</div>
+        </div>
+        <div class="stg-value" id="stgThemeValue">Sea</div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="darkMode">Dark Mode</div>
+        </div>
+        <button class="stg-toggle" id="stgDarkMode" onclick="toggleSetting('darkMode')" aria-label="Toggle"></button>
+      </div>
+      
+      <button class="stg-row" onclick="openFontSizePage()">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="4 7 4 4 20 4 20 7"/>
+            <line x1="9" y1="20" x2="15" y2="20"/>
+            <line x1="12" y1="4" x2="12" y2="20"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="fontSize">Font Size</div>
+        </div>
+        <div class="stg-value" id="stgFontSizeValue">Medium</div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="animations">Animations</div>
+        </div>
+        <button class="stg-toggle" id="stgAnimations" onclick="toggleSetting('animations')" aria-label="Toggle"></button>
+      </div>
+      
+    </section>
+    
+    <!-- ===== NOTIFICATIONS ===== -->
+    <div class="stg-label" data-i18n="sectionNotifications">NOTIFICATIONS</div>
+    <section class="stg-card">
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="enableAlerts">Enable Alerts</div>
+          <div class="stg-sub" data-i18n="enableAlertsSub">System notifications</div>
+        </div>
+        <button class="stg-toggle" id="stgNotifications" onclick="toggleSetting('notifications')" aria-label="Toggle"></button>
+      </div>
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"/>
+            <polyline points="1 20 1 14 7 14"/>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/>
+            <path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="updateAlerts">Update Alerts</div>
+          <div class="stg-sub" data-i18n="updateAlertsSub">New app updates</div>
+        </div>
+        <button class="stg-toggle" id="stgUpdateAlerts" onclick="toggleSetting('updateAlerts')" aria-label="Toggle"></button>
+      </div>
+      
+    </section>
+    
+    <!-- ===== DOWNLOADS ===== -->
+    <div class="stg-label" data-i18n="sectionDownloads">DOWNLOADS</div>
+    <section class="stg-card">
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="autoDownload">Auto-download</div>
+          <div class="stg-sub" data-i18n="autoDownloadSub">Start instantly when tapped</div>
+        </div>
+        <button class="stg-toggle" id="stgAutoDownload" onclick="toggleSetting('autoDownload')" aria-label="Toggle"></button>
+      </div>
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+            <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+            <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+            <line x1="12" y1="20" x2="12.01" y2="20"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="wifiOnly">Wi-Fi Only</div>
+          <div class="stg-sub" data-i18n="wifiOnlySub">Download only on Wi-Fi</div>
+        </div>
+        <button class="stg-toggle" id="stgWifiOnly" onclick="toggleSetting('wifiOnly')" aria-label="Toggle"></button>
+      </div>
+      
+    </section>
+    
+    <!-- ===== LANGUAGE ===== -->
+    <div class="stg-label" data-i18n="sectionLanguage">LANGUAGE</div>
+    <section class="stg-card">
+      
+      <button class="stg-row" onclick="openLanguagePage()">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="language">Language</div>
+        </div>
+        <div class="stg-value" id="stgLanguageValue">العربية</div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+    </section>
+    
+    <!-- ===== STORAGE ===== -->
+    <div class="stg-label" data-i18n="sectionStorage">STORAGE</div>
+    <section class="stg-card">
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="cacheSize">Cache Size</div>
+        </div>
+        <div class="stg-value" id="stgCacheSize">—</div>
+      </div>
+      
+      <button class="stg-row" onclick="clearAppCache()">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="clearCache">Clear Cache</div>
+        </div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+      <button class="stg-row stg-row-danger" onclick="resetAllSettings()">
+        <div class="stg-icon stg-icon-danger">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="resetSettings">Reset Settings</div>
+          <div class="stg-sub" data-i18n="resetSettingsSub">Restore defaults</div>
+        </div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+    </section>
+    
+    <!-- ===== ABOUT ===== -->
+    <div class="stg-label" data-i18n="sectionAbout">ABOUT</div>
+    <section class="stg-card">
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="16" x2="12" y2="12"/>
+            <line x1="12" y1="8" x2="12.01" y2="8"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="appVersion">Version</div>
+        </div>
+        <div class="stg-value">iStore v3.1</div>
+      </div>
+      
+      <button class="stg-row" onclick="contactSupport()">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="contactSupport">Contact Support</div>
+        </div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+      <button class="stg-row" onclick="rateStore()">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="rateStore">Rate iStore</div>
+        </div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+    </section>
+    
+    <!-- ===== ADMIN (للأدمن فقط) ===== -->
+    <div class="stg-label stg-admin-only" id="stgAdminLabel" style="display:none;" data-i18n="sectionAdmin">ADMIN</div>
+    <section class="stg-card stg-admin-only" id="stgAdminCard" style="display:none;">
+      
+      <button class="stg-row" onclick="closeSettingsPage(); setTimeout(function(){ switchTab('admin_panel', null); }, 250);">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7l4 4 5-7 5 7 4-4v12H3V7z"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="adminDashboard">Admin Dashboard</div>
+        </div>
+        <span class="stg-chevron">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </span>
+      </button>
+      
+      <div class="stg-row">
+        <div class="stg-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="stg-info">
+          <div class="stg-name" data-i18n="userPreview">User Preview Mode</div>
+        </div>
+        <button class="stg-toggle" id="stgUserPreview" onclick="toggleUserPreview()" aria-label="Toggle"></button>
+      </div>
+      
+    </section>
+    
+    <!-- مساحة أسفل -->
+    <div style="height:60px;"></div>
+    
+  </div>
+  
 </div>
 </body>
 </html>
