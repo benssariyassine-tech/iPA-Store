@@ -10679,12 +10679,12 @@ function syncLoginUI(){
 }
 
 function syncLoginTitle(){
-  const t = document.querySelector('.lgn-title');
-  if(!t) return;
+  const titleEl = document.querySelector('.lgn-title');
+  if(!titleEl) return;
   if(currentUser) {
-    t.textContent = t('accountTitle') || (currentLang==='ar'?'حسابي':'Account');
+    titleEl.textContent = (currentLang==='ar' ? 'حسابي' : 'Account');
   } else {
-    t.textContent = t('signIn') || (currentLang==='ar'?'تسجيل الدخول':'Sign In');
+    titleEl.textContent = (currentLang==='ar' ? 'تسجيل الدخول' : 'Sign In');
   }
 }
 
