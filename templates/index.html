@@ -10833,6 +10833,8 @@ if(typeof _oldApplyTranslations === 'function'){
   };
 }
 /* ===== CHOICE MODAL (iOS Action Sheet) ===== */
+let _stgChoiceCallback = null;
+
 function showStgChoice(title, options, currentValue, onSelect){
   const modal = document.getElementById('stgChoiceModal');
   const titleEl = document.getElementById('stgChoiceTitle');
