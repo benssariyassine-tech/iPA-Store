@@ -11100,10 +11100,10 @@ window.openSettings = function(){
 };
 
 /* ===== LOAD SETTINGS (محدث) ===== */
-const _oldLoadSettings = window.loadSettings;
-window.loadSettings = function(){
+ function loadSettings(){
   try {
     const s = JSON.parse(localStorage.getItem('istore_app_settings') || '{}');
+    
     if(s.darkMode !== undefined) appSettings.darkMode = s.darkMode;
     if(s.notifications !== undefined) appSettings.notifications = s.notifications;
     if(s.updateAlerts !== undefined) appSettings.updateAlerts = s.updateAlerts;
@@ -11112,7 +11112,8 @@ window.loadSettings = function(){
     if(s.animations !== undefined) appSettings.animations = s.animations;
     if(s.fontSize) appSettings.fontSize = s.fontSize;
     
-    // طبق الإعدادات
+    console.log(' Settings loaded:', appSettings);
+    
     if(appSettings.darkMode && !isLightMode){
       isLightMode = true;
       document.body.classList.add('light-mode');
@@ -11128,8 +11129,7 @@ window.loadSettings = function(){
   } catch(e){
     console.warn('loadSettings error:', e);
   }
-};
-
+}
 /* ===== INITIALIZE - كي يتحمل الموقع ===== */
 document.addEventListener('DOMContentLoaded', () => {
   // تأكد أن الصفحة مقفولة في البداية
