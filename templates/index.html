@@ -11233,6 +11233,185 @@ setTimeout(() => {
   }
 }, 500);
 
+/* ============================================
+   📧 VERIFY EMAIL + RESEND CODE — Anti-Spam
+   ============================================ */
+
+const RESEND_COOLDOWN_MS = 10 * 60 * 1000; // 10 دقايق
+let _resendInterval = null;
+
+function _getResendCooldownKey() {
+  if (!auth.currentUser) return null;
+  return 'istore_resend_cooldown_' + auth.currentUser.uid;
+}
+function _getResendCooldownEnd() {
+  const key = _getResendCooldownKey();
+  if (!key) return 0;
+  try { return parseInt(localStorage.getItem(key) || '0', 10) || 0; }
+  catch(e) { return 0; }
+}
+function _setResendCooldownEnd(timestamp) {
+  const key = _getResendCooldownKey();
+  if (!key) return;
+  try { localStorage.setItem(key, String(timestamp)); } catch(e) {}
+}
+function _clearResendCooldown() {
+  const key = _getResendCooldownKey();
+  if (!key) return;
+  try { localStorage.removeItem(key); } catch(e) {}
+}
+function _formatTime(ms) {
+  const totalSec = Math.max(0, Math.ceil(ms / 1000));
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return String(min).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+}
+
+function _updateResendButton() {
+  const btn = document.getElementById('lgnResendBtn');
+  if (!btn) return;
+  
+  const end = _getResendCooldownEnd();
+  const now = Date.now();
+  const remaining = end - now;
+  const isAr = currentLang === 'ar';
+  
+  if (remaining > 0) {
+    btn.disabled = true;
+    btn.setAttribute('disabled', 'disabled');
+    btn.innerHTML =
+      '<span class="resend-timer">' +
+        '<svg viewBox="0 0 24 24">' +
+          '<circle cx="12" cy="12" r="10"/>' +
+          '<polyline points="12 6 12 12 16 14"/>' +
+        '</svg>' +
+        '<span>' + (isAr ? 'انتظر ' : 'Resend in ') + _formatTime(remaining) + '</span>' +
+      '</span>';
+  } else {
+    btn.disabled = false;
+    btn.removeAttribute('disabled');
+    btn.innerHTML = isAr ? 'إعادة إرسال الرمز' : 'Resend Code';
+  }
+}
+
+function _startResendTicker() {
+  if (_resendInterval) { clearInterval(_resendInterval); _resendInterval = null; }
+  _updateResendButton();
+  _resendInterval = setInterval(() => {
+    const end = _getResendCooldownEnd();
+    if (end > 0 && Date.now() >= end) {
+      _clearResendCooldown();
+      _updateResendButton();
+      clearInterval(_resendInterval);
+      _resendInterval = null;
+      return;
+    }
+    _updateResendButton();
+  }, 1000);
+}
+
+function _stopResendTicker() {
+  if (_resendInterval) { clearInterval(_resendInterval); _resendInterval = null; }
+}
+
+function _initResendTickerIfNeeded() {
+  const verifyView = document.getElementById('lgnVerifyView');
+  if (!verifyView) return;
+  if (verifyView.style.display === 'none') return;
+  _updateResendButton();
+  if (_getResendCooldownEnd() > Date.now()) {
+    _startResendTicker();
+  }
+}
+
+/* ===== Resend Code ===== */
+function resendCodeFromPage(){
+  if (!auth.currentUser) return;
+  
+  const end = _getResendCooldownEnd();
+  const now = Date.now();
+  
+  if (end > now) {
+    const remaining = end - now;
+    showToast(
+      currentLang === 'ar'
+        ? 'انتظر ' + _formatTime(remaining) + ' قبل إعادة الإرسال'
+        : 'Wait ' + _formatTime(remaining) + ' before resending',
+      'warning', 2500
+    );
+    return;
+  }
+  
+  const userEmail = auth.currentUser.email;
+  const uid = auth.currentUser.uid;
+  const btn = document.getElementById('lgnResendBtn');
+  
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
+  }
+  
+  db.collection("users").doc(uid).get().then(doc => {
+    if (!doc.exists) throw new Error('User not found');
+    const data = doc.data();
+    const newCode = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    return db.collection("users").doc(uid).update({ verificationCode: newCode })
+      .then(() => emailjs.send('service_x7p1ujg', 'template_mp4sdd5', {
+        to_name: data.displayName || 'User',
+        to_email: userEmail,
+        from_name: "iStore Team",
+        verification_code: newCode
+      }))
+      .then(() => {
+        _setResendCooldownEnd(Date.now() + RESEND_COOLDOWN_MS);
+        _startResendTicker();
+        
+        showToast(
+          currentLang === 'ar' ? 'تم إرسال رمز جديد ✓' : 'New code sent ✓',
+          'success', 2500
+        );
+        
+        setTimeout(() => {
+          showToast(
+            currentLang === 'ar'
+              ? 'يمكنك إعادة الإرسال بعد 10 دقايق'
+              : 'Resend available in 10 minutes',
+            'info', 3500
+          );
+        }, 900);
+      });
+  }).catch(err => {
+    console.warn('Resend error:', err);
+    showToast('Error: ' + (err.message || 'unknown'), 'error', 3000);
+    _updateResendButton();
+  });
+}
+
+/* ===== Verify Info Toast ===== */
+function showVerifyInfoToast(email) {
+  const toast = document.getElementById('verifyInfoToast');
+  const emailEl = document.getElementById('verifyInfoEmail');
+  if (!toast) return;
+  
+  if (emailEl) emailEl.textContent = email || '';
+  toast.classList.add('open');
+  
+  if (navigator.vibrate) try { navigator.vibrate(15); } catch(e) {}
+}
+
+function closeVerifyInfoToast() {
+  const toast = document.getElementById('verifyInfoToast');
+  if (toast) toast.classList.remove('open');
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+  
+  setTimeout(() => {
+    const inp = document.getElementById('lgnVerifyCode');
+    if (inp) inp.focus();
+  }, 200);
+}
+
+console.log('✅ Verify Email + Resend Code loaded');
 console.log('✅ Login Page JS loaded');
 </script>
 
@@ -11777,11 +11956,15 @@ console.log('✅ Login Page JS loaded');
       </div>
     </div>
 
-    <!-- ===== VERIFY CODE VIEW ===== -->
+<!-- ===== VERIFY CODE VIEW ===== -->
     <div id="lgnVerifyView" style="display:none;">
       <div class="lgn-hero">
-        <div class="lgn-icon-wrap" style="background:linear-gradient(135deg,#ff9f0a,#ff6b00);">
-          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <div class="lgn-icon-wrap lgn-icon-glass">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3 7l9 6 9-6"/>
+            <circle cx="12" cy="13" r="2" fill="currentColor" stroke="none"/>
+          </svg>
         </div>
         <h2 class="lgn-hero-title" data-i18n="verifyTitle">Verify Your Email</h2>
         <p class="lgn-hero-sub" data-i18n="verifySub">We sent a 6-digit code to your email. Enter it below.</p>
@@ -11790,7 +11973,7 @@ console.log('✅ Login Page JS loaded');
       <input type="text" id="lgnVerifyCode" class="lgn-code-input" placeholder="000000" maxlength="6" inputmode="numeric" autocomplete="one-time-code">
 
       <button onclick="verifyCodeFromPage()" class="lgn-btn lgn-btn-primary" data-i18n="verifyBtn">Verify Account</button>
-      <button onclick="resendCodeFromPage()" class="lgn-btn lgn-btn-secondary" data-i18n="resendCode">Resend Code</button>
+      <button onclick="resendCodeFromPage()" class="lgn-btn lgn-btn-secondary" id="lgnResendBtn">Resend Code</button>
 
       <div class="lgn-switch" style="margin-top:18px;">
         <button onclick="handleSignOut(); closeLoginPage();" style="color:var(--danger);" data-i18n="cancel">Cancel</button>
@@ -11844,6 +12027,30 @@ console.log('✅ Login Page JS loaded');
       </div>
     </div>
 
+  </div>
+</div>
+ <!-- ===== VERIFY EMAIL INFO TOAST ===== -->
+<div id="verifyInfoToast" class="verify-info-toast">
+  <div class="verify-info-card">
+    <div class="verify-info-icon">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="14" rx="2"/>
+        <path d="M3 7l9 6 9-6"/>
+        <circle cx="12" cy="13" r="2" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <h3 class="verify-info-title" data-i18n="checkEmailTitle">Check Your Email</h3>
+    <p class="verify-info-text" data-i18n="checkEmailText">We sent a 6-digit code to:</p>
+    <p class="verify-info-email" id="verifyInfoEmail">your@email.com</p>
+    <div class="verify-info-note">
+      <span data-i18n="checkEmailNote">📩 Also check your</span>
+      <strong data-i18n="spamFolder">Spam / Junk</strong>
+      <span data-i18n="checkEmailNote2">folder</span>
+    </div>
+    <button class="verify-info-btn" onclick="closeVerifyInfoToast()">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <span data-i18n="gotIt">Got it</span>
+    </button>
   </div>
 </div>
 </body>
