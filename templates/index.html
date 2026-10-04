@@ -10861,10 +10861,11 @@ function showStgChoice(title, options, currentValue, onSelect){
       '<span class="stg-modal-item-label">' + opt.label + '</span>' +
       '<svg class="check-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
     
-    btn.onclick = () => {
-      closeStgChoice();
-      if(_stgChoiceCallback) _stgChoiceCallback(opt.value);
-    };
+btn.onclick = () => {
+  const cb = _stgChoiceCallback;
+  closeStgChoice();
+  if(cb) cb(opt.value);
+};
     list.appendChild(btn);
   });
   
