@@ -5899,13 +5899,34 @@ function getActualDateString(){
 
 // ====== SWITCH TAB ======
 function switchTab(tabName, btnElement){
+  const container = document.getElementById('dynamicContent');
+  
+  // ✅ إذا كاين أنيميشن جاري، ما نبدلوش
+  if (container && container.classList.contains('tab-fading')) return;
+  
+  // ✅ Fade out سريع (150ms)
+  if (container) container.classList.add('tab-fading');
+  
+  // ✅ بدّل التاب فوراً (باش الزر يبان مفعّل)
   currentTab = tabName;
   document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
   if(btnElement) btnElement.classList.add('active');
-  else { const t = document.querySelector('.nav-item[data-tab="'+tabName+'"]'); if(t) t.classList.add('active'); }
+  else { 
+    const t = document.querySelector('.nav-item[data-tab="'+tabName+'"]'); 
+    if(t) t.classList.add('active'); 
+  }
+  
+  // ✅ سكرول للفوق
   window.scrollTo({top:0,behavior:'smooth'});
   savePrefs();
-  renderUI();
+  
+  // ✅ استنى شوية، بدّل المحتوى، ثم Fade in
+  setTimeout(() => {
+    renderUI();
+    requestAnimationFrame(() => {
+      if (container) container.classList.remove('tab-fading');
+    });
+  }, 150);
 }
 
 // ====== FAVORITES ======
