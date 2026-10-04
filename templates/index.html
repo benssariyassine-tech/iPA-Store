@@ -3094,68 +3094,184 @@ body[dir="rtl"] .isto-label {
   transform: scale(0.88);
 }
 
-/* 🔍 زر البحث المنفصل */
+/* ============================================
+   🔍 SEARCH FAB — GLASS BUTTON (Complete)
+   ============================================ */
 .search-fab {
   width: 60px;
   height: 60px;
   border-radius: 50%;
   flex-shrink: 0;
-  background: rgba(28, 28, 34, 0.55);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  
+  /* ✨ زجاجي شفاف */
+  background: rgba(28, 28, 34, 0.45);
+  backdrop-filter: blur(50px) saturate(200%);
+  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  
+  /* 🎨 حدود أنيقة */
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  
+  /* 💎 ظل + توهج داخلي */
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  color: #fff;
-  cursor: pointer;
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+  
+  /* 🎬 أنيميشن */
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* 🎯 تناسق مع القائمة */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  -webkit-tap-highlight-color: transparent;
+  color: #fff;
 }
 
+/* ✨ لمعة زجاجية في النص الفوق */
+.search-fab::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 55%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.25) 0%,
+    rgba(255, 255, 255, 0.05) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 50% 50% 0 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 🎬 تأثير عند الضغط */
 .search-fab:active {
   transform: scale(0.92);
-  background: rgba(28, 28, 34, 0.75);
+  background: rgba(28, 28, 34, 0.65);
+  border-color: rgba(10, 132, 255, 0.5);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    0 0 0 4px rgba(10, 132, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
+/* 🎨 تأثير عند المرور (Desktop) */
+.search-fab:hover {
+  transform: translateY(-2px);
+  border-color: rgba(10, 132, 255, 0.4);
+  background: rgba(28, 28, 34, 0.55);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.5),
+    0 0 25px rgba(10, 132, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 🔍 الأيقونة */
 .search-fab svg {
   width: 24px;
   height: 24px;
   stroke: #fff;
   fill: none;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
 }
 
-/* 🌓 الوضع الفاتح */
-body.light-mode .floating-nav,
+.search-fab:hover svg {
+  transform: scale(1.1) rotate(-8deg);
+}
+
+/* ============================================
+   🌓 LIGHT MODE
+   ============================================ */
 body.light-mode .search-fab {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
 }
 
-body.light-mode .nav-item {
-  color: rgba(0, 0, 0, 0.5);
-}
-
-body.light-mode .nav-item.active {
-  color: #fff;
+body.light-mode .search-fab::before {
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
 
 body.light-mode .search-fab svg {
   stroke: #000;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
-/* 📱 شاشات صغيرة */
+body.light-mode .search-fab:active {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(10, 132, 255, 0.5);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.1),
+    0 0 0 4px rgba(10, 132, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode .search-fab:hover {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(10, 132, 255, 0.4);
+  box-shadow: 
+    0 20px 45px rgba(0, 0, 0, 0.15),
+    0 0 25px rgba(10, 132, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+
+/* ============================================
+   📱 SMALL SCREENS (≤380px)
+   ============================================ */
 @media (max-width: 380px) {
-  .floating-nav { height: 54px; padding: 5px; }
-  .nav-item svg { width: 19px; height: 19px; }
-  .nav-item .nav-label { font-size: 8.5px; }
-  .search-fab { width: 54px; height: 54px; }
-  .search-fab svg { width: 20px; height: 20px; }
-  .isto-nav-wrap .isto-btn { bottom: calc(54px + 18px); }
+  .search-fab {
+    width: 54px;
+    height: 54px;
+    border-width: 1.2px;
+    box-shadow: 
+      0 12px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+  }
+  
+  .search-fab svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .search-fab:active {
+    box-shadow: 
+      0 6px 16px rgba(0, 0, 0, 0.35),
+      0 0 0 3px rgba(10, 132, 255, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+  
+  .search-fab:hover {
+    box-shadow: 
+      0 16px 38px rgba(0, 0, 0, 0.45),
+      0 0 20px rgba(10, 132, 255, 0.22),
+      inset 0 1px 0 rgba(255, 255, 255, 0.28);
+  }
+  
+  /* Light mode on small screens */
+  body.light-mode .search-fab {
+    box-shadow: 
+      0 12px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  }
 }
  /* ============================================
    🔔 NOTIFICATION SYSTEM (Glass + Theme)
