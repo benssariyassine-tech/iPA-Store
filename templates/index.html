@@ -11044,15 +11044,21 @@ function rateStore(){
 }
 
 /* ===== RESET ALL SETTINGS ===== */
-function resetAllSettings(){
-  const msg = currentLang==='ar'
-    ? 'إعادة تعيين كل الإعدادات؟\nراح ترجع الثيم، اللغة، الإشعارات وكل شي للحالة الأصلية.'
-    : 'Reset all settings?\nTheme, language, notifications and everything will return to defaults.';
+async function resetAllSettings(){
+  const confirmed = await showIOSConfirm({
+    type: 'danger',
+    icon: 'reset',
+    title: currentLang==='ar'?'إعادة تعيين الإعدادات':'Reset Settings',
+    message: currentLang==='ar'
+      ? 'راح ترجع الثيم، اللغة، الإشعارات وكل شي للحالة الأصلية.'
+      : 'Theme, language, notifications and everything will return to defaults.',
+    okText: currentLang==='ar'?'إعادة تعيين':'Reset',
+    cancelText: currentLang==='ar'?'إلغاء':'Cancel'
+  });
   
-  if(!confirm(msg)) return;
+  if(!confirmed) return;
   
   try {
-    // امسح كل شي متعلق بالإعدادات
     localStorage.removeItem('istore_prefs');
     localStorage.removeItem('istore_app_settings');
     localStorage.removeItem('istore_lang');
