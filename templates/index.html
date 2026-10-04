@@ -3784,6 +3784,237 @@ body.light-mode .detail-close-btn svg {
 body.light-mode .detail-close-btn:active {
   background: rgba(255, 255, 255, 0.9);
 }
+ /* ============================================
+   🔍 SEARCH OVERLAY (Telegram-Style)
+   ============================================ */
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-color);
+  z-index: 5000;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, visibility 0.4s;
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.search-overlay.open {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== HEADER ===== */
+.search-overlay-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.search-back-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s, background 0.2s;
+  padding: 0;
+}
+.search-back-btn:active { transform: scale(0.9); }
+.search-back-btn svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+body[dir="rtl"] .search-back-btn svg { transform: scaleX(-1); }
+
+.search-input-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 20px;
+  padding: 0 14px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  min-width: 0;
+}
+.search-input-wrap:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.12);
+}
+
+.search-input-icon {
+  width: 18px;
+  height: 18px;
+  stroke: var(--subtext-color);
+  fill: none;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+body[dir="rtl"] .search-input-icon {
+  margin-right: 0;
+  margin-left: 8px;
+}
+
+.search-overlay-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 12px 0;
+  min-width: 0;
+}
+.search-overlay-input::placeholder {
+  color: var(--subtext-color);
+  opacity: 0.7;
+}
+
+.search-clear-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--border-color);
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  transition: background 0.2s, transform 0.2s;
+  margin-left: 6px;
+}
+body[dir="rtl"] .search-clear-btn {
+  margin-left: 0;
+  margin-right: 6px;
+}
+.search-clear-btn.show { display: flex; }
+.search-clear-btn:active { transform: scale(0.85); }
+.search-clear-btn svg {
+  width: 11px;
+  height: 11px;
+  stroke: currentColor;
+}
+
+/* ===== FILTERS ===== */
+.search-filters {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 14px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+.search-filters::-webkit-scrollbar { display: none; }
+
+.search-chip {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid var(--glass-border);
+  color: var(--subtext-color);
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 12.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.search-chip:active { transform: scale(0.95); }
+
+.search-chip.active {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(10, 132, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+/* ===== RESULTS ===== */
+.search-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px 40px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.search-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: var(--subtext-color);
+  text-align: center;
+}
+.search-empty-state svg {
+  width: 70px;
+  height: 70px;
+  stroke: var(--border-color);
+  fill: none;
+  margin-bottom: 18px;
+}
+.search-empty-state p {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.search-results-heading {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--subtext-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ===== LIGHT MODE ===== */
+body.light-mode .search-overlay {
+  background: var(--bg-color);
+}
+body.light-mode .search-overlay-header {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 380px) {
+  .search-overlay-header { padding: 10px 12px; }
+  .search-back-btn { width: 36px; height: 36px; }
+  .search-overlay-input { font-size: 14px; }
+  .search-chip { padding: 7px 14px; font-size: 12px; }
+  .search-results { padding: 14px 16px 40px 16px; }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -3846,7 +4077,64 @@ body.light-mode .detail-close-btn:active {
         <div class="marquee-text" id="maintenanceText"></div>
     </div>
 </div>
+<!-- ============================================
+     🔍 SEARCH OVERLAY (Telegram-Style)
+     ============================================ -->
+<div id="searchOverlay" class="search-overlay">
+  
+  <!-- Header -->
+  <div class="search-overlay-header">
+    <button class="search-back-btn" onclick="closeSearchOverlay()" aria-label="Back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </button>
+    
+    <div class="search-input-wrap">
+      <svg class="search-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" 
+             id="searchOverlayInput" 
+             class="search-overlay-input" 
+             placeholder="ابحث عن تطبيق، لعبة أو أداة..."
+             oninput="onSearchOverlayInput()"
+             autocomplete="off"
+             autocorrect="off"
+             autocapitalize="off"
+             spellcheck="false">
+      <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearchOverlay()" aria-label="Clear">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
 
+  <!-- Filter Chips -->
+  <div class="search-filters" id="searchFilters">
+    <button class="search-chip active" data-filter="all" onclick="setSearchFilter('all', this)">All</button>
+    <button class="search-chip" data-filter="IPA" onclick="setSearchFilter('IPA', this)">iOS</button>
+    <button class="search-chip" data-filter="APK" onclick="setSearchFilter('APK', this)">Android</button>
+    <button class="search-chip" data-filter="apps" onclick="setSearchFilter('apps', this)">Apps</button>
+    <button class="search-chip" data-filter="games" onclick="setSearchFilter('games', this)">Games</button>
+    <button class="search-chip" data-filter="tools" onclick="setSearchFilter('tools', this)">Tools</button>
+  </div>
+
+  <!-- Results -->
+  <div class="search-results" id="searchOverlayResults">
+    <div class="search-empty-state">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <p>ابحث عن أي تطبيق أو لعبة أو أداة</p>
+    </div>
+  </div>
+
+</div>
 <div class="container">
 <div class="search-box">
 <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
