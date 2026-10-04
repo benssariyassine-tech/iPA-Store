@@ -4308,6 +4308,125 @@ body.light-mode .isto-nav-wrap .isto-btn .isto-body::before {
     height: 34px !important;
   }
 }
+ /* ============================================
+   🎧 SUPPORT & SETTINGS MENU
+   ============================================ */
+
+.isto-nav-wrap .isto-btn {
+  display: none !important;
+}
+
+.support-menu-wrap {
+  position: fixed;
+  right: 18px;
+  bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+.support-menu-wrap > * { pointer-events: auto; }
+
+.support-menu-chevron {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(28, 28, 34, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s, background 0.2s;
+}
+.support-menu-chevron:active { transform: scale(0.9); }
+.support-menu-chevron svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.support-menu-chevron.open svg { transform: rotate(180deg); }
+
+.support-menu-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px) scale(0.85);
+  transform-origin: bottom center;
+  transition: opacity 0.3s ease, visibility 0.3s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.support-menu-items.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.support-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px 10px 12px;
+  border-radius: 50px;
+  background: rgba(28, 28, 34, 0.75);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 0.2s, background 0.2s;
+}
+.support-menu-item:active { transform: scale(0.95); background: rgba(28, 28, 34, 0.9); }
+
+.support-robot-icon {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.support-robot-icon svg { width: 100%; height: 100%; }
+
+.support-menu-item > svg:not(.support-robot-icon svg) {
+  width: 20px;
+  height: 20px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+body.light-mode .support-menu-chevron,
+body.light-mode .support-menu-item {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+body.light-mode .support-menu-item:active { background: rgba(255, 255, 255, 0.95); }
+
+@media (max-width: 380px) {
+  .support-menu-wrap { right: 14px; bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+  .support-menu-chevron { width: 34px; height: 34px; }
+  .support-menu-chevron svg { width: 16px; height: 16px; }
+  .support-menu-item { padding: 9px 14px 9px 10px; font-size: 12px; }
+  .support-robot-icon { width: 26px; height: 26px; }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -8544,6 +8663,54 @@ window.addEventListener('popstate', function() {
     updateNavVisibility();
   });
 })();
+ /* ============================================
+   🎧 SUPPORT MENU — Toggle
+   ============================================ */
+function toggleSupportMenu() {
+  const items = document.getElementById('supportMenuItems');
+  const chevron = document.getElementById('supportMenuChevron');
+  if (!items || !chevron) return;
+  
+  const isOpen = items.classList.contains('open');
+  
+  if (isOpen) {
+    items.classList.remove('open');
+    chevron.classList.remove('open');
+  } else {
+    items.classList.add('open');
+    chevron.classList.add('open');
+    if (navigator.vibrate) navigator.vibrate(10);
+  }
+}
+
+function closeSupportMenu() {
+  const items = document.getElementById('supportMenuItems');
+  const chevron = document.getElementById('supportMenuChevron');
+  if (items) items.classList.remove('open');
+  if (chevron) chevron.classList.remove('open');
+}
+
+// 🚪 سد القائمة كي تكليكي برا منها
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('supportMenuWrap');
+  if (wrap && !wrap.contains(e.target)) {
+    closeSupportMenu();
+  }
+});
+
+// 🚪 سد القائمة كي يفتح البحث
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.search-fab')) {
+    closeSupportMenu();
+  }
+});
+
+// 🚪 سد القائمة كي يسد الشات
+document.addEventListener('click', function(e) {
+  if (e.target.closest('#aiChatDrawer')) {
+    // ما نديرو والو، غير ما نسدوش
+  }
+});
 </script>
 
 <div id="aiChatDrawer">
@@ -8588,6 +8755,48 @@ window.addEventListener('popstate', function() {
   </button>
 </div>
 </div>
+</div>
+ <!-- ============================================
+     🎧 SUPPORT & SETTINGS MENU (فوق زر البحث)
+     ============================================ -->
+<div class="support-menu-wrap" id="supportMenuWrap">
+  <div class="support-menu-items" id="supportMenuItems">
+    
+    <!-- 🎧 الدعم الفني (مع الروبوت) -->
+    <button class="support-menu-item" onclick="closeSupportMenu(); setTimeout(openAiChat, 200);">
+      <span class="support-robot-icon">
+        <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d='M 8 20 Q 8 8, 20 8 Q 32 8, 32 20'/>
+          <rect x='5' y='18' width='5' height='7' rx='2'/>
+          <rect x='30' y='18' width='5' height='7' rx='2'/>
+          <rect x='12' y='14' width='16' height='13' rx='4'/>
+          <circle cx='16.5' cy='19.5' r='1.4' fill='currentColor'/>
+          <circle cx='23.5' cy='19.5' r='1.4' fill='currentColor'/>
+          <line x1='17' y1='24' x2='23' y2='24'/>
+          <path d='M 33 24 Q 33 29, 28 30 L 24 30'/>
+          <circle cx='23' cy='30' r='1.6'/>
+        </svg>
+      </span>
+      <span>الدعم الفني</span>
+    </button>
+    
+    <!-- ⚙️ الإعدادات -->
+    <button class="support-menu-item" onclick="closeSupportMenu(); setTimeout(openSettings, 200);">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+      <span>الإعدادات</span>
+    </button>
+    
+  </div>
+  
+  <!-- ⬆️ السهم -->
+  <button class="support-menu-chevron" id="supportMenuChevron" onclick="toggleSupportMenu()" aria-label="القائمة">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 15 12 9 18 15"/>
+    </svg>
+  </button>
 </div>
 </body>
 </html>
