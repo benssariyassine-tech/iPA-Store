@@ -4449,6 +4449,95 @@ body[dir="rtl"] .admin-add-float {
     padding: 10px 16px !important;
   }
 }
+ /* ============================================
+   🎨 UNIFIED THEME SYSTEM — لكل الثيمات
+   ============================================ */
+
+/* ═══ 1. القائمة السفلية — كتتبع الثيم ═══ */
+.floating-nav {
+  background: var(--glass-bg) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+.nav-item { color: var(--subtext-color) !important; }
+
+.nav-item.active {
+  color: #fff !important;
+  background: linear-gradient(135deg, var(--accent), var(--accent2)) !important;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 1px 0 rgba(255,255,255,0.25) !important;
+}
+.nav-item.active svg { filter: drop-shadow(0 0 6px var(--accent)) !important; }
+
+/* ═══ 2. زر البحث — كيتبع الثيم ═══ */
+.search-fab {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+}
+.search-fab::after { display: none !important; }
+.search-fab svg { stroke: var(--text-color) !important; }
+
+/* ═══ 3. قائمة الدعم — كتتبع الثيم ═══ */
+.support-menu-chevron,
+.support-menu-item {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-color) !important;
+}
+.support-menu-chevron svg,
+.support-menu-item svg,
+.support-robot-icon { color: var(--accent) !important; stroke: currentColor !important; }
+
+/* ═══ 4. App Cards — كيتبعو الثيم ═══ */
+.app-card-pro {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+}
+.card-app-name { color: var(--text-color) !important; }
+.card-meta-line { color: var(--subtext-color) !important; }
+
+/* ═══ 5. WHITE / LIGHT MODE ═══ */
+body.light-mode {
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(0, 0, 0, 0.08);
+}
+body.light-mode .floating-nav,
+body.light-mode .search-fab,
+body.light-mode .support-menu-chevron,
+body.light-mode .support-menu-item {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+body.light-mode .nav-item { color: #666 !important; }
+body.light-mode .nav-item.active { color: #fff !important; }
+body.light-mode .search-fab svg { stroke: #000 !important; }
+body.light-mode .support-menu-item,
+body.light-mode .support-menu-chevron { color: #000 !important; }
+
+/* ═══ 6. DARK MODE + أي ثيم — كيخدم بـ accent الثيم ═══ */
+body:not(.light-mode) .floating-nav {
+  background: rgba(28, 28, 34, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+body:not(.light-mode) .search-fab {
+  background: rgba(28, 28, 34, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+body:not(.light-mode) .support-menu-chevron,
+body:not(.light-mode) .support-menu-item {
+  background: rgba(28, 28, 34, 0.75) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+}
+body:not(.light-mode) .nav-item { color: rgba(255, 255, 255, 0.5) !important; }
+
+/* ═══ 7. Light-mode في كل ثيم خاص ═══ */
+body.light-mode.algeria-mode { --accent: #006233; --accent2: #004d28; --glass-bg: rgba(255,255,255,0.85); }
+body.light-mode.redblack-mode { --accent: #ff2a00; --accent2: #c41e00; --glass-bg: rgba(255,255,255,0.85); }
+body.light-mode.sea-mode { --accent: #0a84ff; --accent2: #0062d2; --glass-bg: rgba(255,255,255,0.85); }
+body.light-mode.premium-mode { --accent: #d4a017; --accent2: #b8860b; --glass-bg: rgba(255,255,255,0.85); }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
