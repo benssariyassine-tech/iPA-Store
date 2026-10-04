@@ -4185,12 +4185,11 @@ body.overlay-active .isto-nav-wrap {
 #dynamicContent.tab-fading {
   opacity: 0.15;
 }
- /* ============================================
-   🎤 SUPPORT BUTTON — Professional Redesign
-   (دائري ذهبي، مايك، بدون isto، ثابت)
+/* ============================================
+   🎧 SUPPORT ROBOT — Glass + Headphones + Mic
    ============================================ */
 
-/* 1️⃣ الموضع: أسفل يسار */
+/* 1️⃣ الموضع أسفل يسار */
 .isto-nav-wrap .isto-btn {
   position: fixed !important;
   left: 16px !important;
@@ -4203,10 +4202,9 @@ body.overlay-active .isto-nav-wrap {
   background: rgba(28, 28, 34, 0.55) !important;
   backdrop-filter: blur(40px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
-  border: 1px solid rgba(212, 160, 23, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.45),
-    0 0 20px rgba(212, 160, 23, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
   animation: none !important;
   overflow: visible !important;
@@ -4218,7 +4216,7 @@ body.overlay-active .isto-nav-wrap {
   transition: transform 0.2s ease, background 0.2s ease !important;
 }
 
-/* 2️⃣ نخبيو كل أجزاء الروبوت القديم */
+/* 2️⃣ نخبيو كل الأجزاء القديمة */
 .isto-nav-wrap .isto-btn .isto-glow,
 .isto-nav-wrap .isto-btn .isto-ring,
 .isto-nav-wrap .isto-btn .isto-eyes,
@@ -4230,7 +4228,7 @@ body.overlay-active .isto-nav-wrap {
   display: none !important;
 }
 
-/* 3️⃣ الجسم: دائرة زجاجية + مايك ذهبي */
+/* 3️⃣ الجسم: نستعملو SVG فيه روبوت + سماعات + مايك */
 .isto-nav-wrap .isto-btn .isto-body {
   position: static !important;
   inset: auto !important;
@@ -4249,13 +4247,13 @@ body.overlay-active .isto-nav-wrap {
   content: '' !important;
   position: static !important;
   inset: auto !important;
-  width: 26px !important;
-  height: 26px !important;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4a017' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z'/><path d='M19 10v2a7 7 0 0 1-14 0v-2'/><line x1='12' y1='19' x2='12' y2='22'/></svg>") !important;
+  width: 38px !important;
+  height: 38px !important;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M 8 20 Q 8 8, 20 8 Q 32 8, 32 20'/><rect x='5' y='18' width='5' height='7' rx='2'/><rect x='30' y='18' width='5' height='7' rx='2'/><rect x='12' y='14' width='16' height='13' rx='4'/><circle cx='16.5' cy='19.5' r='1.4' fill='%23ffffff'/><circle cx='23.5' cy='19.5' r='1.4' fill='%23ffffff'/><line x1='17' y1='24' x2='23' y2='24'/><path d='M 33 24 Q 33 29, 28 30 L 24 30'/><circle cx='23' cy='30' r='1.6'/></svg>") !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
-  filter: drop-shadow(0 0 8px rgba(212, 160, 23, 0.7)) !important;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4)) !important;
   display: block !important;
 }
 
@@ -4265,7 +4263,7 @@ body.overlay-active .isto-nav-wrap {
   background: rgba(28, 28, 34, 0.75) !important;
 }
 
-/* 5️⃣ Badge (النقطة الحمراء كي يجي إشعار) */
+/* 5️⃣ Badge (النقطة الحمراء) */
 .isto-nav-wrap .isto-btn .isto-badge {
   display: none !important;
   position: absolute !important;
@@ -4286,12 +4284,16 @@ body.overlay-active .isto-nav-wrap {
 
 /* 6️⃣ الوضع الفاتح */
 body.light-mode .isto-nav-wrap .isto-btn {
-  background: rgba(255, 255, 255, 0.7) !important;
-  border-color: rgba(212, 160, 23, 0.4) !important;
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
   box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.15),
-    0 0 20px rgba(212, 160, 23, 0.15),
+    0 15px 40px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+body.light-mode .isto-nav-wrap .isto-btn .isto-body::before {
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3)) !important;
+  /* نخليو اللون أسود في الوضع الفاتح */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' fill='none' stroke='%23111' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M 8 20 Q 8 8, 20 8 Q 32 8, 32 20'/><rect x='5' y='18' width='5' height='7' rx='2'/><rect x='30' y='18' width='5' height='7' rx='2'/><rect x='12' y='14' width='16' height='13' rx='4'/><circle cx='16.5' cy='19.5' r='1.4' fill='%23111'/><circle cx='23.5' cy='19.5' r='1.4' fill='%23111'/><line x1='17' y1='24' x2='23' y2='24'/><path d='M 33 24 Q 33 29, 28 30 L 24 30'/><circle cx='23' cy='30' r='1.6'/></svg>") !important;
 }
 
 /* 7️⃣ شاشات صغيرة */
@@ -4302,8 +4304,8 @@ body.light-mode .isto-nav-wrap .isto-btn {
     left: 12px !important;
   }
   .isto-nav-wrap .isto-btn .isto-body::before {
-    width: 22px !important;
-    height: 22px !important;
+    width: 34px !important;
+    height: 34px !important;
   }
 }
 </style>
