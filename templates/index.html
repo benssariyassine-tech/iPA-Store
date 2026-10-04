@@ -5011,6 +5011,138 @@ body.light-mode .stg-back {
 body.stg-open {
   overflow: hidden;
 }
+ /* ===== SETTINGS CHOICE MODAL (iOS Action Sheet) ===== */
+.stg-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 8px calc(8px + env(safe-area-inset-bottom, 0px)) 8px;
+}
+.stg-modal.open {
+  display: flex;
+}
+
+.stg-modal-bg {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: stgFadeIn 0.25s ease;
+}
+
+.stg-modal-content {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: stgSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes stgSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.stg-modal-header {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 14px 16px;
+  text-align: center;
+}
+.stg-modal-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--subtext-color);
+  letter-spacing: -0.1px;
+}
+
+.stg-modal-list {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.stg-modal-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 15px 18px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.stg-modal-item:last-child {
+  border-bottom: none;
+}
+.stg-modal-item:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+body.light-mode .stg-modal-item:active {
+  background: rgba(0, 0, 0, 0.05);
+}
+.stg-modal-item.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+.stg-modal-item .check-icon {
+  width: 18px;
+  height: 18px;
+  stroke: var(--accent);
+  fill: none;
+  stroke-width: 2.5;
+  display: none;
+}
+.stg-modal-item.active .check-icon {
+  display: block;
+}
+
+.stg-modal-cancel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 15px;
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: background 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.stg-modal-cancel:active {
+  background: rgba(255, 255, 255, 0.08);
+}
+body.light-mode .stg-modal-cancel:active {
+  background: rgba(0, 0, 0, 0.05);
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -10293,6 +10425,17 @@ console.log('✅ Settings Page JS loaded');
     
   </div>
   
+</div>
+ <!-- ===== SETTINGS CHOICE MODAL ===== -->
+<div id="stgChoiceModal" class="stg-modal">
+  <div class="stg-modal-bg" onclick="closeStgChoice()"></div>
+  <div class="stg-modal-content">
+    <div class="stg-modal-header">
+      <h3 class="stg-modal-title" id="stgChoiceTitle">Choose</h3>
+    </div>
+    <div class="stg-modal-list" id="stgChoiceList"></div>
+    <button class="stg-modal-cancel" onclick="closeStgChoice()" data-i18n="cancel">Cancel</button>
+  </div>
 </div>
 </body>
 </html>
