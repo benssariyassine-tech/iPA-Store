@@ -8163,25 +8163,39 @@ async function _checkWiFiBeforeDownload() {
   
   // إذا ما عندناش معلومات → نفترضو أنو شبكة عادية (warn)
   if (!conn.hasInfo) {
-    const userConfirmed = confirm(
-      currentLang === 'ar'
-        ? '⚠️ Wi-Fi Only مفعّل. ما قدرناش نتحققو من نوع الشبكة.\n\nهل تريد المتابعة بأي حال؟'
-        : '⚠️ Wi-Fi Only is on. We couldn\'t detect your network type.\n\nContinue anyway?'
-    );
-    return userConfirmed;
+    const confirmed = await showIOSConfirm({
+      type: 'warning',
+      icon: 'wifi',
+      title: currentLang === 'ar' 
+        ? 'Wi-Fi Only مفعّل' 
+        : 'Wi-Fi Only is on',
+      message: currentLang === 'ar'
+        ? 'ما قدرناش نتحققو من نوع الشبكة. هل تريد المتابعة بأي حال؟'
+        : 'We couldn\'t detect your network type. Continue anyway?',
+      okText: currentLang === 'ar' ? 'متابعة' : 'Continue',
+      cancelText: currentLang === 'ar' ? 'إلغاء' : 'Cancel'
+    });
+    return confirmed;
   }
   
-  // إذا WiFi → OK
+  // (` إذا WiFi → OK
   if (conn.isWiFi) return true;
   
   // إذا ماشي WiFi → نسقسوه
-  const userConfirmed = confirm(
-    currentLang === 'ar'
-      ? '📡 أنت ماشي متصل بـ Wi-Fi.\n\nWi-Fi Only مفعّل في الإعدادات.\n\nهل تريد المتابعة بأي حال؟'
-      : '📡 You\'re not on Wi-Fi.\n\nWi-Fi Only is enabled.\n\nContinue anyway?'
-  );
+  const confirmed = await showIOSConfirm({
+    type: 'warning',
+    icon: 'wifi',
+    title: currentLang === 'ar' 
+      ? 'أنت ماشي على Wi-Fi' 
+      : 'Not on Wi-Fi',
+    message: currentLang === 'ar'
+      ? 'Wi-Fi Only مفعّل في الإعدادات. هل تريد المتابعة بأي حال؟'
+      : 'Wi-Fi Only is enabled. Continue anyway?',
+    okText: currentLang === 'ar' ? 'متابعة' : 'Continue',
+    cancelText: currentLang === 'ar' ? 'إلغاء' : 'Cancel'
+  });
   
-  return userConfirmed;
+  return confirmed;
 }
 
 /* التحميل الفعلي */
