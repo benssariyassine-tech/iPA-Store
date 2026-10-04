@@ -10646,8 +10646,6 @@ if(typeof _oldApplyTranslations === 'function'){
   };
 }
 /* ===== CHOICE MODAL (iOS Action Sheet) ===== */
-let _stgChoiceCallback = null;
-
 function showStgChoice(title, options, currentValue, onSelect){
   const modal = document.getElementById('stgChoiceModal');
   const titleEl = document.getElementById('stgChoiceTitle');
@@ -10657,15 +10655,23 @@ function showStgChoice(title, options, currentValue, onSelect){
   titleEl.textContent = title;
   _stgChoiceCallback = onSelect;
   
-  // بناء القائمة
   list.innerHTML = '';
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'stg-modal-item';
     if(opt.value === currentValue) btn.classList.add('active');
+    
+    // مربع اللون (للثيمات فقط)
+    let previewHTML = '';
+    if(opt.color){
+      previewHTML = '<span class="stg-color-swatch" style="background:' + opt.color + '"></span>';
+    }
+    
     btn.innerHTML = 
-      '<span>' + opt.label + '</span>' +
+      previewHTML +
+      '<span class="stg-modal-item-label">' + opt.label + '</span>' +
       '<svg class="check-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    
     btn.onclick = () => {
       closeStgChoice();
       if(_stgChoiceCallback) _stgChoiceCallback(opt.value);
@@ -10676,7 +10682,55 @@ function showStgChoice(title, options, currentValue, onSelect){
   modal.classList.add('open');
   if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
 }
-
+/* ===== THEME ACTION SHEET ===== */
+function openThemeSheet(){
+  const themes = [
+    { 
+      value: 'dark', 
+      label: currentLang==='ar'?'داكن'       : 'Dark',
+      color: 'linear-gradient(135deg, #1e1e2a 0%, #0b0b0f 60%, #000 100%)'
+    },
+    { 
+      value: 'light', 
+      label: currentLang==='ar'?'فاتح'       : 'Light',
+      color: 'linear-gradient(135deg, #ffffff 0%, #e5e5ea 60%, #d1d1d6 100%)'
+    },
+    { 
+      value: 'gold', 
+      label: currentLang==='ar'?'ذهبي'       : 'Gold',
+      color: 'linear-gradient(135deg, #ffd700 0%, #d4a017 45%, #8b6508 100%)'
+    },
+    { 
+      value: 'algeria', 
+      label: currentLang==='ar'?'الجزائر'    : 'Algeria',
+      color: 'linear-gradient(135deg, #006233 0%, #ffffff 50%, #d21034 100%)'
+    },
+    { 
+      value: 'redblack', 
+      label: currentLang==='ar'?'أحمر وأسود' : 'Red & Black',
+      color: 'linear-gradient(135deg, #ff2a00 0%, #8b0000 45%, #000 100%)'
+    },
+    { 
+      value: 'sea', 
+      label: currentLang==='ar'?'بحر عميق'   : 'Deep Sea',
+      color: 'linear-gradient(135deg, #5ac8fa 0%, #0a84ff 45%, #051529 100%)'
+    }
+  ];
+  
+  const current = (typeof getCurrentTheme === 'function') ? getCurrentTheme() : 'sea';
+  
+  showStgChoice(
+    currentLang==='ar'?'اختر الثيم':'Choose Theme',
+    themes,
+    current,
+    (val) => {
+      if(typeof selectTheme === 'function'){
+        selectTheme(val);
+        setTimeout(syncSettingsUI, 200);
+      }
+    }
+  );
+}
 function closeStgChoice(){
   const modal = document.getElementById('stgChoiceModal');
   if(modal) modal.classList.remove('open');
