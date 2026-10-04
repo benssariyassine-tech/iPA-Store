@@ -2927,78 +2927,181 @@ body[dir="rtl"] .isto-label {
   .isto-pupil { width: 7px; height: 7px; }
   .isto-mouth { bottom: 14px; width: 16px; }
 }
- /* ===== WRAPPER ===== */
+/* ============================================
+   🧭 TELEGRAM-STYLE BOTTOM NAV (Glass)
+   ============================================ */
 .isto-nav-wrap {
   position: fixed;
   bottom: calc(14px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
-  width: 92%;
+  width: 94%;
   max-width: 480px;
   z-index: 1000;
   pointer-events: none;
 }
 .isto-nav-wrap > * { pointer-events: auto; }
 
-/* ===== القائمة داخل الـ wrapper ===== */
-.isto-nav-wrap .floating-nav {
-  position: relative;
-  bottom: auto;
-  left: auto;
-  transform: none;
+/* 🎯 الروبوت في الوسط فوق القائمة */
+.isto-nav-wrap .isto-btn {
+  position: absolute;
+  left: 50%;
+  bottom: calc(60px + 20px);
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.isto-nav-wrap .isto-btn:active {
+  transform: translateX(-50%) scale(0.92);
+}
+
+/* الصف اللي فيه القائمة + البحث */
+.bottom-nav-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
   width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 10px 6px;
-  border-radius: 26px;
-  background: var(--nav-bg);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* 🧭 القائمة الرئيسية */
+.floating-nav {
+  flex: 1;
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap: 2px;
+  padding: 6px 6px;
+  height: 60px;
+  border-radius: 30px;
+  background: rgba(28, 28, 34, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
 }
 
-/* ===== بلاصة فارغة للروبوت ===== */
-.nav-spacer {
-  width: 66px;
+/* ✨ عنصر واحد */
+.nav-item {
+  flex: 1;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 2px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+  min-width: 0;
+}
+
+.nav-item svg {
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: (2.2;
+  stroke-linecap10: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s;
+}
+
+.nav-item .nav-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* 🔵 العنصر المفعّل */
+.nav-item.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  box-shadow: 
+    0 4px 14px rgba, 132, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.nav-item:active svg {
+  transform: scale(0.88);
+}
+
+/* 🔍 زر البحث المنفصل */
+.search-fab {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   flex-shrink: 0;
-  display: block;
+  background: rgba(28, 28, 34, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* ===== تعديل الروبوت كي يبان فوق القائمة ===== */
-.isto-nav-wrap .isto-btn {
-  position: absolute;
-  left: 50%;
-  bottom: 38px;
-  transform: translateX(-50%);
+.search-fab:active {
+  transform: scale(0.92);
+  background: rgba(28, 28, 34, 0.75);
 }
-.isto-nav-wrap .isto-btn:active {
-  transform: translateX(-50%) scale(0.92);
+
+.search-fab svg {
+  width: 24px;
+  height: 24px;
+  stroke: #fff;
+  fill: none;
 }
-@keyframes istoFloat {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50%      { transform: translateX(-50%) translateY(-5px); }
+
+/* 🌓 الوضع الفاتح */
+body.light-mode .floating-nav,
+body.light-mode .search-fab {
+  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(0, 0, 0, 0.06);
 }
-@keyframes istoShake {
-  0%, 100% { transform: translateX(-50%) rotate(0deg); }
-  20%      { transform: translateX(-50%) rotate(-9deg); }
-  40%      { transform: translateX(-50%) rotate(9deg); }
-  60%      { transform: translateX(-50%) rotate(-6deg); }
-  80%      { transform: translateX(-50%) rotate(6deg); }
+
+body.light-mode .nav-item {
+  color: rgba(0, 0, 0, 0.5);
 }
- .isto-btn.isto-shake {
-  animation: istoShake 0.55s ease-in-out !important;
+
+body.light-mode .nav-item.active {
+  color: #fff;
 }
-@keyframes istoShake {
-  0%, 100% { transform: translateX(-50%) rotate(0deg); }
-  20%      { transform: translateX(-50%) rotate(-9deg); }
-  40%      { transform: translateX(-50%) rotate(9deg); }
-  60%      { transform: translateX(-50%) rotate(-6deg); }
-  80%      { transform: translateX(-50%) rotate(6deg); }
+
+body.light-mode .search-fab svg {
+  stroke: #000;
+}
+
+/* 📱 شاشات صغيرة */
+@media (max-width: 380px) {
+  .floating-nav { height: 54px; padding: 5px; }
+  .nav-item svg { width: 19px; height: 19px; }
+  .nav-item .nav-label { font-size: 8.5px; }
+  .search-fab { width: 54px; height: 54px; }
+  .search-fab svg { width: 20px; height: 20px; }
+  .isto-nav-wrap .isto-btn { bottom: calc(54px + 18px); }
 }
  /* ============================================
    🔔 NOTIFICATION SYSTEM (Glass + Theme)
@@ -7455,6 +7558,62 @@ setTimeout(() => {
   const badge = document.getElementById('headerPremiumBadge');
   if (badge) badge.remove();
 }, 500);
+ // 🆕 فتح البحث (Overlay)
+function openSearchOverlay() {
+  const searchInput = document.getElementById('searchInput');
+  const searchBox = document.querySelector('.search-box');
+  
+  if (!searchInput || !searchBox) return;
+
+  // 1. سكرول للفوق
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // 2. أضف class نشط للـ search-box
+  searchBox.classList.add('search-active');
+
+  // 3. ركّز على الحقل بعد ما يكمل السكرول
+  setTimeout(() => {
+    searchInput.focus();
+    // على iOS، click ضروري باش تبان الكيبورد
+    searchInput.click();
+  }, 350);
+
+  // 4. زيد Escape للخروج
+  document.addEventListener('keydown', handleSearchEscape);
+
+  // 5. زيد click خارج لخروج
+  document.addEventListener('click', handleSearchOutsideClick);
+}
+
+// 🔍 إغلاق البحث
+function closeSearchOverlay() {
+  const searchBox = document.querySelector('.search-box');
+  const searchInput = document.getElementById('searchInput');
+  
+  if (searchBox) searchBox.classList.remove('search-active');
+  if (searchInput) searchInput.blur();
+
+  // حيّد الـ listeners
+  document.removeEventListener('keydown', handleSearchEscape);
+  document.removeEventListener('click', handleSearchOutsideClick);
+}
+
+// ⌨️ زر Escape
+function handleSearchEscape(e) {
+  if (e.key === 'Escape') {
+    closeSearchOverlay();
+  }
+}
+
+// 🖱️ كليك خارج
+function handleSearchOutsideClick(e) {
+  const searchBox = document.querySelector('.search-box');
+  const searchInput = document.getElementById('searchInput');
+  
+  if (searchBox && !searchBox.contains(e.target) && e.target !== searchInput) {
+    closeSearchOverlay();
+  }
+}
 </script>
 
 <div id="aiChatDrawer">
