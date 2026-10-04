@@ -6875,10 +6875,19 @@ function changeFontSize(size){
   showToast('Font size: ' + size, 'info', 1500);
 }
 function applyFontSize(size){
-  const body = document.body;
-  if(size === 'small') body.style.fontSize = '13px';
-  else if(size === 'large') body.style.fontSize = '17px';
-  else body.style.fontSize = '15px';
+  // 🎯 خريطة الأحجام
+  const sizes = {
+    small:  '13px',
+    medium: '15px',
+    large:  '17px'
+  };
+  const value = sizes[size] || '15px';
+  
+  // 🎯 الطريقة 2: نبدلو المتغير في :root
+  document.documentElement.style.setProperty('--font-size-base', value);
+  
+  // Fallback: نضمنو أن body يتحدث تلقائياً
+  document.body.style.fontSize = value;
 }
 function clearAppCache(){
   if(!confirm('Clear all cached data? / مسح جميع البيانات؟')) return;
