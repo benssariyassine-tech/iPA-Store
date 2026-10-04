@@ -8622,7 +8622,14 @@ function toggleSetting(name){
   }
   saveSettings();
 }
-function saveSettings(){ try{ localStorage.setItem('istore_app_settings', JSON.stringify(appSettings)); }catch(e){} }
+function saveSettings(){ 
+  try{ 
+    localStorage.setItem('istore_app_settings', JSON.stringify(appSettings)); 
+    console.log(' Settings saved:', appSettings);
+  }catch(e){
+    console.warn('saveSettings error:', e);
+  } 
+}
 function loadSettings(){
   try{
     const s = JSON.parse(localStorage.getItem('istore_app_settings')||'{}');
