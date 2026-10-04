@@ -6686,26 +6686,54 @@ try {
     });
   };
 
-  window.selectTheme = function(themeName) {
-    if (!window.THEMES_LIST.includes(themeName)) themeName = 'dark';
-    try { localStorage.setItem('istore_theme', themeName); } catch(e) {}
-    window.applyTheme(themeName);
-    const lang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
-    const labels = {
-      dark:    { en: 'Dark theme activated',        ar: 'تم تفعيل الوضع الداكن' },
-      light:   { en: 'Light theme activated',       ar: 'تم تفعيل الوضع الفاتح' },
-      gold:    { en: 'Gold theme activated',        ar: 'تم تفعيل الثيم الذهبي' },
-      algeria: { en: 'Algeria theme activated',     ar: 'تم تفعيل ثيم الجزائر' },
-      redblack:{ en: 'Red & Black theme activated', ar: 'تم تفعيل الثيم الأحمر والأسود' },
-      sea:     { en: 'Deep Sea theme activated',    ar: 'تم تفعيل ثيم البحر العميق' }
-    };
-    if (typeof showToast === 'function') {
-      showToast(labels[themeName][lang] || labels[themeName].en, 'success', 1800);
-    }
-    setTimeout(() => {
-      if (typeof closeModal === 'function') closeModal('themeModal');
-    }, 350);
+window.selectTheme = function(themeName) {
+  if (!window.THEMES_LIST.includes(themeName)) themeName = 'dark';
+  try { localStorage.setItem('istore_theme', themeName); } catch(e) {}
+  
+  // 🎨 إذا بدلنا من Gold → نمسحو light-mode (باش ما يبقاش)
+  if(themeName !== 'gold' && themeName !== 'light'){
+    document.body.classList.remove('light-mode');
+    isLightMode = false;
+  }
+  
+  // 🌙 إذا اخترنا Gold → نخليو الوضع الحالي (light or dark)
+  if(themeName === 'gold'){
+    document.body.classList.toggle('light-mode', isLightMode);
+  }
+  
+  // إذا اخترنا Light → نخليو light-mode
+  if(themeName === 'light'){
+    isLightMode = true;
+  }
+  
+  // إذا اخترنا Dark → نحيدو light-mode
+  if(themeName === 'dark'){
+    isLightMode = false;
+  }
+  
+  window.applyTheme(themeName);
+  
+  // زامن Settings UI بعد شوية
+  setTimeout(() => {
+    if (typeof syncSettingsUI === 'function') syncSettingsUI();
+  }, 100);
+  
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'en';
+  const labels = {
+    dark:    { en: 'Dark theme activated',        ar: 'تم تفعيل الوضع الداكن' },
+    light:   { en: 'Light theme activated',       ar: 'تم تفعيل الوضع الفاتح' },
+    gold:    { en: 'Gold theme activated',        ar: 'تم تفعيل الثيم الذهبي' },
+    algeria: { en: 'Algeria theme activated',     ar: 'تم تفعيل ثيم الجزائر' },
+    redblack:{ en: 'Red & Black theme activated', ar: 'تم تفعيل الثيم الأحمر والأسود' },
+    sea:     { en: 'Deep Sea theme activated',    ar: 'تم تفعيل ثيم البحر العميق' }
   };
+  if (typeof showToast === 'function') {
+    showToast(labels[themeName][lang] || labels[themeName].en, 'success', 1800);
+  }
+  setTimeout(() => {
+    if (typeof closeModal === 'function') closeModal('themeModal');
+  }, 350);
+};
 
   window.openThemeModal = function() {
     const current = window.getCurrentTheme();
