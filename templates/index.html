@@ -10965,13 +10965,13 @@ function syncLoginUI(){
   // --- إذا كاين مستخدم ---
   if(currentUser){
     // شوف واش الحالة
-    if(currentUser.providerData.some(p => p.providerId === 'password') && !userProfile.isVerified){
-      // بحاجة للتحقق
-      verifyView.style.display = 'block';
-      const codeInput = document.getElementById('lgnVerifyCode');
-      if(codeInput) codeInput.value = '';
-      return;
-    }
+ if(currentUser.providerData.some(p => p.providerId === 'password') && !userProfile.isVerified){
+  verifyView.style.display = 'block';
+  const codeInput = document.getElementById('lgnVerifyCode');
+  if(codeInput) codeInput.value = '';
+  setTimeout(_initResendTickerIfNeeded, 250);
+  return;
+}
     
     // مسجل عادي
     loggedView.style.display = 'block';
