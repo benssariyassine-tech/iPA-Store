@@ -9490,25 +9490,18 @@ function openSettingsPage(){
   const page = document.getElementById('settingsPage');
   if(!page) return;
   
-  // زامن كل شي قبل ما تفتح
   syncSettingsUI();
-  
-  // زيد كلاس
   page.classList.add('open');
-  document.body.classList.add('stg-open');
+  document.body.classList.add('stg-open', 'overlay-active');
   
   // خبي القائمة السفلية
   const nav = document.querySelector('.isto-nav-wrap');
-  if(nav) nav.style.display = 'none';
+  if(nav) nav.style.opacity = '0';
   
-  // سكرول لفوق
   const scroll = page.querySelector('.stg-scroll');
   if(scroll) scroll.scrollTop = 0;
   
-  // حسب حجم الكاش
   setTimeout(updateCacheSize, 200);
-  
-  // Vibration خفيف (iPhone XR ما فيهش لكن ماشي مشكل)
   if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
 }
 
@@ -9517,11 +9510,11 @@ function closeSettingsPage(){
   if(!page) return;
   
   page.classList.remove('open');
-  document.body.classList.remove('stg-open');
+  document.body.classList.remove('stg-open', 'overlay-active');
   
   // رجع القائمة السفلية
   const nav = document.querySelector('.isto-nav-wrap');
-  if(nav) nav.style.display = '';
+  if(nav) nav.style.opacity = '';
   
   if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
 }
@@ -9854,18 +9847,16 @@ function openLanguagePage(){
     { value: 'ar', label: 'العربية' },
     { value: 'en', label: 'English' }
   ];
-  
   const current = currentLang || 'ar';
-  const choice = prompt(
-    currentLang==='ar'?'اختر اللغة:\n1. العربية\n2. English':'Choose language:\n1. العربية\n2. English',
-    String(langs.findIndex(l => l.value === current) + 1)
+  showStgChoice(
+    currentLang==='ar'?'اللغة':'Language',
+    langs,
+    current,
+    (val) => {
+      changeLanguage(val);
+      setTimeout(syncSettingsUI, 150);
+    }
   );
-  
-  const idx = parseInt(choice) - 1;
-  if(langs[idx]){
-    changeLanguage(langs[idx].value);
-    setTimeout(syncSettingsUI, 100);
-  }
 }
 
 /* ===== CONTACT SUPPORT ===== */
@@ -9988,7 +9979,43 @@ if(typeof _oldApplyTranslations === 'function'){
     setTimeout(syncSettingsUI, 50);
   };
 }
+/* ===== CHOICE MODAL (iOS Action Sheet) ===== */
+let _stgChoiceCallback = null;
 
+function showStgChoice(title, options, currentValue, onSelect){
+  const modal = document.getElementById('stgChoiceModal');
+  const titleEl = document.getElementById('stgChoiceTitle');
+  const list = document.getElementById('stgChoiceList');
+  if(!modal || !titleEl || !list) return;
+  
+  titleEl.textContent = title;
+  _stgChoiceCallback = onSelect;
+  
+  // بناء القائمة
+  list.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'stg-modal-item';
+    if(opt.value === currentValue) btn.classList.add('active');
+    btn.innerHTML = 
+      '<span>' + opt.label + '</span>' +
+      '<svg class="check-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+    btn.onclick = () => {
+      closeStgChoice();
+      if(_stgChoiceCallback) _stgChoiceCallback(opt.value);
+    };
+    list.appendChild(btn);
+  });
+  
+  modal.classList.add('open');
+  if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
+}
+
+function closeStgChoice(){
+  const modal = document.getElementById('stgChoiceModal');
+  if(modal) modal.classList.remove('open');
+  _stgChoiceCallback = null;
+}
 console.log('✅ Settings Page JS loaded');
 </script>
 
