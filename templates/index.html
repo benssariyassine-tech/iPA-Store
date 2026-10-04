@@ -4161,6 +4161,26 @@ body.light-mode .nav-item.active {
 body.light-mode .nav-item.active svg {
   stroke: var(--accent) !important;
 }
+ /* ============================================
+   🚫 إخفاء القائمة السفلية في الشاشات المنبثقة
+   ============================================ */
+
+/* 1️⃣ كي يفتح شات AI */
+body:has(#aiChatDrawer.open) .isto-nav-wrap,
+/* 2️⃣ كي يفتح البحث */
+body:has(#searchOverlay.open) .isto-nav-wrap,
+/* 3️⃣ كي يفتح تفاصيل تطبيق */
+body:has(#appDetailModal[style*="flex"]) .isto-nav-wrap {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
+
+/* ✨ إضافة transition ناعم للأساس */
+.isto-nav-wrap {
+  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
