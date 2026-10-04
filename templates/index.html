@@ -4049,9 +4049,6 @@ body.light-mode .search-overlay-header {
   visibility: visible !important;
   opacity: 1 !important;
 }
- /* ============================================
-   🎨 iStore FINAL POLISH — v1.0
-   ============================================ */
 
 /* --------------------------------------------
    1️⃣ زر البحث — زجاجي بلا Ring وبلا Glow
@@ -4161,25 +4158,21 @@ body.light-mode .nav-item.active {
 body.light-mode .nav-item.active svg {
   stroke: var(--accent) !important;
 }
- /* ============================================
+/* ============================================
    🚫 إخفاء القائمة السفلية في الشاشات المنبثقة
+   (يعمل على كل الهواتف - JS + CSS)
    ============================================ */
 
-/* 1️⃣ كي يفتح شات AI */
-body:has(#aiChatDrawer.open) .isto-nav-wrap,
-/* 2️⃣ كي يفتح البحث */
-body:has(#searchOverlay.open) .isto-nav-wrap,
-/* 3️⃣ كي يفتح تفاصيل تطبيق */
-body:has(#appDetailModal[style*="flex"]) .isto-nav-wrap {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* ✨ الأساس: transition ناعم */
+.isto-nav-wrap {
   transition: opacity 0.25s ease, visibility 0.25s ease !important;
 }
 
-/* ✨ إضافة transition ناعم للأساس */
-.isto-nav-wrap {
-  transition: opacity 0.25s ease, visibility 0.25s ease !important;
+/* 🚫 كي تكون شاشة منبثقة مفتوحة، نخبيو القائمة */
+body.overlay-active .isto-nav-wrap {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -8353,6 +8346,49 @@ window.addEventListener('popstate', function() {
     closeSearchOverlay();
   }
 });
+ /* ============================================
+   🚫 AUTO-HIDE BOTTOM NAV ON OVERLAYS
+   (يعمل على كل الهواتف - حتى Safari القديم)
+   ============================================ */
+(function() {
+  function updateNavVisibility() {
+    const aiOpen    = document.getElementById('aiChatDrawer')?.classList.contains('open');
+    const searchOpen = document.getElementById('searchOverlay')?.classList.contains('open');
+    const detailOpen = document.getElementById('appDetailModal')?.style.display === 'flex';
+    
+    if (aiOpen || searchOpen || detailOpen) {
+      document.body.classList.add('overlay-active');
+    } else {
+      document.body.classList.remove('overlay-active');
+    }
+  }
+
+  // 👀 راقب التغييرات على الكلاسات والـ style
+  const observer = new MutationObserver(updateNavVisibility);
+  
+  document.addEventListener('DOMContentLoaded', function() {
+    // راقب الشات
+    const aiDrawer = document.getElementById('aiChatDrawer');
+    if (aiDrawer) {
+      observer.observe(aiDrawer, { attributes: true, attributeFilter: ['class'] });
+    }
+    
+    // راقب البحث
+    const searchOv = document.getElementById('searchOverlay');
+    if (searchOv) {
+      observer.observe(searchOv, { attributes: true, attributeFilter: ['class'] });
+    }
+    
+    // راقب تفاصيل التطبيق
+    const detail = document.getElementById('appDetailModal');
+    if (detail) {
+      observer.observe(detail, { attributes: true, attributeFilter: ['style'] });
+    }
+    
+    // شغل مرة أولى
+    updateNavVisibility();
+  });
+})();
 </script>
 
 <div id="aiChatDrawer">
