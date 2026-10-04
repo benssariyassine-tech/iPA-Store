@@ -6864,6 +6864,12 @@ contactSupport: "Contact Support",
 rateStore: "Rate iStore",
 adminDashboard: "Admin Dashboard",
 userPreview: "User Preview Mode",
+   checkEmailTitle: "Check Your Email",
+checkEmailText: "We sent a 6-digit code to:",
+checkEmailNote: "📩 Also check your",
+spamFolder: "Spam / Junk",
+checkEmailNote2: "folder",
+gotIt: "Got it",
  },
   ar: {
     welcomeTitle: "مرحباً بك في iStore",
@@ -6984,6 +6990,12 @@ contactSupport: "تواصل مع الدعم",
 rateStore: "قيّم iStore",
 adminDashboard: "لوحة الإدارة",
 userPreview: "وضع معاينة المستخدم",
+   checkEmailTitle: "تحقق من بريدك الإلكتروني",
+checkEmailText: "لقد أرسلنا رمزاً مكوناً من 6 أرقام إلى:",
+checkEmailNote: "📩 يُرجى أيضاً فحص مجلد",
+spamFolder: "الرسائل غير المرغوب فيها",
+checkEmailNote2: "",
+gotIt: "فهمت",
   }
 };
 
@@ -10921,15 +10933,18 @@ function openLoginPage(){
   const page = document.getElementById('loginPage');
   if(!page) return;
   
-  // حدد الواجهة اللي تبان
   syncLoginUI();
-  
   page.classList.add('open');
   document.body.classList.add('stg-open', 'overlay-active');
   
-  // خبي القائمة السفلية
   const nav = document.querySelector('.isto-nav-wrap');
   if(nav) nav.style.opacity = '0';
+  
+  setTimeout(() => {
+    if (document.getElementById('lgnVerifyView')?.style.display === 'block') {
+      _initResendTickerIfNeeded();
+    }
+  }, 400);
   
   if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
 }
@@ -10943,6 +10958,8 @@ function closeLoginPage(){
   
   const nav = document.querySelector('.isto-nav-wrap');
   if(nav) nav.style.opacity = '';
+  
+  _stopResendTicker();
   
   if(navigator.vibrate) try{ navigator.vibrate(8); }catch(e){}
 }
