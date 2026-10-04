@@ -4427,6 +4427,28 @@ body.light-mode .support-menu-item:active { background: rgba(255, 255, 255, 0.95
   .support-menu-item { padding: 9px 14px 9px 10px; font-size: 12px; }
   .support-robot-icon { width: 26px; height: 26px; }
 }
+ /* ============================================
+   🔧 ADMIN ADD BTN — Move to LEFT (بلا تعارض)
+   ============================================ */
+.admin-add-float {
+  right: auto !important;
+  left: 20px !important;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px)) !important;
+}
+
+body[dir="rtl"] .admin-add-float {
+  left: 20px !important;
+  right: auto !important;
+}
+
+@media (max-width: 380px) {
+  .admin-add-float {
+    left: 14px !important;
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+    font-size: 12px !important;
+    padding: 10px 16px !important;
+  }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
