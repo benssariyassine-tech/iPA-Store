@@ -2980,6 +2980,42 @@ body[dir="rtl"] .isto-label {
   .isto-pupil { width: 7px; height: 7px; }
   .isto-mouth { bottom: 14px; width: 16px; }
 }
+ /* ============================================
+   🤖 ISTO NAV WRAP (Robot + Bottom Nav)
+   ============================================ */
+.isto-nav-wrap {
+  position: fixed;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: 94%;
+  max-width: 500px;
+  z-index: 1000;
+  pointer-events: none;
+}
+.isto-nav-wrap > * { pointer-events: auto; }
+
+/* 🎯 الروبوت في الوسط فوق القائمة */
+.isto-nav-wrap .isto-btn {
+  position: absolute;
+  left: 50%;
+  bottom: calc(66px + 18px);
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: auto;
+}
+.isto-nav-wrap .isto-btn:active {
+  transform: translateX(-50%) scale(0.92);
+}
+
+/* 🎯 الصف: القائمة + البحث */
+.bottom-nav-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
 /* ============================================
    🧭 TELEGRAM-STYLE BOTTOM NAV (Wider + Taller)
    ============================================ */
@@ -3056,9 +3092,6 @@ body[dir="rtl"] .isto-label {
 }
 
 /* ============================================
-   🔍 SEARCH FAB — نفس حجم القائمة (68x68)
-   ============================================ */
-/* ============================================
    🔍 SEARCH FAB — Professional (Telegram-Style)
    ============================================ */
 .search-fab {
@@ -3097,7 +3130,6 @@ body[dir="rtl"] .isto-label {
   color: #fff;
 }
 
-/* ✨ طبقة لمعة زجاجية فوق */
 .search-fab::before {
   content: '';
   position: absolute;
@@ -3107,10 +3139,10 @@ body[dir="rtl"] .isto-label {
   height: 50%;
   background: linear-gradient(
     to bottom,
-    rgba(:255, 255, 255, 0. 22) 0%,
-    rgba(50255, 255, 255,% 0.02) 100%
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(255, 255, 255, 0.02) 100%
   );
-  border-radius 50% 0 0;
+  border-radius: 50% 50% 0 0;
   pointer-events: none;
   z-index: 1;
 }
@@ -3965,6 +3997,59 @@ body.light-mode .search-overlay-header {
   .search-overlay-input { font-size: 14px; }
   .search-chip { padding: 7px 14px; font-size: 12px; }
   .search-results { padding: 14px 16px 40px 16px; }
+}
+ /* ============================================
+   🎯 FINAL FIX — FORCE BOTTOM NAV VISIBLE
+   ============================================ */
+.isto-nav-wrap {
+  position: fixed !important;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+  left: 50% !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  width: 94% !important;
+  max-width: 500px !important;
+  z-index: 9999 !important;
+  pointer-events: none !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.isto-nav-wrap > * {
+  pointer-events: auto !important;
+}
+
+.isto-nav-wrap .isto-btn {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: calc(66px + 18px) !important;
+  transform: translateX(-50%) !important;
+  z-index: 10 !important;
+  top: auto !important;
+}
+
+.bottom-nav-row {
+  display: flex !important;
+  gap: 10px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+.floating-nav {
+  position: relative !important;
+  bottom: auto !important;
+  left: auto !important;
+  top: auto !important;
+  transform: none !important;
+  width: auto !important;
+  max-width: none !important;
+  z-index: auto !important;
+  flex: 0 0 auto !important;
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
