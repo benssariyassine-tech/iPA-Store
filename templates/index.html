@@ -2989,33 +2989,32 @@ body[dir="rtl"] .isto-label {
   bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
-  width: 96%;
-  max-width: 520px;
+  width: 94%;
+  max-width: 500px;
   z-index: 1000;
   pointer-events: none;
 }
 .isto-nav-wrap > * { pointer-events: auto; }
 
-/* 🎯 الروبوت في الوسط فوق القائمة */
+/* 🤖 الروبوت في الوسط */
 .isto-nav-wrap .isto-btn {
   position: absolute;
   left: 50%;
-  bottom: calc(70px + 18px);   /* 👈 رفعناه حيت القائمة ولاو أطول */
+  bottom: calc(66px + 18px);
   transform: translateX(-50%);
   z-index: 10;
   pointer-events: auto;
 }
-
 .isto-nav-wrap .isto-btn:active {
   transform: translateX(-50%) scale(0.92);
 }
 
-/* الصف: القائمة + زر البحث */
+/* 🎯 الصف: القائمة + البحث */
 .bottom-nav-row {
   display: flex;
   gap: 10px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   width: 100%;
 }
 
