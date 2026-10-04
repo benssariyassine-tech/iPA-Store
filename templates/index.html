@@ -9821,38 +9821,31 @@ function applyAnimationsSetting(enabled){
   }
 }
 
-/* ===== FONT SIZE PAGE ===== */
+ 
 function openFontSizePage(){
-  // دركا، نعرضو قائمة سريعة
   const sizes = [
     { value: 'small',  label: currentLang==='ar'?'صغير'  : 'Small'  },
     { value: 'medium', label: currentLang==='ar'?'متوسط' : 'Medium' },
     { value: 'large',  label: currentLang==='ar'?'كبير'  : 'Large'  }
   ];
-  
   const current = appSettings.fontSize || 'medium';
-  
-  // نستعملو UI بسيط
-  const choice = prompt(
-    currentLang==='ar'?'اختر حجم الخط:\n1. صغير\n2. متوسط\n3. كبير':'Choose font size:\n1. Small\n2. Medium\n3. Large',
-    String(sizes.findIndex(s => s.value === current) + 1)
+  showStgChoice(
+    currentLang==='ar'?'حجم الخط':'Font Size',
+    sizes,
+    current,
+    (val) => {
+      appSettings.fontSize = val;
+      applyFontSize(val);
+      saveSettings();
+      const found = sizes.find(s => s.value === val);
+      const el = document.getElementById('stgFontSizeValue');
+      if(el && found) el.textContent = found.label;
+      showToast(
+        currentLang==='ar'?'حجم الخط: '+found.label:'Font size: '+found.label,
+        'success', 1500
+      );
+    }
   );
-  
-  const idx = parseInt(choice) - 1;
-  if(sizes[idx]){
-    const newSize = sizes[idx].value;
-    appSettings.fontSize = newSize;
-    applyFontSize(newSize);
-    saveSettings();
-    
-    const fontVal = document.getElementById('stgFontSizeValue');
-    if(fontVal) fontVal.textContent = sizes[idx].label;
-    
-    showToast(
-      currentLang==='ar'?'حجم الخط: '+sizes[idx].label:'Font size: '+sizes[idx].label,
-      'success', 1500
-    );
-  }
 }
 
 /* ===== LANGUAGE PAGE ===== */
