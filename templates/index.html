@@ -2984,50 +2984,15 @@ body[dir="rtl"] .isto-label {
 /* ============================================
    🧭 TELEGRAM-STYLE BOTTOM NAV (Wider + Taller)
    ============================================ */
-.isto-nav-wrap {
-  position: fixed;
-  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-  left: 50%;
-  transform: translateX(-50%);
-  width: 94%;
-  max-width: 500px;
-  z-index: 1000;
-  pointer-events: none;
-}
-.isto-nav-wrap > * { pointer-events: auto; }
-
-/* 🤖 الروبوت في الوسط */
-.isto-nav-wrap .isto-btn {
-  position: absolute;
-  left: 50%;
-  bottom: calc(66px + 18px);
-  transform: translateX(-50%);
-  z-index: 10;
-  pointer-events: auto;
-}
-.isto-nav-wrap .isto-btn:active {
-  transform: translateX(-50%) scale(0.92);
-}
-
-/* 🎯 الصف: القائمة + البحث */
-.bottom-nav-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-/* 🧭 القائمة الرئيسية - أكبر وأطول */
 .floating-nav {
-  flex: 1;
+  flex: 0 0 auto;              /* 👈 ماشي flex:1 */
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap: 2px;
-  padding: 8px 8px;        /* 👈 زدنا padding عمودي */
-  height: 68px;            /* 👈 من 60 لـ 68 */
-  border-radius: 34px;     /* 👈 نصف الطول باش يبقى كامل دائري */
+  padding: 8px 10px;
+  height: 62px;                 /* 👈 نفس طول زر البحث */
+  border-radius: 31px;          /* 👈 نصف الطول */
   background: rgba(28, 28, 34, 0.55);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
@@ -3036,11 +3001,13 @@ body[dir="rtl"] .isto-label {
     0 15px 40px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   position: relative;
+  min-width: 0;
 }
 
 /* ✨ كل عنصر */
 .nav-item {
-  flex: 1;
+  flex: 0 0 auto;
+  min-width: 62px;             /* 👈 كل تاب عنده عرض محدد */
   background: none;
   border: none;
   color: rgba(255, 255, 255, 0.5);
@@ -3048,9 +3015,9 @@ body[dir="rtl"] .isto-label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;                 /* 👈 زيادة بسيطة */
-  padding: 6px 4px;
-  border-radius: 22px;
+  gap: 3px;
+  padding: 6px 8px;
+  border-radius: 20px;
   cursor: pointer;
   font-family: inherit;
   font-size: 10px;
@@ -3058,12 +3025,11 @@ body[dir="rtl"] .isto-label {
   letter-spacing: 0.2px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   -webkit-tap-highlight-color: transparent;
-  min-width: 0;
 }
 
 .nav-item svg {
-  width: 24px;              /* 👈 من 21 لـ 24 */
-  height: 24px;
+  width: 22px;
+  height: 22px;
   stroke: currentColor;
   fill: none;
   stroke-width: 2.2;
@@ -3073,22 +3039,19 @@ body[dir="rtl"] .isto-label {
 }
 
 .nav-item .nav-label {
-  font-size: 10px;          /* 👈 من 9.5 لـ 10 */
+  font-size: 10px;
   font-weight: 700;
   white-space: nowrap;
   line-height: 1;
 }
 
-/* 🔵 العنصر المفعّل */
 .nav-item.active {
   color: #fff;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   box-shadow: 
     0 4px 14px rgba(10, 132, 255, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
-  transform: translateY(-1px);
 }
-
 .nav-item:active svg {
   transform: scale(0.88);
 }
@@ -3096,29 +3059,36 @@ body[dir="rtl"] .isto-label {
 /* ============================================
    🔍 SEARCH FAB — نفس حجم القائمة (68x68)
    ============================================ */
+/* ============================================
+   🔍 SEARCH FAB — Professional (Telegram-Style)
+   ============================================ */
 .search-fab {
-  width: 68px;              /* 👈 من 60 لـ 68 - كيف القائمة */
-  height: 68px;
+  width: 62px;                    /* 👈 نفس طول القائمة */
+  height: 62px;
   border-radius: 50%;
   flex-shrink: 0;
   position: relative;
-  overflow: hidden;
+  overflow: visible;               /* 👈 باش يبان التوهج من برا */
   cursor: pointer;
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   
-  /* ✨ زجاجي شفاف */
-  background: rgba(28, 28, 34, 0.55);
+  /* ✨ Gradient زجاجي أنيق */
+  background: 
+    radial-gradient(circle at 30% 25%, rgba(90, 200, 250, 0.25) 0%, transparent 50%),
+    linear-gradient(145deg, rgba(40, 40, 50, 0.65), rgba(20, 20, 28, 0.75));
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   
-  /* 🎨 حدود أنيقة */
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* 🎨 حدود مع لمعة توبي */
+  border: 1.5px solid rgba(90, 200, 250, 0.35);
   
   /* 💎 ظل + توهج داخلي */
   box-shadow: 
-    0 15px 40px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    0 15px 40px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(10, 132, 255, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
   
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   
@@ -3128,80 +3098,110 @@ body[dir="rtl"] .isto-label {
   color: #fff;
 }
 
+/* ✨ طبقة لمعة زجاجية فوق */
 .search-fab::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 55%;
+  height: 50%;
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.25) 0%,
-    rgba(255, 255, 255, 0.05) 40%,
-    rgba(255, 255, 255, 0) 100%
+    rgba(:255, 255, 255, 0. 22) 0%,
+    rgba(50255, 255, 255,% 0.02) 100%
   );
-  border-radius: 50% 50% 0 0;
+  border-radius 50% 0 0;
   pointer-events: none;
   z-index: 1;
 }
 
+/* 🎯 Ring متحرك حوالين الزر */
+.search-fab::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: rgba(90, 200, 250, 0.6);
+  border-right-color: rgba(90, 200, 250, 0.2);
+  opacity: 0.7;
+  pointer-events: none;
+  animation: searchRingSpin 4s linear infinite;
+}
+
+@keyframes searchRingSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 🎬 عند الضغط */
 .search-fab:active {
   transform: scale(0.92);
-  background: rgba(28, 28, 34, 0.65);
-  border-color: rgba(10, 132, 255, 0.5);
+  border-color: rgba(10, 132, 255, 0.7);
   box-shadow: 
     0 8px 20px rgba(0, 0, 0, 0.4),
-    0 0 0 4px rgba(10, 132, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    0 0 0 4px rgba(10, 132, 255, 0.18),
+    0 0 30px rgba(10, 132, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
+/* 🖱️ Hover */
 .search-fab:hover {
   transform: translateY(-2px);
-  border-color: rgba(10, 132, 255, 0.4);
-  background: rgba(28, 28, 34, 0.65);
+  border-color: rgba(90, 200, 250, 0.6);
   box-shadow: 
-    0 20px 45px rgba(0, 0, 0, 0.5),
-    0 0 25px rgba(10, 132, 255, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 20px 45px rgba(0, 0, 0, 0.55),
+    0 0 30px rgba(10, 132, 255, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
+/* 🔍 الأيقونة */
 .search-fab svg {
-  width: 26px;              /* 👈 من 24 لـ 26 */
-  height: 26px;
+  width: 24px;
+  height: 24px;
   stroke: #fff;
   fill: none;
   position: relative;
   z-index: 2;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4))
+          drop-shadow(0 0 8px rgba(90, 200, 250, 0.5));
   transition: transform 0.3s ease;
+  stroke-width: 2.5;
 }
 
 .search-fab:hover svg {
-  transform: scale(1.1) rotate(-8deg);
+  transform: scale(1.12) rotate(-8deg);
 }
 
 /* ============================================
    🌓 LIGHT MODE
    ============================================ */
-body.light-mode .search-fab {
-  background: rgba(255, 255, 255, 0.65);
-  border-color: rgba(0, 0, 0, 0.08);
+ body.light-mode .search-fab {
+  background: 
+    radial-gradient(circle at 30% 25%, rgba(10, 132, 255, 0.15) 0%, transparent 50%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(245, 245, 250, 0.95));
+  border-color: rgba(10, 132, 255, 0.3);
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+    0 0 20px rgba(10, 132, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 body.light-mode .search-fab::before {
   background: linear-gradient(
     to bottom,
-    rgba(255, 255, 255, 0.7) 0%,
+    rgba(255, 255, 255, 0.85) 0%,
     rgba(255, 255, 255, 0) 100%
   );
 }
 body.light-mode .search-fab svg {
-  stroke: #000;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  stroke: var(--accent);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))
+          drop-shadow(0 0 6px rgba(10, 132, 255, 0.3));
+}
+body.light-mode .search-fab::after {
+  border-top-color: rgba(10, 132, 255, 0.5);
+  border-right-color: rgba(10, 132, 255, 0.15);
 }
 
 /* ============================================
@@ -3209,33 +3209,20 @@ body.light-mode .search-fab svg {
    ============================================ */
 @media (max-width: 380px) {
   .search-fab {
-    width: 60px;
-    height: 60px;
-    border-width: 1.2px;
-    box-shadow:
-      0 12px 32px rgba(0, 0, 0, 0.4),
-      inset 0 1px 0 rgba(255, 255, 255, 0.22),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+    width: 56px;
+    height: 56px;
   }
-
-  .search-fab svg {
-    width: 22px;
-    height: 22px;
+  .search-fab svg { width: 22px; height: 22px; }
+  .floating-nav {
+    height: 56px;
+    border-radius: 28px;
+    padding: 7px 8px;
   }
-
-  .search-fab:active {
-    box-shadow:
-      0 6px 16px rgba(0, 0, 0, 0.35),
-      0 0 0 3px rgba(10, 132, 255, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  }
-
-  .search-fab:hover {
-    box-shadow:
-      0 16px 38px rgba(0, 0, 0, 0.45),
-      0 0 20px rgba(10, 132, 255, 0.22),
-      inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  }
+  .nav-item { min-width: 56px; padding: 5px 6px; }
+  .nav-item svg { width: 20px; height: 20px; }
+  .nav-item .nav-label { font-size: 9.5px; }
+  .isto-nav-wrap .isto-btn { bottom: calc(56px + 16px); }
+}
 
   /* 🌓 Light mode */
   body.light-mode .search-fab {
