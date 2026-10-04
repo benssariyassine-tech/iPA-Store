@@ -2982,15 +2982,15 @@ body[dir="rtl"] .isto-label {
   .isto-mouth { bottom: 14px; width: 16px; }
 }
 /* ============================================
-   🧭 TELEGRAM-STYLE BOTTOM NAV (Glass)
+   🧭 TELEGRAM-STYLE BOTTOM NAV (Wider + Taller)
    ============================================ */
 .isto-nav-wrap {
   position: fixed;
-  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
-  width: 94%;
-  max-width: 480px;
+  width: 96%;
+  max-width: 520px;
   z-index: 1000;
   pointer-events: none;
 }
@@ -3000,7 +3000,7 @@ body[dir="rtl"] .isto-label {
 .isto-nav-wrap .isto-btn {
   position: absolute;
   left: 50%;
-  bottom: calc(60px + 20px);
+  bottom: calc(70px + 18px);   /* 👈 رفعناه حيت القائمة ولاو أطول */
   transform: translateX(-50%);
   z-index: 10;
   pointer-events: auto;
@@ -3010,7 +3010,7 @@ body[dir="rtl"] .isto-label {
   transform: translateX(-50%) scale(0.92);
 }
 
-/* الصف اللي فيه القائمة + البحث */
+/* الصف: القائمة + زر البحث */
 .bottom-nav-row {
   display: flex;
   gap: 10px;
@@ -3019,16 +3019,16 @@ body[dir="rtl"] .isto-label {
   width: 100%;
 }
 
-/* 🧭 القائمة الرئيسية */
+/* 🧭 القائمة الرئيسية - أكبر وأطول */
 .floating-nav {
   flex: 1;
   display: flex;
   justify-content: space-around;
   align-items: center;
   gap: 2px;
-  padding: 6px 6px;
-  height: 60px;
-  border-radius: 30px;
+  padding: 8px 8px;        /* 👈 زدنا padding عمودي */
+  height: 68px;            /* 👈 من 60 لـ 68 */
+  border-radius: 34px;     /* 👈 نصف الطول باش يبقى كامل دائري */
   background: rgba(28, 28, 34, 0.55);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
@@ -3039,7 +3039,7 @@ body[dir="rtl"] .isto-label {
   position: relative;
 }
 
-/* ✨ عنصر واحد */
+/* ✨ كل عنصر */
 .nav-item {
   flex: 1;
   background: none;
@@ -3049,12 +3049,12 @@ body[dir="rtl"] .isto-label {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 6px 2px;
-  border-radius: 20px;
+  gap: 3px;                 /* 👈 زيادة بسيطة */
+  padding: 6px 4px;
+  border-radius: 22px;
   cursor: pointer;
   font-family: inherit;
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: 0.2px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -3063,18 +3063,18 @@ body[dir="rtl"] .isto-label {
 }
 
 .nav-item svg {
-  width: 21px;
-  height: 21px;
+  width: 24px;              /* 👈 من 21 لـ 24 */
+  height: 24px;
   stroke: currentColor;
   fill: none;
-  stroke-width: (2.2;
-  stroke-linecap10: round;
+  stroke-width: 2.2;
+  stroke-linecap: round;
   stroke-linejoin: round;
   transition: transform 0.25s;
 }
 
 .nav-item .nav-label {
-  font-size: 9.5px;
+  font-size: 10px;          /* 👈 من 9.5 لـ 10 */
   font-weight: 700;
   white-space: nowrap;
   line-height: 1;
@@ -3085,7 +3085,7 @@ body[dir="rtl"] .isto-label {
   color: #fff;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   box-shadow: 
-    0 4px 14px rgba, 132, 255, 0.5),
+    0 4px 14px rgba(10, 132, 255, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
@@ -3095,11 +3095,11 @@ body[dir="rtl"] .isto-label {
 }
 
 /* ============================================
-   🔍 SEARCH FAB — GLASS BUTTON (Complete)
+   🔍 SEARCH FAB — نفس حجم القائمة (68x68)
    ============================================ */
 .search-fab {
-  width: 60px;
-  height: 60px;
+  width: 68px;              /* 👈 من 60 لـ 68 - كيف القائمة */
+  height: 68px;
   border-radius: 50%;
   flex-shrink: 0;
   position: relative;
@@ -3109,30 +3109,26 @@ body[dir="rtl"] .isto-label {
   -webkit-tap-highlight-color: transparent;
   
   /* ✨ زجاجي شفاف */
-  background: rgba(28, 28, 34, 0.45);
-  backdrop-filter: blur(50px) saturate(200%);
-  -webkit-backdrop-filter: blur(50px) saturate(200%);
+  background: rgba(28, 28, 34, 0.55);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
   
   /* 🎨 حدود أنيقة */
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   
   /* 💎 ظل + توهج داخلي */
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   
-  /* 🎬 أنيميشن */
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   
-  /* 🎯 تناسق مع القائمة */
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
 }
 
-/* ✨ لمعة زجاجية في النص الفوق */
 .search-fab::before {
   content: '';
   position: absolute;
@@ -3151,7 +3147,6 @@ body[dir="rtl"] .isto-label {
   z-index: 1;
 }
 
-/* 🎬 تأثير عند الضغط */
 .search-fab:active {
   transform: scale(0.92);
   background: rgba(28, 28, 34, 0.65);
@@ -3162,21 +3157,19 @@ body[dir="rtl"] .isto-label {
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* 🎨 تأثير عند المرور (Desktop) */
 .search-fab:hover {
   transform: translateY(-2px);
   border-color: rgba(10, 132, 255, 0.4);
-  background: rgba(28, 28, 34, 0.55);
+  background: rgba(28, 28, 34, 0.65);
   box-shadow: 
     0 20px 45px rgba(0, 0, 0, 0.5),
     0 0 25px rgba(10, 132, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
-/* 🔍 الأيقونة */
 .search-fab svg {
-  width: 24px;
-  height: 24px;
+  width: 26px;              /* 👈 من 24 لـ 26 */
+  height: 26px;
   stroke: #fff;
   fill: none;
   position: relative;
@@ -3193,14 +3186,13 @@ body[dir="rtl"] .isto-label {
    🌓 LIGHT MODE
    ============================================ */
 body.light-mode .search-fab {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.65);
   border-color: rgba(0, 0, 0, 0.08);
   box-shadow: 
     0 15px 40px rgba(0, 0, 0, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.9),
     inset 0 -1px 0 rgba(0, 0, 0, 0.04);
 }
-
 body.light-mode .search-fab::before {
   background: linear-gradient(
     to bottom,
@@ -3208,69 +3200,77 @@ body.light-mode .search-fab::before {
     rgba(255, 255, 255, 0) 100%
   );
 }
-
 body.light-mode .search-fab svg {
   stroke: #000;
   filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
-body.light-mode .search-fab:active {
-  background: rgba(255, 255, 255, 0.8);
-  border-color: rgba(10, 132, 255, 0.5);
-  box-shadow: 
-    0 8px 20px rgba(0, 0, 0, 0.1),
-    0 0 0 4px rgba(10, 132, 255, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-body.light-mode .search-fab:hover {
-  background: rgba(255, 255, 255, 0.75);
-  border-color: rgba(10, 132, 255, 0.4);
-  box-shadow: 
-    0 20px 45px rgba(0, 0, 0, 0.15),
-    0 0 25px rgba(10, 132, 255, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-}
-
 /* ============================================
-   📱 SMALL SCREENS (≤380px)
+   📱 SMALL SCREENS (≤380px) — نسخة محدثة
    ============================================ */
 @media (max-width: 380px) {
   .search-fab {
-    width: 54px;
-    height: 54px;
+    width: 60px;
+    height: 60px;
     border-width: 1.2px;
-    box-shadow: 
+    box-shadow:
       0 12px 32px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.22),
       inset 0 -1px 0 rgba(0, 0, 0, 0.12);
   }
-  
+
   .search-fab svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
-  
+
   .search-fab:active {
-    box-shadow: 
+    box-shadow:
       0 6px 16px rgba(0, 0, 0, 0.35),
       0 0 0 3px rgba(10, 132, 255, 0.15),
       inset 0 1px 0 rgba(255, 255, 255, 0.2);
   }
-  
+
   .search-fab:hover {
-    box-shadow: 
+    box-shadow:
       0 16px 38px rgba(0, 0, 0, 0.45),
       0 0 20px rgba(10, 132, 255, 0.22),
       inset 0 1px 0 rgba(255, 255, 255, 0.28);
   }
-  
-  /* Light mode on small screens */
+
+  /* 🌓 Light mode */
   body.light-mode .search-fab {
-    box-shadow: 
+    box-shadow:
       0 12px 32px rgba(0, 0, 0, 0.1),
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
       inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  }
+
+  /* 🧭 القائمة - تكبير بسيط */
+  .floating-nav {
+    height: 60px;
+    padding: 7px 7px;
+    border-radius: 30px;
+  }
+
+  .nav-item svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .nav-item .nav-label {
+    font-size: 9.5px;
+  }
+
+  /* 🤖 الروبوت - يرفع شوية حيت القائمة ولات أطول */
+  .isto-nav-wrap .isto-btn {
+    bottom: calc(68px + 16px);
+  }
+
+  /* 🧭 العرض */
+  .isto-nav-wrap {
+    width: 95%;
+    max-width: 480px;
   }
 }
  /* ============================================
