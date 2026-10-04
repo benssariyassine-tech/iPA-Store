@@ -5732,6 +5732,35 @@ body.light-mode .lgn-action-icon {
   .lgn-field input { font-size: 14.5px; padding: 13px 0; }
   .lgn-code-input { font-size: 28px; letter-spacing: 10px; padding: 18px; }
 }
+ /* ===== THEME ACTION SHEET — COLOR SWATCHES ===== */
+.stg-modal-item-label {
+  flex: 1;
+  text-align: left;
+}
+body[dir="rtl"] .stg-modal-item-label {
+  text-align: right;
+}
+.stg-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  position: relative;
+}
+.stg-color-swatch::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent 50%);
+  pointer-events: none;
+}
+body.light-mode .stg-color-swatch {
+  border-color: rgba(0, 0, 0, 0.1);
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -11109,8 +11138,7 @@ console.log('✅ Login Page JS loaded');
     <!-- ===== APPEARANCE ===== -->
     <div class="stg-label" data-i18n="sectionAppearance">APPEARANCE</div>
     <section class="stg-card">
-      
-      <button class="stg-row" onclick="openThemeModal()">
+      <button class="stg-row" onclick="openThemeSheet()">
         <div class="stg-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="13.5" cy="6.5" r="1.2"/>
