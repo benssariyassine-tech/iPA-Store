@@ -5556,11 +5556,18 @@ function applyTranslations(){
     if(TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) el.placeholder = TRANSLATIONS[currentLang][key];
   });
 
-  // 3. تفعيل زر اللغة النشط
-  const langEnEl = document.getElementById('langEn');
-  const langArEl = document.getElementById('langAr');
-  if (langEnEl) langEnEl.classList.toggle('active', currentLang === 'en');
-  if (langArEl) langArEl.classList.toggle('active', currentLang === 'ar');
+// 3. تفعيل زر اللغة النشط (لكل المجموعات — modal القديم + صفحة Settings الجديدة)
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    // نحدد لغة الزر: data-lang أولاً، ثم من id كـ fallback
+    let btnLang = btn.dataset.lang;
+    if (!btnLang) {
+      if (btn.id === 'langEn') btnLang = 'en';
+      else if (btn.id === 'langAr') btnLang = 'ar';
+    }
+    if (btnLang) {
+      btn.classList.toggle('active', currentLang === btnLang);
+    }
+  });
 
   // 4. اتجاه الصفحة واللغة
   document.body.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
