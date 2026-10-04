@@ -5966,6 +5966,34 @@ body.light-mode .verify-info-btn:active {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+ /* ============================================
+   🎬 NO ANIMATIONS MODE
+   ============================================ */
+body.no-animations *,
+body.no-animations *::before,
+body.no-animations *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+body.no-animations .app-card-pro,
+body.no-animations .featured-card,
+body.no-animations .today-header,
+body.no-animations .skeleton-box,
+body.no-animations .isto-btn,
+body.no-animations .splash-logo,
+body.no-animations .splash-logo-wrap::before,
+body.no-animations .splash-logo-wrap::after,
+body.no-animations .slant-badge,
+body.no-animations .slant-badge::before {
+  animation: none !important;
+}
+
+body.no-animations .search-fab::after {
+  animation: none !important;
+  display: none !important;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -7985,30 +8013,118 @@ if(badgeEl){
   }
   
 }
-function startRealDownload(appId, fileUrl, appName) {
+/* ============================================
+   📥 DOWNLOAD — Wi-Fi Only + Auto-download
+   ============================================ */
+
+/* التحقق من نوع الاتصال */
+function _getConnectionInfo() {
+  const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if (!conn) {
+    // ما كاينش معلومات — نفترضو أنو غير WiFi (احتياطي)
+    return { type: 'unknown', isWiFi: false, hasInfo: false };
+  }
+  const type = conn.type || conn.effectiveType || 'unknown';
+  const isWiFi = (type === 'wifi' || type === 'ethernet' || conn.effectiveType === '4g' && type !== 'cellular');
+  return { type, isWiFi: type === 'wifi', hasInfo: true };
+}
+
+/* التحقق من Wi-Fi قبل التحميل */
+async function _checkWiFiBeforeDownload() {
+  // إذا الإعداد ماشي مفعّل → ما نتحققوش
+  if (!appSettings.wifiOnly) return true;
+  
+  const conn = _getConnectionInfo();
+  
+  // إذا ما عندناش معلومات → نفترضو أنو شبكة عادية (warn)
+  if (!conn.hasInfo) {
+    const userConfirmed = confirm(
+      currentLang === 'ar'
+        ? '⚠️ Wi-Fi Only مفعّل. ما قدرناش نتحققو من نوع الشبكة.\n\nهل تريد المتابعة بأي حال؟'
+        : '⚠️ Wi-Fi Only is on. We couldn\'t detect your network type.\n\nContinue anyway?'
+    );
+    return userConfirmed;
+  }
+  
+  // إذا WiFi → OK
+  if (conn.isWiFi) return true;
+  
+  // إذا ماشي WiFi → نسقسوه
+  const userConfirmed = confirm(
+    currentLang === 'ar'
+      ? '📡 أنت ماشي متصل بـ Wi-Fi.\n\nWi-Fi Only مفعّل في الإعدادات.\n\nهل تريد المتابعة بأي حال؟'
+      : '📡 You\'re not on Wi-Fi.\n\nWi-Fi Only is enabled.\n\nContinue anyway?'
+  );
+  
+  return userConfirmed;
+}
+
+/* التحميل الفعلي */
+async function startRealDownload(appId, fileUrl, appName) {
   const app = allAppsCache.find(a => a.id === appId);
   const isOfficial = app && app.appType === 'official';
   const hasLink = !!(fileUrl && fileUrl !== '#' && fileUrl.trim() !== '');
-
-  if (isOfficial) {
-    showDownloadNotif(appName, 3000, fileUrl, true, appId);
-    if (hasLink) setTimeout(() => window.open(fileUrl, '_blank'), 1500);
+  
+  // ✅ 1. تحقق Wi-Fi Only
+  const wifiOk = await _checkWiFiBeforeDownload();
+  if (!wifiOk) {
+    showToast(
+      currentLang === 'ar'
+        ? 'تم إلغاء التحميل (Wi-Fi Only)'
+        : 'Download cancelled (Wi-Fi Only)',
+      'info', 2500
+    );
     return;
   }
-
-  showDownloadNotif(appName, 3000, fileUrl, false, appId);
-  if (hasLink) {
-    incrementDownload(appId);
-    setTimeout(() => {
-      window.open(fileUrl, '_blank', 'noopener,noreferrer');
-    }, 1500);
+  
+  // ✅ 2. Auto-download
+  const autoDownload = appSettings.autoDownload !== false;
+  
+  if (isOfficial) {
+    // التطبيقات الرسمية تفتح المتجر الرسمي
+    showDownloadNotif(appName, 3000, fileUrl, true, appId);
+    if (hasLink) {
+      setTimeout(() => window.open(fileUrl, '_blank'), autoDownload ? 1500 : 3000);
+    }
+    return;
   }
-}
-// ====== فتح رابط التحميل ======
-function goToDownload(fileUrl, appName){
-  const hasLink = !!(fileUrl && fileUrl !== '#' && fileUrl.trim() !== '');
-  showDownloadNotif(appName, 3000, fileUrl, false);
-  if (hasLink) {
+  
+  // التطبيقات المعدلة
+  if (autoDownload) {
+    // ✅ Auto → يبدأ فوراً
+    showDownloadNotif(appName, 3000, fileUrl, false, appId);
+    if (hasLink) {
+      incrementDownload(appId);
+      setTimeout(() => {
+        window.open(fileUrl, '_blank', 'noopener,noreferrer');
+      }, 1500);
+    }
+  } else {
+    // ⚠️ Auto OFF → نسقسوه قبل
+    if (!hasLink) {
+      showToast(
+        currentLang === 'ar' ? 'ما كاينش رابط تحميل' : 'No download link',
+        'warning', 2500
+      );
+      return;
+    }
+    
+    const userConfirmed = confirm(
+      currentLang === 'ar'
+        ? 'هل تريد فتح رابط التحميل؟\n\n' + (appName || '')
+        : 'Open download link?\n\n' + (appName || '')
+    );
+    
+    if (!userConfirmed) {
+      showToast(
+        currentLang === 'ar' ? 'تم إلغاء التحميل' : 'Download cancelled',
+        'info', 1800
+      );
+      return;
+    }
+    
+    showDownloadNotif(appName, 3000, fileUrl, false, appId);
+    incrementDownload(appId);
     setTimeout(() => {
       window.open(fileUrl, '_blank', 'noopener,noreferrer');
     }, 1500);
