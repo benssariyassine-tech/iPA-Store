@@ -11109,7 +11109,6 @@ function forgotPasswordFromPage(){
     .then(() => showToast(currentLang==='ar'?'تم إرسال رابط إعادة التعيين':'Reset link sent! Check your email.', 'success', 5000))
     .catch(err => showToast('Error: ' + err.message, 'error', 5000));
 }
-
 function registerFromPage(){
   const name = document.getElementById('lgnName').value.trim();
   const email = document.getElementById('lgnRegEmail').value.trim();
@@ -11145,10 +11144,21 @@ function registerFromPage(){
       });
     })
     .then(() => {
-      showToast(currentLang==='ar'?'تم إنشاء الحساب! تحقق من بريدك':'Account created! Check your email.', 'success', 6000);
       userProfile.isVerified = false;
       userProfile.displayName = name;
-      setTimeout(syncLoginUI, 400);
+      
+      _setResendCooldownEnd(Date.now() + RESEND_COOLDOWN_MS);
+      
+      setTimeout(() => {
+        syncLoginUI();
+        setTimeout(() => {
+          _initResendTickerIfNeeded();
+          // أظهر Toast "شوف بريدك"
+          if (typeof showVerifyInfoToast === 'function') {
+            showVerifyInfoToast(email);
+          }
+        }, 600);
+      }, 400);
     })
     .catch(err => showToast('Error: ' + err.message, 'error'));
 }
