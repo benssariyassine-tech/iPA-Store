@@ -11841,18 +11841,17 @@ console.log('✅ Login Page JS loaded');
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </span>
       </button>
-      
-      <div class="stg-row">
-        <div class="stg-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-          </svg>
-        </div>
-        <div class="stg-info">
-          <div class="stg-name" data-i18n="darkMode">Dark Mode</div>
-        </div>
-        <button class="stg-toggle" id="stgDarkMode" onclick="toggleSetting('darkMode')" aria-label="Toggle"></button>
-      </div>
+      <div class="stg-row" id="stgDarkModeRow" style="display:none;">
+  <div class="stg-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  </div>
+  <div class="stg-info">
+    <div class="stg-name" data-i18n="darkMode">Dark Mode</div>
+  </div>
+  <button class="stg-toggle" id="stgDarkMode" onclick="toggleSetting('darkMode')" aria-label="Toggle"></button>
+</div>
       
       <button class="stg-row" onclick="openFontSizePage()">
         <div class="stg-icon">
