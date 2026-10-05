@@ -1873,63 +1873,62 @@ body.light-mode .ai-quick-btn{background:rgba(0, 0, 0, 0.04);border-color:rgba(0
 
 @media (max-width: 380px){.ai-welcome-text{font-size:56px;letter-spacing:-1.5px}}
 /* =========================================
-   ✨ تصحيح شاشة الترحيب (Glass Effect Only)
+   ✨ الشكل الاحترافي النهائي لشاشة الترحيب
    ========================================= */
 
-/* 1. نحيّدوا التوهج الأزرق نهائياً */
+/* 1. نحيّدوا التوهج الأزرق */
 .ai-welcome-glow {
     display: none !important;
 }
 
-/* 2. الحاوية: نرجعو ليها العرض والطول باش الكلمات يتوسطو مزيان */
+/* 2. الحاوية: باش الكلمات يتوسطو مزيان */
 .ai-welcome-text-wrap {
     position: relative !important;
     width: 100% !important;
-    height: 130px !important; /* طول ثابت باش الكلام يبقى وسط */
+    height: 120px !important;
     display: block !important;
-    margin-bottom: 20px !important;
+    margin-bottom: 25px !important;
 }
 
-/* 3. التنسيق الأساسي للكلمتين (مرحبا و Welcome) */
+/* 3. التصميم الزجاجي الفخم للكلمتين */
 .ai-welcome-text {
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
     
-    /* 🔥 حجم خط آمن كيكبر ويصغر حسب الشاشة بلا ما يخرج */
-    font-size: clamp(2.5rem, 10vw, 4.5rem) !important; 
+    /* حجم متناسق وكبير */
+    font-size: clamp(2.8rem, 11vw, 5rem) !important; 
     font-weight: 900 !important;
-    letter-spacing: -1px !important;
-    white-space: normal !important; /* خليه يقدر ينزل سطر جديد إلا احتاج */
+    letter-spacing: -1.5px !important;
+    white-space: nowrap !important;
     margin: 0 !important;
     text-align: center !important;
     width: 100% !important;
     
-    /* 💎 تأثير الزجاج (Glass) */
+    /* 💎 سحر الزجاج الاحترافي: تدرج فضي ناصع */
     color: transparent !important;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.15) 100%) !important;
-    -webkit-background-clip: text !important;
-    background-clip: text !important;
+    background: linear-gradient(180deg, #ffffff 0%, #d4d4d8 50%, #a1a1a6 100%) إ !important;
+    -webkit-background-clip: text !importantح;
+    background-clip:ساس text !important;
     
-    /* إطار زجاجي رقيق */
-    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25) !important;
-    
-    /* ظل أسود خفيف باش الكلمة تبان وتقراها مزيان */
-    text-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.1) !important;
+    /* ✨ العمق: ظل قوي من الأسفل باش يبان العمق، مع توهج أبيض خفيف جداً */
+    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.8)) 
+            drop-shadow(0px 2px 5px rgba(0, 0, 0, 0.5))
+            drop-shadow(0px 0px 15px rgba(255, 255, 255, 0.15)) !important;
 }
 
-/* 4. نضمنوا بلي الكلمتين عندهم نفس التصميم بالضبط */
+/* 4. نضمنوا بلي الكلمتين (مرحبا و Welcome) عندهم نفس التصميم بالضبط */
 .ai-welcome-ar, 
 .ai-welcome-en {
     background: inherit !important;
     -webkit-background-clip: text !important;
     background-clip: text !important;
     color: transparent !important;
-    text-shadow: inherit !important;
+    filter: inherit !important;
 }
 
-/* 5. نرجعوا الأزرار فبلاصتهم باش ما يتلخبطوش */
+/* 5. نرجعوا الأزرار فبلاصتهم */
 .ai-quick-actions {
-    margin-top: 20px !important;
+    margin-top: 25px !important;
 }
