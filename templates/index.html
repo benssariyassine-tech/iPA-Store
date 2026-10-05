@@ -11952,36 +11952,63 @@ function _swapNotifCards(topCard, behindCard) {
 /* ===== Wrapper على showNotification ===== */
 (function() {
   if (typeof window.showNotification !== 'function') return;
-  if (window.showNotification._stackWrapped) return;
+  if (window.showNotification._categorized) return;
   
   const _orig = window.showNotification;
   
   window.showNotification = function(opts) {
     const o = Object.assign({}, opts || {});
     
-    if (o.duration === undefined) o.duration = NOTIF_DEFAULT_DURATION;
+    // مدة افتراضية 4 ثواني
+    if (o.duration === undefined) o.duration = 4000;
     
-    const stack = document.getElementById('notifStack');
-    if (stack) {
-      const existing = stack.querySelectorAll('.notif-card:not(.dismissing)');
-      if (existing.length >= NOTIF_MAX) {
-        const oldest = existing[existing.length - 1];
-        dismissNotif(oldest);
+    // 🎯 قاعدة: نخليو in-app غير إذا طلب صراحة
+    const showInApp = o.inApp === true;
+    
+    // 🎯 system notification — فقط للمهم (تحديثات التطبيقات)
+    const sendSystem = o.system === true 
+                    && appSettings.notifications 
+                    && Notification.permission === 'granted';
+    
+    let card = null;
+    
+    // In-App (فقط إذا طلب صراحة)
+    if (showInApp) {
+      // احذف الأقدم إذا كاين 2
+      const stack = document.getElementById('notifStack');
+      if (stack) {
+        const existing = stack.querySelectorAll('.notif-card:not(.dismissing)');
+        if (existing.length >= NOTIF_MAX) {
+          const oldest = existing[existing.length - 1];
+          dismissNotif(oldest);
+        }
       }
+      
+      card = _orig.call(this, o);
+      
+      if (card) {
+        setTimeout(() => _setupNotifSwipe(card), 50);
+      }
+      
+      setTimeout(_refreshNotifStack, 30);
     }
     
-    const card = _orig.call(this, o);
-    
-    if (card) {
-      setTimeout(() => _setupNotifSwipe(card), 50);
+    // System (فقط للمهم)
+    if (sendSystem && o.title) {
+      _sendSystemNotification(
+        o.title,
+        o.desc || '',
+        {
+          tag: o.tag || 'istore-sys-' + Date.now(),
+          data: o.data || null
+        }
+      );
     }
-    
-    setTimeout(_refreshNotifStack, 30);
     
     return card;
   };
   
-  window.showNotification._stackWrapped = true;
+  window.showNotification._categorized = true;
 })();
 
 /* ===== تحديث الترتيب عند الحذف ===== */
