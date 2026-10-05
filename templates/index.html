@@ -9476,6 +9476,7 @@ function handleFullLogin(user){
     }).catch(()=>{ isAdmin = false; isPublisher = false; applyAdminUI(); });
   }
   updateFavBtnVisibility();
+ updateHeaderAccountBtn();
   renderUI();
 }
 
@@ -9485,6 +9486,7 @@ loadSettings();
 applyTranslations();
 applyPremiumTheme();
 updateFavBtnVisibility();
+ updateHeaderAccountBtn();
 setTimeout(()=>{
   const activeBtn = document.querySelector('.nav-item[data-tab="'+currentTab+'"]');
   if(activeBtn) activeBtn.classList.add('active');
