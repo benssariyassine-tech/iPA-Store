@@ -13865,18 +13865,18 @@ function playWelcomeAnimation() {
   
   if (!welcomeScreen || !welcomeAr || !welcomeEn) return;
   
-  // خبي الشات وخلي الترحيب يبان
-  if (messages) messages.style.opacity = '0';
+  // ✅ نخبيو غير الرسائل القديمة (ماشي الـ Welcome Screen)
+  const oldMsgs = messages.querySelectorAll('.aiMsg');
+  oldMsgs.forEach(el => el.style.display = 'none');
   
-  // بداية: العربى ما كاينش
   welcomeAr.classList.remove('wiping-in', 'wiping-out');
   welcomeEn.classList.remove('wiping-in', 'wiping-out');
   
-  // 1. ظهور "مرحباً" بـ wipe من اليسار
   setTimeout(() => {
     welcomeAr.classList.add('wiping-in');
   }, 200);
-  
+  ...
+}
   // 2. Glow يبان
   setTimeout(() => {
     if (glow) glow.classList.add('active');
