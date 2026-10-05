@@ -13123,13 +13123,44 @@ function applyActivitiesTranslations() {
   });
 }
 
-function getDeviceId() {
-  let id = localStorage.getItem('istore_device_id');
-  if (!id) {
-    id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 10);
-    try { localStorage.setItem('istore_device_id', id); } catch(e) {}
+/* ============================================
+   📱 DEVICE FINGERPRINT — بصمة ثابتة للجهاز
+   (كي تكون نفس الشي في Safari و PWA)
+   ============================================ */
+function getDeviceFingerprint() {
+  const ua = navigator.userAgent || '';
+  const screenInfo = window.screen ? (window.screen.width + 'x' + window.screen.height + 'x' + window.screen.colorDepth) : '';
+  const tz = (typeof Intl !== 'undefined' && Intl.DateTimeFormat) 
+    ? (Intl.DateTimeFormat().resolvedOptions().timeZone || '') 
+    : '';
+  const lang = navigator.language || '';
+  const platform = navigator.platform || '';
+  
+  // 🧹 ننقيو الـ UA: نحيدو "Standalone" و PWA markers باش يكون نفس الشي
+  const cleanUA = ua
+    .replace(/\s*\(KHTML, like Gecko\)/g, '')
+    .replace(/\s*Standalone/gi, '')
+    .replace(/\s*PWA/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+  
+  // 🔗 نجمعو كل شي في string
+  const raw = cleanUA + '|' + screenInfo + '|' + tz + '|' + lang + '|' + platform;
+  
+  // 🔢 Hash (FNV-1a) باش نوليدو ID قصير وثابت
+  let hash = 0x811c9dc5;
+  for (let i = 0; i < raw.length; i++) {
+    hash ^= raw.charCodeAt(i);
+    hash = (hash * 0x01000193) >>> 0;
   }
-  return id;
+  
+  return 'dev_' + hash.toString(36);
+}
+
+function getDeviceId() {
+  // ✅ نستعملو fingerprint ثابت بدل localStorage
+  // هكا Safari و PWA كيشوفو نفس الجهاز
+  return getDeviceFingerprint();
 }
 
 function getDeviceInfo() {
