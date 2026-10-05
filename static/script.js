@@ -1888,18 +1888,7 @@ function openSettings(){
   document.getElementById('settingFontSize').value = appSettings.fontSize || 'medium';
   openModal('settingsModal');
 }
-function toggleSetting(name){
-  if(name === 'darkMode'){
-    toggleDarkMode();
-    appSettings.darkMode = isLightMode;
-    document.getElementById('settingDarkMode').classList.toggle('on', isLightMode);
-  } else {
-    appSettings[name] = !appSettings[name];
-    document.getElementById('setting' + name.charAt(0).toUpperCase() + name.slice(1)).classList.toggle('on', appSettings[name]);
-    showToast(name + ': ' + (appSettings[name] ? 'ON' : 'OFF'), 'info', 1500);
-  }
-  saveSettings();
-}
+
 function saveSettings(){ 
   try{ 
     localStorage.setItem('istore_app_settings', JSON.stringify(appSettings)); 
@@ -1908,22 +1897,7 @@ function saveSettings(){
     console.warn('saveSettings error:', e);
   } 
 }
-function loadSettings(){
-  try{
-    const s = JSON.parse(localStorage.getItem('istore_app_settings')||'{}');
-    if(s.darkMode !== undefined) appSettings.darkMode = s.darkMode;
-    if(s.notifications !== undefined) appSettings.notifications = s.notifications;
-    if(s.autoDownload !== undefined) appSettings.autoDownload = s.autoDownload;
-    if(s.fontSize) appSettings.fontSize = s.fontSize;
-    if(appSettings.darkMode && !isLightMode){
-      isLightMode = true;
-      document.body.classList.add('light-mode');
-      const icon = document.getElementById('themeIcon');
-      if(icon) icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
-    }
-    applyFontSize(appSettings.fontSize);
-  }catch(e){}
-}
+
 function changeFontSize(size){
   appSettings.fontSize = size;
   saveSettings();
@@ -3543,13 +3517,8 @@ async function sendAiMessage() {
     }
   }
 }
-  function handleBubbleClick(event) {
-  if(event) event.stopPropagation();
-  openAiChat();
-}
- function dismissNews(event) {
-  if(event) event.stopPropagation();
-}
+  
+ 
 // ✅ استدعاء الشريط كي تفتح الصفحة
 setTimeout(updateNewsBubble, 500);
  // ====== COMMENT REPORT SYSTEM ======
@@ -4914,23 +4883,7 @@ function verifyCodeFromPage(){
   }).catch(err => showToast('Error: ' + err.message, 'error'));
 }
 
-function resendCodeFromPage(){
-  if(!auth.currentUser) return;
-  const userEmail = auth.currentUser.email;
-  db.collection("users").doc(auth.currentUser.uid).get().then(doc => {
-    if(!doc.exists) return;
-    const data = doc.data();
-    const newCode = Math.floor(100000 + Math.random() * 900000).toString();
-    return db.collection("users").doc(auth.currentUser.uid).update({ verificationCode: newCode })
-      .then(() => emailjs.send('service_x7p1ujg', 'template_mp4sdd5', {
-        to_name: data.displayName || 'User',
-        to_email: userEmail,
-        from_name: "iStore Team",
-        verification_code: newCode
-      }))
-      .then(() => showToast(currentLang==='ar'?'تم إرسال رمز جديد':'New code sent!', 'success'));
-  }).catch(err => showToast('Error: ' + err.message, 'error'));
-}
+
 
 /* ===== REDIRECT OLD openAccountModal ===== */
 const _oldOpenAccountModal = window.openAccountModal;
