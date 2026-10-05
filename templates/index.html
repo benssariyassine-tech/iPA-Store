@@ -12266,7 +12266,46 @@ function _checkForUpdates() {
   _setLastUpdateCheck(now);
 }
 
+/* ============================================
+   🔗 ربط الإشعارات الداخلية مع النظام
+   ============================================ */
 
+/* Wrapper على showNotification — يبعث إشعار نظام تانيت */
+(function() {
+  if (typeof window.showNotification !== 'function') return;
+  if (window.showNotification._systemWrapped) return;
+  
+  const _orig = window.showNotification;
+  
+  window.showNotification = function(opts) {
+    const o = Object.assign({}, opts || {});
+    
+    // نادِ الدالة الأصلية (الإشعار داخل الموقع)
+    const card = _orig.call(this, o);
+    
+    // إذا الإشعار من نوع success أو error أو warning → ابعث نظام تانيت
+    // (ماشي info، لأن info كثيرة)
+    const sendSystem = o.sendSystem !== false 
+                    && appSettings.notifications 
+                    && Notification.permission === 'granted'
+                    && ['success', 'error', 'warning'].includes(o.type);
+    
+    if (sendSystem && o.title) {
+      _sendSystemNotification(
+        o.title,
+        o.desc || '',
+        {
+          tag: 'istore-sys-' + Date.now(),
+          data: o.data || null
+        }
+      );
+    }
+    
+    return card;
+  };
+  
+  window.showNotification._systemWrapped = true;
+})();
 
 /* ============================================
    🚀 INITIALIZATION — شغل Check Updates بعد ما تحمل
