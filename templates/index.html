@@ -10608,6 +10608,28 @@ function renderBotMessage(text) {
   
   return html;
 }
+ /* ============================================
+   LANGUAGE DETECTION
+   ============================================ */
+function detectUserLanguage(text) {
+  if (!text || typeof text !== 'string') return 'en';
+  
+  // نحسبو الحروف العربية مقابل اللاتينية
+  const arabicChars = (text.match(/[\u0600-\u06FF]/g) || []).length;
+  const latinChars = (text.match(/[a-zA-Z]/g) || []).length;
+  const totalLetters = arabicChars + latinChars;
+  
+  if (totalLetters === 0) return 'en'; // إذا ما كانش حروف (أرقام/رموز)
+  
+  // إلا 70% ولا أكثر عربي → عربي
+  if (arabicChars / totalLetters >= 0.7) return 'ar';
+  
+  // إلا 70% ولا أكثر لاتيني → إنجليزي
+  if (latinChars / totalLetters >= 0.7) return 'en';
+  
+  // الحالة الوسطية → كيتبع اللغة الحالية
+  return currentLang || 'en';
+}
  async function sendAiMessage() {
   let botTextForNotif = ''; 
   const input = document.getElementById('aiChatInput');
