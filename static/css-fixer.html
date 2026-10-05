@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مصلح CSS</title>
+<style>
+body{font-family:-apple-system,sans-serif;padding:16px;background:#0b0b0f;color:#fff;margin:0;line-height:1.6}
+h1{font-size:18px;margin:0 0 8px}
+p{font-size:12.5px;color:#8e8e93;margin:0 0 12px}
+button{width:100%;padding:16px;border-radius:12px;font-size:15px;font-weight:bold;border:none;cursor:pointer;font-family:inherit;margin:6px 0}
+.btn-primary{background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff}
+.btn-success{background:linear-gradient(135deg,#32d74b,#1a9f3a);color:#fff}
+button:active{transform:scale(0.98)}
+button:disabled{opacity:0.5}
+.report{padding:14px;background:#16161c;border-radius:12px;margin-top:10px;font-size:12.5px}
+.item{padding:8px 12px;background:#0b0b0f;border-radius:8px;margin:5px 0;display:flex;justify-content:space-between;gap:10px}
+.val{font-weight:bold;color:#32d74b}
+.badge{background:rgba(255,69,58,0.2);color:#ff453a;padding:3px 8px;border-radius:6px;font-weight:bold;font-size:11px}
+.badge.green{background:rgba(50,215,75,0.2);color:#32d74b}
+.badge.blue{background:rgba(10,132,255,0.2);color:#0a84ff}
+details{margin:6px 0}
+summary{cursor:pointer;font-size:12px;color:#8e8e93;padding:4px 0}
+pre{background:#0b0b0f;padding:10px;border-radius:8px;font-size:10px;max-height:200px;overflow:auto;white-space:pre-wrap;word-break:break-all;color:#aaa}
+</style>
+</head>
+<body>
+<h1>🔧 مصلح CSS العميق</h1>
+<p>كيصلح الفواصل، يحذف التكرارات داخل القاعدة، ويحذف القواعد المكررة.</p>
+<button id="btn" class="btn-primary" onclick="fix()">🔍 حلل و أصلح</button>
+<div id="report"></div>
+<button id="dlBtn" class="btn-success" style="display:none" onclick="dl()">💾 تحميل style.css المصلح</button>
+
+<script>
+let fixed = '';
+
+async function fix() {
+  const r = document.getElementById('report');
+  const btn = document.getElementById('btn');
+  btn.disabled = true;
+  r.innerHTML = '<div class="report">⏳ جاري التحميل...</div>';
+  document.getElementById('dlBtn').style.display = 'none';
+
+  try {
+    const url = 'https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/style.css';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const original = await resp.text();
+    const originalSize = original.length;
+
+    // 1. حذف التعليقات
+    let css = original.replace(/\/\*[\s\S]*?\*\//g, '');
+
+    // 2. إصلاح الفواصل الناقصة (السطر اللي قبل } بدون ;)
+    let missingFix = 0;
+    css = css.replace(/([^\s;{}])\s*\n(\s*[a-z-]+\s*:)/gi, (m, a, b) => {
+      missingFix++;
+      return a + ';\n' + b;
+    });
+
+    // 3. تحليل الكتل
+    const blocks = parseBlocks(css);
+
+    // 4. حذف التكرارات الحرفية
+    const seen = new Set();
+    const deduped = [];
+    let exactRemoved = 0;
+    blocks.forEach(b => {
+      if (b.selector.startsWith('@')) { deduped.push(b); return; }
+      const key = b.selector + '|||' + b.body.replace(/\s+/g, ' ').trim();
+      if (seen.has(key)) { exactRemoved++; return; }
+      seen.add(key);
+      deduped.push(b);
+    });
+
+    // 5. تنظيف داخل كل قاعدة (حذف التصريحات المكررة)
+    let insideCleaned = 0;
+    deduped.forEach(b => {
+      if (b.selector.startsWith('@')) return;
+      const lines = b.body.split(';').map(s => s.trim()).filter(Boolean);
+      const seenProps = {};
+      lines.forEach(line => {
+        const m = line.match(/^([a-z-]+)\s*:(.+)$/i);
+        if (m) {
+          const prop = m[1].toLowerCase();
+          const val = m[2].trim();
+          if (seenProps[prop] !== undefined && seenProps[prop] !== val) {
+            insideCleaned++;
+          }
+          seenProps[prop] = val;
+        }
+      });
+      // ناخذو آخر قيمة لكل خاصية
+      const finalLines = [];
+      const propOrder = [];
+      lines.forEach(line => {
+        const m = line.match(/^([a-z-]+)\s*:(.+)$/i);
+        if (m) {
+          const prop = m[1].toLowerCase();
+          if (propOrder.includes(prop)) {
+            const idx = finalLines.findIndex(l => l.toLowerCase().startsWith(prop + ':'));
+            if (idx > -1) finalLines[idx] = prop + ':' + m[2].trim();
+          } else {
+            propOrder.push(prop);
+            finalLines.push(prop + ':' + m[2].trim());
+          }
+        } else if (line.length > 0) {
+          finalLines.push(line);
+        }
+      });
+      b.body = finalLines.join(';');
+    });
+
+    // 6. حذف القواعد الفارغة
+    let emptyRemoved = 0;
+    const finalBlocks = [];
+    deduped.forEach(b => {
+      const empty = b.body.replace(/\s+/g, '').replace(/;/g, '').length === 0;
+      if (empty && !b.selector.startsWith('@')) { emptyRemoved++; return; }
+      finalBlocks.push(b);
+    });
+
+    // 7. تجميع
+    fixed = finalBlocks.map(b => b.selector + '{' + b.body + '}').join('\n\n');
+    fixed = fixed.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+
+    const newSize = fixed.length;
+    const savedKB = ((originalSize - newSize) / 1024).toFixed(2);
+
+    r.innerHTML = `
+      <div class="report">
+        <div class="item"><span>📥 الأصلي</span><span>${(originalSize/1024).toFixed(1)} KB</span></div>
+        <div class="item"><span>📤 المصلح</span><span class="val">${(newSize/1024).toFixed(1)} KB</span></div>
+        <div class="item"><span>💾 التوفير</span><span class="val">${savedKB} KB (${((originalSize-newSize)/originalSize*100).toFixed(1)}%)</span></div>
+        <div class="item"><span>🔧 فواصل مصلحة</span><span class="badge green">${missingFix}</span></div>
+        <div class="item"><span>🗑️ قواعد مكررة</span><span class="badge">${exactRemoved}</span></div>
+        <div class="item"><span>🧹 تصريحات مكررة داخل قواعد</span><span class="badge blue">${insideCleaned}</span></div>
+        <div class="item"><span>📭 قواعد فارغة</span><span class="badge">${emptyRemoved}</span></div>
+        <details>
+          <summary>👁️ عاين أول 300 حرف</summary>
+          <pre>${escapeHTML(fixed.substring(0, 300))}...</pre>
+        </details>
+      </div>`;
+    document.getElementById('dlBtn').style.display = 'block';
+  } catch(e) {
+    r.innerHTML = '<div class="report" style="color:#ff453a">❌ ' + e.message + '</div>';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function parseBlocks(css) {
+  const blocks = [];
+  let i = 0;
+  let start = 0;
+  let depth = 0;
+  while (i < css.length) {
+    const c = css[i];
+    if (c === '{') {
+      if (depth === 0) {
+        const sel = css.slice(start, i).trim();
+        let j = i + 1;
+        let d = 1;
+        let inStr = null;
+        while (j < css.length && d > 0) {
+          const cc = css[j];
+          if (inStr) {
+            if (cc === '\\') { j += 2; continue; }
+            if (cc === inStr) inStr = null;
+          } else if (cc === '"' || cc === "'") inStr = cc;
+          else if (cc === '{') d++;
+          else if (cc === '}') d--;
+          if (d === 0) break;
+          j++;
+        }
+        blocks.push({ selector: sel, body: css.slice(i+1, j), raw: css.slice(start, j+1) });
+        i = j + 1; start = i; continue;
+      }
+      depth++;
+    } else if (c === '}') {
+      depth--;
+      if (depth === 0) start = i + 1;
+    }
+    i++;
+  }
+  return blocks;
+}
+
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function dl() {
+  if (!fixed) return;
+  const blob = new Blob([fixed], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'style.css';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
