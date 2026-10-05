@@ -781,10 +781,28 @@ User
 <div class="aiChatMessages" id="aiChatMessages">
 <!-- شاشة الترحيب -->
 <div id="aiWelcomeScreen" class="ai-welcome-screen">
-  <div class="ai-welcome-text-wrap">
-    <h1 class="ai-welcome-text ai-welcome-ar" id="aiWelcomeAr">مرحباً</h1>
-    <h1 class="ai-welcome-text ai-welcome-en" id="aiWelcomeEn">Welcome</h1>
+  
+  <!-- ✨ Hero Container -->
+  <div class="ai-welcome-hero">
+    
+    <!-- أيقونة زجاجية -->
+    <div class="ai-welcome-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L13.5 8.5L20 10L13.5 11.5L12 18L10.5 11.5L4 10L10.5 8.5L12 2Z"/>
+      </svg>
+    </div>
+    
+    <!-- النص الرئيسي - ارتفاع ثابت -->
+    <div class="ai-welcome-text-wrap">
+      <h1 class="ai-welcome-text ai-welcome-ar" id="aiWelcomeAr">أهلاً بك</h1>
+      <h1 class="ai-welcome-text ai-welcome-en" id="aiWelcomeEn">Hello there</h1>
+    </div>
+    
+    <!-- النص التحتي -->
+    <p class="ai-welcome-sub" id="aiWelcomeSub">كيفاش نقدر نعاونك اليوم؟</p>
+    
   </div>
+  
   <div class="ai-welcome-glow" id="aiWelcomeGlow"></div>
   
   <!-- اقتراحات سريعة -->
