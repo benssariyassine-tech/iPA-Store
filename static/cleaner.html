@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منظف script.js</title>
+<style>
+body{font-family:-apple-system,sans-serif;padding:20px;background:#0b0b0f;color:#fff;margin:0;line-height:1.6}
+h1{font-size:20px;margin:0 0 8px}
+p{font-size:13px;color:#8e8e93;margin:0 0 14px}
+button{width:100%;padding:18px;border-radius:12px;font-size:15px;font-weight:bold;border:none;cursor:pointer;font-family:inherit;margin:8px 0}
+.btn-primary{background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff}
+.btn-success{background:linear-gradient(135deg,#32d74b,#1a9f3a);color:#fff}
+button:active{transform:scale(0.98)}
+.report{padding:16px;background:#16161c;border-radius:12px;margin-top:12px;font-size:13px}
+.report h3{margin:0 0 8px;font-size:14px;color:#0a84ff}
+.item{padding:8px 12px;background:#0b0b0f;border-radius:8px;margin:6px 0;display:flex;justify-content:space-between;gap:10px;font-size:12px}
+.badge{background:rgba(255,69,58,0.2);color:#ff453a;padding:3px 8px;border-radius:6px;font-weight:bold}
+.badge.ok{background:rgba(50,215,75,0.2);color:#32d74b}
+</style>
+</head>
+<body>
+<h1>🧹 منظف script.js</h1>
+<p>يجيب الملف من GitHub، يلقى التكرارات والدوال الميتة، ويعطيك نسخة نظيفة.</p>
+<button class="btn-primary" onclick="analyze()">🔍 حلل و نظف</button>
+<div id="report"></div>
+<button id="dlBtn" class="btn-success" style="display:none" onclick="dl()">💾 تحميل النسخة النظيفة</button>
+
+<script>
+let cleanedJS = '';
+let originalSize = 0;
+
+async function analyze() {
+  const report = document.getElementById('report');
+  report.innerHTML = '<div class="report">⏳ جاري تحميل script.js من GitHub...</div>';
+  document.getElementById('dlBtn').style.display = 'none';
+  
+  try {
+    const url = 'https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/script.js';
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    let source = await resp.text();
+    originalSize = source.length;
+    
+    const removed = [];
+    
+    // 1. الدوال المكررة (نحتفظو بآخر نسخة)
+    ['resendCodeFromPage', 'toggleSetting', 'loadSettings'].forEach(name => {
+      const ranges = findFuncs(source, name);
+      if (ranges.length > 1) {
+        ranges.sort((a, b) => a.start - b.start);
+        for (let i = ranges.length - 2; i >= 0; i--) {
+          source = source.slice(0, ranges[i].start) + source.slice(ranges[i].end);
+        }
+        removed.push({ name: name, count: ranges.length - 1, type: 'duplicate' });
+      }
+    });
+    
+    // 2. الدوال الميتة
+    ['handleBubbleClick', 'dismissNews'].forEach(name => {
+      const ranges = findFuncs(source, name);
+      if (ranges.length > 0) {
+        ranges.sort((a, b) => b.start - a.start);
+        ranges.forEach(r => { source = source.slice(0, r.start) + source.slice(r.end); });
+        removed.push({ name: name, count: 1, type: 'dead' });
+      }
+    });
+    
+    // 3. openThemeModal القديمة (إذا ما كانش استدعاء)
+    const otmRanges = findFuncs(source, 'openThemeModal');
+    if (otmRanges.length > 0) {
+      const srcCopy = source.replace(/function\s+openThemeModal[\s\S]*?\n\}/gi, '');
+      if (!/openThemeModal\s*\(/.test(srcCopy)) {
+        otmRanges.sort((a, b) => b.start - a.start);
+        otmRanges.forEach(r => { source = source.slice(0, r.start) + source.slice(r.end); });
+        removed.push({ name: 'openThemeModal (القديمة)', count: 1, type: 'dead' });
+      }
+    }
+    
+    cleanedJS = source;
+    
+    let html = '<div class="report"><h3>📊 النتائج</h3>';
+    html += '<div class="item"><span>الأصلي:</span><span>' + (originalSize/1024).toFixed(1) + ' KB</span></div>';
+    html += '<div class="item"><span>النظيف:</span><span style="color:#32d74b;">' + (source.length/1024).toFixed(1) + ' KB</span></div>';
+    html += '<div class="item"><span>التوفير:</span><span style="color:#32d74b;">' + ((originalSize-source.length)/1024).toFixed(1) + ' KB</span></div>';
+    html += '<h3 style="margin-top:14px;">🗑️ المحذوف:</h3>';
+    if (removed.length === 0) {
+      html += '<div class="item"><span>ما لقيتش شي</span><span class="badge ok">OK</span></div>';
+    } else {
+      removed.forEach(r => {
+        const label = r.type === 'duplicate' ? '🔁 مكرر ×' + (r.count+1) : '💀 ميت';
+        html += '<div class="item"><span>' + r.name + '</span><span class="badge">' + label + '</span></div>';
+      });
+    }
+    html += '</div>';
+    report.innerHTML = html;
+    document.getElementById('dlBtn').style.display = 'block';
+  } catch(e) {
+    report.innerHTML = '<div class="report" style="color:#ff453a;">❌ ' + e.message + '</div>';
+  }
+}
+
+function findFuncs(source, name) {
+  const esc = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp('(?:async\\s+)?function\\s+' + esc + '\\s*\\(', 'g');
+  const out = [];
+  let m;
+  while ((m = regex.exec(source)) !== null) {
+    let i = m.index, depth = 0, started = false, inStr = null, inCmt = null, end = -1;
+    while (i < source.length) {
+      const c = source[i], n = source[i+1];
+      if (inCmt === 'line') { if (c === '\n') inCmt = null; i++; continue; }
+      if (inCmt === 'block') { if (c === '*' && n === '/') { inCmt = null; i += 2; continue; } i++; continue; }
+      if (inStr) { if (c === '\\') { i += 2; continue; } if (c === inStr) inStr = null; i++; continue; }
+      if (c === '/' && n === '/') { inCmt = 'line'; i += 2; continue; }
+      if (c === '/' && n === '*') { inCmt = 'block'; i += 2; continue; }
+      if (c === '"' || c === "'" || c === '`') { inStr = c; i++; continue; }
+      if (c === '{') { if (!started) started = true; depth++; }
+      else if (c === '}') { depth--; if (started && depth === 0) { end = i+1; break; } }
+      i++;
+    }
+    if (end > 0) out.push({ start: m.index, end });
+  }
+  return out;
+}
+
+function dl() {
+  if (!cleanedJS) return;
+  const blob = new Blob([cleanedJS], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'script.js';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  document.getElementById('report').innerHTML += '<div class="report" style="color:#32d74b;margin-top:10px;">✅ تم التحميل! ارفعو لـ static/script.js في GitHub.</div>';
+}
+</script>
+</body>
+</html>
