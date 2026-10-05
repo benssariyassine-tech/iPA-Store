@@ -10864,8 +10864,14 @@ if (existingApp) {
   input.focus();
   return;
 }
-  const appsContext = getAppsContext() + autoFetchNote;
-  const fullSystemPrompt = AI_SYSTEM_PROMPT + appsContext;
+// ✅ نكشفو لغة المستخدم
+const userLang = detectUserLanguage(text);
+
+// ✅ نبعثو تذكير صريح للـ AI
+const langReminder = userLang === 'ar' 
+  ? '\n\n⚠️ المستخدم كتب بالعربية - رد بالعربية فقط.'
+  : '\n\n⚠️ The user wrote in English - respond in English only.';
+
 
   const messages_payload = [{ role: 'system', content: fullSystemPrompt }];
   aiChatHistory.slice(-8).forEach(msg => {
