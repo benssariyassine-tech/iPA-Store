@@ -13003,6 +13003,433 @@ if (document.readyState === 'loading') {
 
 console.log('✅ Onboarding Tour loaded');
 console.log('✅ Login Page JS loaded');
+ /* ============================================
+   📱 DEVICE SESSION TRACKING (أنشطتك)
+   ============================================ */
+
+// 🆔 ID الجهاز — ثابت لكل جهاز
+function getDeviceId() {
+  let id = localStorage.getItem('istore_device_id');
+  if (!id) {
+    id = 'dev_' + Date.now().toString(36) + '_' + Math.random().toString(36).substring(2, 10);
+    try { localStorage.setItem('istore_device_id', id); } catch(e) {}
+  }
+  return id;
+}
+
+// 🔍 معلومات الجهاز
+function getDeviceInfo() {
+  const ua = navigator.userAgent || '';
+  let deviceName = 'جهاز غير معروف';
+  let deviceType = 'desktop';
+  let os = 'Unknown';
+  let browser = 'Unknown';
+  let osIcon = 'monitor';
+
+  // OS
+  if (/iPhone/i.test(ua))        { os = 'iPhone'; deviceType = 'mobile'; deviceName = 'iPhone'; osIcon = 'smartphone'; }
+  else if (/iPad/i.test(ua))     { os = 'iPad'; deviceType = 'tablet'; deviceName = 'iPad'; osIcon = 'tablet'; }
+  else if (/Android/i.test(ua)) {
+    os = 'Android';
+    deviceType = /Mobile/i.test(ua) ? 'mobile' : 'tablet';
+    const m = ua.match(/Android[^;]*;\s*([^)]+?)(?:\s+Build|\))/);
+    deviceName = m ? m[1].trim() : (deviceType === 'mobile' ? 'Android Phone' : 'Android Tablet');
+    osIcon = deviceType === 'mobile' ? 'smartphone' : 'tablet';
+  }
+  else if (/Macintosh|Mac OS X/i.test(ua)) { os = 'macOS'; deviceName = 'Mac'; osIcon = 'laptop'; }
+  else if (/Windows/i.test(ua))  { os = 'Windows'; deviceName = 'Windows PC'; osIcon = 'monitor'; }
+  else if (/Linux/i.test(ua))    { os = 'Linux'; deviceName = 'Linux'; osIcon = 'monitor'; }
+
+  // Browser
+  if (/Edg\//i.test(ua))                    browser = 'Edge';
+  else if (/OPR\/|Opera/i.test(ua))         browser = 'Opera';
+  else if (/Chrome\//i.test(ua))            browser = 'Chrome';
+  else if (/Safari\//i.test(ua))            browser = 'Safari';
+  else if (/Firefox\//i.test(ua))           browser = 'Firefox';
+
+  // PWA standalone?
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isPWA) browser += ' (PWA)';
+
+  return { deviceName, os, browser, deviceType, userAgent: ua.substring(0, 200), osIcon, isPWA };
+}
+
+// 💾 نحفظ / نحدّث الجلسة ديال هذا الجهاز
+async function saveDeviceSession() {
+  if (!currentUser) return;
+  const deviceId = getDeviceId();
+  const info = getDeviceInfo();
+  const sessionRef = db.collection('users').doc(currentUser.uid)
+                       .collection('sessions').doc(deviceId);
+
+  try {
+    const doc = await sessionRef.get();
+    const payload = {
+      ...info,
+      lastActive: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (doc.exists) {
+      await sessionRef.update(payload);
+    } else {
+      payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+      payload.userEmail = currentUser.email || '';
+      await sessionRef.set(payload);
+    }
+  } catch (e) { console.warn('saveDeviceSession:', e); }
+}
+
+// 🔄 نحدّث lastActive كل 5 دقايق
+setInterval(() => { if (currentUser) saveDeviceSession(); }, 5 * 60 * 1000);
+
+/* ============================================
+   🖼️ ACTIVITIES PAGE — فتح / إغلاق
+   ============================================ */
+function openActivitiesPage() {
+  if (!currentUser) {
+    showToast('سجّل الدخول أولاً', 'warning', 2000);
+    return;
+  }
+  const page = document.getElementById('activitiesPage');
+  if (!page) return;
+
+  page.classList.add('open');
+  document.body.classList.add('stg-open', 'overlay-active');
+
+  const nav = document.querySelector('.isto-nav-wrap');
+  if (nav) nav.style.opacity = '0';
+
+  loadSessions();
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+}
+
+function closeActivitiesPage() {
+  const page = document.getElementById('activitiesPage');
+  if (!page) return;
+  page.classList.remove('open');
+  document.body.classList.remove('stg-open', 'overlay-active');
+  const nav = document.querySelector('.isto-nav-wrap');
+  if (nav) nav.style.opacity = '';
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+}
+
+/* ============================================
+   📋 LOAD SESSIONS — نجيب كل الأجهزة
+   ============================================ */
+function timeAgo(date) {
+  if (!date) return 'الآن';
+  const diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60) return 'قبل لحظات';
+  if (diff < 3600) return 'قبل ' + Math.floor(diff / 60) + ' دقيقة';
+  if (diff < 86400) return 'قبل ' + Math.floor(diff / 3600) + ' ساعة';
+  if (diff < 2592000) return 'قبل ' + Math.floor(diff / 86400) + ' يوم';
+  return date.toLocaleDateString('ar');
+}
+
+function getDeviceSvg(icon) {
+  if (icon === 'smartphone') return '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>';
+  if (icon === 'tablet') return '<rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>';
+  if (icon === 'laptop') return '<path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v11H4z"/><line x1="2" y1="19" x2="22" y2="19"/>';
+  return '<rect x="3" y="4" width="18" height="13" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>';
+}
+
+async function loadSessions() {
+  if (!currentUser) return;
+  const myDeviceId = getDeviceId();
+
+  try {
+    const snap = await db.collection('users').doc(currentUser.uid)
+                      .collection('sessions')
+                      .orderBy('lastActive', 'desc')
+                      .get();
+
+    const all = [];
+    snap.forEach(doc => all.push({ id: doc.id, ...doc.data() }));
+
+    const mine = all.find(s => s.id === myDeviceId) || {
+      ...getDeviceInfo(),
+      createdAt: { toDate: () => new Date() },
+      lastActive: { toDate: () => new Date() }
+    };
+    const others = all.filter(s => s.id !== myDeviceId);
+
+    // 🟢 الجهاز الحالي
+    document.getElementById('curDevName').textContent = mine.deviceName || 'هذا الجهاز';
+    document.getElementById('curDevInfo').textContent = 
+      (mine.os || '') + ' • ' + (mine.browser || '') + ' • آخر نشاط: الآن';
+
+    // 🟠 الأجهزة الأخرى
+    const othersCard = document.getElementById('otherSessionsCard');
+    const countEl = document.getElementById('otherDevicesCount');
+
+    if (others.length === 0) {
+      countEl.textContent = '';
+      othersCard.innerHTML = `
+        <div style="padding:32px 16px;text-align:center;">
+          <svg style="width:56px;height:56px;margin:0 auto 12px;stroke:var(--border-color);fill:none;stroke-width:1.5;" viewBox="0 0 24 24">
+            <rect x="5" y="2" width="14" height="20" rx="2"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+          <div style="color:var(--text-color);font-weight:700;font-size:14px;margin-bottom:4px;">ما كاينش أجهزة أخرى</div>
+          <div style="color:var(--subtext-color);font-size:12px;">حسابك مسجل غير في هذا الجهاز</div>
+        </div>`;
+      return;
+    }
+
+    countEl.textContent = others.length + ' ' + (others.length === 1 ? 'جهاز' : 'أجهزة');
+
+    let html = '';
+    others.forEach(s => {
+      const lastDate = s.lastActive && s.lastActive.toDate ? s.lastActive.toDate() : null;
+      const when = timeAgo(lastDate);
+      html += `
+        <div class="stg-row" style="align-items:flex-start;padding:16px;border-bottom:1px solid var(--border-color);" id="session_${s.id}">
+          <div class="stg-icon" style="background:linear-gradient(135deg,rgba(255,159,10,0.18),rgba(255,159,10,0.06));color:var(--warning);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              ${getDeviceSvg(s.osIcon)}
+            </svg>
+          </div>
+          <div class="stg-info" style="flex:1;">
+            <div class="stg-name">${escapeHTML(s.deviceName || 'جهاز')}</div>
+            <div class="stg-sub">${escapeHTML(s.os || '')} • ${escapeHTML(s.browser || '')}</div>
+            <div style="font-size:11px;color:var(--warning);font-weight:700;margin-top:6px;display:flex;align-items:center;gap:5px;">
+              <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+              </svg>
+              ${when}
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button onclick="confirmRemoveSession('${s.id}', '${escapeHTML(s.deviceName || 'هذا الجهاز')}')" 
+              style="background:rgba(255,69,58,0.12);color:var(--danger);border:1px solid rgba(255,69,58,0.25);padding:7px 12px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">
+              إخراج
+            </button>
+            <button onclick="askIsThisYou('${s.id}', '${escapeHTML(s.deviceName || 'هذا الجهاز')}')" 
+              style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:7px 12px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">
+              هل هذا نتا؟
+            </button>
+          </div>
+        </div>`;
+    });
+
+    othersCard.innerHTML = html;
+
+  } catch (e) {
+    console.warn('loadSessions:', e);
+    document.getElementById('otherSessionsCard').innerHTML = 
+      `<div style="padding:24px;text-align:center;color:var(--danger);font-size:13px;">تعذر تحميل الأجهزة</div>`;
+  }
+}
+
+/* ============================================
+   ❓ "هل هذا نتا؟" — سؤال ذكي
+   ============================================ */
+async function askIsThisYou(sessionId, deviceName) {
+  const isMe = await showIOSConfirm({
+    type: 'info',
+    icon: 'info',
+    title: 'هل هذا الجهاز نتا؟',
+    message: `سجل هذا الجهاز دخول من:\n${deviceName}\n\nإذا ما كنتش نتا، راح نخرجه فوراً ونطلب منك تبدل كلمة السر.`,
+    okText: 'لا، ماشي أنا',
+    cancelText: 'نعم، هذا أنا'
+  });
+
+  if (isMe) {
+    // يعني كليكى "لا، ماشي أنا" → نخرجوه
+    await removeSession(sessionId, true);
+  } else {
+    // "نعم هذا أنا" → نسجلو ثقة
+    showToast('زعما مزيان، تم تسجيل ثقة', 'success', 2000);
+  }
+}
+
+/* ============================================
+   🚪 إخراج جهاز (مع تأكيد)
+   ============================================ */
+async function confirmRemoveSession(sessionId, deviceName) {
+  const ok = await showIOSConfirm({
+    type: 'danger',
+    icon: 'trash',
+    title: 'إخراج الجهاز',
+    message: `تأكيد إخراج "${deviceName}" من حسابك؟`,
+    okText: 'إخراج',
+    cancelText: 'إلغاء'
+  });
+  if (ok) await removeSession(sessionId, false);
+}
+
+async function removeSession(sessionId, securityMode) {
+  if (!currentUser) return;
+  try {
+    await db.collection('users').doc(currentUser.uid)
+            .collection('sessions').doc(sessionId).delete();
+
+    const el = document.getElementById('session_' + sessionId);
+    if (el) {
+      el.style.transition = 'all 0.4s ease';
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(60px)';
+      setTimeout(() => { el.remove(); loadSessions(); }, 400);
+    }
+
+    if (securityMode) {
+      // 🚨 حالة أمنية — نسقسوه يبدل كلمة السر
+      const changeNow = await showIOSConfirm({
+        type: 'warning',
+        icon: 'warning',
+        title: '⚠️ تنبيه أمني',
+        message: 'الجهاز تم إخراجه. ننصحك تبدل كلمة السر فوراً باش تحمي حسابك.',
+        okText: 'نعم، بدل كلمة السر',
+        cancelText: 'بعدين'
+      });
+      if (changeNow) {
+        closeActivitiesPage();
+        setTimeout(openChangePasswordPage, 300);
+      }
+    } else {
+      showToast('تم إخراج الجهاز', 'success', 2000);
+    }
+  } catch (e) {
+    console.warn('removeSession:', e);
+    showToast('تعذر الإخراج', 'error', 2000);
+  }
+}
+
+/* ============================================
+   🚫 تسجيل خروج من كل الأجهزة
+   ============================================ */
+async function logoutAllOtherDevices() {
+  if (!currentUser) return;
+  const ok = await showIOSConfirm({
+    type: 'danger',
+    icon: 'warning',
+    title: 'إخراج كل الأجهزة',
+    message: 'راح تخرج من كل الأجهزة الأخرى المسجلة. هذا الجهاز راح يبقى. متأكد؟',
+    okText: 'إخراج الكل',
+    cancelText: 'إلغاء'
+  });
+  if (!ok) return;
+
+  try {
+    const myId = getDeviceId();
+    const snap = await db.collection('users').doc(currentUser.uid).collection('sessions').get();
+
+    const batch = db.batch();
+    let count = 0;
+    snap.forEach(doc => {
+      if (doc.id !== myId) {
+        batch.delete(doc.ref);
+        count++;
+      }
+    });
+    await batch.commit();
+
+    showToast(`تم إخراج ${count} جهاز`, 'success', 2500);
+    loadSessions();
+  } catch (e) {
+    console.warn('logoutAll:', e);
+    showToast('تعذر الإخراج', 'error', 2000);
+  }
+}
+
+/* ============================================
+   🔐 CHANGE PASSWORD
+   ============================================ */
+function openChangePasswordPage() {
+  if (!currentUser) {
+    showToast('سجّل الدخول أولاً', 'warning', 2000);
+    return;
+  }
+  // إلا كان Google ولا غير provider
+  const isEmailProvider = currentUser.providerData.some(p => p.providerId === 'password');
+  if (!isEmailProvider) {
+    showToast('حسابك ماشي بالإيميل — ما تقدرش تبدل كلمة السر', 'info', 3000);
+    return;
+  }
+
+  document.getElementById('chgCurrentPass').value = '';
+  document.getElementById('chgNewPass').value = '';
+  document.getElementById('chgNewPass2').value = '';
+
+  const page = document.getElementById('changePasswordPage');
+  page.classList.add('open');
+  document.body.classList.add('stg-open', 'overlay-active');
+  const nav = document.querySelector('.isto-nav-wrap');
+  if (nav) nav.style.opacity = '0';
+}
+
+function closeChangePasswordPage() {
+  const page = document.getElementById('changePasswordPage');
+  if (!page) return;
+  page.classList.remove('open');
+  document.body.classList.remove('stg-open', 'overlay-active');
+  const nav = document.querySelector('.isto-nav-wrap');
+  if (nav) nav.style.opacity = '';
+}
+
+async function submitChangePassword() {
+  if (!currentUser) return;
+  const currentPass = document.getElementById('chgCurrentPass').value;
+  const newPass = document.getElementById('chgNewPass').value;
+  const newPass2 = document.getElementById('chgNewPass2').value;
+
+  if (!currentPass || !newPass || !newPass2) {
+    showToast('عمّر كل الحقول', 'warning', 2000);
+    return;
+  }
+  if (newPass.length < 6) {
+    showToast('كلمة السر قصيرة (6 على الأقل)', 'warning', 2500);
+    return;
+  }
+  if (newPass !== newPass2) {
+    showToast('كلمتين السر ماشي كيفكيف', 'warning', 2500);
+    return;
+  }
+  if (newPass === currentPass) {
+    showToast('كلمة السر الجديدة كيف القديمة', 'warning', 2500);
+    return;
+  }
+
+  try {
+    // 🔐 نأكد الهوية الأولى
+    const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPass);
+    await currentUser.reauthenticateWithCredential(cred);
+
+    // ✏️ نبدلو كلمة السر
+    await currentUser.updatePassword(newPass);
+
+    showToast('✅ تم تحديث كلمة المرور بنجاح', 'success', 3000);
+    closeChangePasswordPage();
+
+    // 🔒 نسجلو الحدث في Firestore (اختياري)
+    try {
+      await db.collection('users').doc(currentUser.uid).update({
+        passwordChangedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+    } catch(e) {}
+
+  } catch (e) {
+    console.warn('changePassword:', e);
+    let msg = 'تعذر تحديث كلمة المرور';
+    if (e.code === 'auth/wrong-password') msg = 'كلمة السر الحالية غلط';
+    else if (e.code === 'auth/too-many-requests') msg = 'محاولات كثيرة، انتظر شوية';
+    else if (e.code === 'auth/requires-recent-login') msg = 'خاصك تدخل من جديد قبل التغيير';
+    showToast(msg, 'error', 3500);
+  }
+}
+
+/* ============================================
+   🔗 HOOKS — نربطو مع auth flow
+   ============================================ */
+// عند الدخول → نسجلو الجهاز
+if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
+  auth.onAuthStateChanged(u => {
+    if (u) setTimeout(saveDeviceSession, 1500);
+  });
+}
+// كي يتحمل الموقع و المستخدم مسجل → نسجلو
+setTimeout(() => { if (currentUser) saveDeviceSession(); }, 3000);
+
+console.log('✅ Activities + Password Change loaded');
 </script>
 
 <div id="aiChatDrawer">
@@ -13115,23 +13542,41 @@ console.log('✅ Login Page JS loaded');
   <div class="stg-scroll">
     
     <!-- ===== ACCOUNT ===== -->
-    <section class="stg-card stg-card-account">
-      <button class="stg-row stg-row-account" onclick="openAccountModal()">
-        <div class="stg-avatar" id="stgAvatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-        </div>
-        <div class="stg-info">
-          <div class="stg-name" id="stgName" data-i18n="signIn">Sign In</div>
-          <div class="stg-sub" id="stgEmail" data-i18n="tapToSignIn">Tap to sign in</div>
-        </div>
-        <span class="stg-chevron">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </span>
-      </button>
-    </section>
+<section class="stg-card stg-card-account">
+  <button class="stg-row stg-row-account" onclick="openAccountModal()">
+    <div class="stg-avatar" id="stgAvatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>
+    <div class="stg-info">
+      <div class="stg-name" id="stgName" data-i18n="signIn">Sign In</div>
+      <div class="stg-sub" id="stgEmail" data-i18n="tapToSignIn">Tap to sign in</div>
+    </div>
+    <span class="stg-chevron">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </span>
+  </button>
+
+  <!-- ✅ جديد: زر أنشطتك -->
+  <button class="stg-row" onclick="openActivitiesPage()" id="activitiesBtn" style="border-top:1px solid var(--border-color);">
+    <div class="stg-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+        <line x1="12" y1="18" x2="12.01" y2="18"/>
+        <path d="M9 6h6M9 10h6M9 14h4"/>
+      </svg>
+    </div>
+    <div class="stg-info">
+      <div class="stg-name">أنشطتك</div>
+      <div class="stg-sub">الأجهزة المتصلة بحسابك</div>
+    </div>
+    <span class="stg-chevron">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </span>
+  </button>
+</section>
     
     <!-- ===== APPEARANCE ===== -->
     <div class="stg-label" data-i18n="sectionAppearance">APPEARANCE</div>
