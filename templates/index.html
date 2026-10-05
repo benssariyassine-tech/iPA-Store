@@ -10490,7 +10490,24 @@ function renderBotMessage(text) {
   const text = input.value.trim();
   if (!text) return;
 
- 
+ async function sendAiMessage() {
+  let botTextForNotif = '';
+  const input = document.getElementById('aiChatInput');
+  const sendBtn = document.getElementById('aiChatSendBtn');
+  const messages = document.getElementById('aiChatMessages');
+  const text = input.value.trim();
+  if (!text) return;
+
+  // ✅ جديد: خبي Welcome Screen
+  hideWelcomeScreen();
+  // ✅ رجّع الرسائل القديمة
+  const oldMsgs = messages.querySelectorAll('.aiMsg');
+  oldMsgs.forEach(el => el.style.display = '');
+
+  // إظهار رسالة المستخدم
+  const userMsg = document.createElement('div');
+  ...
+}
 
   // إظهار رسالة المستخدم
   const userMsg = document.createElement('div');
