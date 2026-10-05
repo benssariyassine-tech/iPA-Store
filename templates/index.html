@@ -9801,7 +9801,8 @@ auth.onAuthStateChanged(user=>{
 });
 
 function handleFullLogin(user){
-  document.getElementById('loginView').style.display = 'none';
+  setTimeout(saveDeviceSession, 800);
+ document.getElementById('loginView').style.display = 'none';
   document.getElementById('registerView').style.display = 'none';
   document.getElementById('verifyCodeView').style.display = 'none';
   document.getElementById('loggedInView').style.display = 'block';
