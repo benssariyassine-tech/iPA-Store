@@ -10853,7 +10853,7 @@ if (existingApp) {
     </div>
   `;
   
-  messages.appendChild(appCard);
+messages.appendChild(appCard);
   messages.scrollTop = messages.scrollHeight;
   
   appCard.querySelector('.app-card-download-btn').addEventListener('click', (e) => {
@@ -10875,22 +10875,34 @@ if (existingApp) {
   
   sendBtn.disabled = false;
   input.focus();
-  return;
-}
-// ✅ نكشفو لغة المستخدم
-const userLang = detectUserLanguage(text);
+  return; // ⚠️ تحذير: إذا تم الوصول لهذا السطر، لن يكمل الكود للأسفل ولن يرسل للـ AI
 
-// ✅ نبعثو تذكير صريح للـ AI
-const langReminder = userLang === 'ar' 
-  ? '\n\n⚠️ المستخدم كتب بالعربية - رد بالعربية فقط.'
-  : '\n\n⚠️ The user wrote in English - respond in English only.';
+/* ============================================
+     📤 إرسال الرسالة للـ AI
+     ============================================ */
+  
+  // ✅ نكشفو لغة المستخدم (تم حذف التكرار)
+  const userLang = (typeof detectUserLanguage === 'function') 
+    ? detectUserLanguage(text) 
+    : (currentLang || 'en');
+  
+  // ✅ تذكير صريح للـ AI (تم حذف التكرار)
+  const langReminder = userLang === 'ar'
+    ? '\n\n⚠️ المستخدم كتب بالعربية - رد بالعربية فقط.'
+    : '\n\n⚠️ The user wrote in English - respond in English only.';
+  
+  // ✅ بناء السياق + الـ System Prompt
+  const appsContext = getAppsContext() + (typeof autoFetchNote !== 'undefined' ? autoFetchNote : '') + langReminder;
+  const fullSystemPrompt = AI_SYSTEM_PROMPT + appsContext;
 
-
+  // ✅ بناء الرسائل
   const messages_payload = [{ role: 'system', content: fullSystemPrompt }];
   aiChatHistory.slice(-8).forEach(msg => {
     messages_payload.push({ role: msg.role, content: msg.content });
   });
   messages_payload.push({ role: 'user', content: text });
+
+
 
   const startTime = Date.now();
   const MIN_DELAY = 2000;
