@@ -7568,7 +7568,10 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
   const d = duration || 3000;
   const hasLink = !!(appUrl && appUrl !== '#' && appUrl.trim() !== '');
 
+  // 🎯 In-App فقط (ماشي system)
   const card = showNotification({
+    inApp: true,       // ← In-App
+    system: false,     // ← ما يبعثش system
     title: currentLang === 'ar' ? 'جاري توجيهك لرابط التحميل...' : 'Redirecting to download link...',
     desc: appName || '',
     type: 'info',
@@ -7576,7 +7579,7 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
     duration: 0,
     progress: true,
     vibrate: true,
-    context: { appName: appName, appUrl: appUrl, appId: appId },   // 👈 زيد appId
+    context: { appName, appUrl, appId },
     showProblem: true
   });
 
@@ -7584,7 +7587,6 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
 
   setTimeout(() => {
     if (hasLink) {
-      // ✅ نجح — نبدلو محتوى الإشعار
       updateNotifContent(card, {
         type: 'success',
         title: currentLang === 'ar' ? 'تم فتح الرابط بنجاح' : 'Link opened successfully',
@@ -7592,22 +7594,16 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
         icon: getNotifIcon('success')
       });
       
-      // نحيدو زر "هل واجهت مشكلة؟" و نخليو "إبلاغ" فقط
       const problemBtn = card.querySelector('.notif-opt-problem');
       if (problemBtn) problemBtn.remove();
       
       setTimeout(() => dismissNotif(card), 3000);
     } else {
-      // ❌ فشل — نحددو سبب الفشل
       let errorDesc = '';
       if (!appUrl || appUrl === '') {
-        errorDesc = currentLang === 'ar'
-          ? 'ما كاينش رابط تحميل لهذا التطبيق'
-          : 'No download link for this app';
+        errorDesc = currentLang === 'ar' ? 'ما كاينش رابط تحميل لهذا التطبيق' : 'No download link for this app';
       } else if (appUrl === '#') {
-        errorDesc = currentLang === 'ar'
-          ? 'الرابط ماشي صحيح (placeholder)'
-          : 'Invalid link (placeholder)';
+        errorDesc = currentLang === 'ar' ? 'الرابط ماشي صحيح' : 'Invalid link';
       }
       
       updateNotifContent(card, {
@@ -7617,7 +7613,6 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
         icon: getNotifIcon('error')
       });
       
-      // نخليو فقط "إبلاغ" (باش يبلغ على الرابط المعطل)
       const problemBtn = card.querySelector('.notif-opt-problem');
       if (problemBtn) problemBtn.remove();
       
