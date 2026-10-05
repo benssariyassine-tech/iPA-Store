@@ -6554,8 +6554,6 @@ if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
  /* ============================================
    AI WELCOME SCREEN ANIMATION
    ============================================ */
-let _welcomeAnimPlayed = false;
-
 function playWelcomeAnimation() {
   const welcomeScreen = document.getElementById('aiWelcomeScreen');
   const welcomeAr = document.getElementById('aiWelcomeAr');
@@ -6566,35 +6564,51 @@ function playWelcomeAnimation() {
   
   if (!welcomeScreen || !welcomeAr || !welcomeEn) return;
   
+  // ✅ نخبيو الرسائل القديمة
   const oldMsgs = messages.querySelectorAll('.aiMsg');
   oldMsgs.forEach(el => el.style.display = 'none');
   
+  // ✅ نبدلو النص التحتي حسب اللغة
+  const subEl = document.getElementById('aiWelcomeSub');
+  if (subEl && typeof currentLang !== 'undefined') {
+    subEl.textContent = currentLang === 'ar' 
+      ? 'كيفاش نقدر نعاونك اليوم؟' 
+      : 'How can I help you today?';
+  }
+  
+  // Reset الأنيميشن
   welcomeAr.classList.remove('wiping-in', 'wiping-out');
   welcomeEn.classList.remove('wiping-in', 'wiping-out');
   
-  // 1. ظهور "مرحباً"
+  // 1. النص العربي يبان (fade + scale)
   setTimeout(() => {
     welcomeAr.classList.add('wiping-in');
-  }, 200);
+  }, 300);
   
-  // 2. Glow يبان
+  // 2. الـ Glow يبان
   setTimeout(() => {
     if (glow) glow.classList.add('active');
   }, 800);
   
-  // 3. تبديل لـ Welcome
+  // 3. النص العربي يختفي + الإنجليزي يبان
   setTimeout(() => {
     welcomeAr.classList.remove('wiping-in');
     welcomeAr.classList.add('wiping-out');
+    
     setTimeout(() => {
       welcomeEn.classList.add('wiping-in');
-    }, 200);
-  }, 2500);
+      
+      // ✅ نبدلو النص التحتي للإنجليزي
+      if (subEl) {
+        subEl.textContent = 'How can I help you today?';
+      }
+    }, 250);
+  }, 2600);
   
   // 4. Quick Actions
   setTimeout(() => {
     if (quickActions) quickActions.classList.add('show');
-  }, 3500);
+  }, 3600);
 }
 
 function hideWelcomeScreen() {
