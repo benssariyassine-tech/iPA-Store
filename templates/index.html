@@ -13855,6 +13855,91 @@ if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
     }
   });
 }
+ /* ============================================
+   AI WELCOME SCREEN ANIMATION
+   ============================================ */
+let _welcomeAnimPlayed = false;
+
+function playWelcomeAnimation() {
+  const welcomeScreen = document.getElementById('aiWelcomeScreen');
+  const welcomeAr = document.getElementById('aiWelcomeAr');
+  const welcomeEn = document.getElementById('aiWelcomeEn');
+  const quickActions = document.getElementById('aiQuickActions');
+  const glow = document.getElementById('aiWelcomeGlow');
+  const messages = document.getElementById('aiChatMessages');
+  
+  if (!welcomeScreen || !welcomeAr || !welcomeEn) return;
+  
+  // خبي الشات وخلي الترحيب يبان
+  if (messages) messages.style.opacity = '0';
+  
+  // بداية: العربى ما كاينش
+  welcomeAr.classList.remove('wiping-in', 'wiping-out');
+  welcomeEn.classList.remove('wiping-in', 'wiping-out');
+  
+  // 1. ظهور "مرحباً" بـ wipe من اليسار
+  setTimeout(() => {
+    welcomeAr.classList.add('wiping-in');
+  }, 200);
+  
+  // 2. Glow يبان
+  setTimeout(() => {
+    if (glow) glow.classList.add('active');
+  }, 800);
+  
+  // 3. بعد 2.5 ثانية: "مرحباً" تختفي بـ wipe، و"Welcome" تبان
+  setTimeout(() => {
+    welcomeAr.classList.remove('wiping-in');
+    welcomeAr.classList.add('wiping-out');
+    
+    setTimeout(() => {
+      welcomeEn.classList.add('wiping-in');
+    }, 200);
+  }, 2500);
+  
+  // 4. Quick Actions تبان
+  setTimeout(() => {
+    if (quickActions) quickActions.classList.add('show');
+  }, 3500);
+}
+
+function hideWelcomeScreen() {
+  const welcomeScreen = document.getElementById('aiWelcomeScreen');
+  const messages = document.getElementById('aiChatMessages');
+  
+  if (welcomeScreen) welcomeScreen.classList.add('hide');
+  if (messages) messages.style.opacity = '1';
+}
+
+function sendQuickAction(type) {
+  const input = document.getElementById('aiChatInput');
+  if (!input) return;
+  
+  const messages = {
+    app: currentLang === 'ar' ? 'ابحث عن تطبيق' : 'Find an app',
+    help: currentLang === 'ar' ? 'كيفاش نحمل تطبيق؟' : 'How do I download an app?',
+    publisher: currentLang === 'ar' ? 'كيفاش نصير ناشر؟' : 'How to become a publisher?'
+  };
+  
+  input.value = messages[type] || '';
+  sendAiMessage();
+}
+
+// ⚙️ ربط الأنيميشن ملي يفتح الشات
+const _origOpenAiChat = window.openAiChat;
+window.openAiChat = function() {
+  _origOpenAiChat.call(this);
+  
+  const messages = document.getElementById('aiChatMessages');
+  const hasHistory = messages && messages.querySelectorAll('.aiMsg').length > 1;
+  
+  if (!_welcomeAnimPlayed && !hasHistory) {
+    setTimeout(() => {
+      playWelcomeAnimation();
+      _welcomeAnimPlayed = true;
+    }, 400);
+  }
+};
 console.log('Activities + Password loaded');
 </script>
 
