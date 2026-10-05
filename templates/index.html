@@ -12237,7 +12237,7 @@ function _setLastUpdateCheck(timestamp) {
 }
 
 /* تحقق من التحديثات الجديدة */
-function _checkForUpdates() {
+ function _checkForUpdates() {
   if (!appSettings.updateAlerts) return;
   if (!appSettings.notifications) return;
   if (Notification.permission !== 'granted') return;
@@ -12249,36 +12249,40 @@ function _checkForUpdates() {
   // إذا فحصنا في آخر 24 ساعة → ما نعاودوش
   if (now - lastCheck < oneDay) return;
   
-  // جيب التطبيقات الجديدة (في آخر 24 ساعة)
+  // جيب التطبيقات الجديدة (في آخر 7 أيام)
   const newApps = allAppsCache.filter(app => {
     if (!app.createdAt || !app.createdAt.seconds) return false;
     const appTime = app.createdAt.seconds * 1000;
-    return appTime > lastCheck && appTime > (now - 7 * oneDay); // آخر 7 أيام
+    return appTime > lastCheck && appTime > (now - 7 * oneDay);
   });
   
   if (newApps.length > 0) {
-    // إشعار بالتطبيقات الجديدة
     const appNames = newApps.slice(0, 3).map(a => a.name).join(', ');
     const count = newApps.length;
     
-    _sendSystemNotification(
-      currentLang === 'ar' 
-        ? `🆕 ${count} تطبيق جديد` 
-        : `🆕 ${count} new ${count > 1 ? 'apps' : 'app'}`,
-      currentLang === 'ar'
-        ? `تم إضافة: ${appNames}${count > 3 ? ' والمزيد...' : ''}`
-        : `Added: ${appNames}${count > 3 ? ' and more...' : ''}`,
-      {
-        tag: 'istore-new-apps-' + now,
+    const title = currentLang === 'ar' 
+      ? `🆕 ${count} تطبيق جديد` 
+      : `🆕 ${count} new ${count > 1 ? 'apps' : 'app'}`;
+    
+    const desc = currentLang === 'ar'
+      ? `تم إضافة: ${appNames}${count > 3 ? ' والمزيد...' : ''}`
+      : `Added: ${appNames}${count > 3 ? ' and more...' : ''}`;
+    
+    // 🎯 استعمل showNotification — الـ Router كيقرر (in-app ولا system)
+    if (typeof showNotification === 'function') {
+      showNotification({
+        title: title,
+        desc: desc,
+        type: 'success',
+        duration: 10000,
+        vibrate: true,
         data: { url: '/' }
-      }
-    );
+      });
+    }
   }
   
-  // احفظ الوقت
   _setLastUpdateCheck(now);
 }
-
 
 /* ============================================
    🚀 INITIALIZATION — شغل Check Updates بعد ما تحمل
