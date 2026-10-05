@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تقسيم index.html</title>
+<style>
+body{font-family:-apple-system,sans-serif;padding:20px;background:#0b0b0f;color:#fff;margin:0}
+h1{font-size:20px;margin:0 0 8px}
+p{font-size:13px;color:#8e8e93;margin:0 0 14px;line-height:1.6}
+input,button{width:100%;padding:14px;margin:8px 0;border-radius:12px;font-size:15px;box-sizing:border-box;border:none;font-family:inherit}
+input{background:#16161c;color:#fff;border:1px solid #333}
+button{background:linear-gradient(135deg,#0a84ff,#0062d2);color:#fff;font-weight:bold;cursor:pointer;padding:18px}
+button:active{transform:scale(0.98)}
+.file-item{display:flex;justify-content:space-between;align-items:center;padding:14px;background:#16161c;border-radius:12px;margin-top:10px;gap:10px}
+.file-item span{font-size:14px}
+.file-item a{color:#0a84ff;font-weight:bold;background:rgba(10,132,255,0.15);padding:10px 16px;border-radius:10px;text-decoration:none;flex-shrink:0}
+.status{padding:14px;background:#16161c;border-radius:10px;margin-top:10px;font-size:13px;line-height:1.8}
+</style>
+</head>
+<body>
+<h1>🔧 تقسيم index.html</h1>
+<p>اضغط الزر، الأداة غادي تجيب ملف index.html من GitHub وتقسمو لـ 3 ملفات.</p>
+<input id="url" value="https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/templates/index.html">
+<button onclick="fetchAndSplit()">⚡ جيب و قسّم</button>
+<div id="result"></div>
+
+<script>
+async function fetchAndSplit() {
+  const url = document.getElementById('url').value.trim();
+  const result = document.getElementById('result');
+  if (!url) { alert('الرابط فارغ'); return; }
+  result.innerHTML = '<div class="status">⏳ جاري تحميل الملف من GitHub... (يمكن تاخد 5-10 ثواني)</div>';
+  
+  try {
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('فشل التحميل: ' + resp.status);
+    const html = await resp.text();
+    
+    const styleRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi;
+    let css = '';
+    let m;
+    while ((m = styleRegex.exec(html)) !== null) css += m[1].trim() + '\n\n';
+    
+    const scriptRegex = /<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi;
+    let js = '';
+    const scriptsToRemove = [];
+    while ((m = scriptRegex.exec(html)) !== null) {
+      const content = m[1];
+      if (content.length > 1000) {
+        js += content.trim() + '\n\n';
+        scriptsToRemove.push(m[0]);
+      }
+    }
+    
+    let newHTML = html;
+    newHTML = newHTML.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+    scriptsToRemove.forEach(s => { newHTML = newHTML.replace(s, ''); });
+    newHTML = newHTML.replace('</head>', '<link rel="stylesheet" href="/static/style.css">\n</head>');
+    newHTML = newHTML.replace(/<\/body>/, '<script src="/static/script.js" defer><\/script>\n</body>');
+    
+    result.innerHTML = 
+      '<div class="status">' +
+      '✅ تم التقسيم!<br>' +
+      '📊 الأصلي: ' + (html.length/1024).toFixed(1) + ' KB<br>' +
+      '🎨 CSS: ' + (css.length/1024).toFixed(1) + ' KB<br>' +
+      '⚙️ JS: ' + (js.length/1024).toFixed(1) + ' KB<br>' +
+      '📄 HTML: ' + (newHTML.length/1024).toFixed(1) + ' KB' +
+      '</div>' +
+      '<div class="file-item"><span>📄 index.html</span><a href="#" onclick="dl(\'index.html\',window._h);return false;">تحميل</a></div>' +
+      '<div class="file-item"><span>🎨 style.css</span><a href="#" onclick="dl(\'style.css\',window._c);return false;">تحميل</a></div>' +
+      '<div class="file-item"><span>⚙️ script.js</span><a href="#" onclick="dl(\'script.js\',window._j);return false;">تحميل</a></div>';
+    window._h = newHTML; window._c = css; window._j = js;
+  } catch(e) {
+    result.innerHTML = '<div class="status" style="color:#ff453a;">❌ خطأ: ' + e.message + '</div>';
+  }
+}
+
+function dl(filename, content) {
+  if (!content) return alert('الملف فارغ');
+  const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+</script>
+</body>
+</html>
