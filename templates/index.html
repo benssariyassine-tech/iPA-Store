@@ -6191,6 +6191,336 @@ body.light-mode .account-header-btn:active {
   stroke: currentColor;
   fill: none;
 }
+ /* ============================================
+   🎯 ONBOARDING TOUR — Spotlight
+   ============================================ */
+.tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+  pointer-events: none;
+}
+.tour-overlay.open {
+  display: block;
+  pointer-events: auto;
+}
+
+.tour-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.3s ease;
+}
+
+.tour-spotlight {
+  position: absolute;
+  border-radius: 20px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.75),
+              0 0 0 3px var(--accent),
+              0 0 30px color-mix(in srgb, var(--accent) 60%, transparent);
+  background: transparent;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+}
+.tour-spotlight.active {
+  opacity: 1;
+}
+
+.tour-tooltip {
+  position: absolute;
+  background: var(--glass-bg);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  padding: 20px 20px 16px;
+  max-width: 320px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  z-index: 3;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: tourPopIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes tourPopIn {
+  from { opacity: 0; transform: translateY(15px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tour-progress {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.tour-progress-bar {
+  flex: 1;
+  height: 3px;
+  background: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.tour-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 3px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 0 10px var(--accent);
+}
+.tour-progress-text {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--subtext-color);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.tour-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--text-color);
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.tour-title-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+.tour-title-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tour-message {
+  font-size: 13.5px;
+  color: var(--subtext-color);
+  line-height: 1.6;
+  margin: 0 0 16px;
+  font-weight: 500;
+}
+
+.tour-actions {
+  display: flex;
+  gap: 8px;
+}
+.tour-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 14px;
+  border: none;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tour-btn:active { transform: scale(0.96); }
+.tour-btn-skip {
+  background: transparent;
+  color: var(--subtext-color);
+  flex: 0 0 auto;
+  padding: 12px 14px;
+}
+.tour-btn-next {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 6px 20px color-mix(in srgb, var(--accent) 40%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.tour-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+body[dir="rtl"] .tour-btn-next svg {
+  transform: scaleX(-1);
+}
+
+/* ===== Welcome Screen ===== */
+.tour-welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+}
+.tour-welcome.open { display: flex; }
+
+.tour-welcome-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-radius: 28px;
+  padding: 32px 24px 24px;
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+              inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  animation: tourPopIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+.tour-welcome-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 200px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent), transparent 70%);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.tour-welcome-icon {
+  width: 88px;
+  height: 88px;
+  margin: 0 auto 20px;
+  border-radius: 26px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px color-mix(in srgb, var(--accent) 50%, transparent),
+              inset 0 2px 0 rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.tour-welcome-icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+}
+.tour-welcome-icon img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.tour-welcome-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--text-color);
+  margin: 0 0 10px;
+  letter-spacing: -0.5px;
+  line-height: 1.25;
+  position: relative;
+  z-index: 1;
+}
+.tour-welcome-title span {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.tour-welcome-text {
+  font-size: 14.5px;
+  color: var(--subtext-color);
+  line-height: 1.65;
+  margin: 0 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.tour-welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+.tour-welcome-btn {
+  width: 100%;
+  padding: 15px;
+  border-radius: 16px;
+  border: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.tour-welcome-btn:active { transform: scale(0.97); }
+.tour-welcome-btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 45%, transparent),
+              inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+.tour-welcome-btn-secondary {
+  background: transparent;
+  color: var(--subtext-color);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 12px;
+}
+.tour-welcome-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+body[dir="rtl"] .tour-welcome-btn-primary svg {
+  transform: scaleX(-1);
+}
+
+@media (max-width: 380px) {
+  .tour-tooltip { max-width: 290px; padding: 18px; }
+  .tour-welcome-title { font-size: 22px; }
+  .tour-welcome-text { font-size: 13.5px; }
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -12427,6 +12757,251 @@ function _checkAppVersion() {
 setTimeout(_checkAppVersion, 2000);
 
 console.log('✅ iStore Version Check loaded');
+ 
+/* ============================================
+   🎯 ONBOARDING TOUR — Spotlight Controller
+   ============================================ */
+
+const TOUR_STORAGE_KEY = 'istore_tour_v3_done';
+
+// ⚙️ إعدادات الجولة — عدّل النصوص هنا
+const TOUR_STEPS = [
+  {
+    selector: 'body',
+    icon: '<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>',
+    title: { ar: 'مرحباً بك في iStore', en: 'Welcome to iStore' },
+    message: { 
+      ar: 'منصّتك الشاملة لتحميل تطبيقات وألعاب iOS و Android. جولة سريعة ستعرّفك على أهم الميزات.',
+      en: 'Your hub for iOS & Android apps. A quick tour will introduce you to the key features.'
+    },
+    padding: 0,
+    position: 'center'
+  },
+  {
+    selector: '.search-box',
+    icon: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+    title: { ar: 'البحث الذكي', en: 'Smart Search' },
+    message: { 
+      ar: 'ابحث عن أي تطبيق أو لعبة بسرعة. نتائج فورية مع فلاتر ذكية.',
+      en: 'Find any app or game instantly. Instant results with smart filters.'
+    },
+    padding: 6,
+    position: 'bottom'
+  },
+  {
+    selector: '.header-icons',
+    icon: '<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    title: { ar: 'حسابك الشخصي', en: 'Your Account' },
+    message: { 
+      ar: 'سجّل دخولك للإعجاب بالتطبيقات، كتابة التعليقات، وتخصيص تجربتك.',
+      en: 'Sign in to like apps, post comments, and personalize your experience.'
+    },
+    padding: 8,
+    position: 'bottom'
+  },
+  {
+    selector: '.floating-nav',
+    icon: '<svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    title: { ar: 'التنقّل السريع', en: 'Quick Navigation' },
+    message: { 
+      ar: 'تنقّل بين الفئات: اليوم، الألعاب، التطبيقات، والأدوات.',
+      en: 'Switch between categories: Today, Games, Apps, and Tools.'
+    },
+    padding: 8,
+    position: 'top'
+  },
+  {
+    selector: '.support-menu-wrap',
+    icon: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+    title: { ar: 'الإعدادات والدعم', en: 'Settings & Support' },
+    message: { 
+      ar: 'خصّص تجربتك (الثيم، اللغة، الإشعارات) وتواصل مع الدعم الفني من هنا.',
+      en: 'Customize your experience (theme, language, notifications) and contact support.'
+    },
+    padding: 8,
+    position: 'top'
+  },
+  {
+    selector: 'body',
+    icon: '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>',
+    title: { ar: 'أنت جاهز!', en: 'You\'re ready!' },
+    message: { 
+      ar: 'استمتع بتجربة iStore الجديدة. لا تتردد في استكشاف كل الميزات بنفسك.',
+      en: 'Enjoy the new iStore experience. Feel free to explore all the features yourself.'
+    },
+    padding: 0,
+    position: 'center'
+  }
+];
+
+let _tourIndex = 0;
+let _tourActive = false;
+
+/* ===== بدء الجولة ===== */
+function startTour() {
+  const welcome = document.getElementById('tourWelcome');
+  if (welcome) welcome.classList.remove('open');
+  
+  _tourIndex = 0;
+  _tourActive = true;
+  
+  const overlay = document.getElementById('tourOverlay');
+  if (overlay) overlay.classList.add('open');
+  
+  setTimeout(() => showTourStep(0), 300);
+}
+
+/* ===== عرض خطوة ===== */
+function showTourStep(index) {
+  if (index < 0 || index >= TOUR_STEPS.length) return;
+  
+  _tourIndex = index;
+  const step = TOUR_STEPS[index];
+  const lang = (typeof currentLang !== 'undefined') ? currentLang : 'ar';
+  
+  // حدّث النصوص
+  document.getElementById('tourTitleText').textContent = step.title[lang] || step.title.ar;
+  document.getElementById('tourMessageText').textContent = step.message[lang] || step.message.ar;
+  document.getElementById('tourTitleIcon').innerHTML = step.icon;
+  document.getElementById('tourProgressText').textContent = (index + 1) + ' / ' + TOUR_STEPS.length;
+  document.getElementById('tourProgressFill').style.width = ((index + 1) / TOUR_STEPS.length * 100) + '%';
+  
+  // آخر خطوة → بدّل النص
+  if (index === TOUR_STEPS.length - 1) {
+    document.getElementById('tourNextText').textContent = lang === 'ar' ? 'إنهاء' : 'Finish';
+    document.getElementById('tourSkipBtn').style.display = 'none';
+  } else {
+    document.getElementById('tourNextText').textContent = lang === 'ar' ? 'التالي' : 'Next';
+    document.getElementById('tourSkipBtn').style.display = '';
+  }
+  
+  // حدد العنصر
+  const el = step.selector === 'body' ? document.body : document.querySelector(step.selector);
+  if (!el || step.position === 'center') {
+    // شاشة وسطية (welcome / finish)
+    document.getElementById('tourSpotlight').classList.remove('active');
+    
+    const tooltip = document.getElementById('tourTooltip');
+    tooltip.style.top = '50%';
+    tooltip.style.left = '50%';
+    tooltip.style.transform = 'translate(-50%, -50%)';
+    return;
+  }
+  
+  // سكرول للعنصر
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  
+  setTimeout(() => {
+    const rect = el.getBoundingClientRect();
+    const pad = step.padding || 8;
+    
+    // Spotlight
+    const spotlight = document.getElementById('tourSpotlight');
+    spotlight.style.top = (rect.top - pad) + 'px';
+    spotlight.style.left = (rect.left - pad) + 'px';
+    spotlight.style.width = (rect.width + pad * 2) + 'px';
+    spotlight.style.height = (rect.height + pad * 2) + 'px';
+    spotlight.classList.add('active');
+    
+    // Tooltip — positioning
+    const tooltip = document.getElementById('tourTooltip');
+    tooltip.style.transform = 'none';
+    
+    const tooltipWidth = 320;
+    const tooltipHeight = 220;
+    const margin = 16;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    
+    let top, left;
+    
+    if (step.position === 'bottom') {
+      top = rect.bottom + pad + 16;
+      left = rect.left + rect.width / 2 - tooltipWidth / 2;
+    } else if (step.position === 'top') {
+      top = rect.top - pad - tooltipHeight - 16;
+      left = rect.left + rect.width / 2 - tooltipWidth / 2;
+    } else {
+      top = rect.bottom + pad + 16;
+      left = rect.left;
+    }
+    
+    // clamp داخل الشاشة
+    if (left < 12) left = 12;
+    if (left + tooltipWidth > vw - 12) left = vw - tooltipWidth - 12;
+    if (top < 12) top = rect.bottom + pad + 16;
+    if (top + tooltipHeight > vh - 12) top = rect.top - pad - tooltipHeight - 16;
+    if (top < 12) top = 12;
+    
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+  }, 450);
+}
+
+/* ===== الخطوة التالية ===== */
+function nextTourStep() {
+  if (_tourIndex >= TOUR_STEPS.length - 1) {
+    endTour();
+    return;
+  }
+  showTourStep(_tourIndex + 1);
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+}
+
+/* ===== نهاية الجولة ===== */
+function endTour() {
+  _tourActive = false;
+  
+  const overlay = document.getElementById('tourOverlay');
+  if (overlay) overlay.classList.remove('open');
+  
+  try { localStorage.setItem(TOUR_STORAGE_KEY, 'true'); } catch(e) {}
+  
+  if (navigator.vibrate) try { navigator.vibrate([10, 30, 10]); } catch(e) {}
+}
+
+/* ===== تخطّي ===== */
+function skipTour() {
+  endTour();
+  try { localStorage.setItem(TOUR_STORAGE_KEY, 'true'); } catch(e) {}
+}
+
+/* ===== فحص إذا لازم نعرضو الجولة ===== */
+function checkTourStatus() {
+  try {
+    const done = localStorage.getItem(TOUR_STORAGE_KEY);
+    if (done === 'true') return;
+  } catch(e) {}
+  
+  // أول زيارة → عرض Welcome
+  setTimeout(() => {
+    const welcome = document.getElementById('tourWelcome');
+    if (welcome) welcome.classList.add('open');
+  }, 4500); // بعد ما يكمل splash
+}
+
+/* ===== إغلاق بالضغط على الـ backdrop ===== */
+document.getElementById('tourOverlay')?.addEventListener('click', function(e) {
+  if (e.target === this || e.target.classList.contains('tour-backdrop')) {
+    // ما نسدوش بالضغط — باش ما يخسرش المستخدم الجولة
+  }
+});
+
+/* ===== إعادة الجولة يدوياً (للاستعمال في Settings) ===== */
+function restartTour() {
+  try { localStorage.removeItem(TOUR_STORAGE_KEY); } catch(e) {}
+  const welcome = document.getElementById('tourWelcome');
+  if (welcome) welcome.classList.add('open');
+}
+
+// شغّل الفحص بعد ما يتحمل الموقع
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', checkTourStatus);
+} else {
+  checkTourStatus();
+}
+
+console.log('✅ Onboarding Tour loaded');
 console.log('✅ Login Page JS loaded');
 </script>
 
@@ -13083,6 +13658,55 @@ console.log('✅ Login Page JS loaded');
           <span>Confirm</span>
         </button>
       </div>
+    </div>
+  </div>
+</div>
+ <!-- ===== ONBOARDING TOUR ===== -->
+<div id="tourWelcome" class="tour-welcome">
+  <div class="tour-welcome-card">
+    <div class="tour-welcome-icon">
+      <img src="https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png" alt="iStore" onerror="this.outerHTML='<svg viewBox=\'0 0 24 24\' style=\'width:44px;height:44px;stroke:#fff;fill:none;stroke-width:2\'><rect x=\'3\' y=\'4\' width=\'18\' height=\'18\' rx=\'2\'/><path d=\'M3 10h18M8 2v4M16 2v4\'/></svg>'">
+    </div>
+    <h2 class="tour-welcome-title" id="tourWelcomeTitle">
+      مرحباً بك في <span>iStore</span>
+    </h2>
+    <p class="tour-welcome-text" id="tourWelcomeText">
+      نودّ أن نأخذ من وقتك دقيقة واحدة لاكتشاف التصميم الجديد والميزات التي أضفناها خصيصاً لك.
+    </p>
+    <div class="tour-welcome-actions">
+      <button class="tour-welcome-btn tour-welcome-btn-primary" onclick="startTour()">
+        <span id="tourWelcomeStart">ابدأ الجولة</span>
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <button class="tour-welcome-btn tour-welcome-btn-secondary" onclick="skipTour()" id="tourWelcomeSkip">
+        تخطّي — سأستكشف بنفسي
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SPOTLIGHT TOUR ===== -->
+<div id="tourOverlay" class="tour-overlay">
+  <div class="tour-backdrop"></div>
+  <div class="tour-spotlight" id="tourSpotlight"></div>
+  <div class="tour-tooltip" id="tourTooltip">
+    <div class="tour-progress">
+      <div class="tour-progress-bar">
+        <div class="tour-progress-fill" id="tourProgressFill"></div>
+      </div>
+      <span class="tour-progress-text" id="tourProgressText">1 / 6</span>
+    </div>
+    <h3 class="tour-title">
+      <span class="tour-title-icon" id="tourTitleIcon"></span>
+      <span id="tourTitleText">العنوان</span>
+    </h3>
+    <p class="tour-message" id="tourMessageText">الوصف</p>
+    <div class="tour-actions">
+      <button class="tour-btn tour-btn-skip" onclick="skipTour()" id="tourSkipBtn">تخطّي</button>
+      <button class="tour-btn tour-btn-next" onclick="nextTourStep()">
+        <span id="tourNextText">التالي</span>
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
     </div>
   </div>
 </div>
