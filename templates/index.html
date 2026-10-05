@@ -12015,38 +12015,43 @@ function _swapNotifCards(topCard, behindCard) {
   }, 400);
 }
 
-/* ===== Wrapper على showNotification ===== */
+/* ============================================
+   🔔 NOTIFICATION ROUTER — Auto-Switch
+   ============================================ */
 (function() {
   if (typeof window.showNotification !== 'function') return;
-  if (window.showNotification._categorized) return;
+  if (window.showNotification._router) return;
   
   const _orig = window.showNotification;
+  
+  // 🔍 تحقق: هل المستخدم داخل الموقع؟
+  function _isUserInside() {
+    return document.visibilityState === 'visible';
+  }
   
   window.showNotification = function(opts) {
     const o = Object.assign({}, opts || {});
     
-    // مدة افتراضية 4 ثواني
+    // مدة افتراضية
     if (o.duration === undefined) o.duration = 4000;
     
-    // 🎯 قاعدة: نخليو in-app غير إذا طلب صراحة
-    const showInApp = o.inApp === true;
+    // 🎯 هل النظام يسمح بالإشعارات؟
+    const systemAllowed = appSettings.notifications 
+                       && Notification.permission === 'granted'
+                       && _notificationsSupported();
     
-    // 🎯 system notification — فقط للمهم (تحديثات التطبيقات)
-    const sendSystem = o.system === true 
-                    && appSettings.notifications 
-                    && Notification.permission === 'granted';
+    // 🎯 هل المستخدم داخل الموقع؟
+    const userInside = _isUserInside();
     
     let card = null;
     
-    // In-App (فقط إذا طلب صراحة)
-    if (showInApp) {
-      // احذف الأقدم إذا كاين 2
+    if (userInside) {
+      // 🟢 داخل الموقع → In-App فقط
       const stack = document.getElementById('notifStack');
       if (stack) {
         const existing = stack.querySelectorAll('.notif-card:not(.dismissing)');
         if (existing.length >= NOTIF_MAX) {
-          const oldest = existing[existing.length - 1];
-          dismissNotif(oldest);
+          dismissNotif(existing[existing.length - 1]);
         }
       }
       
@@ -12055,27 +12060,35 @@ function _swapNotifCards(topCard, behindCard) {
       if (card) {
         setTimeout(() => _setupNotifSwipe(card), 50);
       }
-      
       setTimeout(_refreshNotifStack, 30);
-    }
-    
-    // System (فقط للمهم)
-    if (sendSystem && o.title) {
-      _sendSystemNotification(
-        o.title,
-        o.desc || '',
-        {
-          tag: o.tag || 'istore-sys-' + Date.now(),
-          data: o.data || null
+      
+    } else {
+      // 🔴 خارج الموقع → System فقط
+      if (systemAllowed && o.title) {
+        // فئات الإشعارات المهمة (اللي تستحق system)
+        const importantTypes = ['success', 'error', 'warning'];
+        const isImportant = importantTypes.includes(o.type) || o.system === true;
+        
+        if (isImportant) {
+          _sendSystemNotification(
+            o.title,
+            o.desc || '',
+            {
+              tag: o.tag || 'istore-sys-' + Date.now(),
+              data: o.data || null
+            }
+          );
         }
-      );
+      }
     }
     
     return card;
   };
   
-  window.showNotification._categorized = true;
+  window.showNotification._router = true;
 })();
+
+console.log('✅ Notification Router (Auto-Switch) loaded');
 
 /* ===== تحديث الترتيب عند الحذف ===== */
 (function() {
@@ -12307,6 +12320,92 @@ function updateHeaderAccountBtn() {
 }
 
 console.log('✅ Account Header loaded');
+ 
+/* ============================================
+   📦 ISTORE VERSION CHECK
+   ============================================ */
+
+const ISTORE_VERSION = '3.1'; // 🔄 بدّل هذا كي تصدر نسخة جديدة
+const ISTORE_VERSION_CHECK_KEY = 'istore_last_version_check';
+
+function _getLastVersionCheck() {
+  try {
+    return parseInt(localStorage.getItem(ISTORE_VERSION_CHECK_KEY) || '0', 10) || 0;
+  } catch(e) { return 0; }
+}
+
+function _setLastVersionCheck(timestamp) {
+  try {
+    localStorage.setItem(ISTORE_VERSION_CHECK_KEY, String(timestamp));
+  } catch(e) {}
+}
+
+function _getStoredVersion() {
+  try {
+    return localStorage.getItem('istore_app_version') || '';
+  } catch(e) { return ''; }
+}
+
+function _setStoredVersion(version) {
+  try {
+    localStorage.setItem('istore_app_version', version);
+  } catch(e) {}
+}
+
+function _checkAppVersion() {
+  const storedVersion = _getStoredVersion();
+  const now = Date.now();
+  const lastCheck = _getLastVersionCheck();
+  const oneDay = 24 * 60 * 60 * 1000;
+  
+  // 🆕 إذا تغيرت النسخة → أظهر إشعار
+  if (storedVersion && storedVersion !== ISTORE_VERSION) {
+    // نسخة جديدة!
+    _setStoredVersion(ISTORE_VERSION);
+    
+    const title = currentLang === 'ar' 
+      ? `🎉 iStore محدّث — v${ISTORE_VERSION}` 
+      : `🎉 iStore updated — v${ISTORE_VERSION}`;
+    
+    const body = currentLang === 'ar'
+      ? 'تم إضافة ميزات جديدة! افتح الإعدادات لاستكشافها.'
+      : 'New features added! Open settings to explore.';
+    
+    // إذا المستخدم داخل → In-App
+    // إذا خارج → System
+    if (typeof showNotification === 'function') {
+      showNotification({
+        title: title,
+        desc: body,
+        type: 'success',
+        duration: 8000,
+        vibrate: true,
+        data: { url: '/' }
+      });
+    }
+    
+    // ما نعاودوش الفحص اليوم
+    _setLastVersionCheck(now);
+    return;
+  }
+  
+  // أول مرة → احفظ النسخة
+  if (!storedVersion) {
+    _setStoredVersion(ISTORE_VERSION);
+    _setLastVersionCheck(now);
+    return;
+  }
+  
+  // فحص عادي (كل 24 ساعة) — ممكن نضيفو منطق مستقبلاً
+  if (now - lastCheck > oneDay) {
+    _setLastVersionCheck(now);
+  }
+}
+
+// شغلها بعد ما يتحمل الموقع
+setTimeout(_checkAppVersion, 2000);
+
+console.log('✅ iStore Version Check loaded');
 console.log('✅ Login Page JS loaded');
 </script>
 
