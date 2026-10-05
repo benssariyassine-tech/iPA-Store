@@ -13005,10 +13005,126 @@ if (document.readyState === 'loading') {
 console.log('✅ Onboarding Tour loaded');
 console.log('✅ Login Page JS loaded');
  /* ============================================
-   📱 DEVICE SESSION TRACKING (أنشطتك)
+   DEVICE SESSION TRACKING
    ============================================ */
 
-// 🆔 ID الجهاز — ثابت لكل جهاز
+const ACT_T = {
+  en: {
+    title: 'Your Activity',
+    currentSection: 'THIS DEVICE',
+    currentBadge: 'Current Device',
+    othersSection: 'OTHER DEVICES',
+    logoutAll: 'Sign out from all devices',
+    logoutAllSub: 'This will end every session including this one',
+    changePass: 'Change Password',
+    changePassSub: 'Update your account password',
+    chgTitle: 'Change Password',
+    chgCurrent: 'CURRENT PASSWORD',
+    chgCurrentPh: 'Enter current password',
+    chgNew: 'NEW PASSWORD',
+    chgNewPh: 'At least 6 characters',
+    chgNewPh2: 'Repeat new password',
+    chgNote: 'For security, you must enter your current password. If you forgot it, sign out and use Forgot password or sign in with Google.',
+    chgBtn: 'Update Password',
+    loading: 'Loading...',
+    noOthers: 'No other devices',
+    noOthersSub: 'Your account is only signed in on this device',
+    failedLoad: 'Failed to load devices',
+    failedRemove: 'Failed to sign out device',
+    removed: 'Device signed out',
+    removedAll: 'Signed out from {n} device(s)',
+    logout: 'Sign Out',
+    isThisYou: 'Is this you?',
+    removedTitle: 'Device signed out',
+    removedMsg: 'Are you sure you want to sign out {name}?',
+    okRemove: 'Sign Out',
+    cancel: 'Cancel',
+    secTitle: 'Security Alert',
+    secMsg: 'The device was signed out. We recommend changing your password now to protect your account.',
+    secOk: 'Change Password',
+    secLater: 'Later',
+    allTitle: 'Sign out from all devices',
+    allMsg: 'You will be signed out from every device, including this one. Continue?',
+    allOk: 'Sign Out All',
+    confirmTitle: 'Is this your device?',
+    confirmMsg: 'A sign-in was detected from: {name} . If this was not you, we will sign out this device and ask you to change your password.',
+    yesMine: 'Yes, this is me',
+    noNotMine: 'No, not me',
+    trusted: 'Device marked as trusted',
+    momentsAgo: 'moments ago',
+    minsAgo: 'min ago',
+    hoursAgo: 'h ago',
+    daysAgo: 'd ago'
+  },
+  ar: {
+    title: 'أنشطتك',
+    currentSection: 'هذا الجهاز',
+    currentBadge: 'الجهاز الحالي',
+    othersSection: 'أجهزة أخرى',
+    logoutAll: 'تسجيل الخروج من جميع الأجهزة',
+    logoutAllSub: 'سيتم إنهاء كل الجلسات بما فيها هذا الجهاز',
+    changePass: 'تغيير كلمة المرور',
+    changePassSub: 'حدّث كلمة السر الخاصة بحسابك',
+    chgTitle: 'تغيير كلمة المرور',
+    chgCurrent: 'كلمة المرور الحالية',
+    chgCurrentPh: 'أدخل كلمة السر الحالية',
+    chgNew: 'كلمة المرور الجديدة',
+    chgNewPh: '6 أحرف على الأقل',
+    chgNewPh2: 'أعد كتابة كلمة السر الجديدة',
+    chgNote: 'للحماية، خاصك تدخل كلمة السر القديمة. إذا نسيتها، خرج من الحساب واستعمل نسيت كلمة المرور أو دخل بحساب Google.',
+    chgBtn: 'تحديث كلمة المرور',
+    loading: 'جاري التحميل',
+    noOthers: 'ما كاينش أجهزة أخرى',
+    noOthersSub: 'حسابك مسجل غير في هذا الجهاز',
+    failedLoad: 'تعذر تحميل الأجهزة',
+    failedRemove: 'تعذر الإخراج',
+    removed: 'تم إخراج الجهاز',
+    removedAll: 'تم إخراج {n} جهاز',
+    logout: 'إخراج',
+    isThisYou: 'هل هذا نتا',
+    removedTitle: 'إخراج الجهاز',
+    removedMsg: 'تأكيد إخراج {name} من حسابك',
+    okRemove: 'إخراج',
+    cancel: 'إلغاء',
+    secTitle: 'تنبيه أمني',
+    secMsg: 'الجهاز تم إخراجه. ننصحك تبدل كلمة السر فوراً باش تحمي حسابك.',
+    secOk: 'نعم، بدل كلمة السر',
+    secLater: 'بعدين',
+    allTitle: 'إخراج كل الأجهزة',
+    allMsg: 'راح تخرج من كل الأجهزة، بما فيها هذا الجهاز. متأكد',
+    allOk: 'إخراج الكل',
+    confirmTitle: 'هل هذا جهازك',
+    confirmMsg: 'سجل هذا الجهاز دخول من: {name} . إذا ما كنتش نتا، راح نخرجه ونطلب منك تبدل كلمة السر.',
+    yesMine: 'نعم، هذا أنا',
+    noNotMine: 'لا، ماشي أنا',
+    trusted: 'تم تسجيل الجهاز كموثوق',
+    momentsAgo: 'قبل لحظات',
+    minsAgo: 'دقيقة',
+    hoursAgo: 'ساعة',
+    daysAgo: 'يوم'
+  }
+};
+
+function actT(key, vars) {
+  const lang = (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
+  let str = (ACT_T[lang] && ACT_T[lang][key]) || (ACT_T.en[key]) || key;
+  if (vars) {
+    Object.keys(vars).forEach(k => { str = str.replace('{' + k + '}', vars[k]); });
+  }
+  return str;
+}
+
+function applyActivitiesTranslations() {
+  document.querySelectorAll('[data-act]').forEach(el => {
+    const key = el.getAttribute('data-act');
+    if (key) el.textContent = actT(key);
+  });
+  document.querySelectorAll('[data-act-ph]').forEach(el => {
+    const key = el.getAttribute('data-act-ph');
+    if (key) el.placeholder = actT(key);
+  });
+}
+
 function getDeviceId() {
   let id = localStorage.getItem('istore_device_id');
   if (!id) {
@@ -13018,18 +13134,16 @@ function getDeviceId() {
   return id;
 }
 
-// 🔍 معلومات الجهاز
 function getDeviceInfo() {
   const ua = navigator.userAgent || '';
-  let deviceName = 'جهاز غير معروف';
+  let deviceName = 'Unknown Device';
   let deviceType = 'desktop';
   let os = 'Unknown';
   let browser = 'Unknown';
   let osIcon = 'monitor';
 
-  // OS
-  if (/iPhone/i.test(ua))        { os = 'iPhone'; deviceType = 'mobile'; deviceName = 'iPhone'; osIcon = 'smartphone'; }
-  else if (/iPad/i.test(ua))     { os = 'iPad'; deviceType = 'tablet'; deviceName = 'iPad'; osIcon = 'tablet'; }
+  if (/iPhone/i.test(ua)) { os = 'iPhone'; deviceType = 'mobile'; deviceName = 'iPhone'; osIcon = 'smartphone'; }
+  else if (/iPad/i.test(ua)) { os = 'iPad'; deviceType = 'tablet'; deviceName = 'iPad'; osIcon = 'tablet'; }
   else if (/Android/i.test(ua)) {
     os = 'Android';
     deviceType = /Mobile/i.test(ua) ? 'mobile' : 'tablet';
@@ -13038,35 +13152,37 @@ function getDeviceInfo() {
     osIcon = deviceType === 'mobile' ? 'smartphone' : 'tablet';
   }
   else if (/Macintosh|Mac OS X/i.test(ua)) { os = 'macOS'; deviceName = 'Mac'; osIcon = 'laptop'; }
-  else if (/Windows/i.test(ua))  { os = 'Windows'; deviceName = 'Windows PC'; osIcon = 'monitor'; }
-  else if (/Linux/i.test(ua))    { os = 'Linux'; deviceName = 'Linux'; osIcon = 'monitor'; }
+  else if (/Windows/i.test(ua)) { os = 'Windows'; deviceName = 'Windows PC'; osIcon = 'monitor'; }
+  else if (/Linux/i.test(ua)) { os = 'Linux'; deviceName = 'Linux'; osIcon = 'monitor'; }
 
-  // Browser
-  if (/Edg\//i.test(ua))                    browser = 'Edge';
-  else if (/OPR\/|Opera/i.test(ua))         browser = 'Opera';
-  else if (/Chrome\//i.test(ua))            browser = 'Chrome';
-  else if (/Safari\//i.test(ua))            browser = 'Safari';
-  else if (/Firefox\//i.test(ua))           browser = 'Firefox';
+  if (/Edg\//i.test(ua)) { browser = 'Edge'; }
+  else if (/OPR\/|Opera/i.test(ua)) { browser = 'Opera'; }
+  else if (/Chrome\//i.test(ua)) { browser = 'Chrome'; }
+  else if (/Safari\//i.test(ua)) { browser = 'Safari'; }
+  else if (/Firefox\//i.test(ua)) { browser = 'Firefox'; }
 
-  // PWA standalone?
   const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
   if (isPWA) browser += ' (PWA)';
 
-  return { deviceName, os, browser, deviceType, userAgent: ua.substring(0, 200), osIcon, isPWA };
+  return { deviceName: deviceName, os: os, browser: browser, deviceType: deviceType, userAgent: ua.substring(0, 200), osIcon: osIcon, isPWA: isPWA };
 }
 
-// 💾 نحفظ / نحدّث الجلسة ديال هذا الجهاز
 async function saveDeviceSession() {
   if (!currentUser) return;
   const deviceId = getDeviceId();
   const info = getDeviceInfo();
-  const sessionRef = db.collection('users').doc(currentUser.uid)
-                       .collection('sessions').doc(deviceId);
+  const sessionRef = db.collection('users').doc(currentUser.uid).collection('sessions').doc(deviceId);
 
   try {
     const doc = await sessionRef.get();
     const payload = {
-      ...info,
+      deviceName: info.deviceName,
+      os: info.os,
+      browser: info.browser,
+      deviceType: info.deviceType,
+      osIcon: info.osIcon,
+      isPWA: info.isPWA,
+      userAgent: info.userAgent,
       lastActive: firebase.firestore.FieldValue.serverTimestamp()
     };
     if (doc.exists) {
@@ -13076,30 +13192,30 @@ async function saveDeviceSession() {
       payload.userEmail = currentUser.email || '';
       await sessionRef.set(payload);
     }
-  } catch (e) { console.warn('saveDeviceSession:', e); }
+    console.log('[Session] Saved:', deviceId, info.deviceName);
+  } catch (e) {
+    console.warn('[Session] Save failed:', e);
+  }
 }
 
-// 🔄 نحدّث lastActive كل 5 دقايق
-setInterval(() => { if (currentUser) saveDeviceSession(); }, 5 * 60 * 1000);
+setInterval(function() { if (currentUser) saveDeviceSession(); }, 5 * 60 * 1000);
 
-/* ============================================
-   🖼️ ACTIVITIES PAGE — فتح / إغلاق
-   ============================================ */
 function openActivitiesPage() {
   if (!currentUser) {
-    showToast('سجّل الدخول أولاً', 'warning', 2000);
+    showToast(currentLang === 'ar' ? 'سجّل الدخول أولاً' : 'Please sign in first', 'warning', 2000);
     return;
   }
   const page = document.getElementById('activitiesPage');
   if (!page) return;
 
+  applyActivitiesTranslations();
   page.classList.add('open');
   document.body.classList.add('stg-open', 'overlay-active');
 
   const nav = document.querySelector('.isto-nav-wrap');
   if (nav) nav.style.opacity = '0';
 
-  loadSessions();
+  saveDeviceSession().then(function() { loadSessions(); });
   if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
 }
 
@@ -13113,17 +13229,15 @@ function closeActivitiesPage() {
   if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
 }
 
-/* ============================================
-   📋 LOAD SESSIONS — نجيب كل الأجهزة
-   ============================================ */
 function timeAgo(date) {
-  if (!date) return 'الآن';
+  if (!date) return actT('momentsAgo');
   const diff = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (diff < 60) return 'قبل لحظات';
-  if (diff < 3600) return 'قبل ' + Math.floor(diff / 60) + ' دقيقة';
-  if (diff < 86400) return 'قبل ' + Math.floor(diff / 3600) + ' ساعة';
-  if (diff < 2592000) return 'قبل ' + Math.floor(diff / 86400) + ' يوم';
-  return date.toLocaleDateString('ar');
+  const lang = (typeof currentLang !== 'undefined' && currentLang === 'ar') ? 'ar' : 'en';
+  if (diff < 60) return actT('momentsAgo');
+  if (diff < 3600) return Math.floor(diff / 60) + ' ' + actT('minsAgo');
+  if (diff < 86400) return Math.floor(diff / 3600) + ' ' + actT('hoursAgo');
+  if (diff < 2592000) return Math.floor(diff / 86400) + ' ' + actT('daysAgo');
+  return date.toLocaleDateString(lang);
 }
 
 function getDeviceSvg(icon) {
@@ -13144,116 +13258,96 @@ async function loadSessions() {
                       .get();
 
     const all = [];
-    snap.forEach(doc => all.push({ id: doc.id, ...doc.data() }));
+    snap.forEach(function(doc) { all.push(Object.assign({ id: doc.id }, doc.data())); });
 
-    const mine = all.find(s => s.id === myDeviceId) || {
-      ...getDeviceInfo(),
-      createdAt: { toDate: () => new Date() },
-      lastActive: { toDate: () => new Date() }
-    };
-    const others = all.filter(s => s.id !== myDeviceId);
+    console.log('[Session] Loaded', all.length, 'sessions');
 
-    // 🟢 الجهاز الحالي
-    document.getElementById('curDevName').textContent = mine.deviceName || 'هذا الجهاز';
-    document.getElementById('curDevInfo').textContent = 
-      (mine.os || '') + ' • ' + (mine.browser || '') + ' • آخر نشاط: الآن';
+    const mine = all.find(function(s) { return s.id === myDeviceId; }) || Object.assign(getDeviceInfo(), { createdAt: null, lastActive: null });
+    const others = all.filter(function(s) { return s.id !== myDeviceId; });
 
-    // 🟠 الأجهزة الأخرى
+    document.getElementById('curDevName').textContent = mine.deviceName || 'Unknown';
+    document.getElementById('curDevInfo').textContent = (mine.os || 'Unknown') + ' \u2022 ' + (mine.browser || 'Unknown');
+
     const othersCard = document.getElementById('otherSessionsCard');
     const countEl = document.getElementById('otherDevicesCount');
 
     if (others.length === 0) {
       countEl.textContent = '';
-      othersCard.innerHTML = `
-        <div style="padding:32px 16px;text-align:center;">
-          <svg style="width:56px;height:56px;margin:0 auto 12px;stroke:var(--border-color);fill:none;stroke-width:1.5;" viewBox="0 0 24 24">
-            <rect x="5" y="2" width="14" height="20" rx="2"/>
-            <line x1="12" y1="18" x2="12.01" y2="18"/>
-          </svg>
-          <div style="color:var(--text-color);font-weight:700;font-size:14px;margin-bottom:4px;">ما كاينش أجهزة أخرى</div>
-          <div style="color:var(--subtext-color);font-size:12px;">حسابك مسجل غير في هذا الجهاز</div>
-        </div>`;
+      othersCard.innerHTML = '<div style="padding:32px 16px;text-align:center;">' +
+        '<svg style="width:56px;height:56px;margin:0 auto 12px;stroke:var(--border-color);fill:none;stroke-width:1.5;" viewBox="0 0 24 24">' +
+        '<rect x="5" y="2" width="14" height="20" rx="2"/>' +
+        '<line x1="12" y1="18" x2="12.01" y2="18"/></svg>' +
+        '<div style="color:var(--text-color);font-weight:700;font-size:14px;margin-bottom:4px;">' + actT('noOthers') + '</div>' +
+        '<div style="color:var(--subtext-color);font-size:12px;">' + actT('noOthersSub') + '</div>' +
+        '</div>';
       return;
     }
 
-    countEl.textContent = others.length + ' ' + (others.length === 1 ? 'جهاز' : 'أجهزة');
+    countEl.textContent = others.length;
 
     let html = '';
-    others.forEach(s => {
+    others.forEach(function(s) {
       const lastDate = s.lastActive && s.lastActive.toDate ? s.lastActive.toDate() : null;
       const when = timeAgo(lastDate);
-      html += `
-        <div class="stg-row" style="align-items:flex-start;padding:16px;border-bottom:1px solid var(--border-color);" id="session_${s.id}">
-          <div class="stg-icon" style="background:linear-gradient(135deg,rgba(255,159,10,0.18),rgba(255,159,10,0.06));color:var(--warning);">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              ${getDeviceSvg(s.osIcon)}
-            </svg>
-          </div>
-          <div class="stg-info" style="flex:1;">
-            <div class="stg-name">${escapeHTML(s.deviceName || 'جهاز')}</div>
-            <div class="stg-sub">${escapeHTML(s.os || '')} • ${escapeHTML(s.browser || '')}</div>
-            <div style="font-size:11px;color:var(--warning);font-weight:700;margin-top:6px;display:flex;align-items:center;gap:5px;">
-              <svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-              </svg>
-              ${when}
-            </div>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;">
-            <button onclick="confirmRemoveSession('${s.id}', '${escapeHTML(s.deviceName || 'هذا الجهاز')}')" 
-              style="background:rgba(255,69,58,0.12);color:var(--danger);border:1px solid rgba(255,69,58,0.25);padding:7px 12px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">
-              إخراج
-            </button>
-            <button onclick="askIsThisYou('${s.id}', '${escapeHTML(s.deviceName || 'هذا الجهاز')}')" 
-              style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:7px 12px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">
-              هل هذا نتا؟
-            </button>
-          </div>
-        </div>`;
+      const devNameEsc = escapeHTML(s.deviceName || 'Device');
+      const osEsc = escapeHTML(s.os || '');
+      const brEsc = escapeHTML(s.browser || '');
+      const devNameSafe = devNameEsc.replace(/'/g, '');
+      html += '<div class="stg-row" style="align-items:flex-start;padding:16px;border-bottom:1px solid var(--border-color);" id="session_' + s.id + '">' +
+        '<div class="stg-icon" style="background:linear-gradient(135deg,rgba(255,159,10,0.18),rgba(255,159,10,0.06));color:var(--warning);">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        getDeviceSvg(s.osIcon) + '</svg></div>' +
+        '<div class="stg-info" style="flex:1;min-width:0;">' +
+        '<div class="stg-name">' + devNameEsc + '</div>' +
+        '<div class="stg-sub">' + osEsc + ' \u2022 ' + brEsc + '</div>' +
+        '<div style="font-size:11px;color:var(--warning);font-weight:700;margin-top:6px;display:flex;align-items:center;gap:5px;">' +
+        '<svg style="width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2.5;" viewBox="0 0 24 24">' +
+        '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
+        when + '</div></div>' +
+        '<div style="display:flex;flex-direction:column;gap:6px;">' +
+        '<button onclick="confirmRemoveSession(\'' + s.id + '\', \'' + devNameSafe + '\')" ' +
+        'style="background:rgba(255,69,58,0.12);color:var(--danger);border:1px solid rgba(255,69,58,0.25);padding:7px 12px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">' +
+        actT('logout') + '</button>' +
+        '<button onclick="askIsThisYou(\'' + s.id + '\', \'' + devNameSafe + '\')" ' +
+        'style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:7px 12px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">' +
+        actT('isThisYou') + '</button>' +
+        '</div></div>';
     });
 
     othersCard.innerHTML = html;
 
   } catch (e) {
-    console.warn('loadSessions:', e);
-    document.getElementById('otherSessionsCard').innerHTML = 
-      `<div style="padding:24px;text-align:center;color:var(--danger);font-size:13px;">تعذر تحميل الأجهزة</div>`;
+    console.warn('[Session] Load failed:', e);
+    document.getElementById('otherSessionsCard').innerHTML =
+      '<div style="padding:24px;text-align:center;color:var(--danger);font-size:13px;">' + actT('failedLoad') + '</div>';
   }
 }
 
-/* ============================================
-   ❓ "هل هذا نتا؟" — سؤال ذكي
-   ============================================ */
 async function askIsThisYou(sessionId, deviceName) {
-  const isMe = await showIOSConfirm({
+  const isNotMe = await showIOSConfirm({
     type: 'info',
     icon: 'info',
-    title: 'هل هذا الجهاز نتا؟',
-    message: `سجل هذا الجهاز دخول من:\n${deviceName}\n\nإذا ما كنتش نتا، راح نخرجه فوراً ونطلب منك تبدل كلمة السر.`,
-    okText: 'لا، ماشي أنا',
-    cancelText: 'نعم، هذا أنا'
+    title: actT('confirmTitle'),
+    message: actT('confirmMsg', { name: deviceName }),
+    okText: actT('noNotMine'),
+    cancelText: actT('yesMine')
   });
 
-  if (isMe) {
-    // يعني كليكى "لا، ماشي أنا" → نخرجوه
+  if (isNotMe) {
     await removeSession(sessionId, true);
   } else {
-    // "نعم هذا أنا" → نسجلو ثقة
-    showToast('زعما مزيان، تم تسجيل ثقة', 'success', 2000);
+    showToast(actT('trusted'), 'success', 2000);
   }
 }
 
-/* ============================================
-   🚪 إخراج جهاز (مع تأكيد)
-   ============================================ */
 async function confirmRemoveSession(sessionId, deviceName) {
   const ok = await showIOSConfirm({
     type: 'danger',
     icon: 'trash',
-    title: 'إخراج الجهاز',
-    message: `تأكيد إخراج "${deviceName}" من حسابك؟`,
-    okText: 'إخراج',
-    cancelText: 'إلغاء'
+    title: actT('removedTitle'),
+    message: actT('removedMsg', { name: deviceName }),
+    okText: actT('okRemove'),
+    cancelText: actT('cancel')
   });
   if (ok) await removeSession(sessionId, false);
 }
@@ -13269,87 +13363,90 @@ async function removeSession(sessionId, securityMode) {
       el.style.transition = 'all 0.4s ease';
       el.style.opacity = '0';
       el.style.transform = 'translateX(60px)';
-      setTimeout(() => { el.remove(); loadSessions(); }, 400);
+      setTimeout(function() { el.remove(); loadSessions(); }, 400);
     }
 
     if (securityMode) {
-      // 🚨 حالة أمنية — نسقسوه يبدل كلمة السر
       const changeNow = await showIOSConfirm({
         type: 'warning',
         icon: 'warning',
-        title: '⚠️ تنبيه أمني',
-        message: 'الجهاز تم إخراجه. ننصحك تبدل كلمة السر فوراً باش تحمي حسابك.',
-        okText: 'نعم، بدل كلمة السر',
-        cancelText: 'بعدين'
+        title: actT('secTitle'),
+        message: actT('secMsg'),
+        okText: actT('secOk'),
+        cancelText: actT('secLater')
       });
       if (changeNow) {
         closeActivitiesPage();
         setTimeout(openChangePasswordPage, 300);
       }
     } else {
-      showToast('تم إخراج الجهاز', 'success', 2000);
+      showToast(actT('removed'), 'success', 2000);
     }
   } catch (e) {
-    console.warn('removeSession:', e);
-    showToast('تعذر الإخراج', 'error', 2000);
+    console.warn('[Session] Remove failed:', e);
+    showToast(actT('failedRemove'), 'error', 2000);
   }
 }
 
-/* ============================================
-   🚫 تسجيل خروج من كل الأجهزة
-   ============================================ */
-async function logoutAllOtherDevices() {
+async function logoutAllDevices() {
   if (!currentUser) return;
   const ok = await showIOSConfirm({
     type: 'danger',
     icon: 'warning',
-    title: 'إخراج كل الأجهزة',
-    message: 'راح تخرج من كل الأجهزة الأخرى المسجلة. هذا الجهاز راح يبقى. متأكد؟',
-    okText: 'إخراج الكل',
-    cancelText: 'إلغاء'
+    title: actT('allTitle'),
+    message: actT('allMsg'),
+    okText: actT('allOk'),
+    cancelText: actT('cancel')
   });
   if (!ok) return;
 
   try {
-    const myId = getDeviceId();
     const snap = await db.collection('users').doc(currentUser.uid).collection('sessions').get();
-
     const batch = db.batch();
     let count = 0;
-    snap.forEach(doc => {
-      if (doc.id !== myId) {
-        batch.delete(doc.ref);
-        count++;
-      }
+    snap.forEach(function(doc) {
+      batch.delete(doc.ref);
+      count++;
     });
     await batch.commit();
 
-    showToast(`تم إخراج ${count} جهاز`, 'success', 2500);
-    loadSessions();
+    try { localStorage.removeItem('istore_device_id'); } catch(e) {}
+
+    closeActivitiesPage();
+    showToast(actT('removedAll', { n: count }), 'success', 2500);
+
+    setTimeout(function() {
+      auth.signOut().then(function() {
+        showToast(currentLang === 'ar' ? 'تم تسجيل الخروج' : 'Signed out', 'info', 2000);
+      });
+    }, 800);
+
   } catch (e) {
-    console.warn('logoutAll:', e);
-    showToast('تعذر الإخراج', 'error', 2000);
+    console.warn('[Session] Logout all failed:', e);
+    showToast(actT('failedRemove'), 'error', 2500);
   }
 }
 
-/* ============================================
-   🔐 CHANGE PASSWORD
-   ============================================ */
 function openChangePasswordPage() {
   if (!currentUser) {
-    showToast('سجّل الدخول أولاً', 'warning', 2000);
+    showToast(currentLang === 'ar' ? 'سجّل الدخول أولاً' : 'Please sign in first', 'warning', 2000);
     return;
   }
-  // إلا كان Google ولا غير provider
-  const isEmailProvider = currentUser.providerData.some(p => p.providerId === 'password');
+  const isEmailProvider = currentUser.providerData.some(function(p) { return p.providerId === 'password'; });
   if (!isEmailProvider) {
-    showToast('حسابك ماشي بالإيميل — ما تقدرش تبدل كلمة السر', 'info', 3000);
+    showToast(
+      currentLang === 'ar'
+        ? 'حسابك ماشي بالإيميل، ما تقدرش تبدل كلمة السر'
+        : 'Your account uses Google, cannot change password',
+      'info', 3000
+    );
     return;
   }
 
   document.getElementById('chgCurrentPass').value = '';
   document.getElementById('chgNewPass').value = '';
   document.getElementById('chgNewPass2').value = '';
+  applyActivitiesTranslations();
 
   const page = document.getElementById('changePasswordPage');
   page.classList.add('open');
@@ -13373,35 +13470,33 @@ async function submitChangePassword() {
   const newPass = document.getElementById('chgNewPass').value;
   const newPass2 = document.getElementById('chgNewPass2').value;
 
+  const isAr = currentLang === 'ar';
+
   if (!currentPass || !newPass || !newPass2) {
-    showToast('عمّر كل الحقول', 'warning', 2000);
+    showToast(isAr ? 'عمّر كل الحقول' : 'Fill all fields', 'warning', 2000);
     return;
   }
   if (newPass.length < 6) {
-    showToast('كلمة السر قصيرة (6 على الأقل)', 'warning', 2500);
+    showToast(isAr ? 'كلمة السر قصيرة (6 على الأقل)' : 'Password too short (min 6)', 'warning', 2500);
     return;
   }
   if (newPass !== newPass2) {
-    showToast('كلمتين السر ماشي كيفكيف', 'warning', 2500);
+    showToast(isAr ? 'كلمتين السر ماشي كيفكيف' : 'Passwords do not match', 'warning', 2500);
     return;
   }
   if (newPass === currentPass) {
-    showToast('كلمة السر الجديدة كيف القديمة', 'warning', 2500);
+    showToast(isAr ? 'كلمة السر الجديدة كيف القديمة' : 'New password same as old', 'warning', 2500);
     return;
   }
 
   try {
-    // 🔐 نأكد الهوية الأولى
     const cred = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPass);
     await currentUser.reauthenticateWithCredential(cred);
-
-    // ✏️ نبدلو كلمة السر
     await currentUser.updatePassword(newPass);
 
-    showToast('✅ تم تحديث كلمة المرور بنجاح', 'success', 3000);
+    showToast(isAr ? 'تم تحديث كلمة المرور بنجاح' : 'Password updated successfully', 'success', 3000);
     closeChangePasswordPage();
 
-    // 🔒 نسجلو الحدث في Firestore (اختياري)
     try {
       await db.collection('users').doc(currentUser.uid).update({
         passwordChangedAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -13409,28 +13504,36 @@ async function submitChangePassword() {
     } catch(e) {}
 
   } catch (e) {
-    console.warn('changePassword:', e);
-    let msg = 'تعذر تحديث كلمة المرور';
-    if (e.code === 'auth/wrong-password') msg = 'كلمة السر الحالية غلط';
-    else if (e.code === 'auth/too-many-requests') msg = 'محاولات كثيرة، انتظر شوية';
-    else if (e.code === 'auth/requires-recent-login') msg = 'خاصك تدخل من جديد قبل التغيير';
+    console.warn('[Password] Change failed:', e);
+    let msg = isAr ? 'تعذر تحديث كلمة المرور' : 'Failed to update password';
+    if (e.code === 'auth/wrong-password') msg = isAr ? 'كلمة السر الحالية غلط' : 'Current password is wrong';
+    else if (e.code === 'auth/too-many-requests') msg = isAr ? 'محاولات كثيرة، انتظر شوية' : 'Too many attempts, try later';
+    else if (e.code === 'auth/requires-recent-login') msg = isAr ? 'خاصك تدخل من جديد' : 'Please sign in again';
     showToast(msg, 'error', 3500);
   }
 }
 
-/* ============================================
-   🔗 HOOKS — نربطو مع auth flow
-   ============================================ */
-// عند الدخول → نسجلو الجهاز
 if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
-  auth.onAuthStateChanged(u => {
+  auth.onAuthStateChanged(function(u) {
     if (u) setTimeout(saveDeviceSession, 1500);
   });
 }
-// كي يتحمل الموقع و المستخدم مسجل → نسجلو
-setTimeout(() => { if (currentUser) saveDeviceSession(); }, 3000);
+setTimeout(function() { if (currentUser) saveDeviceSession(); }, 3000);
 
-console.log('✅ Activities + Password Change loaded');
+const _oldApplyTrans = window.applyTranslations;
+if (typeof _oldApplyTrans === 'function' && !_oldApplyTrans._actWrapped) {
+  window.applyTranslations = function() {
+    _oldApplyTrans.call(this);
+    if (document.getElementById('activitiesPage') && document.getElementById('activitiesPage').classList.contains('open') ||
+        document.getElementById('changePasswordPage') && document.getElementById('changePasswordPage').classList.contains('open')) {
+      applyActivitiesTranslations();
+      loadSessions();
+    }
+  };
+  window.applyTranslations._actWrapped = true;
+}
+
+console.log('Activities + Password loaded');
 </script>
 
 <div id="aiChatDrawer">
