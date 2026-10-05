@@ -10527,17 +10527,30 @@ allAppsCache.slice(0, 20).forEach((app, i) => {
 function looksLikeAppQuery(msg) {
   const lower = msg.toLowerCase().trim();
   
-  // تجاهل الرسائل القصيرة جداً
-  if (lower.length < 4) return false;
+  // إذا الرسالة قصيرة بزاف (أقل من 5 حروف) → ماشي استعلام
+  if (lower.length < 5) return false;
   
-  // تجاهل التحيات والرسائل العامة
-  const skipWords = ['مرحبا', 'سلام', 'اهلا', 'أهلا', 'شكرا', 'شكراً', 'hello', 'hi', 'thanks', 'ok', 'نعم', 'لا', 'كيف حالك', 'صباح', 'مساء', 'bonjour', 'salam'];
-  if (skipWords.some(w => lower.startsWith(w) || lower === w)) return false;
+  // كلمات التحية والعامة - إذا كاملة أو كبداية
+  const skipWords = [
+    'مرحبا', 'سلام', 'سلام عليكم', 'اهلا', 'أهلا', 'شكرا', 'شكراً', 'صباح', 'صباح الخير', 
+    'مساء', 'مساء الخير', 'كيف حالك', 'كيفك', 'كيفك اليوم', 'بخير', 'الحمد لله', 'وداعا', 
+    'بسلامة', 'hello', 'hi', 'hey', 'thanks', 'thank you', 'good morning', 'good evening',
+    'good night', 'how are you', 'how r u', 'fine', 'ok', 'okay', 'bye', 'goodbye',
+    'bonjour', 'salut', 'merci', 'salam', 'ciao', 'yo', 'sup', 'wassup', 'whats up',
+    'what\'s up', 'hola', 'hallo', 'buenos', 'привет', 'здравствуйте'
+  ];
   
-  // إذا التطبيق ديجا موجود فالمتجر، ما نحتاجش نجيبو
-  if (allAppsCache.some(a => a.name && lower.includes(a.name.toLowerCase()))) return false;
+  // إلا الرسالة كاملة كلمة تحية → ماشي استعلام
+  if (skipWords.some(w => lower === w)) return false;
   
-  // أنماط تدل على أن المستخدم يسأل عن تطبيق
+  // إلا الرسالة كتبدا بكلمة تحية + ماشي فيها كلمات "تطبيق/لعبة/بحث"
+  const startsWithSkip = skipWords.some(w => lower.startsWith(w + ' ') || lower.startsWith(w + ',') || lower.startsWith(w + '!'));
+  if (startsWithSkip) {
+    const hasAppKeyword = /\b(app|game|تطبيق|لعبة|برنامج|ابحث|حوس|جيب|قلب|بحث|download|find|search|look)\b/i.test(lower);
+    if (!hasAppKeyword) return false;
+  }
+  
+  // من هنا فصاعداً، الكود الأصلي
   const patterns = [
     /هل (يوجد|كاين|عندكم|تتوفر|متوفر|متوفرة)/i,
     /واش (يوجد|كاين|عندكم|كاين|متوفر|متوفرة|راك)/i,
@@ -10549,11 +10562,11 @@ function looksLikeAppQuery(msg) {
   
   if (patterns.some(p => p.test(msg))) return true;
   
-  // إذا كانت الجملة قصيرة (3-30 حرف) ومن غير كلمات مفتاحية، نجربو نحوسو
+  // إذا الجملة قصيرة و فيها كلام عام - ماشي استعلام
   const words = lower.split(/\s+/);
-  if (words.length <= 4 && lower.length >= 3 && lower.length <= 30) return true;
+  if (words.length <= 2 && lower.length <= 15) return false;
   
-  return false;
+  return false;  // ✅ بدلنا آخر شرط لـ false باش ما نبعتوش app card بلا سبب
 }
  // ============================================
 // 🎨 RENDER BOT MESSAGE (Auto-link apps + Markdown)
