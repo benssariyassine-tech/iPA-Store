@@ -8220,6 +8220,54 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
     }
   }, d);
 }
+ /* ============================================
+   DMCA / COPYRIGHT PAGE
+   ============================================ */
+function openDMCAPage() {
+  const isAr = (typeof currentLang !== 'undefined' && currentLang === 'ar');
+  
+  const msg = isAr
+    ? '=====================================\n' +
+      'DMCA - سياسة حقوق النشر\n' +
+      '=====================================\n\n' +
+      'iStore - جميع الحقوق محفوظة (c) 2026\n\n' +
+      'هذا الموقع وكل محتواه، بما في ذلك:\n' +
+      '- الكود المصدري (HTML, CSS, JavaScript)\n' +
+      '- التصميم والتخطيط والعناصر المرئية\n' +
+      '- الأيقونات والشعارات\n' +
+      '- بنية قاعدة البيانات ومحتواها\n\n' +
+      'هي ملكية حصرية لفريق iStore ومحمية بموجب:\n' +
+      '- DMCA (قانون الألفية الرقمية لحقوق النشر)\n' +
+      '- المعاهدات الدولية لحقوق النشر\n' +
+      '- اتفاقية برن\n\n' +
+      'تنبيه - الاستخدام غير المصرح:\n' +
+      'أي نسخ أو تعديل أو توزيع أو استخدام تجاري\n' +
+      'بدون إذن كتابي صريح من المالك ممنوع تماما.\n\n' +
+      'للإبلاغ عن انتهاك:\n' +
+      'support.istoreipa@gmail.com\n\n' +
+      'المخالفون سيتم محاسبتهم قانونيا.'
+    : '=====================================\n' +
+      'DMCA - Copyright Policy\n' +
+      '=====================================\n\n' +
+      'iStore - All Rights Reserved (c) 2026\n\n' +
+      'This website and all of its content, including but not limited to:\n' +
+      '- Source code (HTML, CSS, JavaScript)\n' +
+      '- Design, layout, and UI elements\n' +
+      '- Graphics, icons, and logos\n' +
+      '- Database structure and content\n\n' +
+      'Are the exclusive property of iStore Team and protected by:\n' +
+      '- DMCA (Digital Millennium Copyright Act)\n' +
+      '- International copyright treaties\n' +
+      '- Berne Convention\n\n' +
+      'WARNING - Unauthorized Use:\n' +
+      'Any copying, modification, distribution, or commercial use\n' +
+      'without written permission is strictly prohibited.\n\n' +
+      'To report a violation:\n' +
+      'support.istoreipa@gmail.com\n\n' +
+      'Violators will be prosecuted to the fullest extent of the law.';
+  
+  alert(msg);
+}
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 function openModal(id){ document.getElementById(id).style.display='flex'; }
 function openImgViewer(src){ document.getElementById('imgViewerImg').src = src; document.getElementById('imgViewer').style.display='flex'; }
