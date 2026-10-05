@@ -1873,67 +1873,55 @@ body.light-mode .ai-quick-btn{background:rgba(0, 0, 0, 0.04);border-color:rgba(0
 
 @media (max-width: 380px){.ai-welcome-text{font-size:56px;letter-spacing:-1.5px}}
 /* =========================================
-   🚀 إصلاح مشاكل اللغة العربية (RTL) - Final Fix
+   ✨ تنسيق شاشة الترحيب (Glass Effect Only)
    ========================================= */
 
-/* 1. منع الصفحة بالكامل من السكرول الأفقي */
-html[dir="rtl"], body[dir="rtl"] {
-    overflow-x: hidden !important;
-    max-width: 100vw !important;
+/* 1. نشيلوا التوهج الأزرق لي مورا النص */
+.ai-welcome-glow {
+    display: none !important; /* حيدنا الخلفية الزرقاء كاملة */
 }
 
-/* 2. إصلاح شاشة الترحيب في الشات (Welcome Screen) */
-body[dir="rtl"] .ai-welcome-text-wrap {
-    max-width: 100% !important;
-    padding: 0 15px !important;
-}
-body[dir="rtl"] .ai-welcome-text {
-    font-size: 48px !important; /* تصغير الخط عشان م يخرجش بره الشاشة */
-    white-space: normal !important;
-    word-break: break-word !important;
-}
-
-/* 3. إصلاح رسائل الشات (Chat Messages) */
-body[dir="rtl"] .aiChatMessages {
-    max-width: 100% !important;
-    overflow-x: hidden !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-}
-body[dir="rtl"] .aiMsg {
-    max-width: 85% !important;
-    word-wrap: break-word !important;
-    overflow-wrap: anywhere !important; /* يكسر الروابط الطويلة */
-    white-space: normal !important;
+/* 2. تنسيق النص باش يولي زجاجي (لكلتا الكلمتين بلا استثناء) */
+.ai-welcome-text {
+    font-size: clamp(3rem, 15vw, 7rem) !important; /* حجم كبير وقد الشاشة */
+    font-weight: 900 !important;
+    letter-spacing: -2px !important;
+    white-space: nowrap !important; /* عشان ما تتقطعش */
+    position: relative !important;
+    margin: 0 !important;
+    
+    /* 🔥 هنا سحر الـ Glass: لون أبيض شفاف مع تدرج رمادي فاتح */
+    color: transparent !important;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.5) 50%, rgba(180, 180, 180, 0.3) 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    
+    /* إطار زجاجي رقيق جداً باش تبان الحواف */
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25) !important;
+    
+    /* ظل أسود خفيف (ماشي أزرق) باش يعطي عمق ويخلي الكلمة تبان */
+    text-shadow: 0 12px 24px rgba(0, 0, 0, 0.6) !important;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.08)) !important; 
 }
 
-/* 4. إصلاح مربع الكتابة (Input Area) */
-body[dir="rtl"] .aiChatInputBar {
-    max-width: 100vw !important;
-    box-sizing: border-box !important;
-    padding-left: 10px !important;
-    padding-right: 10px !important;
+
+.ai-welcome-ar, 
+.ai-welcome-en {
+    background: inherit !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+    text-shadow: inherit !important;
+    filter: inherit !important;
 }
-body[dir="rtl"] .aiChatInputWrap {
-    min-width: 0 !important; /* 🔥 أهم سطر لمنع الـ Flexbox من التمدد */
-    flex: 1 !important;
-}
-body[dir="rtl"] .aiChatInput {
-    min-width: 0 !important;
+
+
+.ai-welcome-text-wrap {
+    position: relative !important;
     width: 100% !important;
-    box-sizing: border-box !important;
-}
-
-/* 5. إصلاح قائمة الدعم الفني (Support Menu) */
-body[dir="rtl"] .support-menu-item {
-    white-space: normal !important;
-    max-width: calc(100vw - 40px) !important;
-    text-align: right !important;
-    word-break: break-word !important;
-}
-
-/* 6. إصلاح أي عنصر جوه الشات بشكل عام */
-body[dir="rtl"] .aiChatPanel * {
-    max-width: 100% !important;
-    box-sizing: border-box !important;
+    height: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 30px !important;
 }
