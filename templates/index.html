@@ -8729,14 +8729,31 @@ function applyFontSize(size){
   // Fallback: نضمنو أن body يتحدث تلقائياً
   document.body.style.fontSize = value;
 }
-function clearAppCache(){
-  if(!confirm('Clear all cached data? / مسح جميع البيانات؟')) return;
+async function clearAppCache(){
+  const confirmed = await showIOSConfirm({
+    type: 'danger',
+    icon: 'trash',
+    title: currentLang==='ar'?'مسح البيانات المؤقتة':'Clear Cache',
+    message: currentLang==='ar'
+      ? 'سيتم مسح البيانات المؤقتة والإعدادات. هل تريد المتابعة؟'
+      : 'Cache and settings will be cleared. Continue?',
+    okText: currentLang==='ar'?'مسح':'Clear',
+    cancelText: currentLang==='ar'?'إلغاء':'Cancel'
+  });
+  
+  if(!confirmed) return;
+  
   try{
     localStorage.removeItem('istore_prefs');
     localStorage.removeItem('istore_app_settings');
-    showToast('Cache cleared. Reloading...', 'success');
+    showToast(
+      currentLang==='ar'?'تم المسح، جاري التحديث...':'Cache cleared. Reloading...',
+      'success'
+    );
     setTimeout(()=>{ auth.signOut().then(()=>{ window.location.reload(); }); }, 1200);
-  }catch(e){ showToast('Error clearing cache', 'error'); }
+  }catch(e){ 
+    showToast('Error clearing cache', 'error'); 
+  }
 }
 
 // ====== EDIT PROFILE ======
