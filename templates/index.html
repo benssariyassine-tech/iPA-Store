@@ -7884,6 +7884,7 @@ function handleSignOut(){
     document.getElementById('verifyCodeView').style.display = 'none';
     document.getElementById('loggedInView').style.display = 'none';
     closeModal('accountModal');
+   updateHeaderAccountBtn();
     applyPremiumTheme();
     renderUI();
     showToast("Signed out / تم تسجيل الخروج", "info");
