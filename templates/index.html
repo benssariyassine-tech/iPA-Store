@@ -6119,6 +6119,78 @@ body.no-animations .search-fab::after {
   box-shadow: 0 6px 20px rgba(255, 159, 10, 0.4),
               inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
+ /* ============================================
+   👤 ACCOUNT HEADER BUTTON
+   ============================================ */
+.account-header-btn {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  color: var(--text-color);
+  overflow: hidden;
+  padding: 0;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+/* عند الضغط */
+.account-header-btn:active {
+  transform: scale(0.9);
+  background: var(--card-bg);
+}
+
+/* ==== الحالة 1: مسجل بصورة ==== */
+.account-header-btn.has-avatar {
+  border: 2px solid var(--accent);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.account-header-btn.has-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* ==== الحالة 2: مسجل بحرف واحد ==== */
+.account-header-btn.has-initial {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  color: #fff;
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+.account-header-initial {
+  font-size: 16px;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: -0.3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ==== الوضع الفاتح ==== */
+body.light-mode .account-header-btn {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+body.light-mode .account-header-btn:active {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+/* ==== ما كيتبانش إذا كان مخفي ==== */
+.account-header-btn svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+}
 </style>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -6156,24 +6228,12 @@ body.no-animations .search-fab::after {
   <div class="logo-area">
     i<span>Store</span>
   </div>
-  <div class="header-icons">
-    <div class="icon-btn" id="favHeaderBtn" onclick="switchTab('favorites')" style="display:none;">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-    </div>
-  <div class="icon-btn" id="themeHeaderBtn" onclick="openThemeModal()" title="Change Theme">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="13.5" cy="6.5" r="1.2"/>
-    <circle cx="17.5" cy="10.5" r="1.2"/>
-    <circle cx="8.5" cy="7.5" r="1.2"/>
-    <circle cx="6.5" cy="12.5" r="1.2"/>
-    <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/>
-  </svg>
+<div class="icon-btn" id="favHeaderBtn" onclick="switchTab('favorites')" style="display:none;">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
 </div>
-    
-    <div class="icon-btn primary" onclick="openAccountModal()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
-  </div>
+
+<div class="icon-btn account-header-btn" id="accountHeaderBtn" onclick="openAccountModal()" aria-label="Account">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
 </div>
  <!-- Maintenance Banner -->
 <div id="maintenanceBanner" class="maintenance-banner">
@@ -12252,6 +12312,37 @@ setTimeout(() => {
 }, 3000);
 
 console.log('✅ System Notifications + Update Alerts loaded');
+ 
+/* ============================================
+   👤 ACCOUNT HEADER — Dynamic Avatar
+   ============================================ */
+function updateHeaderAccountBtn() {
+  const btn = document.getElementById('accountHeaderBtn');
+  if (!btn) return;
+  
+  // ✅ الحالة 1: ماشي مسجل
+  if (!currentUser) {
+    btn.classList.remove('has-avatar', 'has-initial');
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    return;
+  }
+  
+  // ✅ الحالة 2: مسجل + عندو صورة
+  if (userProfile.avatar && userProfile.avatar.startsWith('data:') || (userProfile.avatar && userProfile.avatar.startsWith('http'))) {
+    btn.classList.remove('has-initial');
+    btn.classList.add('has-avatar');
+    btn.innerHTML = '<img src="' + userProfile.avatar + '" alt="Avatar" onerror="this.parentNode.classList.remove(\'has-avatar\'); this.parentNode.classList.add(\'has-initial\'); this.parentNode.innerHTML=\'<span class=&quot;account-header-initial&quot;>' + ((userProfile.displayName || 'U').charAt(0).toUpperCase()) + '</span>\';">';
+    return;
+  }
+  
+  // ✅ الحالة 3: مسجل بلا صورة → أول حرف
+  const initial = (userProfile.displayName || (currentUser && currentUser.email) || 'U').charAt(0).toUpperCase();
+  btn.classList.remove('has-avatar');
+  btn.classList.add('has-initial');
+  btn.innerHTML = '<span class="account-header-initial">' + initial + '</span>';
+}
+
+console.log('✅ Account Header loaded');
 console.log('✅ Login Page JS loaded');
 </script>
 
