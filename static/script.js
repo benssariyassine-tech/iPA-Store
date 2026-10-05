@@ -6554,6 +6554,8 @@ if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
  /* ============================================
    AI WELCOME SCREEN ANIMATION
    ============================================ */
+let _welcomeAnimPlayed = false;
+
 function playWelcomeAnimation() {
   const welcomeScreen = document.getElementById('aiWelcomeScreen');
   const welcomeAr = document.getElementById('aiWelcomeAr');
@@ -6564,51 +6566,35 @@ function playWelcomeAnimation() {
   
   if (!welcomeScreen || !welcomeAr || !welcomeEn) return;
   
-  // ✅ نخبيو الرسائل القديمة
   const oldMsgs = messages.querySelectorAll('.aiMsg');
   oldMsgs.forEach(el => el.style.display = 'none');
   
-  // ✅ نبدلو النص التحتي حسب اللغة
-  const subEl = document.getElementById('aiWelcomeSub');
-  if (subEl && typeof currentLang !== 'undefined') {
-    subEl.textContent = currentLang === 'ar' 
-      ? 'كيفاش نقدر نعاونك اليوم؟' 
-      : 'How can I help you today?';
-  }
-  
-  // Reset الأنيميشن
   welcomeAr.classList.remove('wiping-in', 'wiping-out');
   welcomeEn.classList.remove('wiping-in', 'wiping-out');
   
-  // 1. النص العربي يبان (fade + scale)
+  // 1. ظهور "مرحباً"
   setTimeout(() => {
     welcomeAr.classList.add('wiping-in');
-  }, 300);
+  }, 200);
   
-  // 2. الـ Glow يبان
+  // 2. Glow يبان
   setTimeout(() => {
     if (glow) glow.classList.add('active');
   }, 800);
   
-  // 3. النص العربي يختفي + الإنجليزي يبان
+  // 3. تبديل لـ Welcome
   setTimeout(() => {
     welcomeAr.classList.remove('wiping-in');
     welcomeAr.classList.add('wiping-out');
-    
     setTimeout(() => {
       welcomeEn.classList.add('wiping-in');
-      
-      // ✅ نبدلو النص التحتي للإنجليزي
-      if (subEl) {
-        subEl.textContent = 'How can I help you today?';
-      }
-    }, 250);
-  }, 2600);
+    }, 200);
+  }, 2500);
   
   // 4. Quick Actions
   setTimeout(() => {
     if (quickActions) quickActions.classList.add('show');
-  }, 3600);
+  }, 3500);
 }
 
 function hideWelcomeScreen() {
@@ -6649,5 +6635,4 @@ window.openAiChat = function() {
   }
 };
 console.log('Activities + Password loaded');
-
 
