@@ -13334,13 +13334,20 @@ async function loadSessions() {
         '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' +
         when + '</div></div>' +
         '<div style="display:flex;flex-direction:column;gap:6px;">' +
-        '<button onclick="confirmRemoveSession(\'' + s.id + '\', \'' + devNameSafe + '\')" ' +
-        'style="background:rgba(255,69,58,0.12);color:var(--danger);border:1px solid rgba(255,69,58,0.25);padding:7px 12px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">' +
-        actT('logout') + '</button>' +
-        '<button onclick="askIsThisYou(\'' + s.id + '\', \'' + devNameSafe + '\')" ' +
-        'style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:7px 12px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">' +
-        actT('isThisYou') + '</button>' +
-        '</div></div>';
+   '<button onclick="confirmRemoveSession(\'' + s.id + '\', \'' + devNameSafe + '\')" ' +
+'style="background:rgba(255,69,58,0.12);color:var(--danger);border:1px solid rgba(255,69,58,0.25);padding:7px 12px;border-radius:10px;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">' +
+actT('logout') + '</button>' +
+((s.trusted === true) ? 
+  '<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(50,215,75,0.12);color:var(--success);border:1px solid rgba(50,215,75,0.25);padding:6px 10px;border-radius:10px;font-weight:800;font-size:10px;white-space:nowrap;">' +
+    '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+    (currentLang === 'ar' ? 'موثوق' : 'Trusted') +
+  '</span>'
+  :
+  '<button onclick="askIsThisYou(\'' + s.id + '\', \'' + devNameSafe + '\')" ' +
+  'style="background:var(--input-bg);color:var(--text-color);border:1px solid var(--border-color);padding:7px 12px;border-radius:10px;font-weight:700;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;">' +
+  actT('isThisYou') + '</button>'
+) +
+'</div></div>';
     });
 
     othersCard.innerHTML = html;
@@ -13363,12 +13370,24 @@ async function askIsThisYou(sessionId, deviceName) {
   });
 
   if (isNotMe) {
+    // المستخدم قال "لا، ماشي أنا" → نخرجو الجهاز
     await removeSession(sessionId, true);
   } else {
-    showToast(actT('trusted'), 'success', 2000);
+    // المستخدم قال "نعم، هذا أنا" → نسجلو الجهاز كـ trusted
+    try {
+      await db.collection('users').doc(currentUser.uid)
+              .collection('sessions').doc(sessionId).update({
+                trusted: true,
+                trustedAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+      
+      // نسدو الـ modal بلا Toast
+      loadSessions();
+    } catch (e) {
+      console.warn('[Trust] Save failed:', e);
+    }
   }
 }
-
 async function confirmRemoveSession(sessionId, deviceName) {
   const ok = await showIOSConfirm({
     type: 'danger',
