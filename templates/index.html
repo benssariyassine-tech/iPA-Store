@@ -7530,9 +7530,14 @@ function handleProblemFromNotif(card) {
     }
   }, 500);
 }
- // Backward compatible
+/* ============================================
+   🍞 TOAST — In-App فقط (بلا System)
+   ============================================ */
 function showToast(msg, type, duration) {
-  showNotification({
+  // 🎯 Toast = In-App فقط، بلا system notification
+  return showNotification({
+    inApp: true,        // ← In-App
+    system: false,      // ← ما يبعثش system
     title: msg,
     type: type || 'info',
     duration: (duration === 0) ? 0 : (duration || 3000)
