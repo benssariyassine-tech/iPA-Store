@@ -10490,12 +10490,7 @@ function renderBotMessage(text) {
   const text = input.value.trim();
   if (!text) return;
 
-  // إخفاء إشعار الخصوصية
-  const notice = document.getElementById('chatPrivacyNotice');
-  if (notice && !notice.classList.contains('hide')) {
-    notice.classList.add('hide');
-    setTimeout(() => { notice.style.display = 'none'; }, 400);
-  }
+ 
 
   // إظهار رسالة المستخدم
   const userMsg = document.createElement('div');
