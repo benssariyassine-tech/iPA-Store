@@ -12059,6 +12059,170 @@ function closeIOSConfirm(result) {
 }
 
 console.log('✅ IOS Confirm Dialog loaded');
+ 
+/* ============================================
+   🔔 NOTIFICATIONS — Real System Notifications
+   ============================================ */
+
+/* التحقق من دعم الإشعارات */
+function _notificationsSupported() {
+  return 'Notification' in window;
+}
+
+/* إرسال إشعار نظام حقيقي */
+function _sendSystemNotification(title, body, options) {
+  // تحقق: المستخدم مفعّل الإشعارات + المتصفح يدعم
+  if (!appSettings.notifications) return false;
+  if (!_notificationsSupported()) return false;
+  if (Notification.permission !== 'granted') return false;
+  
+  try {
+    const opts = Object.assign({
+      body: body || '',
+      icon: 'https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png',
+      badge: 'https://raw.githubusercontent.com/benssariyassine-tech/iPA-Store/main/static/icon.png',
+      tag: 'istore-notif-' + Date.now(),
+      requireInteraction: false,
+      silent: false
+    }, options || {});
+    
+    const notif = new Notification(title, opts);
+    
+    // كي يضغط على الإشعار → يفتح الموقع
+    notif.onclick = function() {
+      window.focus();
+      if (opts.data && opts.data.url) {
+        window.location.href = opts.data.url;
+      }
+      notif.close();
+    };
+    
+    // سد تلقائي بعد 8 ثواني
+    setTimeout(() => { try { notif.close(); } catch(e) {} }, 8000);
+    
+    return true;
+  } catch(e) {
+    console.warn('System notif error:', e);
+    return false;
+  }
+}
+
+/* ============================================
+   🔄 UPDATE ALERTS — Check for New Apps
+   ============================================ */
+
+/* مفتاح آخر فحص */
+function _getLastUpdateCheckKey() {
+  return 'istore_last_update_check';
+}
+
+/* جيب آخر فحص */
+function _getLastUpdateCheck() {
+  try {
+    return parseInt(localStorage.getItem(_getLastUpdateCheckKey()) || '0', 10) || 0;
+  } catch(e) { return 0; }
+}
+
+/* احفظ آخر فحص */
+function _setLastUpdateCheck(timestamp) {
+  try {
+    localStorage.setItem(_getLastUpdateCheckKey(), String(timestamp));
+  } catch(e) {}
+}
+
+/* تحقق من التحديثات الجديدة */
+function _checkForUpdates() {
+  if (!appSettings.updateAlerts) return;
+  if (!appSettings.notifications) return;
+  if (Notification.permission !== 'granted') return;
+  
+  const lastCheck = _getLastUpdateCheck();
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+  
+  // إذا فحصنا في آخر 24 ساعة → ما نعاودوش
+  if (now - lastCheck < oneDay) return;
+  
+  // جيب التطبيقات الجديدة (في آخر 24 ساعة)
+  const newApps = allAppsCache.filter(app => {
+    if (!app.createdAt || !app.createdAt.seconds) return false;
+    const appTime = app.createdAt.seconds * 1000;
+    return appTime > lastCheck && appTime > (now - 7 * oneDay); // آخر 7 أيام
+  });
+  
+  if (newApps.length > 0) {
+    // إشعار بالتطبيقات الجديدة
+    const appNames = newApps.slice(0, 3).map(a => a.name).join(', ');
+    const count = newApps.length;
+    
+    _sendSystemNotification(
+      currentLang === 'ar' 
+        ? `🆕 ${count} تطبيق جديد` 
+        : `🆕 ${count} new ${count > 1 ? 'apps' : 'app'}`,
+      currentLang === 'ar'
+        ? `تم إضافة: ${appNames}${count > 3 ? ' والمزيد...' : ''}`
+        : `Added: ${appNames}${count > 3 ? ' and more...' : ''}`,
+      {
+        tag: 'istore-new-apps-' + now,
+        data: { url: '/' }
+      }
+    );
+  }
+  
+  // احفظ الوقت
+  _setLastUpdateCheck(now);
+}
+
+/* ============================================
+   🔗 ربط الإشعارات الداخلية مع النظام
+   ============================================ */
+
+/* Wrapper على showNotification — يبعث إشعار نظام تانيت */
+(function() {
+  if (typeof window.showNotification !== 'function') return;
+  if (window.showNotification._systemWrapped) return;
+  
+  const _orig = window.showNotification;
+  
+  window.showNotification = function(opts) {
+    const o = Object.assign({}, opts || {});
+    
+    // نادِ الدالة الأصلية (الإشعار داخل الموقع)
+    const card = _orig.call(this, o);
+    
+    // إذا الإشعار من نوع success أو error أو warning → ابعث نظام تانيت
+    // (ماشي info، لأن info كثيرة)
+    const sendSystem = o.sendSystem !== false 
+                    && appSettings.notifications 
+                    && Notification.permission === 'granted'
+                    && ['success', 'error', 'warning'].includes(o.type);
+    
+    if (sendSystem && o.title) {
+      _sendSystemNotification(
+        o.title,
+        o.desc || '',
+        {
+          tag: 'istore-sys-' + Date.now(),
+          data: o.data || null
+        }
+      );
+    }
+    
+    return card;
+  };
+  
+  window.showNotification._systemWrapped = true;
+})();
+
+/* ============================================
+   🚀 INITIALIZATION — شغل Check Updates بعد ما تحمل
+   ============================================ */
+setTimeout(() => {
+  // استنى 3 ثواني حتى تجي البيانات من Firebase
+  _checkForUpdates();
+}, 3000);
+
+console.log('✅ System Notifications + Update Alerts loaded');
 console.log('✅ Login Page JS loaded');
 </script>
 
