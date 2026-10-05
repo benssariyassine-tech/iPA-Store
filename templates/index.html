@@ -13674,7 +13674,45 @@ console.log('Activities + Password loaded');
   </div>
 </div>
 <div class="aiChatMessages" id="aiChatMessages">
-  <div class="aiMsg bot" data-i18n="chatWelcome">مرحباً بك في iStore. أنا مساعدك الذكي، كيف يمكنني مساعدتك اليوم؟</div>
+<!-- شاشة الترحيب -->
+<div id="aiWelcomeScreen" class="ai-welcome-screen">
+  <div class="ai-welcome-text-wrap">
+    <h1 class="ai-welcome-text ai-welcome-ar" id="aiWelcomeAr">مرحباً</h1>
+    <h1 class="ai-welcome-text ai-welcome-en" id="aiWelcomeEn">Welcome</h1>
+  </div>
+  <div class="ai-welcome-glow" id="aiWelcomeGlow"></div>
+  
+  <!-- اقتراحات سريعة -->
+  <div class="ai-quick-actions" id="aiQuickActions">
+    <button class="ai-quick-btn" onclick="sendQuickAction('app')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="3" width="7" height="7"/>
+        <rect x="14" y="3" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/>
+      </svg>
+      <span data-i18n="quickFindApp">Find an app</span>
+    </button>
+    
+    <button class="ai-quick-btn" onclick="sendQuickAction('help')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span data-i18n="quickHowDownload">How to download</span>
+    </button>
+    
+    <button class="ai-quick-btn" onclick="sendQuickAction('publisher')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <span data-i18n="quickBecomePublisher">Become a publisher</span>
+    </button>
+  </div>
+</div>
   <!-- ✅ إشعار الخصوصية (يظهر في الوسط ويختفي عند بدء المحادثة) -->
   <div id="chatPrivacyNotice" class="chat-privacy-notice">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
