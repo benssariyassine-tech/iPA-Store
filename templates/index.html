@@ -13384,8 +13384,20 @@ async function confirmRemoveSession(sessionId, deviceName) {
 async function removeSession(sessionId, securityMode) {
   if (!currentUser) return;
   try {
+    // ✅ 1. نسجلو flag "forceLogout" باش الجهاز الآخر يخرج
     await db.collection('users').doc(currentUser.uid)
-            .collection('sessions').doc(sessionId).delete();
+            .collection('sessions').doc(sessionId).update({
+              forceLogout: true,
+              forceLogoutAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+    // ✅ 2. بعد ثانيتين، نحذفو الجلسة نهائياً
+    setTimeout(async () => {
+      try {
+        await db.collection('users').doc(currentUser.uid)
+                .collection('sessions').doc(sessionId).delete();
+      } catch(e) {}
+    }, 2000);
 
     const el = document.getElementById('session_' + sessionId);
     if (el) {
@@ -13561,7 +13573,66 @@ if (typeof _oldApplyTrans === 'function' && !_oldApplyTrans._actWrapped) {
   };
   window.applyTranslations._actWrapped = true;
 }
+/* ============================================
+   FORCE LOGOUT LISTENER
+   كل جهاز كيسمع للإشعارات في الوقت الحقيقي
+   ============================================ */
+let _forceLogoutUnsub = null;
 
+function listenForForceLogout() {
+  if (_forceLogoutUnsub) _forceLogoutUnsub();
+  if (!currentUser) return;
+  
+  const myDeviceId = getDeviceId();
+  
+  _forceLogoutUnsub = db.collection('users').doc(currentUser.uid)
+    .collection('sessions').doc(myDeviceId)
+    .onSnapshot((doc) => {
+      if (!doc.exists) {
+        // الجلسة انحذفت - نسجلو خروج
+        console.log('[ForceLogout] Session deleted, signing out...');
+        showToast(
+          currentLang === 'ar' 
+            ? 'تم تسجيل خروجك من هذا الجهاز' 
+            : 'You have been signed out from this device',
+          'warning', 5000
+        );
+        setTimeout(() => auth.signOut(), 800);
+        return;
+      }
+      
+      const data = doc.data();
+      if (data && data.forceLogout === true) {
+        // طلب خروج بالقوة
+        console.log('[ForceLogout] Forced logout requested');
+        showToast(
+          currentLang === 'ar' 
+            ? 'تم إنهاء جلستك من جهاز آخر' 
+            : 'Your session was ended from another device',
+          'warning', 5000
+        );
+        
+        // نحذفو الجلسة تاعنا
+        doc.ref.delete().catch(() => {});
+        
+        // نسجلو خروج
+        setTimeout(() => auth.signOut(), 800);
+      }
+    }, (err) => {
+      console.warn('[ForceLogout] Listener error:', err);
+    });
+}
+
+// نبدأ الاستماع ملي يسجل المستخدم دخول
+if (typeof auth !== 'undefined' && auth.onAuthStateChanged) {
+  auth.onAuthStateChanged((u) => {
+    if (u) {
+      setTimeout(listenForForceLogout, 2000);
+    } else {
+      if (_forceLogoutUnsub) { _forceLogoutUnsub(); _forceLogoutUnsub = null; }
+    }
+  });
+}
 console.log('Activities + Password loaded');
 </script>
 
