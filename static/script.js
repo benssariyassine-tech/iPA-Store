@@ -813,90 +813,54 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
   }, d);
 }
 /* ============================================
-   DMCA / COPYRIGHT PAGE
+   DMCA / COPYRIGHT PAGE — Standalone (White)
    ============================================ */
 function openDMCAPage() {
-  const isAr = (typeof currentLang !== 'undefined' && currentLang === 'ar');
+  const page = document.getElementById('dmcaPage');
+  if (!page) {
+    console.warn('DMCA page not found');
+    return;
+  }
   
-  const title = isAr ? 'DMCA - حقوق النشر' : 'DMCA - Copyright Policy';
-  
-  const content = isAr
-    ? '<p style="margin:0 0 16px 0; font-size:13px; color:var(--subtext-color);">iStore - جميع الحقوق محفوظة (c) 2026</p>' +
-      '<p style="margin:0 0 12px 0; font-size:13px; line-height:1.7; color:var(--text-color);">هذا الموقع وكل محتواه، بما في ذلك:</p>' +
-      '<ul style="margin:0 0 16px 0; padding-right:20px; font-size:13px; line-height:1.8; color:var(--text-color);">' +
-        '<li>الكود المصدري (HTML, CSS, JavaScript)</li>' +
-        '<li>التصميم والتخطيط والعناصر المرئية</li>' +
-        '<li>الأيقونات والشعارات</li>' +
-        '<li>بنية قاعدة البيانات ومحتواها</li>' +
-      '</ul>' +
-      '<p style="margin:0 0 12px 0; font-size:13px; line-height:1.7; color:var(--text-color);">هي ملكية حصرية لفريق iStore ومحمية بموجب:</p>' +
-      '<ul style="margin:0 0 16px 0; padding-right:20px; font-size:13px; line-height:1.8; color:var(--text-color);">' +
-        '<li>DMCA (قانون الألفية الرقمية لحقوق النشر)</li>' +
-        '<li>المعاهدات الدولية لحقوق النشر</li>' +
-        '<li>اتفاقية برن</li>' +
-      '</ul>' +
-      '<div style="background:rgba(255,159,10,0.1); border:1px solid rgba(255,159,10,0.3); border-radius:12px; padding:12px; margin-bottom:16px;">' +
-        '<p style="margin:0; font-size:12.5px; line-height:1.6; color:var(--warning); font-weight:700;">تنبيه - الاستخدام غير المصرح</p>' +
-        '<p style="margin:6px 0 0 0; font-size:12.5px; line-height:1.6; color:var(--text-color);">أي نسخ أو تعديل أو توزيع أو استخدام تجاري بدون إذن كتابي صريح من المالك ممنوع تماما.</p>' +
-      '</div>' +
-      '<div style="background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.3); border-radius:12px; padding:12px;">' +
-        '<p style="margin:0; font-size:12.5px; color:var(--danger); font-weight:800;">للإبلاغ عن انتهاك:</p>' +
-        '<p style="margin:4px 0 0 0; font-size:13px; color:var(--accent); font-weight:800;">support.istoreipa@gmail.com</p>' +
-      '</div>'
-    : '<p style="margin:0 0 16px 0; font-size:13px; color:var(--subtext-color);">iStore - All Rights Reserved (c) 2026</p>' +
-      '<p style="margin:0 0 12px 0; font-size:13px; line-height:1.7; color:var(--text-color);">This website and all of its content, including but not limited to:</p>' +
-      '<ul style="margin:0 0 16px 0; padding-left:20px; font-size:13px; line-height:1.8; color:var(--text-color);">' +
-        '<li>Source code (HTML, CSS, JavaScript)</li>' +
-        '<li>Design, layout, and UI elements</li>' +
-        '<li>Graphics, icons, and logos</li>' +
-        '<li>Database structure and content</li>' +
-      '</ul>' +
-      '<p style="margin:0 0 12px 0; font-size:13px; line-height:1.7; color:var(--text-color);">Are the exclusive property of iStore Team and protected by:</p>' +
-      '<ul style="margin:0 0 16px 0; padding-left:20px; font-size:13px; line-height:1.8; color:var(--text-color);">' +
-        '<li>DMCA (Digital Millennium Copyright Act)</li>' +
-        '<li>International copyright treaties</li>' +
-        '<li>Berne Convention</li>' +
-      '</ul>' +
-      '<div style="background:rgba(255,159,10,0.1); border:1px solid rgba(255,159,10,0.3); border-radius:12px; padding:12px; margin-bottom:16px;">' +
-        '<p style="margin:0; font-size:12.5px; line-height:1.6; color:var(--warning); font-weight:700;">WARNING - Unauthorized Use</p>' +
-        '<p style="margin:6px 0 0 0; font-size:12.5px; line-height:1.6; color:var(--text-color);">Any copying, modification, distribution, or commercial use without written permission is strictly prohibited.</p>' +
-      '</div>' +
-      '<div style="background:rgba(255,69,58,0.1); border:1px solid rgba(255,69,58,0.3); border-radius:12px; padding:12px;">' +
-        '<p style="margin:0; font-size:12.5px; color:var(--danger); font-weight:800;">To report a violation:</p>' +
-        '<p style="margin:4px 0 0 0; font-size:13px; color:var(--accent); font-weight:800;">support.istoreipa@gmail.com</p>' +
-      '</div>';
-  
-  // نحيد أي modal قديم
+  // تأكد ما كاينش نسخة قديمة من الـ modal
   const oldModal = document.getElementById('dmcaModal');
   if (oldModal) oldModal.remove();
   
-  // ننشئ modal جديد
-  const modal = document.createElement('div');
-  modal.id = 'dmcaModal';
-  modal.className = 'modal';
-  modal.style.display = 'flex';
-  modal.style.zIndex = '99999';
+  page.classList.add('open');
+  document.body.classList.add('stg-open', 'overlay-active');
   
-  modal.innerHTML = 
-    '<div class="modal-box" style="max-width:440px;">' +
-      '<button class="modal-close-x" onclick="closeDMCAPage()" aria-label="Close">' +
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
-          '<line x1="18" y1="6" x2="6" y2="18"/>' +
-          '<line x1="6" y1="6" x2="18" y2="18"/>' +
-        '</svg>' +
-      '</button>' +
-      '<h3 class="modal-title" style="margin-bottom:18px;">' + title + '</h3>' +
-      '<div style="max-height:60vh; overflow-y:auto; padding-right:4px;">' + content + '</div>' +
-      '<button onclick="closeDMCAPage()" class="btn-secondary" style="margin-top:18px;" data-i18n="close">Close</button>' +
-    '</div>';
+  // خبي القائمة السفلية
+  const nav = document.querySelector('.isto-nav-wrap');
+  if (nav) nav.style.opacity = '0';
   
-  document.body.appendChild(modal);
+  // سكرول للفوق
+  const scroll = page.querySelector('.dmca-scroll');
+  if (scroll) scroll.scrollTop = 0;
+  
+  // فيبراج خفيف
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
 }
 
 function closeDMCAPage() {
-  const modal = document.getElementById('dmcaModal');
-  if (modal) modal.remove();
+  const page = document.getElementById('dmcaPage');
+  if (!page) return;
+  
+  page.classList.remove('open');
+  document.body.classList.remove('stg-open', 'overlay-active');
+  
+  const nav = document.querySelector('.isto-nav-wrap');
+  if (nav) nav.style.opacity = '';
+  
+  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
 }
+
+// 🔙 زر الرجوع في الهاتف يسد الصفحة
+window.addEventListener('popstate', function() {
+  const page = document.getElementById('dmcaPage');
+  if (page && page.classList.contains('open')) {
+    closeDMCAPage();
+  }
+});
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 function openModal(id){ document.getElementById(id).style.display='flex'; }
 function openImgViewer(src){ document.getElementById('imgViewerImg').src = src; document.getElementById('imgViewer').style.display='flex'; }
