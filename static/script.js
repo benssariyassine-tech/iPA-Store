@@ -813,54 +813,17 @@ function showDownloadNotif(appName, duration, appUrl, isOfficial, appId) {
   }, d);
 }
 /* ============================================
-   DMCA / COPYRIGHT PAGE — Standalone (White)
+   DMCA / COPYRIGHT PAGE — Redirect to /dmca
    ============================================ */
 function openDMCAPage() {
-  const page = document.getElementById('dmcaPage');
-  if (!page) {
-    console.warn('DMCA page not found');
-    return;
-  }
-  
-  // تأكد ما كاينش نسخة قديمة من الـ modal
-  const oldModal = document.getElementById('dmcaModal');
-  if (oldModal) oldModal.remove();
-  
-  page.classList.add('open');
-  document.body.classList.add('stg-open', 'overlay-active');
-  
-  // خبي القائمة السفلية
-  const nav = document.querySelector('.isto-nav-wrap');
-  if (nav) nav.style.opacity = '0';
-  
-  // سكرول للفوق
-  const scroll = page.querySelector('.dmca-scroll');
-  if (scroll) scroll.scrollTop = 0;
-  
-  // فيبراج خفيف
-  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+  // ✅ افتح الصفحة الرسمية عبر Flask route
+  window.location.href = '/dmca';
 }
 
 function closeDMCAPage() {
-  const page = document.getElementById('dmcaPage');
-  if (!page) return;
-  
-  page.classList.remove('open');
-  document.body.classList.remove('stg-open', 'overlay-active');
-  
-  const nav = document.querySelector('.isto-nav-wrap');
-  if (nav) nav.style.opacity = '';
-  
-  if (navigator.vibrate) try { navigator.vibrate(8); } catch(e) {}
+  // ماشي محتاجة دابا، حيت الصفحة تفتح فالرابط
+  window.history.back();
 }
-
-// 🔙 زر الرجوع في الهاتف يسد الصفحة
-window.addEventListener('popstate', function() {
-  const page = document.getElementById('dmcaPage');
-  if (page && page.classList.contains('open')) {
-    closeDMCAPage();
-  }
-});
 function closeModal(id){ document.getElementById(id).style.display='none'; }
 function openModal(id){ document.getElementById(id).style.display='flex'; }
 function openImgViewer(src){ document.getElementById('imgViewerImg').src = src; document.getElementById('imgViewer').style.display='flex'; }
