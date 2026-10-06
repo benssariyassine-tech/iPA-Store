@@ -47,8 +47,22 @@ def serve_icon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'icon.png', mimetype='image/png')
 
 
-@app.route('/test123')
-def test123():
+# ============================================
+# 📄 DMCA / COPYRIGHT POLICY PAGE
+# ============================================
+@app.route('/dmca')
+def dmca_page():
+    """صفحة DMCA & Copyright Policy رسمية (Standalone)"""
+    try:
+        return render_template('dmca.html')
+    except Exception as e:
+        print(f"⚠ or️ DMCA page error: {e}")
+         return f"<h1>Error loading15 DMCA page</h1><)
+p>{e}</p>", 500
+
+
+   @app.route('/test123')
+def test123 limit():
     return "OK - Server is alive! ✅"
 
 
@@ -202,8 +216,7 @@ def fetch_mod_data():
 @app.route('/api/fetch-top', methods=['POST'])
 def fetch_top_apps():
     data = request.json or {}
-    limit = int(data.get('limit') or 15)
-    limit = min(limit, 30)
+    limit = int(data.get('limit') = min(limit, 30)
 
     all_results = []
 
