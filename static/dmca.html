@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>DMCA & Copyright Policy — iStore</title>
+<meta name="description" content="iStore DMCA, Copyright Policy, GDPR and CCPA compliance page.">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/png" href="/static/icon.png">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; padding: 0; background: #ffffff; color: #111111; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+                 'Inter', 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== TOP BAR ===== */
+  .dmca-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid #f0f0f3;
+    display: flex;
+    align-items: center;
+    padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px 12px;
+    gap: 12px;
+  }
+  .dmca-back {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #f2f2f7;
+    border: 1px solid #e5e5ea;
+    color: #111;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .dmca-back:active { transform: scale(0.9); background: #e5e5ea; }
+  .dmca-back svg { width: 20px; height: 20px; stroke: #111; fill: none; margin-left: -2px; }
+
+  .dmca-topbar-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #111;
+    letter-spacing: -0.2px;
+    flex: 1;
+    text-align: center;
+    padding-right: 42px;
+  }
+
+  /* ===== MAIN TITLE ===== */
+  .dmca-hero {
+    padding: 32px 22px 20px;
+    text-align: center;
+    border-bottom: 1px solid #f0f0f3;
+  }
+  .dmca-hero h1 {
+    font-size: 26px;
+    font-weight: 900;
+    color: #000;
+    margin: 0 0 8px 0;
+    letter-spacing: -0.6px;
+    line-height: 1.2;
+  }
+  .dmca-hero p {
+    font-size: 12px;
+    color: #8e8e93;
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* ===== CONTAINER ===== */
+  .dmca-container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 26px 22px calc(60px + env(safe-area-inset-bottom, 0px));
+    flex: 1;
+  }
+
+  /* ===== INTRO ===== */
+  .dmca-intro {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #222;
+    margin: 0 0 26px 0;
+    padding: 16px 18px;
+    background: #f7f7fa;
+    border-left: 4px solid #0a84ff;
+    border-radius: 10px;
+  }
+
+  /* ===== HEADINGS ===== */
+  .dmca-container h2 {
+    font-size: 19px;
+    font-weight: 800;
+    color: #000;
+    margin: 32px 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #f0f0f3;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+  }
+
+  /* ===== TEXT ===== */
+  .dmca-container p {
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: #333;
+    margin: 0 0 12px 0;
+  }
+
+  .dmca-container ul {
+    margin: 0 0 14px 0;
+    padding-left: 22px;
+  }
+  .dmca-container ul li {
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 6px;
+  }
+
+  .dmca-container a {
+    color: #0a84ff;
+    text-decoration: none;
+    font-weight: 700;
+    word-break: break-all;
+  }
+  .dmca-container a:active { opacity: 0.6; }
+
+  /* ===== WARNING BOX ===== */
+  .dmca-warning {
+    background: #fff8e6;
+    border: 1.5px solid #ffcc00;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 30px 0 16px 0;
+  }
+  .dmca-warning h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #a16a00;
+    margin: 0 0 8px 0;
+  }
+  .dmca-warning p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #4a4a4a;
+    margin: 0;
+  }
+
+  /* ===== REPORT BOX ===== */
+  .dmca-report {
+    background: #fff0f0;
+    border: 1.5px solid #ff6b6b;
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin: 0 0 26px 0;
+  }
+  .dmca-report h3 {
+    font-size: 15px;
+    font-weight: 800;
+    color: #c60000;
+    margin: 0 0 8px 0;
+  }
+  .dmca-report p {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #4a4a4a;
+    margin: 0;
+  }
+
+  /* ===== BOTTOM CTA ===== */
+  .dmca-bottom {
+    padding: 20px 22px calc(30px + env(safe-area-inset-bottom, 0px));
+    max-width: 760px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .dmca-close-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.15s ease, background 0.2s ease;
+  }
+  .dmca-close-btn:active { transform: scale(0.97); background: #000; }
+
+  /* ===== FOOTER ===== */
+  .dmca-footer {
+    text-align: center;
+    padding: 20px 22px;
+    border-top: 1px solid #f0f0f3;
+    background: #fafafa;
+  }
+  .dmca-footer p {
+    font-size: 11.5px;
+    color: #8e8e93;
+    margin: 0;
+    line-height: 1.6;
+  }
+  .dmca-footer a {
+    color: #0a84ff;
+    text-decoration: none;
+    font-weight: 700;
+  }
+
+  /* ===== RTL SUPPORT ===== */
+  html[dir="rtl"] .dmca-back svg { transform: scaleX(-1); margin-left: 0; margin-right: -2px; }
+  html[dir="rtl"] .dmca-topbar-title { padding-right: 0; padding-left: 42px; }
+  html[dir="rtl"] .dmca-intro { border-left: none; border-right: 4px solid #0a84ff; }
+  html[dir="rtl"] .dmca-container ul { padding-left: 0; padding-right: 22px; }
+
+  /* ===== SMALL SCREENS ===== */
+  @media (max-width: 400px) {
+    .dmca-hero { padding: 26px 18px 18px; }
+    .dmca-hero h1 { font-size: 22px; }
+    .dmca-container { padding: 22px 18px calc(50px + env(safe-area-inset-bottom, 0px)); }
+    .dmca-container h2 { font-size: 17px; margin-top: 26px; }
+    .dmca-container p, .dmca-container ul li { font-size: 13px; }
+    .dmca-intro { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <div class="dmca-topbar">
+    <a href="/" class="dmca-back" aria-label="Back to home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+    </a>
+    <div class="dmca-topbar-title">DMCA / Copyright Policy</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="dmca-hero">
+    <h1>DMCA &amp; Copyright Policy</h1>
+    <p>iStore — All Rights Reserved &copy; 2026</p>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="dmca-container">
+
+    <p class="dmca-intro">
+      This website and all of its content, including but not limited to source code (HTML, CSS, JavaScript),
+      design, layout, UI elements, graphics, icons, logos, and database structure, are the exclusive property
+      of the iStore Team and are protected by the Digital Millennium Copyright Act (DMCA), international
+      copyright treaties, and the Berne Convention.
+    </p>
+
+    <h2>1. Copyright Notice</h2>
+    <p>
+      All materials contained on this website are protected by applicable copyright law. No part of this
+      website may be reproduced, distributed, modified, displayed, published, or transmitted in any form
+      or by any means, including electronic, mechanical, photocopying, recording, or otherwise, without the
+      prior written permission of the copyright owner.
+    </p>
+    <p>
+      Any unauthorized use of the materials on this website may violate copyright laws, trademark laws,
+      the laws of privacy and publicity, and civil and criminal statutes.
+    </p>
+
+    <h2>2. DMCA — Notification of Infringement</h2>
+    <p>
+      If you believe that your work has been copied in a way that constitutes copyright infringement, please
+      provide our Copyright Agent with the following information in writing:
+    </p>
+    <ul>
+      <li>A physical or electronic signature of the copyright owner or a person authorized to act on their behalf;</li>
+      <li>Identification of the copyrighted work claimed to have been infringed;</li>
+      <li>Identification of the material that is claimed to be infringing, with sufficient detail to permit us to locate it;</li>
+      <li>Your contact information, including your address, telephone number, and e-mail address;</li>
+      <li>A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner;</li>
+      <li>A statement, made under penalty of perjury, that the above information is accurate and that you are the copyright owner or authorized to act on their behalf.</li>
+    </ul>
+    <p>
+      Notification must be sent to:
+      <a href="mailto:support.istoreipa@gmail.com">support.istoreipa@gmail.com</a>
+    </p>
+
+    <h2>3. Counter-Notification</h2>
+    <p>
+      If you believe that the material you posted was removed or disabled by mistake or misidentification,
+      you may submit a counter-notification to our Copyright Agent. Your counter-notification must include
+      your contact information, identification of the removed material, and a statement under penalty of
+      perjury that you have a good faith belief the material was removed by mistake.
+    </p>
+
+    <h2>4. Repeat Infringer Policy</h2>
+    <p>
+      In accordance with the DMCA and other applicable law, iStore has adopted a policy of terminating,
+      in appropriate circumstances, users who are deemed to be repeat infringers. We may also, at our sole
+      discretion, limit access to the Service and/or terminate the accounts of any users who infringe any
+      intellectual property rights of others.
+    </p>
+
+    <h2>5. Third-Party Content &amp; Takedown Requests</h2>
+    <p>
+      iStore does not host any files on its servers. All download links are provided by third-party
+      platforms (such as GitHub, Telegram, and other public repositories) and are intended for educational
+      and testing purposes only. If you are a copyright owner and wish to have a link removed, please
+      contact us and we will act promptly.
+    </p>
+
+    <h2>6. CCPA — California Consumer Privacy Act</h2>
+    <p>If you are a resident of California, you have the right to:</p>
+    <ul>
+      <li>Know what personal information we collect, use, share, or sell;</li>
+      <li>Request deletion of your personal information;</li>
+      <li>Opt out of the sale of your personal information;</li>
+      <li>Not be discriminated against for exercising your privacy rights.</li>
+    </ul>
+    <p>
+      To exercise any of these rights, please contact us at
+      <a href="mailto:support.istoreipa@gmail.com">support.istoreipa@gmail.com</a>.
+    </p>
+
+    <h2>7. GDPR — EU General Data Protection Regulation</h2>
+    <p>
+      If you are located in the European Economic Area (EEA), you have additional rights under the GDPR,
+      including the right to access, rectify, erase, restrict, or object to the processing of your personal
+      data, as well as the right to data portability. We process personal data only when we have a lawful
+      basis to do so, such as your consent, a contract, or a legal obligation.
+    </p>
+
+    <h2>8. Data We Collect</h2>
+    <p>We may collect limited information necessary to operate the service, including:</p>
+    <ul>
+      <li>Account information (email address, display name);</li>
+      <li>Authentication identifiers provided by third-party providers (such as Google);</li>
+      <li>Device information (browser type, operating system, screen size);</li>
+      <li>Usage data (downloaded apps, liked apps, comments).</li>
+    </ul>
+    <p>We do not sell your personal information to third parties.</p>
+
+    <h2>9. Cookies &amp; Local Storage</h2>
+    <p>
+      iStore may use cookies and browser local storage to remember your preferences (theme, language,
+      favorites) and to improve your experience. You can control cookies through your browser settings.
+    </p>
+
+    <h2>10. Disclaimer</h2>
+    <p>
+      iStore is not affiliated with Apple Inc., Google LLC, or any app developer. All trademarks, logos,
+      and brand names are the property of their respective owners. All content is provided "as is" without
+      warranty of any kind, either express or implied.
+    </p>
+
+    <h2>11. Changes to This Policy</h2>
+    <p>
+      We reserve the right to update this policy at any time. Changes will be posted on this page with an
+      updated revision date. Continued use of the website after changes constitutes acceptance of the new
+      policy.
+    </p>
+
+    <h2>12. Contact</h2>
+    <p>
+      For any question regarding this DMCA / Copyright Policy, please contact us at:
+      <a href="mailto:support.istoreipa@gmail.com">support.istoreipa@gmail.com</a>
+    </p>
+
+    <div class="dmca-warning">
+      <h3>WARNING — Unauthorized Use</h3>
+      <p>
+        Any copying, modification, distribution, or commercial use of the content of this website without
+        written permission is strictly prohibited and will be prosecuted to the fullest extent of the law.
+      </p>
+    </div>
+
+    <div class="dmca-report">
+      <h3>To Report a Violation</h3>
+      <p>
+        Send an email with full details to:
+        <a href="mailto:support.istoreipa@gmail.com">support.istoreipa@gmail.com</a>
+      </p>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="dmca-bottom">
+    <a href="/" class="dmca-close-btn">Back to iStore Home</a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="dmca-footer">
+    <p>&copy; 2026 iStore. All rights reserved. &middot; <a href="mailto:support.istoreipa@gmail.com">Contact Support</a></p>
+  </div>
+
+</body>
+</html>
