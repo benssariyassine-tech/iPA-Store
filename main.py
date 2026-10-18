@@ -52,17 +52,15 @@ def serve_icon():
 # ============================================
 @app.route('/dmca')
 def dmca_page():
-    """صفحة DMCA & Copyright Policy رسمية (Standalone)"""
     try:
         return render_template('dmca.html')
     except Exception as e:
-        print(f"⚠ or️ DMCA page error: {e}")
-         return f"<h1>Error loading15 DMCA page</h1><)
-p>{e}</p>", 500
+        print(f"⚠️ DMCA page error: {e}")
+        return f"<h1>Error loading DMCA page</h1><p>{e}</p>", 500
 
 
-   @app.route('/test123')
-def test123 limit():
+@app.route('/test123')
+def test123_limit():
     return "OK - Server is alive! ✅"
 
 
@@ -96,6 +94,7 @@ def fetch_ios_data():
     try:
         url = f"https://itunes.apple.com/search?term={requests.utils.quote(app_name)}&entity=software&limit=1"
         response = requests.get(url, timeout=10)
+        response.raise_for_status()
         results = response.json().get('results', [])
         
         if not results:
@@ -106,7 +105,7 @@ def fetch_ios_data():
         formatted_data = {
             'name': app_data.get('trackName'),
             'icon': app_data.get('artworkUrl512'),
-            'size': f"{int(app_data.get('fileSizeBytes', 0)) / (1024*1024):.2f} MB",
+            'size': f"{int(app_data.get('fileSizeBytes', 0)) / (1024 * 1024):.2f} MB",
             'info': app_data.get('description'),
             'publisher': app_data.get('artistName'),
             'url': app_data.get('trackViewUrl'),
@@ -150,7 +149,7 @@ def fetch_android_data():
         formatted_data = {
             'name': result.get('title'),
             'icon': result.get('icon'),
-            'size': f"{(result.get('size') or 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
+            'size': f"{(result.get('size') or 0) / (1024 * 1024):.2f} MB" if result.get('size') else 'N/A',
             'info': (result.get('description') or '')[:2000],
             'publisher': result.get('developer'),
             'url': f"https://play.google.com/store/apps/details?id={package_name}",
@@ -216,7 +215,8 @@ def fetch_mod_data():
 @app.route('/api/fetch-top', methods=['POST'])
 def fetch_top_apps():
     data = request.json or {}
-    limit = int(data.get('limit') = min(limit, 30)
+    limit = int(data.get('limit', 10))
+    limit = min(limit, 20) # حد أقصى 20 لتجنب البطء
 
     all_results = []
 
@@ -225,37 +225,32 @@ def fetch_top_apps():
         gp_results = gp_search("popular apps", lang='en', country='us', n_hits=limit)
         
         for app_info in gp_results[:limit]:
-            try:
-                package_name = app_info.get('appId')
-                if not package_name:
-                    continue
-                result = gp_app(package_name, lang='en', country='us')
-                if result and result.get('title') and result.get('icon'):
-                    formatted = {
-                        'name': result.get('title'),
-                        'icon': result.get('icon'),
-                        'size': f"{(result.get('size') or 0) / (1024*1024):.2f} MB" if result.get('size') else 'N/A',
-                        'info': (result.get('description') or '')[:1000],
-                        'publisher': result.get('developer'),
-                        'url': f"https://play.google.com/store/apps/details?id={package_name}",
-                        'platform': 'APK',
-                        'category': 'apps',
-                        'screenshots': (result.get('screenshots') or [])[:3],
-                        'appType': 'official',
-                        'likedBy': [],
-                        'downloadedBy': [],
-                        'downloads': 0,
-                        'commentsCount': 0,
-                        'ratingSum': 0,
-                        'ratingCount': 0,
-                        'ratingAvg': 0,
-                        'userRatings': {}
-                    }
-                    all_results.append(formatted)
-            except Exception as inner_e:
-                print(f"GP detail error: {inner_e}")
+            package_name = app_info.get('appId')
+            if not package_name:
                 continue
-        print(f"✅ Google Play: {len(all_results)} apps")
+                
+            formatted = {
+                'name': app_info.get('title', 'Unknown'),
+                'icon': app_info.get('icon', ''),
+                'size': 'N/A',
+                'info': app_info.get('description', ''),
+                'publisher': app_info.get('developer', 'Unknown'),
+                'url': f"https://play.google.com/store/apps/details?id={package_name}",
+                'platform': 'APK',
+                'category': 'apps',
+                'screenshots': [],
+                'appType': 'official',
+                'likedBy': [],
+                'downloadedBy': [],
+                'downloads': 0,
+                'commentsCount': 0,
+                'ratingSum': 0,
+                'ratingCount': 0,
+                'ratingAvg': 0,
+                'userRatings': {}
+            }
+            all_results.append(formatted)
+        print(f"✅ Google Play fetched: {len(all_results)} apps")
     except Exception as e:
         print(f"❌ Google Play top error: {e}")
 
@@ -288,7 +283,7 @@ def fetch_top_apps():
                 'userRatings': {}
             }
             all_results.append(formatted)
-        print(f"✅ iTunes: {len(itunes_apps)} apps")
+        print(f"✅ iTunes fetched: {len(itunes_apps)} apps")
     except Exception as e:
         print(f"❌ iTunes top error: {e}")
 
@@ -479,7 +474,6 @@ def robots():
 # ============================================
 
 def normalize_text(text):
-    """تطبيع النص: حروف عربية + حالات + رمزية"""
     if not text:
         return ''
     text = str(text).lower().strip()
@@ -492,26 +486,18 @@ def normalize_text(text):
 
 
 def is_good_match(query, candidate_name):
-    """تحقق دقيق: هل النتيجة تطابق الاستعلام؟"""
     q = normalize_text(query)
     c = normalize_text(candidate_name)
     
     if not q or not c:
         return False
-    
-    # 1. تطابق تام
     if q == c:
         return True
-    
-    # 2. الاسم الكامل مدكور في السؤال
     if len(c) >= 3 and c in q:
         return True
-    
-    # 3. السؤال مدكور في الاسم
     if len(q) >= 3 and q in c:
         return True
     
-    # 4. كل كلمات السؤال موجودة في الاسم
     q_words = [w for w in q.split() if len(w) >= 3]
     c_words = [w for w in c.split() if len(w) >= 3]
     
@@ -527,7 +513,6 @@ def is_good_match(query, candidate_name):
 
 
 def clean_query_text(query):
-    """تنظيف الاستعلام من الكلمات العامة"""
     if not query:
         return ''
     
@@ -552,7 +537,6 @@ def clean_query_text(query):
 
 
 def build_app_data(name, icon, size, info, publisher, url, platform, category, screenshots):
-    """بناء قاموس التطبيق بالشكل الموحد"""
     return {
         'name': name,
         'icon': icon,
@@ -576,7 +560,6 @@ def build_app_data(name, icon, size, info, publisher, url, platform, category, s
 
 
 def format_size(size_bytes):
-    """تحويل البايت لصيغة مقروءة"""
     if not size_bytes:
         return 'N/A'
     mb = size_bytes / (1024 * 1024)
@@ -586,7 +569,6 @@ def format_size(size_bytes):
 
 
 def search_itunes(query):
-    """البحث في iTunes — يرجّع أول تطابق دقيق"""
     try:
         url = f"https://itunes.apple.com/search?term={requests.utils.quote(query)}&entity=software&limit=5"
         r = requests.get(url, timeout=8)
@@ -624,7 +606,6 @@ def search_itunes(query):
 
 
 def search_play_store(query):
-    """البحث في Google Play — يرجّع أول تطابق دقيق"""
     try:
         gp_results = gp_search(query, lang='ar', country='dz', n_hits=5)
         
@@ -676,7 +657,6 @@ def search_play_store(query):
 
 
 def save_to_firebase(app_data):
-    """حفظ التطبيق في Firebase (مع التحقق من التكرار)"""
     if not db:
         return None
     
@@ -698,18 +678,15 @@ def save_to_firebase(app_data):
 
 @app.route('/api/smart-fetch', methods=['POST'])
 def smart_fetch():
-    """🎯 نقطة النهاية: البحث الذكي عن التطبيقات"""
     data = request.json
     query = (data.get('query') or '').strip()
     
     if not query or len(query) < 2:
         return jsonify({'found': False, 'message': 'Query too short'}), 200
     
-    # 1. تنظيف الاستعلام
     clean_query = clean_query_text(query)
     print(f"🔍 Smart fetch: query='{query}' → cleaned='{clean_query}'")
     
-    # 2. البحث في المصادر
     results = []
     matched_sources = []
     
@@ -723,7 +700,6 @@ def smart_fetch():
         results.append(play_app)
         matched_sources.append(f"Play: {play_app['name']}")
     
-    # 3. ما لقيناش تطابق
     if not results:
         print(f"❌ No match found for: {clean_query}")
         return jsonify({
@@ -737,7 +713,6 @@ def smart_fetch():
             ]
         }), 200
     
-    # 4. حفظ في Firebase
     if not db:
         return jsonify({
             'found': False,
