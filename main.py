@@ -53,7 +53,8 @@ def serve_icon():
 @app.route('/dmca')
 def dmca_page():
     try:
-        return render_template('dmca.html')
+        # قراءة الملف من مجلد static
+        return send_from_directory(os.path.join(app.root_path, 'static'), 'dmca.html', mimetype='text/html')
     except Exception as e:
         print(f"⚠️ DMCA page error: {e}")
         return f"<h1>Error loading DMCA page</h1><p>{e}</p>", 500
